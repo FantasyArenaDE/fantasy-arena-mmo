@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const nl_NL: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Juridische informatie",
+    "worldPicker": "Kies een wereld",
+    "characterPreview": "Probeer de personage-editor",
+    "desktopDownload": "Download de desktopapp",
+    "credits": "Credits en licenties",
+    "sourceProject": "Oorspronkelijk project op GitHub",
+    "supportProject": "Steun het project",
+    "musicCredits": "Muziekcredits",
+    "separateAccount": "Voor deze testversie heb je een apart MMO-account nodig."
+  },
   "referralCards": {
     "title": "Vriend uitnodigen",
     "subtitle": "Samen op avontuur. Verdien je stempels.",
@@ -467,6 +478,77 @@ export const nl_NL: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Koerier",
       "close": "Koerier sluiten",
@@ -1767,6 +1849,7 @@ export const nl_NL: EnTranslations = {
       "presets": {
         "classic": "Klassiek Goud",
         "fancyGold": "Chique Goud (WIP)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Middernacht",
         "parchment": "Perkament",
         "highContrast": "Hoog Contrast"
@@ -2072,8 +2155,8 @@ export const nl_NL: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Update beschikbaar",
-      "body": "Er is een nieuwe versie van World of ClaudeCraft beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
-      "bodyWithVersion": "Versie {version} van World of ClaudeCraft is beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
+      "body": "Er is een nieuwe versie van Fantasy Arena MMO beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
+      "bodyWithVersion": "Versie {version} van Fantasy Arena MMO is beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
       "notNow": "Niet nu",
       "update": "Bijwerken"
     },
@@ -2205,6 +2288,8 @@ export const nl_NL: EnTranslations = {
         "remove": "Verwijderen",
         "promote": "Promoveren",
         "bank": "Gildebankkluis",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Officierenchat",
         "motd": "Mededelingenbord",
         "events": "Kalender"
@@ -2214,6 +2299,8 @@ export const nl_NL: EnTranslations = {
         "remove": "Verwijder leden die een lagere rang hebben.",
         "promote": "Promoveer en degrade leden die een lagere rang hebben, zolang je toestemming voor dit recht hebt.",
         "bank": "Stort en stort munten en items in de gildebankkluis.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Lees en spreek in de officierenchat.",
         "motd": "Bewerk het gilde-mededelingenbord.",
         "events": "Voeg gilde-agendagebeurtenissen toe en verwijder ze."
@@ -3079,7 +3166,7 @@ export const nl_NL: EnTranslations = {
         "offline": "Offline"
       },
       "diagnostics": {
-        "panelAria": "World of ClaudeCraft prestatiediagnostiek",
+        "panelAria": "Fantasy Arena MMO prestatiediagnostiek",
         "title": "ClaudeCraft Prestatiedokter",
         "subtitle": "Een spelspecifieke scan met bewijs en oplossingen op codeniveau.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const nl_NL: EnTranslations = {
           }
         },
         "report": {
-          "title": "World of ClaudeCraft prestatiediagnose",
+          "title": "Fantasy Arena MMO prestatiediagnose",
           "statusLine": "Status: {status} ({score}/100)",
           "capturedLine": "Vastgelegd: {captured}",
           "topFindingLine": "Belangrijkste bevinding: {finding}",
@@ -5422,7 +5509,7 @@ export const nl_NL: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Sluiten",
       "keybind": "Discord-paneel",
@@ -5836,6 +5923,8 @@ export const nl_NL: EnTranslations = {
       "guildTab": "Gilde",
       "guildCapacityAria": "Gildebankvakken gebruikt: {used} van {total}",
       "guildEmpty": "De gildebank is leeg.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Gildekas",
       "guildDepositGold": "Geld storten",
       "guildWithdrawGold": "Geld opnemen",
@@ -6446,6 +6535,7 @@ export const nl_NL: EnTranslations = {
       "toolEffectRechargeFull": "{effect} is al volledig opgeladen.",
       "toolEffectRechargeToolCapped": "Draag beter {profession}-gereedschap om {effect} verder op te laden.",
       "toolEffectRechargeMaterials": "Het opladen van {effect} vereist {material} x{count}.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Je bent aan het vervaardigen: {remaining}s van {total}s resterend.",
       "disenchantingProgress": "Je bent aan het onbetoveren: {remaining}s van {total}s resterend.",
       "enchantingProgress": "Je bent aan het betoveren: {remaining}s van {total}s resterend.",
@@ -7978,6 +8068,7 @@ export const nl_NL: EnTranslations = {
         }
       },
       "commendHeading": "Aanbeveling van de gezant",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount} standing met een factie naar keuze, eenmaal per week",
       "commendCarriedNote": "{amount} aanzien van vorige week, nog niet opgehaald. Haal het op om een nieuwe lading te kiezen.",
       "commendClaimed": "De aanbeveling van deze week ging naar {faction}.",
@@ -9202,7 +9293,7 @@ export const nl_NL: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "Een MMO in klassieke stijl die je gratis in je browser speelt.",
     "skipToContent": "Ga naar hoofdinhoud",
@@ -9312,7 +9403,7 @@ export const nl_NL: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klassieke MMO in je browser",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Verken de wereld, voltooi quests en trotseer dungeons met vrienden.",
       "ctaPlay": "Speel nu",
       "ctaLearn": "Hoe te spelen",
@@ -10293,7 +10384,7 @@ export const nl_NL: EnTranslations = {
     },
     "worldPage": {
       "heading": "De wereld",
-      "intro": "World of ClaudeCraft is één aaneengesloten land dat je te voet doorkruist. De oude weg loopt van zuid naar noord door de begindal, het moeras en de pieken, en hij blijft daarna doorklimmen naar de holte erachter en het sneeuwland boven aan de kaart. Een kolom hogere rijken opent zich vanaf die weg naar het westen en een andere naar het oosten, en voor de oostkust van de Vallei ligt een eiland. Er is geen snelreizen, er zijn geen vluchtroutes en geen koetsen: elke reis wordt gelopen of gereden, dus er komen hoort bij het avontuur.\n\nHet land houdt ook de tijd bij. Een dag-en-nachtcyclus loopt op een echte klok die iedereen op jouw wereld deelt, zodat de hemel voor jullie allemaal tegelijk van dageraad via middag naar schemer en donker verloopt, de maan komt en gaat door haar fasen, en het licht op de grond met haar meeverandert. De wijzerplaat rond je minikaart is waar je het uur afleest.",
+      "intro": "Fantasy Arena MMO is één aaneengesloten land dat je te voet doorkruist. De oude weg loopt van zuid naar noord door de begindal, het moeras en de pieken, en hij blijft daarna doorklimmen naar de holte erachter en het sneeuwland boven aan de kaart. Een kolom hogere rijken opent zich vanaf die weg naar het westen en een andere naar het oosten, en voor de oostkust van de Vallei ligt een eiland. Er is geen snelreizen, er zijn geen vluchtroutes en geen koetsen: elke reis wordt gelopen of gereden, dus er komen hoort bij het avontuur.\n\nHet land houdt ook de tijd bij. Een dag-en-nachtcyclus loopt op een echte klok die iedereen op jouw wereld deelt, zodat de hemel voor jullie allemaal tegelijk van dageraad via middag naar schemer en donker verloopt, de maan komt en gaat door haar fasen, en het licht op de grond met haar meeverandert. De wijzerplaat rond je minikaart is waar je het uur afleest.",
       "hub": "Thuisbasis",
       "mapHeading": "De weg en de rijken daarachter",
       "mapSub": "Het opdrachtenspoor loopt van zuid naar noord door het midden van de kaart: dal, moeras, pieken, en daaraan voorbij de holte en de sneeuw in. De andere rijken openen zich langs die weg in plaats van erna, door poorten ten oosten en ten westen van de moerasweg, terwijl het eiland Farshore vanaf de oostkust van de Vallei bereikt wordt. Wat je uit de verre rijken houdt zijn hun niveaubanden, niet de wandeling: vijf ervan delen de hoogste band, dus zodra je klaar bent kun je ze in elke volgorde aanpakken. Farshore is de uitzondering, laagniveauland dat je vroeg kunt bezoeken.",
@@ -11594,7 +11685,7 @@ export const nl_NL: EnTranslations = {
       "importedTexture": "Geïmporteerde textuur {number}"
     },
     "appTitle": "Kaarteditor",
-    "docTitle": "Kaarteditor - World of ClaudeCraft",
+    "docTitle": "Kaarteditor - Fantasy Arena MMO",
     "untitledMap": "Naamloze kaart",
     "liveWorld": {
       "name": "Bijwerkingen van de livewereld",
@@ -13756,7 +13847,7 @@ export const nl_NL: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spelen",
-    "playAria": "Speel World of ClaudeCraft",
+    "playAria": "Speel Fantasy Arena MMO",
     "playLoading": "Laden",
     "playStarting": "Starten",
     "serverLabel": "Kies je wereld",
@@ -13860,6 +13951,41 @@ export const nl_NL: EnTranslations = {
         "default": "Klassiek",
         "almond": "Amandel",
         "hooded": "Overhangend"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const nl_NL: EnTranslations = {
     "extensionHelp": "Om hier een portemonnee te zien, houd je een browserextensie voor portemonnees zoals Solflare Wallet actief.",
     "mobileAppHelp": "Kies Phantom of Solflare. Je portemonnee-app vraagt om goedkeuring. Houd dit spel open en keer ernaar terug wanneer je klaar bent.",
     "seekerAppHelp": "Ga verder met Seed Vault Wallet. Bekijk de verbindings- en verificatieverzoeken in Seed Vault en keer daarna terug naar het spel.",
-    "standaloneAppHelp": "Portemonneeverbindingen zijn nog niet beschikbaar in de beginscherm-app. Open World of ClaudeCraft in Safari of Chrome om Phantom of Solflare te gebruiken.",
+    "standaloneAppHelp": "Portemonneeverbindingen zijn nog niet beschikbaar in de beginscherm-app. Open Fantasy Arena MMO in Safari of Chrome om Phantom of Solflare te gebruiken.",
     "openAppTitle": "Doorgaan in {wallet}",
     "openAppHelp": "Open {wallet} om dit verzoek te bekijken. Houd dit speltabblad open terwijl de portemonnee-app actief is.",
     "openAppButton": "Open {wallet}",
     "manualReturnBrowserHelp": "Keer na goedkeuring terug naar dit speltabblad. Als iOS een andere browser opent, sluit die dan en keer handmatig terug naar de oorspronkelijke browser.",
-    "manualReturnStandaloneHelp": "Keer na goedkeuring terug naar World of ClaudeCraft via je beginscherm. Als iOS een browser opent, sluit die dan en open de beginscherm-app handmatig opnieuw.",
+    "manualReturnStandaloneHelp": "Keer na goedkeuring terug naar Fantasy Arena MMO via je beginscherm. Als iOS een browser opent, sluit die dan en open de beginscherm-app handmatig opnieuw.",
     "preparingAppButton": "{wallet} voorbereiden...",
     "walletAppUnavailable": "{wallet} kon niet worden voorbereid. Sluit dit venster en probeer het opnieuw.",
     "flowConnect": "Kies een portemonnee. De verificatie gaat automatisch verder.",
@@ -14266,12 +14392,12 @@ export const nl_NL: EnTranslations = {
       "paymentBody": "Kies de aan je account gekoppelde portemonnee en keur de transactie goed in deze browser.",
       "stepUpBody": "Kies de portemonnee die aan je account is gekoppeld en onderteken het autorisatiebericht voor $WOC Exchange. Ondertekenen is gratis en verplaatst geen geld.",
       "extensionHelp": "Geen compatibele portemonnee-extensie gevonden. Installeer of ontgrendel Phantom, Solflare of een andere Solana-browserportemonnee en probeer het opnieuw.",
-      "safety": "World of ClaudeCraft vraagt nooit naar je herstelzin of privésleutel.",
+      "safety": "Fantasy Arena MMO vraagt nooit naar je herstelzin of privésleutel.",
       "continueWith": "Doorgaan met {wallet}",
       "reviewTitle": "Bekijken in je portemonnee",
       "reviewBody": "Volg de aanwijzing van {wallet}. Houd deze browserpagina open.",
       "completeTitle": "Portemonnee-autorisatie voltooid",
-      "completeBody": "Je kunt terugkeren naar de World of ClaudeCraft desktop-app.",
+      "completeBody": "Je kunt terugkeren naar de Fantasy Arena MMO desktop-app.",
       "returnButton": "Terug naar desktop-app",
       "failed": "Portemonnee-autorisatie mislukt of verlopen. Keer terug naar de desktop-app en probeer het opnieuw.",
       "retry": "Opnieuw proberen"
@@ -14369,16 +14495,16 @@ export const nl_NL: EnTranslations = {
     "levelClass": "Niveau {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "Wereld {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Fantasy Arena MMO",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count} geworven",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Smeed je legende: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", {tier}-rang $WOC-houder",
-    "shareText": "Ik smeed mijn legende in World of ClaudeCraft: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn wereld:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareText": "Ik smeed mijn legende in Fantasy Arena MMO: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn wereld:",
+    "nativeShareTitle": "Fantasy Arena MMO",
     "fileNameFallback": "speler",
     "actionShareX": "Delen op X",
     "actionCopyReferral": "Verwijzingslink Kopiëren",
@@ -14395,6 +14521,7 @@ export const nl_NL: EnTranslations = {
     "statusShareUnsupported": "Delen wordt niet ondersteund op dit apparaat."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "Krijger",
     "paladin": "Paladijn",
     "hunter": "Jager",
@@ -14402,6 +14529,7 @@ export const nl_NL: EnTranslations = {
     "priest": "Priester",
     "shaman": "Sjamaan",
     "mage": "Magiër",
+    "dreamdancer": "Droomdanser",
     "warlock": "Heksenmeester",
     "druid": "Druïde",
     "warriorAria": "Klasse Krijger",
@@ -14411,6 +14539,7 @@ export const nl_NL: EnTranslations = {
     "priestAria": "Klasse Priester",
     "shamanAria": "Klasse Sjamaan",
     "mageAria": "Klasse Magiër",
+    "dreamdancerAria": "Droomdanser",
     "warlockAria": "Klasse Heksenmeester",
     "druidAria": "Klasse Druïde"
   },
@@ -15248,13 +15377,13 @@ export const nl_NL: EnTranslations = {
     "parseService": "WoC-parseservice"
   },
   "seo": {
-    "title": "World of ClaudeCraft: Web-MMO in Klassieke Stijl",
-    "description": "Speel World of ClaudeCraft, een gratis browser-MMO. Verken de wereld, voltooi quests en trotseer dungeons met vrienden. Geen download nodig.",
+    "title": "Fantasy Arena MMO: Web-MMO in Klassieke Stijl",
+    "description": "Speel Fantasy Arena MMO, een gratis browser-MMO. Verken de wereld, voltooi quests en trotseer dungeons met vrienden. Geen download nodig.",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Spel",
     "operatingSystem": "Webbrowser",
-    "officialLabel": "Officiële website van World of ClaudeCraft",
+    "officialLabel": "Officiële website van Fantasy Arena MMO",
     "officialBody": "De officiële website van World of ClaudeCraft. Speel online, lees de wiki en vind hier de communitylinks."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const nl_NL: EnTranslations = {
     "notify": {
       "updateReadyTitle": "Update {version} is klaar",
       "updateReadyTitleNoVersion": "Update is klaar",
-      "updateReadyBody": "Herstart World of ClaudeCraft om de update toe te passen.",
+      "updateReadyBody": "Herstart Fantasy Arena MMO om de update toe te passen.",
       "partyInviteTitle": "Groepsuitnodiging",
       "partyInviteBody": "{name} heeft je uitgenodigd voor een groep."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "De spelweergave werkt niet meer. Opnieuw laden?",
       "reload": "Opnieuw laden",
       "quit": "Afsluiten",
-      "fatalBody": "World of ClaudeCraft is op een onverwachte fout gestuit en moet worden afgesloten."
+      "fatalBody": "Fantasy Arena MMO is op een onverwachte fout gestuit en moet worden afgesloten."
     },
     "hostDiag": {
       "saveTitle": "Systeemrapport opslaan",
@@ -15500,6 +15629,7 @@ export const nl_NL: EnTranslations = {
       "priest": "Genezer / Ranged-DPS",
       "shaman": "Genezer / Melee- of Ranged-DPS",
       "mage": "Ranged-DPS",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "Ranged-DPS",
       "druid": "Tank / Genezer / Melee- of Ranged-DPS"
     },
@@ -15524,6 +15654,7 @@ export const nl_NL: EnTranslations = {
       "priest": "Priesters roepen Helend Licht aan om bondgenoten te genezen en te beschutten, terwijl Schaduwmagie hen het leven van hun vijanden laat aftappen.",
       "shaman": "Sjamanen gebieden de elementen, doordringen wapens met kracht, schokken vijanden met bliksem en herstellen bondgenoten.",
       "mage": "Magiërs buigen Vuur-, Vorst- en arcane kracht om vijanden te vernietigen, water op te roepen en dreigingen ter plaatse te bevriezen.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "Heksenmeesters roepen demonen op, leggen vloeken en schade-over-tijd-magie op, en tappen leven af bij vijanden om vol te houden.",
       "druid": "Druïden kanaliseren de natuur, genezen wonden, verstrikken vijanden en veranderen in diergedaanten voor verdediging of schade."
     },
@@ -15540,11 +15671,11 @@ export const nl_NL: EnTranslations = {
     "iosStandaloneDetail": "Je bent in de volledig-scherm-modus vanaf het beginscherm. Houd het apparaat in liggende stand.",
     "iosInstallDetail": "Voor echt volledig scherm op iPhone of iPad moet je deze pagina eerst aan je beginscherm toevoegen.",
     "iosShareStep": "Tik in Safari op Deel en daarna op Zet op beginscherm.",
-    "iosOpenStep": "Open World of ClaudeCraft vanaf het nieuwe pictogram op het beginscherm.",
+    "iosOpenStep": "Open Fantasy Arena MMO vanaf het nieuwe pictogram op het beginscherm.",
     "androidStandaloneDetail": "Je bent in de volledig-scherm-appmodus. Houd het apparaat in liggende stand.",
     "androidInstallDetail": "Voor volledig scherm op Android moet je deze pagina eerst installeren of aan je beginscherm toevoegen.",
     "androidInstallStep": "Tik in Chrome op het menu en daarna op App installeren of Toevoegen aan beginscherm.",
-    "androidOpenStep": "Open World of ClaudeCraft vanaf het nieuwe pictogram.",
+    "androidOpenStep": "Open Fantasy Arena MMO vanaf het nieuwe pictogram.",
     "otherStandaloneDetail": "Houd je apparaat in liggend volledig scherm.",
     "otherInstallDetail": "Installeer of voeg deze pagina toe aan je beginscherm voor de beste mobiele ervaring met volledig scherm."
   },
@@ -15560,8 +15691,8 @@ export const nl_NL: EnTranslations = {
     "confirm": "Doorgaan"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Wereld niet beschikbaar",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Wereld niet beschikbaar",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Wereldonderhoud",
     "heading": "De wereld is tijdelijk niet beschikbaar.",
     "body": "We herstarten de gameservice en verwachten dat Claudemoon binnenkort weer terug is. Deze pagina blijft automatisch controleren.",
@@ -15762,6 +15893,7 @@ export const nl_NL: EnTranslations = {
       "audio": "Audio",
       "interface": "Interface",
       "language": "Taal",
+      "characterSelect": "Personage kiezen",
       "logout": "Afmelden",
       "returnToGame": "Terug naar het spel",
       "resetToDefaults": "Terugzetten naar standaard",
@@ -17376,6 +17508,8 @@ export const nl_NL: EnTranslations = {
       "collectNote": "Verdiensten en teruggekeerde waren die de Koopman voor je bewaart.",
       "saleProceeds": "Verkoopopbrengst",
       "collectAll": "Alles ophalen",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Geschiedenis",
       "historyEmpty": "Nog geen verkopen. Voorwerpen die je op de Wereldmarkt verkoopt verschijnen hier.",
       "historyNote": "Je recente verkopen op de Wereldmarkt.",
@@ -19265,6 +19399,66 @@ export const nl_NL: EnTranslations = {
       "revive_pet": {
         "name": "Oplappen",
         "description": "Herstelt gedurende 8 sec. elke seconde 10% van de maximale gezondheid van je levende metgezel. Als je metgezel dood is, wordt hij in plaats daarvan met 50% gezondheid herrezen."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const nl_NL: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Zilverbeek-hengel"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "Zilt Afgodsbeeld"
@@ -31089,8 +31307,8 @@ export const nl_NL: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Slakkenkroon Gewaden",
-        "bonus2": "Afkoelingseffect van Sintelhuid is 30 sec korter. Opgelopen schade vertraagt je spreuken niet meer.",
-        "bonus4": "Elke tweede Ontvlamming maakt je volgende Ruinenschicht binnen 8 sec onmiddellijk."
+        "bonus2": "Tegen vijandige spelers doet Ruinenschicht 50% meer schade, maar duurt het 0,7 sec langer om te spreken. Opgelopen schade vertraagt je spreuken niet meer.",
+        "bonus4": "Elke tweede Ontvlamming maakt je volgende Ruinenschicht binnen 8 sec onmiddellijk. Die gratis Ruinenschicht verbruikt geen Verwoesting."
       },
       "vanguard_warrior_arms": {
         "name": "Blaadwekking Gevechtsuitrusting",

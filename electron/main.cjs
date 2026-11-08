@@ -75,6 +75,8 @@ const { registerLinuxUrlHandler } = require('./linux_url_handler.cjs');
 const { allowGpuUnderSteamOverlay } = require('./steam_overlay_guard.cjs');
 const { attachRendererCrashRecovery, installProcessCrashGuards } = require('./crash_guard.cjs');
 const { initUpdater } = require('./updater.cjs');
+const { resolveBetaUpdate } = require('./beta_update_policy.cjs');
+const { openStartupPatcher } = require('./patcher/window.cjs');
 const {
   forceHighPerformanceGpu,
   PRIME_RELAUNCH_MARKER,
@@ -175,6 +177,7 @@ const devServerUrl = app.isPackaged ? undefined : process.env.VITE_DEV_SERVER_UR
 const appOrigins = appNavigationOrigins(APP_ORIGIN, devServerUrl);
 const deepLinkProtocol = 'worldofclaudecraft';
 let mainWindow = null;
+let patcherWindow = null;
 // The live window's reveal closure (showMainWindow inside createMainWindow),
 // published so focusMainWindow can route a pre-paint reveal through the SAME
 // discipline as 'ready-to-show'. It self-guards on its captured window
@@ -213,6 +216,14 @@ const desktopConfig = resolveDesktopConfig({
 // the VITE_DESKTOP_* env pair is honored on unpackaged checkouts only,
 // mirroring the WOC_DISTRIBUTION hatch closure.
 const apiOrigin = deriveOrigin(desktopConfig.apiOrigin) || PRODUCTION_API_ORIGIN;
+const startupPatcherEnabled = app.isPackaged && process.platform === 'win32' &&
+  desktopConfig.distribution === 'website' && packagedMetadata?.wocDesktop?.startupPatcher === true;
+const startupPatchPolicy = startupPatcherEnabled
+  ? resolveBetaUpdate({ stamp: packagedMetadata.wocDesktop, isPackaged: true, platform: process.platform })
+  : null;
+// The packaged loopback pilot also stays muted after NSIS relaunches it.
+if (startupPatchPolicy?.channel === 'beta-pilot') app.commandLine.appendSwitch('mute-audio');
+const { RELEASE_ORIGIN, DOWNLOAD_PAGE, createReleaseCheck } = require('./windows_release_notice.cjs');
 const desktopLoginOrigin = desktopConfig.loginOrigin.replace(/\/+$/, '');
 
 // Crashpad must start before any window exists so native crashes in EVERY
@@ -222,10 +233,10 @@ const desktopLoginOrigin = desktopConfig.loginOrigin.replace(/\/+$/, '');
 // build time, https-only) they upload compressed and rate-limited. No extra
 // user data rides along: the report carries only process/version metadata.
 crashReporter.start({
-  productName: 'World of ClaudeCraft',
+  productName: 'Fantasy Arena MMO',
   // companyName is deprecated in Electron 43; the metadata field survives as
   // the _companyName global extra.
-  globalExtra: { _companyName: 'World of ClaudeCraft' },
+  globalExtra: { _companyName: 'Fantasy Arena MMO' },
   submitURL: desktopConfig.crashSubmitUrl || undefined,
   uploadToServer: desktopConfig.crashSubmitUrl !== '',
   compress: true,
@@ -626,7 +637,7 @@ function createMainWindow() {
     height: restore.height,
     minWidth: MIN_WINDOW_WIDTH,
     minHeight: MIN_WINDOW_HEIGHT,
-    title: 'World of ClaudeCraft',
+    title: 'Fantasy Arena MMO',
     backgroundColor: '#05070a',
     // Created hidden and revealed on 'ready-to-show' below, so the player never
     // sees an unpainted white or empty frame before the client boots.
@@ -1001,7 +1012,13 @@ function openDesktopWalletHandoff(code) {
 // the bare reveal skipped). restore() before focus(), because focus() on a
 // minimized window does nothing on Windows and Linux.
 function focusMainWindow() {
-  if (!mainWindow || mainWindow.isDestroyed()) return;
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    if (patcherWindow && !patcherWindow.isDestroyed()) {
+      if (patcherWindow.isMinimized()) patcherWindow.restore();
+      patcherWindow.focus();
+    }
+    return;
+  }
   if (!mainWindow.isVisible() && !(revealMainWindow && revealMainWindow())) {
     // Defensive only (createMainWindow always publishes the closure before
     // the window can be reached): an unrevealable window still beats a
@@ -1611,31 +1628,6 @@ ipcMain.on('desktop-renderer-error', (event, payload) => {
 // electron/linux_url_handler.cjs fixes both, and MUST run first so the file and the
 // CHROME_DESKTOP name are in place before setAsDefaultProtocolClient shells out to
 // xdg-settings. No-op on win32/darwin and on every non-AppImage Linux channel.
-const linuxUrlHandler = registerLinuxUrlHandler({ scheme: deepLinkProtocol, log });
-
-// CHROME_DESKTOP is process-wide and inherited by every child, including the browser we open
-// for the Discord login itself. It exists only for the registration below, so the restore runs
-// in a finally: a throw from setAsDefaultProtocolClient would otherwise leave our app identity
-// set for every child, which is the exact outcome the module documents as the reason to
-// restore it. No-op on win32/darwin, and when nothing was set.
-try {
-  if (process.defaultApp) {
-    app.setAsDefaultProtocolClient(deepLinkProtocol, process.execPath, [
-      path.resolve(process.argv[1]),
-    ]);
-  } else {
-    app.setAsDefaultProtocolClient(deepLinkProtocol);
-  }
-} finally {
-  linuxUrlHandler.restore();
-  // AFTER setAsDefaultProtocolClient, never alongside it. Electron's Linux path shells out to
-  // xdg-settings, which runs `xdg-mime default` itself against the same unlocked file, and a
-  // torn read there makes it restore the ORIGINAL association and fail: exactly the broken
-  // state this is meant to fix. Ours stays as the fallback for when Electron's registration
-  // does not take.
-  linuxUrlHandler.associate();
-}
-
 const singleInstance = app.requestSingleInstanceLock();
 if (!singleInstance) {
   app.quit();
@@ -1838,11 +1830,6 @@ function armHealthySessionTimer() {
 // AFTER a healthy session it is the rare late crash: Chromium restarts the GPU process on
 // its own and this session keeps whatever it recovers on. Nothing is counted and nothing
 // is written, because the rung has already proven itself here.
-// The launch window opens now, not when something reports a renderer: see
-// armHealthySessionTimer. Deferred to whenReady only because Electron's timers are the
-// shell's own clock, and nothing before ready can die anyway.
-app.whenReady().then(armHealthySessionTimer);
-
 app.on('child-process-gone', (_event, details) => {
   if (details?.type !== 'GPU') return;
   const context = { reason: details?.reason, exitCode: details?.exitCode };
@@ -1958,7 +1945,8 @@ function logGpuStatus() {
   );
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  if (!singleInstance) return;
   log.info('[shell] starting', {
     version: app.getVersion(),
     electron: process.versions.electron,
@@ -1977,9 +1965,33 @@ app.whenReady().then(() => {
     crashDumpDir: app.getPath('crashDumps'),
     logFile: logFilePath,
   });
+  if (process.platform === 'win32' && app.isPackaged && desktopConfig.distribution === 'website' &&
+      !startupPatcherEnabled && !desktopConfig.updaterEnabled && apiOrigin === RELEASE_ORIGIN) {
+    const checkRelease = createReleaseCheck({ installed: app.getVersion() });
+    ipcMain.handle('fa-windows-release-check', event => trustedSender(event) ? checkRelease() : null);
+    ipcMain.handle('fa-windows-release-download', event => {
+      if (!trustedSender(event)) return null;
+      return shell.openExternal(DOWNLOAD_PAGE);
+    });
+  }
   registerAppProtocol();
   lockDownPermissions();
+  if (startupPatcherEnabled) {
+    const patcher = openStartupPatcher({ policy: startupPatchPolicy, version: app.getVersion(), log });
+    patcherWindow = patcher.window;
+    if (!await patcher.ready) return;
+  }
+  // Give the game its full startup health window after patch verification.
+  armHealthySessionTimer();
   createMainWindow();
+  if (patcherWindow && !patcherWindow.isDestroyed()) {
+    const closePatcher = () => {
+      if (patcherWindow && !patcherWindow.isDestroyed()) patcherWindow.destroy();
+      patcherWindow = null;
+    };
+    mainWindow.once('ready-to-show', closePatcher);
+    mainWindow.once('show', closePatcher);
+  }
 
   // A monitor being added, removed, or re-scaled (a DPI change mid-session)
   // changes a reading the renderer's viewport poll cannot see: it reacts to size
@@ -2013,7 +2025,7 @@ app.whenReady().then(() => {
   // Auto-update, website distribution only (desktop_config.cjs gates on
   // packaged + channel; Steam updates via SteamPipe depots, dev has nothing to
   // update). A failed init degrades to a log line: the game must still run.
-  if (desktopConfig.updaterEnabled) {
+  if (desktopConfig.updaterEnabled && !startupPatcherEnabled) {
     let updater = null;
     try {
       updater = initUpdater({

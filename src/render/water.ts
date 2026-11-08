@@ -34,6 +34,13 @@ import {
   SkyReflectionProbe,
   supportsSkyProbe,
 } from './ocean';
+import {
+  buildPlanktonWake,
+  PLANKTON_GLSL,
+  planktonUniforms,
+  setPlanktonNight,
+  updatePlanktonWake,
+} from './plankton_wake';
 import { bindSceneSamples } from './scene_sampling';
 import { waterNormalish, waterNormalMaps } from './textures';
 import {
@@ -296,7 +303,8 @@ export function setWaterSunDirection(dir: THREE.Vector3): void {
 }
 
 /** Apply the day/night color multiplier to every water surface. */
-export function setWaterDayNight(mul: readonly [number, number, number]): void {
+export function setWaterDayNight(mul: readonly [number, number, number], night: number): void {
+  setPlanktonNight(night);
   WATER_DAYNIGHT_UNIFORM.value.set(mul[0], mul[1], mul[2]);
 }
 
@@ -1229,6 +1237,7 @@ function buildShaderWater(seed: number, renderer?: THREE.WebGLRenderer): WaterVi
       cameraY = Number.POSITIVE_INFINITY,
     ): number {
       WATER_TIME.value = _time % OCEAN_LOOP_SECONDS;
+      updatePlanktonWake(WATER_TIME.value, cameraX, cameraZ);
       // THE CEILING FOLLOWS THE WATER THAT IS ACTUALLY THERE, not the global
       // constant. waterLevelAt is the SAME predicate the renderer's underwater
       // fog reads, so the two can no longer disagree about whether the camera
@@ -1426,6 +1435,7 @@ function buildPhongWater(): WaterView {
     sh.uniforms.uWocSunDir = WATER_SUN_UNIFORM;
     sh.uniforms.uDayNight = WATER_DAYNIGHT_UNIFORM;
     sh.uniforms.uWocWaterTime = WATER_TIME;
+    Object.assign(sh.uniforms, planktonUniforms);
     sh.vertexShader = sh.vertexShader
       .replace(
         '#include <common>',
@@ -1448,7 +1458,8 @@ function buildPhongWater(): WaterView {
         uniform vec3 uWocSunCol;
         uniform vec3 uWocSunDir;
         uniform vec3 uDayNight;
-        uniform float uWocWaterTime;`,
+        uniform float uWocWaterTime;
+        ${PLANKTON_GLSL}`,
       )
       .replace(
         '#include <color_fragment>',
@@ -1479,6 +1490,12 @@ function buildPhongWater(): WaterView {
         vec3 wocRefl = reflect(-normalize(uWocSunDir), wocWaveN);
         float wocGlint = exp2(48.0 * log2(max(dot(wocRefl, wocV), 1e-8)));
         totalEmissiveRadiance += uWocSunCol * uDayNight * wocGlint * 0.55;`,
+      )
+      .replace(
+        '#include <opaque_fragment>',
+        `vec4 plankton = planktonStroke(vWocWaterWPos.xz);
+        outgoingLight = outgoingLight * (1.0 - 0.46 * plankton.a) + plankton.rgb;
+        #include <opaque_fragment>`,
       );
   };
   // low tier gets the same to-the-horizon apron by simply oversizing the
@@ -1499,8 +1516,9 @@ function buildPhongWater(): WaterView {
     isZoneLoaded: () => true,
     // The low tier has no height field at all: a Phong plane cannot sample one,
     // and the tier exists precisely to skip that GPU work.
-    update(time: number): number {
+    update(time: number, cameraX: number, cameraZ: number): number {
       WATER_TIME.value = time % OCEAN_LOOP_SECONDS;
+      updatePlanktonWake(WATER_TIME.value, cameraX, cameraZ);
       tex.offset.x = time * 0.008;
       tex.offset.y = time * 0.011;
       norm.offset.x = time * 0.006;
@@ -1532,5 +1550,6 @@ function buildPhongWater(): WaterView {
 }
 
 export function buildWater(seed: number, renderer?: THREE.WebGLRenderer): WaterView {
+  buildPlanktonWake(seed);
   return GFX.standardMaterials ? buildShaderWater(seed, renderer) : buildPhongWater();
 }

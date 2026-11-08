@@ -17,12 +17,12 @@
 const { flattenControlChars } = require('./diagnostics.cjs');
 
 const DEFAULT_SHELL_STRINGS = {
-  crashTitle: 'World of ClaudeCraft',
+  crashTitle: 'Fantasy Arena MMO',
   crashBody: 'The game view stopped working. Reload it?',
   crashReload: 'Reload',
   crashQuit: 'Quit',
-  fatalTitle: 'World of ClaudeCraft',
-  fatalBody: 'World of ClaudeCraft hit an unexpected error and needs to close.',
+  fatalTitle: 'Fantasy Arena MMO',
+  fatalBody: 'Fantasy Arena MMO hit an unexpected error and needs to close.',
   // The host diagnostic's native save dialog (electron/host_diag.cjs): its
   // title, its confirm button, and the file-type label in the format dropdown.
   // Same contract as the crash strings above, for the same reason: the dialog is
@@ -53,3 +53,4 @@ function sanitizeShellStrings(input, current = DEFAULT_SHELL_STRINGS) {
 }
 
 module.exports = { DEFAULT_SHELL_STRINGS, MAX_SHELL_STRING_LENGTH, sanitizeShellStrings };
+

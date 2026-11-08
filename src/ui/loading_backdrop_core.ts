@@ -1,15 +1,15 @@
 export const LOADING_BACKDROP_PATHS = [
-  '/textures/loading/hollow-crypt-empty.webp',
-  '/textures/loading/crystal-delve.webp',
-  '/textures/loading/duskmoor-eclipse.webp',
-  '/textures/loading/thornpeak-storm.webp',
-  '/textures/loading/eastbrook-mine-duel.webp',
-  '/textures/loading/veiled-hollow-stag.webp',
-  '/textures/loading/hollow-crypt-party.webp',
-  '/textures/loading/eastbrook-square.webp',
-  '/textures/loading/drakemaw-caldera.webp',
-  '/textures/loading/fenbridge-march.webp',
-  '/textures/loading/fenbridge-rain-skiff.webp',
+  '/fantasy-arena/loading/hollow-crypt-empty.webp',
+  '/fantasy-arena/loading/crystal-delve.webp',
+  '/fantasy-arena/loading/duskmoor-eclipse.webp',
+  '/fantasy-arena/loading/thornpeak-storm.webp',
+  '/fantasy-arena/loading/eastbrook-mine-duel.webp',
+  '/fantasy-arena/loading/veiled-hollow-stag.webp',
+  '/fantasy-arena/loading/hollow-crypt-party.webp',
+  '/fantasy-arena/loading/eastbrook-square.webp',
+  '/fantasy-arena/loading/drakemaw-caldera.webp',
+  '/fantasy-arena/loading/fenbridge-march.webp',
+  '/fantasy-arena/loading/fenbridge-rain-skiff.webp',
 ] as const;
 
 function choiceIndex(randomUnit: number, count: number): number {

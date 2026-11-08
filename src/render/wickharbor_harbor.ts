@@ -16,6 +16,8 @@
 // resetter is registered in assets/graphics_profile.ts. Nothing here runs per frame.
 
 import { WICKHARBOR_HARBOR_FRAME } from '../sim/content/wickharbor_harbor';
+import { WORLD_SEED } from '../sim/world_seed';
+import { buildFantasyArenaWickharborHarbor } from './fa_wickharbor_harbor';
 import { registerDeferredPreload } from './assets/preload';
 import { tieredVertexColourModel } from './tiered_vertex_colour_model';
 import { wickharborHarborParts } from './wickharbor_harbor_core';
@@ -30,16 +32,22 @@ const harbor = tieredVertexColourModel({
   origin: WICKHARBOR_HARBOR_FRAME,
 });
 
-export const prepareWickharborHarborAssets = harbor.prepare;
+export function prepareWickharborHarborAssets(): Promise<void> {
+  return import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? Promise.resolve() : harbor.prepare();
+}
 
-if (typeof window !== 'undefined') registerDeferredPreload(prepareWickharborHarborAssets);
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') registerDeferredPreload(prepareWickharborHarborAssets);
 
 /** Drop the prepared templates (graphics-profile rebuilds convert materials anew; the parsed
  *  source survives). Registered in assets/graphics_profile.ts. */
 export const resetWickharborHarborCaches = harbor.reset;
 
 /** The harbor, built once into the props root (built-in world only). */
-export const buildWickharborHarbor = harbor.build;
+export function buildWickharborHarbor(seed: number = WORLD_SEED): ReturnType<typeof harbor.build> {
+  return import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? buildFantasyArenaWickharborHarbor(seed)
+    : harbor.build();
+}
 
 /** The harbor's distinct (geometry, material) programs at the live tier, for the props
  *  material prewarm (props.ts). Empty until buildProps has built the harbor. */

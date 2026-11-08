@@ -1,10 +1,11 @@
 import * as THREE from 'three';
-import { ZONES } from '../../sim/data';
+import { isBuiltinWorldActive, ZONES } from '../../sim/data';
 import {
   type BackgroundGpuQueue,
   GPU_WORK_PRIORITY,
   isGpuQueueShutdown,
 } from '../background_gpu_queue';
+import { islandIsolationActive } from '../island_isolation_core';
 import { prepareSceneryAtlas } from './atlas_preparation';
 import { buildSceneryBand, type SceneryBand } from './batches';
 import {
@@ -202,10 +203,12 @@ export class LowSceneryBands {
       for (const selected of current.selected) selected.fill(0);
       current.giantSelected.fill(0);
       if (this.active) {
+        const islandOnly = isBuiltinWorldActive() && islandIsolationActive(x, z);
         const maxDistance =
           host.scene.fog instanceof THREE.Fog ? host.scene.fog.far : LOW_SCENERY_BUDGET.fadeEnd;
         for (let i = 0; i < current.items.length; i++) {
           const item = current.items[i];
+          if (islandOnly && !islandIsolationActive(item.x, item.z)) continue;
           if (this.sourceOwns(item)) continue;
           const representation = lowSceneryRepresentation(item, x, z, false, maxDistance);
           const band =
@@ -221,6 +224,7 @@ export class LowSceneryBands {
         for (let i = 0; i < current.giantItems.length; i++) {
           const item = current.giantItems[i];
           if (
+            (!islandOnly || islandIsolationActive(item.x, item.z)) &&
             !this.sourceOwns(item) &&
             lowSceneryRepresentation(item, x, z, true, maxDistance) === 'sprite'
           )

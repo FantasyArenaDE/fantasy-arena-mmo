@@ -1,3 +1,4 @@
+import { adminOneHitApplies } from './admin_one_hit';
 // Spell avoidance, classic-era semantics: a spell can never "miss" the way a
 // physical attack does; instead a target can fully RESIST it. The chance of a
 // full resist is the complement of the level-based spell-hit chance
@@ -86,6 +87,7 @@ export function resolveHostileSpellResist(
   tgt: Entity,
   ability: AbilityDef,
 ): boolean {
+  if (adminOneHitApplies(ctx, src, tgt)) return false;
   if (!isSpellResisted(ctx.rng, src.level, tgt.level, src.hitBonus)) return false;
   ctx.emit({
     type: 'damage',

@@ -29,7 +29,7 @@ import {
 } from './content/heroic_loot';
 import { HEROIC_VENDOR_STOCK } from './content/heroic_vendor';
 import { hoardLootSourceLevels } from './content/hoard_loot';
-import { IGNIVAR_LOOT_ITEM_IDS, IGNIVAR_RAID_LOOT_SOURCE_LEVEL } from './content/ignivar_loot';
+import { DREAMDANCER_CRUCIBLE_ITEMS, IGNIVAR_LOOT_ITEM_IDS, IGNIVAR_RAID_LOOT_SOURCE_LEVEL } from './content/ignivar_loot';
 import {
   NYTHRAXIS_RELOCATED_ITEM_IDS,
   NYTHRAXIS_RELOCATED_TRINKET_IDS,
@@ -310,6 +310,7 @@ function buildSourceIndex(): Map<string, ItemSource> {
   // boss mobs (bump() is highest-level-wins, so this overrides that). Sigils
   // are kind 'tool' with no slot and stay item-level ineligible.
   for (const id of IGNIVAR_LOOT_ITEM_IDS) bump(id, IGNIVAR_RAID_LOOT_SOURCE_LEVEL, true);
+  for (const id of Object.keys(DREAMDANCER_CRUCIBLE_ITEMS)) bump(id, IGNIVAR_RAID_LOOT_SOURCE_LEVEL, true);
   // The Crucible raid trinkets (content/trinkets.ts) drop from the same two
   // bosses on both difficulties (Normal off-set slot and Heroic exclusive
   // slot), so they read the Crucible tier (35), out-ranking both the level-20

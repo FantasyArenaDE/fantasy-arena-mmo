@@ -15,6 +15,10 @@ type RetainedRowDescriptionId =
   | 'dru_r20_improved_hurricane';
 
 type OptionalRetainedRowDescriptionId =
+  | 'dream_talent_mana'
+  | 'dream_talent_regen'
+  | 'dream_talent_shroud_power'
+  | 'dream_talent_shroud_time'
   | 'wlk_r17_death_coil'
   | 'wlk_r20_chaos_bolt'
   | 'wlk_r20_grimoire_of_haste'
@@ -728,6 +732,10 @@ export const RETAINED_ROW_DESCRIPTION_OVERRIDES: Partial<
       'Sovrafioritura applica una nuova Cura delle Spore a ogni alleato di cui ha raccolto le cure.',
   },
   de_DE: {
+    dream_talent_mana: 'Erhöht dein maximales Mana um 5 %.',
+    dream_talent_regen: 'Du regenerierst 8 % mehr Mana durch Willenskraft.',
+    dream_talent_shroud_power: 'Traumhülle absorbiert 12 % mehr Grundschaden.',
+    dream_talent_shroud_time: 'Traumhülle hält 2 Sek. länger an.',
     mag_r5_blink_cast:
       'Du kannst Flimmerschritt mitten in einem Zaubervorgang einsetzen, ohne ihn zu unterbrechen.',
     mag_r8_temporal_rift:

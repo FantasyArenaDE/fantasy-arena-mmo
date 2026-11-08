@@ -36,6 +36,7 @@ export const WOC_BODY_CLASSES: ReadonlySet<PlayerClass> = new Set<PlayerClass>([
   'paladin',
   'hunter',
   'rogue',
+  'dreamdancer',
   'mage',
   'priest',
   'warlock',

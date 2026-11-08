@@ -327,7 +327,7 @@ export class ActionBarController {
     grantedAbilityIds: ReadonlySet<string> = new Set(),
   ): void {
     if (this.isSpectating()) return;
-    this.activeSpecState = this.deps.talentSpec();
+    this.swapAttackActionForSpec(this.deps.talentSpec());
     this.actionState = sanitizeHotbarActions(actions, (id) => this.isAbilityPlacementAllowed(id));
     this.unsavedChanges = true;
     this.pendingLoadoutKnownAbilityIds = new Set(targetKnownAbilityIds);
@@ -403,11 +403,26 @@ export class ActionBarController {
     if (next === this.activeSpecState) return false;
     this.saveActions();
     this.saveAttackAction();
+    const outgoingAttackAction = this.attackActionState;
     this.activeSpecState = next;
+    this.loadAttackAction({ carryOver: outgoingAttackAction });
     this.loadActions();
-    this.loadAttackAction();
     this.knownAbilityIdsAtLastSync = null;
     return true;
+  }
+
+  /** The freed Attack slot (key 1) is stored per spec, like the bar. A spec
+   *  change that does not come through syncSpec (a saved build installing its
+   *  bar, which sets activeSpecState itself) must still swap it: keep the
+   *  outgoing spec's assignment under its own key and load the incoming one's.
+   *  Without this, a build switch left the previous spec's key 1 in view, and
+   *  the next save wrote it over the incoming spec's own. */
+  private swapAttackActionForSpec(next: string | null): void {
+    if (next === this.activeSpecState) return;
+    this.writeAttackAction();
+    const outgoingAttackAction = this.attackActionState;
+    this.activeSpecState = next;
+    this.loadAttackAction({ carryOver: outgoingAttackAction });
   }
 
   syncKnownAbilities(): void {
@@ -884,11 +899,22 @@ export class ActionBarController {
     return null;
   }
 
-  private loadAttackAction(): void {
+  /** On a spec switch, only a spec with no saved bar borrows the outgoing key 1.
+   *  If its bar exists, a missing key 1 is an empty slot. Read this before
+   *  loadActions can seed a new bar from the older pre-spec storage. */
+  private loadAttackAction(opts: { carryOver?: HotbarAction } = {}): void {
     const key = attackSlotStorageKey(this.slotMapKey());
     let storedRaw: string | null = null;
     try {
       storedRaw = this.deps.storage.getItem(key);
+      if (storedRaw === null && opts.carryOver !== undefined) {
+        const firstVisit = this.deps.storage.getItem(this.slotMapKey()) === null;
+        this.attackActionState = firstVisit ? opts.carryOver : null;
+        if (this.attackActionState !== null) {
+          writeAttackSlotAction(this.deps.storage, key, this.attackActionState);
+        }
+        return;
+      }
       if (
         storedRaw === null &&
         this.activeFormState === 'normal' &&

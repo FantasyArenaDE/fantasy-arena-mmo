@@ -20,6 +20,8 @@ import {
 import { carryGeometryLod } from './assets/geometry_lod';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { buildBrookBed } from './brook_bed';
+import { setBrookReducedMotion } from './brook_caustics';
 import { buildDeckWood } from './deck_render';
 import { GFX } from './gfx';
 import { activeWorldPromoted } from './promoted_scenery_gate';
@@ -29,7 +31,7 @@ import { applySurfaceDetail, GREAT_TREE_BARK_DETAIL, isBarkMaterialName } from '
 
 export interface JungleFeaturesView {
   group: THREE.Group;
-  update(time: number): void;
+  update(time: number, reducedMotion?: boolean): void;
   dispose(): void;
 }
 
@@ -218,6 +220,8 @@ export function buildJungleFeatures(seed: number): JungleFeaturesView {
   const group = new THREE.Group();
   group.name = 'jungle-features';
   const coconutCells: THREE.InstancedMesh[] = [];
+  const brookBed = buildBrookBed(seed);
+  if (brookBed) group.add(brookBed);
 
   const instance = (geo: THREE.BufferGeometry, material: THREE.Material, spots: Placement[]) => {
     if (spots.length === 0) return;
@@ -463,6 +467,11 @@ export function buildJungleFeatures(seed: number): JungleFeaturesView {
   return {
     group,
     dispose(): void {
+      if (brookBed) {
+        brookBed.removeFromParent();
+        brookBed.geometry.dispose();
+        brookBed.material.dispose();
+      }
       // Release cell buffers and the rebaked geometry, never borrowed GLB materials.
       const geometries = new Set(coconutCells.map((mesh) => mesh.geometry));
       for (const mesh of coconutCells) {
@@ -472,9 +481,8 @@ export function buildJungleFeatures(seed: number): JungleFeaturesView {
       for (const geometry of geometries) geometry.dispose();
       coconutCells.length = 0;
     },
-    update(): void {
-      // still air: the global wind shader sways the modeled foliage; the
-      // strand itself holds its pose
+    update(_time: number, reducedMotion = false): void {
+      setBrookReducedMotion(reducedMotion);
     },
   };
 }

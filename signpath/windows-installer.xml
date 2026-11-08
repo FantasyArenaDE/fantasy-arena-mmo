@@ -1,0 +1,9 @@
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <parameters>
+    <parameter name="version" required="true" />
+  </parameters>
+  <pe-file path="fantasy-arena-mmo-${version}-win-x64.exe"
+           product-name="Fantasy Arena MMO" product-version="${version}">
+    <authenticode-sign hash-algorithm="sha-256" />
+  </pe-file>
+</artifact-configuration>

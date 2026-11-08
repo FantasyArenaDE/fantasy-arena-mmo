@@ -83,7 +83,7 @@ export const BG_LADDER_SIZE = 10;
 // Queue floor: an under-leveled body on one side decides ranked matches, so
 // every queued champion (and every member of a queued party) must be 20.
 export const BG_MIN_LEVEL = 20;
-const BG_COUNTDOWN = 8; // form-up gate at the keeps before the flags go live
+export const BG_COUNTDOWN = 12; // form-up gate at the keeps before the flags go live
 // First team to this many captures wins. THREE, the classic capture-the-flag
 // battleground convention (Warsong Gulch ran first-to-3 for its whole classic
 // life). Cut from the launch value of 5 on live evidence: a dominating side

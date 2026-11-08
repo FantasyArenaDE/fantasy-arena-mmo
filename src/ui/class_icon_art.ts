@@ -17,6 +17,7 @@
 // a new class, or a typo reds the suite.
 
 import type { PlayerClass } from '../sim/types';
+import { DREAMDANCER_CLASS_ART_URL } from './dreamdancer_icon_art';
 
 const CLASS_ICON_DIR = '/ui/classes';
 
@@ -30,6 +31,7 @@ export const CLASS_ART_IDS: ReadonlySet<PlayerClass> = new Set<PlayerClass>([
   'mage',
   'warlock',
   'druid',
+  'dreamdancer',
 ]);
 
 /** True when `id` is a class that ships painted emblem art. */
@@ -39,5 +41,11 @@ export function hasClassIconArt(id: string): id is PlayerClass {
 
 /** Static URL of a class's painted emblem, or null when `id` is not a class. */
 export function classIconUrl(id: string): string | null {
-  return hasClassIconArt(id) ? `${CLASS_ICON_DIR}/${id}.webp` : null;
+  if (!hasClassIconArt(id)) return null;
+  if (id === 'dreamdancer') return DREAMDANCER_CLASS_ART_URL;
+  const dir =
+    import.meta.env?.VITE_FA_BROWSER_RELEASE === '1'
+      ? '/ui/fantasy-arena/classes'
+      : CLASS_ICON_DIR;
+  return `${dir}/${id}.webp`;
 }

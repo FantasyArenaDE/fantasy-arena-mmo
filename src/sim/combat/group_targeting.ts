@@ -7,15 +7,20 @@
 import type { SimContext } from '../sim_context';
 import type { Entity } from '../types';
 
-// Living group/raid PLAYERS within `radius` of `caster` (the caster included when in
-// range); solo, just the caster. Excludes the dead, pets / NPC companions (no
+// Living group/raid PLAYERS within `radius` of the center (the caster by default).
+// The caster is included when in range; solo, just the caster. Excludes the dead, pets / NPC companions (no
 // PlayerMeta), enemies, and out-of-range members. Deterministic order (by entity id);
 // draws no rng.
-export function livingGroupRaidInRadius(ctx: SimContext, caster: Entity, radius: number): Entity[] {
+export function livingGroupRaidInRadius(
+  ctx: SimContext,
+  caster: Entity,
+  radius: number,
+  center: Entity = caster,
+): Entity[] {
   const party = ctx.partyOf(caster.id);
   const memberIds = party ? party.members : [caster.id];
-  const cx = caster.pos.x;
-  const cz = caster.pos.z;
+  const cx = center.pos.x;
+  const cz = center.pos.z;
   const r2 = radius * radius;
   const out: Entity[] = [];
   for (const pid of memberIds) {

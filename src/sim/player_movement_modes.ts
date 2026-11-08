@@ -30,20 +30,7 @@ export function advanceExclusiveMovement(
   // updateRiftTriggers reapplies it after the step; non-rift movement is unchanged.
   const preLift = riftPlayerLift(ctx, p);
   if (preLift !== 0) p.pos.y -= preLift;
-  const mv = meta.moveInput;
-  if (
-    mv.forward ||
-    mv.back ||
-    mv.strafeLeft ||
-    mv.strafeRight ||
-    mv.turnLeft ||
-    mv.turnRight ||
-    mv.jump
-  ) {
-    meta.lastActiveTick = ctx.tickCount;
-    // Deliberate locomotion clears AFK, but not Do Not Disturb.
-    clearAfkOnMove(ctx, meta, p);
-  }
+  notePlayerMoveIntent(ctx, p, meta);
   // An encounter carrying the body in the air owns its pose (carried_body.ts).
   if (p.carriedBy !== undefined && advanceCarried(p, ctx.entities.get(p.carriedBy))) return true;
   if (advanceValkyrsCalling(ctx, p)) return true;
@@ -60,4 +47,21 @@ export function advanceExclusiveMovement(
   if (advanceClimb(p)) return true;
   if (tryStartClimb(p, ctx.cfg.seed) && advanceClimb(p)) return true;
   return false;
+}
+
+export function notePlayerMoveIntent(ctx: SimContext, p: Entity, meta: PlayerMeta): void {
+  const mv = meta.moveInput;
+  if (
+    mv.forward ||
+    mv.back ||
+    mv.strafeLeft ||
+    mv.strafeRight ||
+    mv.turnLeft ||
+    mv.turnRight ||
+    mv.jump
+  ) {
+    meta.lastActiveTick = ctx.tickCount;
+    // Deliberate locomotion clears AFK, but not Do Not Disturb.
+    clearAfkOnMove(ctx, meta, p);
+  }
 }

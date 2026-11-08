@@ -23,7 +23,7 @@ import {
   buildAbilityMaterialPrewarmGroup,
 } from './ability_material_prewarm';
 import { abilityVfxFamilyMaterials, collectAbilityVfxCompileTargets } from './ability_vfx';
-import { warriorKitAssetsState } from './ability_vfx/production_assets';
+import { warriorKitAssetsState, warriorKitUnavailable } from './ability_vfx/production_assets';
 import { CAST_VFX_FAMILIES, type CastVfxFamilyId } from './cast_vfx_family';
 import { type CastVfxReadiness, createCastVfxReadiness } from './cast_vfx_readiness_core';
 import { type CompileArmHost, linkColorPrograms } from './compile_arms';
@@ -80,7 +80,7 @@ function linkUnit(
  *  device (a phone) never draws a kit piece, since every one waits on a sheet,
  *  a geometry or a preparation the declined load never provides. */
 export function warriorKitDeclinedByDevice(): boolean {
-  return GFX.constrainedMemory;
+  return warriorKitUnavailable(GFX.constrainedMemory);
 }
 
 /** One link unit per distinct pooled program, the engine family's first, then

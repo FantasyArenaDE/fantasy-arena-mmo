@@ -17,6 +17,7 @@ interface CameraAudioHost {
   camera: THREE.Camera;
   ambience: ReturnType<typeof createAmbienceState>;
   weatherOn: boolean;
+  weather?: { valleyWeather: THREE.Vector2 };
   sim: {
     cfg: { seed: number };
     player: { pos: { x: number } };
@@ -53,5 +54,7 @@ export function updateCameraAudioListener(host: object, eye: THREE.Vector3): voi
     for (const p of h.riftAmbienceScratch) h.ambientPointsMergedScratch.push(p);
     points = h.ambientPointsMergedScratch;
   }
+  if (h.weatherOn && !amb.inDungeon && (h.weather?.valleyWeather.x ?? 0) > 0.15)
+    amb.precip = 'rain';
   sink.ambience(amb.biome, amb.inDungeon, amb.precip, amb.nearWater, 0, points, eye);
 }

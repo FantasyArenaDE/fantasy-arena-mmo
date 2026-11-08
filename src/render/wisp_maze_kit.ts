@@ -10,6 +10,7 @@
 import * as THREE from 'three';
 import { loadGltf, releaseGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { fantasyArenaWispMazeKit } from './fa_wisp_maze_kit';
 import { markSharedGeometry } from './shared_resource';
 import { WISP_MAZE_WALL_HEIGHT } from './wisp_maze_core';
 import { WISP_MAZE_KIT_CELL, WISP_MAZE_KIT_URL } from './wisp_maze_kit_core';
@@ -24,7 +25,7 @@ export type WispMazeKit = ReadonlyMap<string, WispMazeKitPart>;
 
 let baked: WispMazeKit | null = null;
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   registerDeferredPreload(() =>
     loadGltf(WISP_MAZE_KIT_URL)
       .then((gltf) => {
@@ -153,7 +154,7 @@ function mergeBasic(parts: THREE.BufferGeometry[]): THREE.BufferGeometry {
 
 /** The baked kit when it loaded, else the stand-in. */
 export function wispMazeKit(): WispMazeKit {
-  return baked ?? standInWispMazeKit();
+  return baked ?? (import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? fantasyArenaWispMazeKit() : standInWispMazeKit());
 }
 
 /** True once the real kit is baked (false in Node, and after a failed load). */

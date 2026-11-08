@@ -1,3 +1,4 @@
+import { DREAMDANCER_TALENTS } from './dreamdancer';
 import type { SavedGearSet } from '../loadout_gear';
 import type { AbilityEffect, AuraKind, ResourceType } from '../types';
 import { ALL_CLASSES, MAX_LEVEL, type PlayerClass } from '../types';
@@ -432,6 +433,7 @@ export interface TalentModifiers {
 }
 
 export const TALENTS = {
+  dreamdancer: DREAMDANCER_TALENTS,
   warrior: WARRIOR_TALENTS,
   paladin: PALADIN_TALENTS,
   hunter: HUNTER_TALENTS,

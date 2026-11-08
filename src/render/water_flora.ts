@@ -12,6 +12,7 @@ import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { GFX } from './gfx';
 import { activeWorldPromoted } from './promoted_scenery_gate';
+import { reedWindMaterial } from './reed_wind';
 import { type WaterFloraPlacement, waterFloraRegions } from './water_flora_core';
 import { reusePackedOrmSample } from './water_flora_shader_core';
 import { thinLeanDressing } from './zone_dressing_lod_core';
@@ -100,7 +101,7 @@ function waterFloraMaterial(source: THREE.Material): THREE.Material {
   return material;
 }
 
-function extractParts(scene: THREE.Group): { geo: THREE.BufferGeometry; mat: THREE.Material }[] {
+function extractParts(scene: THREE.Group, swayReeds: boolean): { geo: THREE.BufferGeometry; mat: THREE.Material }[] {
   scene.updateMatrixWorld(true);
   const parts: { geo: THREE.BufferGeometry; mat: THREE.Material }[] = [];
   scene.traverse((o) => {
@@ -121,6 +122,7 @@ function extractParts(scene: THREE.Group): { geo: THREE.BufferGeometry; mat: THR
     p.geo.translate(-cx, -box.min.y, -cz);
     p.geo.computeBoundingBox();
     p.geo.computeBoundingSphere();
+    if (swayReeds) p.mat = reedWindMaterial(p.mat, box.max.y - box.min.y);
   }
   return parts;
 }
@@ -144,7 +146,7 @@ export function buildWaterFlora(seed: number): WaterFloraView {
     if (!scene || spots.length === 0) return;
     let parts = partsCache.get(key);
     if (!parts) {
-      parts = extractParts(scene);
+      parts = extractParts(scene, key === 'reeds' && import.meta.env.VITE_FA_BROWSER_RELEASE === '1');
       partsCache.set(key, parts);
     }
     for (const part of parts) {

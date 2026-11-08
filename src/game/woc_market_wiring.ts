@@ -75,6 +75,7 @@ export interface WocMarketWiringDeps {
  *  shell whose main process proves the website distribution. Every other shell
  *  stays fail-closed. */
 export async function wocMarketAttachAllowed(shell: WocMarketShell): Promise<boolean> {
+  if (import.meta.env.VITE_WALLET_DISABLED === '1') return false;
   if (shell.nativeApp) {
     return resolveWalletCapability({
       disabled: false,

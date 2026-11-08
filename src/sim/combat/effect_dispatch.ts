@@ -1,3 +1,12 @@
+import {
+  DREAM_CHORUS, DREAM_COMFORT, DREAM_MOONREND, DREAM_REVERIE, DREAM_REVERIE_MANA_FRACTION,
+  DREAM_SPARK, DREAM_THREAD, DREAM_VEIL,
+} from '../content/dreamdancer';
+import {
+  bindDreamThread, buildArenaMoonrendStrand, buildDreamThread,
+  DREAM_ARENA_FINISHER_WOUND, rewardDreamChorus,
+} from './dream_thread';
+import { adminOneHitApplies } from './admin_one_hit';
 import { buildBenisonPrayer, consumeBenisonPrayers } from './priest/benison_dawnweave';
 // Effect dispatch (C4b): the per-effect switch that fans a RESOLVED ability's
 // `effects[]` into damage, auras, CC, threat, combo, pets, healing, ground-AoE,
@@ -122,6 +131,7 @@ import {
   applyDuskfireClaim,
   applyRuinousBrand,
   destructionAfterCast,
+  slagcrownRuinboltPvpDamageMult,
   summonPyreColossus,
 } from './destruction';
 import { extendOwnedDot } from './dot_mutation';
@@ -493,6 +503,10 @@ export function runEffects(
   facingOverride?: number,
 ): void {
   const ability = res.def;
+  if (ability.id === DREAM_THREAD && target) bindDreamThread(ctx, p, target);
+  if (ability.id === DREAM_REVERIE && p.resourceType === 'mana') {
+    p.resource = Math.min(p.maxResource, p.resource + Math.round(p.maxResource * DREAM_REVERIE_MANA_FRACTION));
+  }
   const benisonChoirMult = consumeBenisonPrayers(ctx, p, ability.id);
   let benisonPrayerBuilt = false;
   // The resolved (pre-critical) amount of this cast's direct heal, read by a
@@ -892,7 +906,8 @@ export function runEffects(
         // deals no damage and causes no threat. Rolled before this hit's damage and
         // crit draws, and ONLY when it can actually fail: a hit-capped attacker
         // cannot miss, so drawing there would fork the shared stream for nothing.
-        const directMissChance = isSpell ? 0 : swingMissChance(p, target);
+        const directMissChance =
+          isSpell || adminOneHitApplies(ctx, p, target) ? 0 : swingMissChance(p, target);
         if (directMissChance > 0 && ctx.rng.chance(directMissChance)) {
           ctx.emit({
             type: 'damage',
@@ -953,6 +968,9 @@ export function runEffects(
         ) {
           dmg *= 1 + vsDotted;
         }
+        // Slagcrown 2pc (Warfare Season 2): Ruinbolt hits an enemy player 50
+        // percent harder; 1 for every other ability, caster and target.
+        dmg *= slagcrownRuinboltPvpDamageMult(ctx, p, res, target);
         const crit =
           ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : critChance) ||
           eff.guaranteedCrit === true ||
@@ -1001,6 +1019,7 @@ export function runEffects(
         // Read before the hunter/shaman follow-up hooks below, which can deal their
         // own damage: this must stay the damage THIS ability landed.
         const effectiveDamage = Math.max(0, targetHpBefore - target.hp);
+        if (ability.id === DREAM_SPARK) buildDreamThread(p, target, ability.id, effectiveDamage);
         // The crit rolled above is plumbed through as one argument (Coldsight
         // 4pc observes it; no extra roll happens anywhere downstream).
         onHunterPrimaryDamage(ctx, p, target, res, finalDamage, crit);
@@ -1476,6 +1495,7 @@ export function runEffects(
         // ordering is what keeps an echoed copy of this same cast (and every
         // other derived/chained/procced applyHeal call, none of which run
         // through this case) from ever double-crediting a single real cast.
+        if (ability.id === DREAM_COMFORT) buildDreamThread(p, healTarget, ability.id, healed);
         creditHubHealingDrill(ctx, p, healTarget, healed, ability.id);
         if (!benisonPrayerBuilt)
           benisonPrayerBuilt = buildBenisonPrayer(ctx, p, ability.id, healed);
@@ -2085,6 +2105,9 @@ export function runEffects(
       }
       case 'debuffTargetSource': {
         if (!target || target.dead) break;
+        // Two overlapping finisher projectiles must not multiply the wound.
+        if (eff.auraId === DREAM_ARENA_FINISHER_WOUND &&
+            target.auras.some(aura => aura.id === eff.auraId && aura.sourceId !== p.id)) break;
         ctx.applyAura(target, {
           id: eff.auraId,
           name: eff.auraName,
@@ -2193,6 +2216,9 @@ export function runEffects(
         };
         if (dotId === 'vampiric_touch') applyVampiricTouch(ctx, p, target, dot);
         else ctx.applyAura(target, dot);
+        if (ability.id === DREAM_MOONREND && target.auras.includes(dot)) {
+          buildArenaMoonrendStrand(ctx, p, target);
+        }
         if (priorDirge)
           refreshDirgeFieldAfterReapplication(ctx, p, meta, target, priorDirge, ability.range);
         if (dotId === 'rupture') {
@@ -2905,7 +2931,19 @@ export function runEffects(
         // AoE heals take the same per-target coefficient penalty as AoE damage.
         const aoeHealBonus = directHealBonus(p.healPower, res.castTime, true, talentHealMult);
         let effectiveHealingTargets = 0;
-        for (const m of friendliesInRadius(ctx, center, eff.radius)) {
+        const boundId = ability.id === DREAM_CHORUS
+          ? p.auras.find(aura => aura.kind === 'dream_thread' && aura.remaining > 0)?.dreamTargetId
+          : undefined;
+        let boundWasHealed = false;
+        const targets = eff.maxGroupTargets === undefined
+          ? friendliesInRadius(ctx, center, eff.radius)
+          : livingGroupRaidInRadius(ctx, p, eff.radius, center)
+              .filter((member) =>
+                (member.id === p.id || ctx.isFriendlyTo(p, member)) && ctx.hasLineOfSight(center, member),
+              )
+              .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp || a.id - b.id)
+              .slice(0, eff.maxGroupTargets);
+        for (const m of targets) {
           if (eff.playersOnly && m.kind !== 'player') continue;
           if (!ctx.hasLineOfSight(center, m)) continue;
           const rolledHeal = ctx.rng.range(eff.min, eff.max) + aoeHealBonus;
@@ -2927,7 +2965,10 @@ export function runEffects(
             false,
             resolution,
           );
-          if (healed > 0) effectiveHealingTargets++;
+          if (healed > 0) {
+            effectiveHealingTargets++;
+            if (m.id === boundId) boundWasHealed = true;
+          }
           priestOnGroupHeal(
             ctx,
             p,
@@ -2940,6 +2981,7 @@ export function runEffects(
           );
         }
         if (effectiveHealingTargets > 0) devotionHealingTriggered = true;
+        rewardDreamChorus(p, boundWasHealed, effectiveHealingTargets, res);
         if (ability.id === 'radiant_chorus') {
           grantRadiantResonance(ctx, p, effectiveHealingTargets);
         }
@@ -2961,7 +3003,7 @@ export function runEffects(
       case 'groundAoE': {
         // Ground-targeted casts drop the zone where they were aimed; others lay it
         // under the caster (e.g. Consecration at your feet).
-        const zoneCenter = p.castAim ?? p.pos;
+        const zoneCenter = p.castAim ?? (ability.id === DREAM_VEIL ? target?.pos : undefined) ?? p.pos;
         const thundercallMult = thundercallDamageMultiplier(ctx, p, ability.id);
         const echoThunderVent = shouldEchoThunderGroundVent(ctx, p, ability.id);
         const groundEffect: GroundAoE = {
@@ -4332,7 +4374,7 @@ export function runEffects(
         if (!target || target.dead) break;
         // a sunder can miss like any melee attack (and Hit rating reduces it, via
         // swingMissChance); a miss causes no threat
-        if (ctx.rng.chance(swingMissChance(p, target))) {
+        if (!adminOneHitApplies(ctx, p, target) && ctx.rng.chance(swingMissChance(p, target))) {
           ctx.emit({
             type: 'damage',
             sourceId: p.id,

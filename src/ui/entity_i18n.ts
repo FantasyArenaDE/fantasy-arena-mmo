@@ -183,6 +183,7 @@ const CLASS_NAME_KEYS: Record<PlayerClass, string> = {
   priest: 'classes.priest',
   shaman: 'classes.shaman',
   mage: 'classes.mage',
+  dreamdancer: 'classes.dreamdancer',
   warlock: 'classes.warlock',
   druid: 'classes.druid',
 };
@@ -195,6 +196,7 @@ const CLASS_DESCRIPTION_KEYS: Record<PlayerClass, string> = {
   priest: 'classDetails.lore.priest',
   shaman: 'classDetails.lore.shaman',
   mage: 'classDetails.lore.mage',
+  dreamdancer: 'classDetails.lore.dreamdancer',
   warlock: 'classDetails.lore.warlock',
   druid: 'classDetails.lore.druid',
 };

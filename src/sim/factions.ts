@@ -349,9 +349,11 @@ export function sanitizeFactionCurrencies(raw: unknown): Record<FactionId, numbe
 }
 
 /** The Allied Hearthstone's saved or wired hub: a known faction id, else unbound. */
-export function sanitizeAlliedHearthstoneAttunement(raw: unknown): FactionId | undefined {
+export function sanitizeFactionId(raw: unknown): FactionId | undefined {
   return (FACTION_IDS as readonly unknown[]).includes(raw) ? (raw as FactionId) : undefined;
 }
+
+export const sanitizeAlliedHearthstoneAttunement = sanitizeFactionId;
 
 /** Reward in faction currency for completing a World Quest in that faction's zone. */
 export function worldQuestFactionCurrencyReward(_quest: WorldQuestDef, level: number): number {

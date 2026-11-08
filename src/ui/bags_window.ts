@@ -1,3 +1,4 @@
+import { chromeIconUrl } from './chrome_icon_art';
 // Bags window painter: owns the #bags DOM + the window-local filter state (the
 // category/sort/search chips, persisted to localStorage), reads the player's
 // inventory + copper from IWorld, and runs the mode-dependent bag click (trade /
@@ -577,7 +578,7 @@ export class BagsWindow {
     // one on its own (that is a separate opt-in, see prompt_dialog.ts for the modal
     // recipe this window's own prompts use).
     markDialogRoot(el, { label: t('itemUi.bags.title') });
-    el.innerHTML = `<div class="panel-title ui-win-head"><img class="ui-win-art" src="/ui/chrome/bags.webp" alt="" draggable="false"><span class="ui-win-title">${esc(t('itemUi.bags.title'))}</span><button type="button" class="x-btn ui-x-btn" data-close data-focus-key="close" aria-label="${esc(t('itemUi.bags.close'))}">${svgIcon('close')}</button></div>`;
+    el.innerHTML = `<div class="panel-title ui-win-head"><img class="ui-win-art" src="${chromeIconUrl('bags')}" alt="" draggable="false"><span class="ui-win-title">${esc(t('itemUi.bags.title'))}</span><button type="button" class="x-btn ui-x-btn" data-close data-focus-key="close" aria-label="${esc(t('itemUi.bags.close'))}">${svgIcon('close')}</button></div>`;
     el.appendChild(this.buildBagBar());
     // Skip the chip/search row entirely when the bag is empty: a full filter bar
     // above a grid of empty squares is just noise.

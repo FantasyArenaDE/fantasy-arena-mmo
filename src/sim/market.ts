@@ -9,6 +9,7 @@
 // `src/sim`-pure: no DOM/Three/render-ui-game-net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts). The market draws NO rng.
 
+import type { MarketReturnedItem } from '../world_api/market';
 import { bagPools, canGrantCopies, instancedCountCap } from './bags';
 import { rekeySigner } from './character_rename';
 import { MEMBERSHIP_TOKEN_ID } from './content/membership';
@@ -23,6 +24,7 @@ import {
   countMatchingUnlocked,
   grantCopies,
   holdsMatchingLocked,
+  isTransferLockedInstance,
   publicInstanceView,
   removeMatchingInstance,
   sanitizeEscrowSlot,
@@ -151,6 +153,15 @@ export function lowestListingPricePerUnit(
 
 const MARKET_MIN_PRICE = 1; // copper
 const MARKET_MAX_PRICE = 5_000_000; // 500g ceiling, guards against overflow / fat-finger
+function validRelistPrice(price: unknown): price is number {
+  return (
+    typeof price === 'number' &&
+    Number.isSafeInteger(price) &&
+    price >= MARKET_MIN_PRICE &&
+    price <= MARKET_MAX_PRICE
+  );
+}
+
 // Exported for the wiki generator (scripts/wiki/build_content.mjs) and its
 // accuracy guard: the published cut percent derives from this one constant.
 export const MARKET_CUT = 0.05; // the Merchant's cut on a completed sale (a gold sink)
@@ -194,7 +205,7 @@ export interface MarketListing {
 // listings), keyed by sellerKey so an offline seller can collect later.
 export interface MarketCollection {
   copper: number;
-  items: InvSlot[];
+  items: MarketReturnedItem[];
   /** The itemized ledger behind `copper` (market_sale_log.ts): one row per sale
    *  still awaiting pickup. Cleared with the gold it explains, never with the
    *  items, which are returns rather than sales. */
@@ -223,7 +234,7 @@ export interface MarketSave {
   collections: {
     key: string;
     copper: number;
-    items: InvSlot[];
+    items: MarketReturnedItem[];
     /** Additive: the sale ledger (History). Absent on every pre-ledger save and on
      *  any collection holding only returns, which load as an empty log. */
     sales?: MarketSaleLog;
@@ -1268,6 +1279,65 @@ export class Market {
     });
   }
 
+  marketRelist(ids: readonly number[], cutPct: number, pid?: number): void {
+    const r = this.ctx.resolve(pid);
+    if (!r || r.e.dead || !this.nearMerchant(r.e)) return;
+    const { meta } = r;
+    if (ids.length === 0 || ids.length > MARKET_MAX_LISTINGS) return;
+    const wanted = new Set(ids);
+    if (wanted.size !== ids.length) return;
+    const col = this.collectionForSeller(meta);
+    if (!col) return;
+    const discount = membershipActive(meta, this.ctx.time);
+    if (cutPct !== (discount ? MARKET_CUT / 2 : MARKET_CUT) * 100) return;
+    const selected = new Map<number, MarketReturnedItem & { relistPrice: number }>();
+    for (const slot of col.items) {
+      if (slot.relistId === undefined || !wanted.has(slot.relistId)) continue;
+      const def = Object.hasOwn(ITEMS, slot.itemId) ? ITEMS[slot.itemId] : undefined;
+      if (
+        selected.has(slot.relistId) ||
+        !def ||
+        def.kind === 'quest' ||
+        def.noMarketList ||
+        def.soulbound ||
+        isTransferLockedInstance(slot.instance) ||
+        !validRelistPrice(slot.relistPrice)
+      )
+        return;
+      selected.set(slot.relistId, { ...slot, relistPrice: slot.relistPrice });
+    }
+    if (selected.size !== wanted.size) return;
+    const active = this.marketListings.reduce(
+      (total, listing) => total + Number(this.marketListingBelongsTo(listing, meta)),
+      0,
+    );
+    if (active + wanted.size > MARKET_MAX_LISTINGS) return;
+    col.items = col.items.filter(
+      (slot) => slot.relistId === undefined || !wanted.has(slot.relistId),
+    );
+    const sellerKey = this.marketSellerKey(meta);
+    if (col.items.length === 0 && col.copper === 0 && isSaleLogEmpty(col.sales)) {
+      this.marketCollections.delete(sellerKey);
+    }
+    for (const slot of selected.values()) {
+      this.marketListings.push({
+        id: this.nextListingId++,
+        sellerKey,
+        sellerName: meta.name,
+        itemId: slot.itemId,
+        count: slot.count,
+        price: slot.relistPrice,
+        expiresAt: this.ctx.time + MARKET_LISTING_DURATION,
+        house: false,
+        ...(discount ? { membershipDiscount: true as const } : {}),
+        ...(slot.instance ? { instance: slot.instance } : {}),
+        ...(slot.craftedRecipeId === undefined ? {} : { craftedRecipeId: slot.craftedRecipeId }),
+        ...(slot.materialSources ? { materialSources: slot.materialSources } : {}),
+      });
+    }
+    this.bumpBook();
+  }
+
   // Take everything waiting for you at the Merchant: sale gold and any items
   // returned from expired listings.
   marketCollect(pid?: number): void {
@@ -1362,6 +1432,7 @@ export class Market {
       this.collectionFor(l.sellerKey).items.push({
         itemId: l.itemId,
         count: l.count,
+        ...(validRelistPrice(l.price) ? { relistId: l.id, relistPrice: l.price } : {}),
         ...(l.instance ? { instance: l.instance } : {}),
         ...(l.craftedRecipeId === undefined ? {} : { craftedRecipeId: l.craftedRecipeId }),
         ...(l.materialSources === undefined
@@ -1673,6 +1744,8 @@ export class Market {
       const { instance: _legacyInstance, materialSources: _rawSources, ...rest } = listing;
       this.marketListings.push({ ...rest, ...normalized });
     }
+    const usedIds = new Set(this.marketListings.map((listing) => listing.id));
+    let nextListingId = plan.nextListingId;
     for (const c of save.collections ?? []) {
       if (!c || typeof c.key !== 'string') continue;
       this.marketCollections.set(c.key, {
@@ -1688,12 +1761,26 @@ export class Market {
         items: (c.items ?? [])
           .filter((s) => s && typeof s.itemId === 'string')
           .map((s) => {
-            const slot: InvSlot = {
+            const slot: MarketReturnedItem = {
               ...sanitizeEscrowSlot(s, instancedCountCap(ITEMS[s.itemId], s.instance), escrowDrops),
               ...(typeof s.craftedRecipeId === 'string'
                 ? { craftedRecipeId: s.craftedRecipeId }
                 : {}),
             };
+            const id = s.relistId;
+            if (
+              typeof id === 'number' &&
+              Number.isSafeInteger(id) &&
+              id > 0 &&
+              id < Number.MAX_SAFE_INTEGER &&
+              !usedIds.has(id) &&
+              validRelistPrice(s.relistPrice)
+            ) {
+              slot.relistId = id;
+              slot.relistPrice = s.relistPrice;
+              usedIds.add(id);
+              nextListingId = Math.max(nextListingId, id + 1);
+            }
             // Same slot-level marker bound as the listing arm above: a
             // collection slot persists until collected and grants straight
             // into live bags, the same forever-row class as mail.
@@ -1703,7 +1790,7 @@ export class Market {
       });
     }
     warnDroppedInstanceKeys('market book', escrowDrops);
-    this.nextListingId = plan.nextListingId;
+    this.nextListingId = nextListingId;
     if (plan.remapped > 0) {
       // Dev-channel only: a boot-time repair the operator should see in the log.
       // The count covers all three reissue causes (taken by the house band,

@@ -16,6 +16,7 @@
 // detail once the player works on the one that is there
 // (render/characters/preview_armor_detail_core.ts).
 
+import { faReleaseHumansEnabled } from '../render/characters/fa_release_humans';
 import type { WocHeadSlot, WocHeadType } from '../render/characters/woc_head_catalog';
 import { prefetchWocHeadLook, prefetchWocHeadSlot } from '../render/characters/woc_head_packs';
 import { WOC_BODY_CLASSES } from '../render/characters/woc_parts_core';
@@ -73,9 +74,11 @@ export function mountAppearanceEditor(
   // on the body that is there. Picking the body type is browsing, like picking a class:
   // it puts another body on the stage, which nobody chose yet. Neither does the panel
   // being shown again (set, below): that is the host, not the player.
+  const releaseLook = faReleaseHumansEnabled();
   let body: WocHeadType | null = null;
   const builder = mountWocHeadBuilder(host, {
     value: opts.value,
+    releaseLook,
     onChange: (next) => {
       const sameBody = headTypeOf(next) === body;
       body = headTypeOf(next);
@@ -89,12 +92,12 @@ export function mountAppearanceEditor(
     },
     onOpen: (cat) => {
       const slot = wocPrefetchSlotOf(cat);
-      if (slot) prefetchWocHeadSlot(headTypeOf(builder.value), slot);
+      if (slot && !releaseLook) prefetchWocHeadSlot(headTypeOf(builder.value), slot);
     },
   });
   body = headTypeOf(builder.value);
   // the head the creator opens on: its body type's default look
-  prefetchWocHeadLook(headTypeOf(builder.value));
+  if (!releaseLook) prefetchWocHeadLook(headTypeOf(builder.value));
   return {
     get value() {
       return builder.value;

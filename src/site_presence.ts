@@ -41,6 +41,8 @@ let presenceStarted = false;
  * again at boot.
  */
 export function startSitePresence(fallbackPage = 'home'): void {
+  // The private browser build has no site-presence service.
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') return;
   if (presenceStarted) return;
   presenceStarted = true;
   const id = visitorId();

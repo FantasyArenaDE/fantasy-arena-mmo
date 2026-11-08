@@ -29,6 +29,18 @@
 
 import { type ModularAppearance, normalizeAppearance } from '../render/characters/modular';
 import type { AppearanceCustomizer } from './appearance_customizer';
+import { faReleaseCosmeticLabel } from './fa_release_cosmetic_labels';
+import {
+  FA_RELEASE_BUILDER_CATEGORIES,
+  importReleaseDesignCode,
+  randomizeReleaseLook,
+  releaseDesignCode,
+  resetReleaseLook,
+  releaseCategoryLabelKey,
+  releaseCategorySections,
+  releaseFaceChanges,
+  releaseOptionPatch,
+} from './fa_release_editor_model';
 import { captureFocusKey, findFocusKey, restoreFirstEnabled } from './focus_restore';
 import type { TranslationKey } from './i18n';
 import { t } from './i18n';
@@ -71,6 +83,8 @@ import {
 
 export interface WocHeadBuilderOptions {
   value?: Partial<ModularAppearance> | null;
+  /** Use only the appearance controls supported by the CC0 release rig. */
+  releaseLook?: boolean;
   onChange(next: ModularAppearance): void;
   /** The camera focus the open category wants ('face' for every face
    *  category, 'body' for the body pick and on teardown). */
@@ -93,7 +107,7 @@ interface Radio {
 
 let mountSeq = 0;
 
-const tk = (key: string): string => t(key as TranslationKey);
+const tk = (key: string): string => faReleaseCosmeticLabel(key) ?? t(key as TranslationKey);
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -165,7 +179,11 @@ export function mountWocHeadBuilder(
   opts: WocHeadBuilderOptions,
 ): WocHeadBuilder {
   const uid = `whb${++mountSeq}`;
-  let value = mergeFace(opts.value, readFace(opts.value as Partial<WocFaceAppearance>));
+  const categories = opts.releaseLook ? FA_RELEASE_BUILDER_CATEGORIES : WOC_BUILDER_CATEGORIES;
+  const labelFor = opts.releaseLook ? releaseCategoryLabelKey : categoryLabelKey;
+  let value = opts.releaseLook
+    ? ({ ...normalizeAppearance(opts.value), ...(opts.value ?? {}) } as ModularAppearance)
+    : mergeFace(opts.value, readFace(opts.value as Partial<WocFaceAppearance>));
   let menu: WocBuilderMenuState = INITIAL_MENU;
   const cleanups: (() => void)[] = [];
   const on = <K extends keyof HTMLElementEventMap>(
@@ -249,17 +267,17 @@ export function mountWocHeadBuilder(
   host.append(shell, foot);
 
   const catButtons = new Map<WocBuilderCategory, HTMLButtonElement>();
-  for (const cat of WOC_BUILDER_CATEGORIES) {
+  for (const cat of categories) {
     const btn = el('button', 'whb-cat');
     btn.type = 'button';
     btn.id = `${uid}-cat-${cat}`;
     btn.setAttribute('role', 'tab');
     btn.setAttribute('aria-controls', panel.id);
     btn.dataset.cat = cat;
-    btn.append(el('span', 'whb-cat-label', tk(categoryLabelKey(cat))));
+    btn.append(el('span', 'whb-cat-label', tk(labelFor(cat))));
     on(btn, 'click', () => open(cat));
     on(btn, 'keydown', (ev) => {
-      const next = plainKey(ev) ? stepCategory(cat, ev.key) : null;
+      const next = plainKey(ev) ? stepCategory(cat, ev.key, categories) : null;
       if (!next) return;
       ev.preventDefault();
       open(next, true);
@@ -269,12 +287,19 @@ export function mountWocHeadBuilder(
   }
 
   const emit = () => opts.onChange(value);
-  const apply = (next: WocFaceAppearance, repaint = true) => {
+  const commit = (next: ModularAppearance, repaint = true) => {
     if (destroyed) return;
-    value = mergeFace(value, next);
+    value = next;
     if (repaint) paintPanel(true);
     emit();
   };
+  const apply = (next: WocFaceAppearance, repaint = true) =>
+    commit(
+      opts.releaseLook
+        ? { ...value, ...releaseFaceChanges(value, face(), next) }
+        : mergeFace(value, next),
+      repaint,
+    );
 
   function open(page: WocBuilderPage, focusTab = false): void {
     const was = menu.open;
@@ -319,11 +344,14 @@ export function mountWocHeadBuilder(
     shareBox = null;
     panel.hidden = sharing;
     sharePanel.hidden = !sharing;
-    if (!sharing) panelTitle.textContent = tk(categoryLabelKey(menu.open));
+    if (!sharing) panelTitle.textContent = tk(labelFor(menu.open));
     panelBody.textContent = '';
     shareBody.textContent = '';
     const f = face();
-    for (const section of categorySections(menu.open, f)) {
+    const sections = opts.releaseLook
+      ? releaseCategorySections(menu.open, f, value)
+      : categorySections(menu.open, f);
+    for (const section of sections) {
       body.appendChild(paintSection(section, f));
     }
     if (focusKey) {
@@ -360,7 +388,7 @@ export function mountWocHeadBuilder(
       if (s.labelKey) wrap.appendChild(el('div', 'whb-section-label', tk(s.labelKey)));
       const list = el('div', s.target === 'bodyType' ? 'whb-opts whb-opts-body' : 'whb-opts');
       list.setAttribute('role', 'radiogroup');
-      list.setAttribute('aria-label', tk(s.labelKey ?? categoryLabelKey(menu.open)));
+      list.setAttribute('aria-label', tk(s.labelKey ?? labelFor(menu.open)));
       const radios: Radio[] = s.options.map((o) => {
         const b = el('button', o.selected ? 'whb-opt sel' : 'whb-opt');
         b.type = 'button';
@@ -371,6 +399,12 @@ export function mountWocHeadBuilder(
           glyph.setAttribute('aria-hidden', 'true');
           b.appendChild(glyph);
         }
+        if (o.color !== undefined) {
+          const swatch = el('span', 'whb-match-dot');
+          swatch.style.setProperty('--whb-sw', `#${o.color.toString(16).padStart(6, '0')}`);
+          swatch.setAttribute('aria-hidden', 'true');
+          b.appendChild(swatch);
+        }
         b.appendChild(el('span', 'whb-opt-label', tk(o.labelKey)));
         list.appendChild(b);
         return {
@@ -378,7 +412,10 @@ export function mountWocHeadBuilder(
           checked: o.selected,
           // re-picking the checked option changes nothing, so it emits nothing
           pick: () => {
-            if (!o.selected) apply(pickOption(face(), s.target, o.id));
+            if (o.selected) return;
+            const patch = opts.releaseLook ? releaseOptionPatch(s.target, o.id, value) : undefined;
+            if (patch) commit({ ...value, ...patch });
+            else apply(pickOption(face(), s.target, o.id));
           },
         };
       });
@@ -394,7 +431,7 @@ export function mountWocHeadBuilder(
       const keys = `color-${s.target}`;
       const group = el('div', 'whb-swatch-group');
       group.setAttribute('role', 'radiogroup');
-      group.setAttribute('aria-label', tk(categoryLabelKey(menu.open)));
+      group.setAttribute('aria-label', tk(labelFor(menu.open)));
       const radios: Radio[] = [];
       if (s.matchHair !== undefined) {
         const m = el('button', s.matchHair ? 'whb-match sel' : 'whb-match');
@@ -546,7 +583,7 @@ export function mountWocHeadBuilder(
 
     copyBtn.addEventListener('click', () => {
       // what the box shows; an emptied box copies the face on the stage now
-      const text = code.value.trim() || faceCode(face());
+      const text = code.value.trim() || (opts.releaseLook ? releaseDesignCode(value) : faceCode(face()));
       // Clipboard access can be denied or absent (an iframe, an older engine):
       // select the code instead, so one keystroke finishes the copy.
       const manual = () => {
@@ -565,6 +602,21 @@ export function mountWocHeadBuilder(
     });
 
     importBtn.addEventListener('click', () => {
+      if (opts.releaseLook) {
+        const next = importReleaseDesignCode(code.value, value);
+        if (!next) {
+          setStatus(code.value.trim() ? 'auth.designCodeErrMalformed' : 'auth.designCodeErrEmpty', true);
+          return;
+        }
+        const bodyChanged = next.gender !== value.gender;
+        commit(next, false);
+        if (bodyChanged) opts.onFocus?.(focusForCategory(menu.open));
+        const loaded = releaseDesignCode(value);
+        code.value = loaded;
+        shareBox = { code, painted: loaded };
+        setStatus('auth.designCodeImported', false);
+        return;
+      }
       const result = importFaceCode(code.value);
       if (!result.ok) {
         setStatus(FACE_CODE_ERROR_KEYS[result.reason], true);
@@ -586,8 +638,14 @@ export function mountWocHeadBuilder(
     return wrap;
   }
 
-  on(randomBtn, 'click', () => apply(randomizeFace(face(), Math.random)));
-  on(resetBtn, 'click', () => apply(resetFace(face())));
+  on(randomBtn, 'click', () => {
+    if (opts.releaseLook) commit(randomizeReleaseLook(value, Math.random));
+    else apply(randomizeFace(face(), Math.random));
+  });
+  on(resetBtn, 'click', () => {
+    if (opts.releaseLook) commit(resetReleaseLook(value));
+    else apply(resetFace(face()));
+  });
   on(shareBtn, 'click', () => {
     // pressed again: back to the category the player was in
     if (menu.open === 'share') {
@@ -611,7 +669,9 @@ export function mountWocHeadBuilder(
     },
     set(next: Partial<ModularAppearance>) {
       const merged = { ...value, ...next } as Partial<ModularAppearance>;
-      value = mergeFace(merged, readFace(merged as Partial<WocFaceAppearance>));
+      value = opts.releaseLook
+        ? ({ ...value, ...next } as ModularAppearance)
+        : mergeFace(merged, readFace(merged as Partial<WocFaceAppearance>));
       // a code pasted into the Share box but not imported yet is the player's
       // text, not a stale copy of the face: it rides the host's repaint
       const draft =

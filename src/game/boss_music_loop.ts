@@ -7,6 +7,8 @@
 // A boss with a dedicated production of its own is a row in
 // BOSS_TRACK_URLS; every other boss fight keeps the shared default loop.
 
+import { fantasyArenaMusicUrl } from './fantasy_arena_music';
+
 /** The shared boss-fight loop every boss without its own track plays. */
 export const DEFAULT_BOSS_TRACK_URL = '/audio/dungeon-boss-fight.mp3';
 
@@ -72,7 +74,7 @@ export class BossLoopTrack {
   element(): HTMLAudioElement | null {
     if (this.el) return this.el;
     if (typeof Audio !== 'function') return null;
-    const el = new Audio(this.url);
+    const el = new Audio(fantasyArenaMusicUrl(this.url));
     el.loop = true;
     el.preload = 'auto';
     this.el = el;
@@ -100,7 +102,7 @@ export class BossLoopTrack {
     if (this.buffer || this.loading || typeof fetch !== 'function') return;
     this.loading = true;
     const url = this.url;
-    void fetch(url)
+    void fetch(fantasyArenaMusicUrl(url))
       .then((res) => res.arrayBuffer())
       .then((bytes) => ctx.decodeAudioData(bytes))
       .then((buffer) => {

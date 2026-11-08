@@ -1,3 +1,4 @@
+import { clearDreamThread } from '../combat/dream_thread';
 // Talent application, extracted from the Sim monolith (G1a).
 //
 // This module owns the sim-side talent METHOD layer: validate a staged allocation,
@@ -260,6 +261,7 @@ function recomputeTalents(ctx: SimContext, meta: PlayerMeta): void {
   if (e) {
     cleanRemovedProcState(ctx, e, previousMods, meta.talentMods);
     cleanRogueEngineState(ctx, e, previousMods.spec, meta.talentMods.spec);
+    if (meta.cls === 'dreamdancer' && previousMods.spec !== meta.talentMods.spec) clearDreamThread(ctx, e);
     cleanDruidEngineState(ctx, e, previousMods.spec, meta.talentMods.spec);
     normalizeAbilityCharges(e, meta, previousChargeCaps);
     stripOrphanedTalentAuras(ctx, meta, e, previousKnown);

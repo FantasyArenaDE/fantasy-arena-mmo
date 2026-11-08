@@ -2567,7 +2567,7 @@ export const IGNIVAR_SIGIL_ITEMS: Record<string, ItemDef> = {
     stackSize: 20,
     sellValue: 0,
     soulbound: true,
-    requiredClass: ['shaman', 'rogue', 'warlock'],
+    requiredClass: ['shaman', 'rogue', 'warlock', 'dreamdancer'],
   },
   sigil_anvil_gloves: {
     id: 'sigil_anvil_gloves',
@@ -3277,6 +3277,46 @@ export const IGNIVAR_WEAPON_ITEMS: Record<string, ItemDef> = {
   },
 };
 
+// Class rewards redeemed from the Heroic robe sigil. Their stat lines follow
+// the Crucible's epic caster wand and held-focus budgets, including Stamina.
+export const DREAMDANCER_CRUCIBLE_STAFF = 'dreamdancer_dawnveil_staff';
+export const DREAMDANCER_CRUCIBLE_FOCUS = 'dreamcatcher_dawnveil_focus';
+export const DREAMDANCER_CRUCIBLE_ITEMS: Record<string, ItemDef> = {
+  [DREAMDANCER_CRUCIBLE_STAFF]: {
+    id: DREAMDANCER_CRUCIBLE_STAFF,
+    name: 'Dawnveil Dreamstaff',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'epic',
+    requiredLevel: 20,
+    requiredClass: ['dreamdancer'],
+    classLocked: true,
+    soulbound: true,
+    weapon: { min: 21, max: 31, speed: 2.9 },
+    stats: { int: 15, spi: 10, sta: 8 },
+    spellPower: 20,
+    critRating: 45,
+    hasteRating: 25,
+    hitRating: 30,
+    sellValue: 0,
+  },
+  [DREAMDANCER_CRUCIBLE_FOCUS]: {
+    id: DREAMDANCER_CRUCIBLE_FOCUS,
+    name: 'Dawnveil Dreamcatcher',
+    kind: 'held_offhand',
+    slot: 'offhand',
+    quality: 'epic',
+    requiredLevel: 20,
+    requiredClass: ['dreamdancer'],
+    classLocked: true,
+    soulbound: true,
+    stats: { int: 10, spi: 8, sta: 6 },
+    spellPower: 14,
+    critRating: 25,
+    sellValue: 0,
+  },
+};
+
 // The merged table data.ts spreads into ITEMS.
 export const IGNIVAR_LOOT_ITEMS: Record<string, ItemDef> = {
   ...IGNIVAR_SET_ITEMS,
@@ -3335,6 +3375,8 @@ export interface CrucibleVendorOffer {
 
 export const CRUCIBLE_VENDOR_STOCK: readonly CrucibleVendorOffer[] = [
   ...CRUCIBLE_PATTERN_VENDOR_STOCK,
+  { itemId: DREAMDANCER_CRUCIBLE_STAFF, sigilId: 'sigil_tempest_chest' },
+  { itemId: DREAMDANCER_CRUCIBLE_FOCUS, sigilId: 'sigil_tempest_chest' },
   { itemId: 'slagbreaker_helmet', sigilId: 'sigil_anvil_helmet' },
   { itemId: 'slagbreaker_shoulder', sigilId: 'sigil_anvil_shoulder' },
   { itemId: 'slagbreaker_chest', sigilId: 'sigil_anvil_chest' },

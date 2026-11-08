@@ -242,9 +242,13 @@ const PERM_LABEL: Record<GuildRankPermission, { label: () => string; hint: () =>
     label: () => t('hudChrome.guildRanks.perm.promote'),
     hint: () => t('hudChrome.guildRanks.permHint.promote'),
   },
-  bank: {
-    label: () => t('hudChrome.guildRanks.perm.bank'),
-    hint: () => t('hudChrome.guildRanks.permHint.bank'),
+  bankItems: {
+    label: () => t('hudChrome.guildRanks.perm.bankItems'),
+    hint: () => t('hudChrome.guildRanks.permHint.bankItems'),
+  },
+  bankGold: {
+    label: () => t('hudChrome.guildRanks.perm.bankGold'),
+    hint: () => t('hudChrome.guildRanks.permHint.bankGold'),
   },
   officerChat: {
     label: () => t('hudChrome.guildRanks.perm.officerChat'),

@@ -2329,6 +2329,7 @@ export const sharedUniforms = {
    *  Radius 0 (a tier with no carpet) leaves the paint everywhere. Written by
    *  the renderer each frame beside uTime. */
   uCarpetRing: { value: new THREE.Vector3(0, 0, 0) },
+  uMorningDew: { value: new THREE.Vector3() },
   /** Live terrain-detail shed (terrain_detail_shed_core.ts): the governed
    *  0..1 level mapped onto the tier's own terrainRelief / surfaceDetailTaps
    *  / surfaceDetailClampK request, written by the renderer through

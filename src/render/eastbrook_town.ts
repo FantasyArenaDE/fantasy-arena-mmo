@@ -42,7 +42,10 @@ import {
 } from './eastbrook_town_visibility_core';
 import { buildEastbrookWeeklyVault, WEEKLY_VAULT_TRIANGLES } from './eastbrook_weekly_vault';
 import { indexExactVertexTuples } from './exact_index_geometry';
+import { buildFenceDewWeb, createFenceDewWebMaterial } from './fence_dew_web';
+import { fenceDewWebVariant } from './fence_dew_web_core';
 import { EMISSIVE_GLOW, GFX, type GfxSettings, surfaceMat } from './gfx';
+import { buildHarborCrabs, type HarborCrabEnvironment } from './harbor_crabs';
 import { type KitWindowPane, kitWindowPanes } from './kit_window_panes_core';
 import { cloneMaterialWithHooks } from './material_clone_hooks';
 import {
@@ -217,6 +220,7 @@ interface RoofHideTarget extends EastbrookRoofVisibilityTarget {
 
 export interface EastbrookTownView {
   group: THREE.Group;
+  disposeHarborCrabs(): void;
   update(
     camX: number,
     camY: number,
@@ -237,6 +241,7 @@ export interface EastbrookTownView {
   setRevealGate(gate: RevealGateCore | null): void;
   /** The compile roots behind the town's reveal key (the static batches). */
   staticRevealRoots(): readonly THREE.Object3D[];
+  dispose(): void;
   /**
    * Re-bake the Realm Builder monument's projected name.
    *
@@ -1004,6 +1009,8 @@ function wallSegmentNeedsMirror(segment: (typeof EASTBROOK_LAYOUT.wall.segments)
 
 interface MicroBatchBuild {
   batches: THREE.Mesh[];
+  dewWebs: THREE.Mesh[];
+  disposeDew(): void;
 }
 
 function buildMicroBatches(
@@ -1071,24 +1078,29 @@ function buildMicroBatches(
     );
   }
 
+  const dewWebs: THREE.Mesh[] = [];
+  let dewMaterial: THREE.ShaderMaterial | undefined;
   for (const fence of fences) {
     const template = templates.get(fence.assetId);
     if (!template) throw new Error(`Eastbrook town template is missing: ${fence.assetId}`);
     const placement = pitchedSegmentPlacement(fence.start, fence.end, fence.width, groundAt);
-    add(
-      fence.assetId,
-      placementMatrix(
-        template,
-        placement.centerX,
-        placement.centerY,
-        placement.centerZ,
-        placement.rotation,
-        placement.spatialLength,
-        fence.height,
-        fence.width,
-        placement.pitch,
-      ),
+    const transform = placementMatrix(
+      template,
+      placement.centerX,
+      placement.centerY,
+      placement.centerZ,
+      placement.rotation,
+      placement.spatialLength,
+      fence.height,
+      fence.width,
+      placement.pitch,
     );
+    add(fence.assetId, transform);
+    const variant = fenceDewWebVariant(fence.id);
+    if (variant !== undefined) {
+      dewMaterial ??= createFenceDewWebMaterial();
+      dewWebs.push(buildFenceDewWeb(transform, template.size, variant, dewMaterial));
+    }
   }
 
   const batches: THREE.Mesh[] = [];
@@ -1112,7 +1124,14 @@ function buildMicroBatches(
     mesh.receiveShadow = false;
     batches.push(mesh);
   }
-  return { batches };
+  return {
+    batches,
+    dewWebs,
+    disposeDew: () => {
+      for (const web of dewWebs) web.geometry.dispose();
+      dewMaterial?.dispose();
+    },
+  };
 }
 
 interface WallInstancePlacement {
@@ -1223,6 +1242,7 @@ function buildFromTemplates(
   groundAt: GroundAt,
   builtInWorld: boolean,
   atlas: THREE.Texture | undefined,
+  harborEnvironment?: HarborCrabEnvironment,
 ): EastbrookTownView {
   const group = new THREE.Group();
   group.name = ROOT_NAME;
@@ -1247,8 +1267,10 @@ function buildFromTemplates(
     return {
       group,
       update: () => undefined,
+      disposeHarborCrabs: () => undefined,
       setRevealGate: () => undefined,
       staticRevealRoots: () => [],
+      dispose: () => undefined,
       setRealmBuilderHonouree: () => undefined,
     };
   }
@@ -1314,7 +1336,7 @@ function buildFromTemplates(
   const microBuild = buildMicroBatches(templates, groundAt, atlas);
   const microBatches = microBuild.batches;
   const microBatchCount = microBatches.length;
-  for (const batch of microBatches) group.add(batch);
+  for (const batch of [...microBatches, ...microBuild.dewWebs]) group.add(batch);
   // The monument's living half: the honouree's name projected off both honour
   // plates, and the lantern halos and embers. Additive and text, which a merged
   // opaque batch cannot carry, so it is its own small group beside the batches.
@@ -1345,7 +1367,13 @@ function buildFromTemplates(
     throw new Error(`Eastbrook town template is missing: ${EASTBROOK_LAYOUT.wall.assetId}`);
   const wallBatches = buildWallBatches(wallTemplate, groundAt, atlas);
   for (const batch of wallBatches) group.add(batch);
-  const staticCullTargets: THREE.Object3D[] = [...microBatches, ...wallBatches];
+  const harborCrabs = harborEnvironment && buildHarborCrabs(groundAt, harborEnvironment);
+  const staticCullTargets: THREE.Object3D[] = [
+    ...microBatches,
+    ...wallBatches,
+    ...microBuild.dewWebs,
+  ];
+  if (harborCrabs) group.add(harborCrabs.group);
   // The reveal gate compiles the buildings with the static batches: their
   // per-building materials are not shared with any batch, so a building
   // outside the roots linked cold on the frame its own fog cull first showed
@@ -1358,6 +1386,7 @@ function buildFromTemplates(
     ...staticCullTargets,
     ...buildingGroups,
     ...monumentRoots,
+    ...(harborCrabs ? [harborCrabs.group] : []),
   ];
   // Piecewise reveal anchors, in staticRevealRoots order: a batch spans the
   // whole town so it anchors at the centre (Eastbrook sits on the world
@@ -1378,6 +1407,11 @@ function buildFromTemplates(
     rootX.push(monumentSeat.x);
     rootZ.push(monumentSeat.z);
     rootFootprint.push(true);
+  }
+  if (harborCrabs) {
+    rootX.push(harborCrabs.focus.x);
+    rootZ.push(harborCrabs.focus.z);
+    rootFootprint.push(false);
   }
   const staticPiecewise = newTownPiecewiseReveal(
     STATIC_REVEAL_KEY,
@@ -1422,6 +1456,10 @@ function buildFromTemplates(
     prepareSceneryDetailRoot(root);
   return {
     group,
+    dispose: microBuild.disposeDew,
+    disposeHarborCrabs(): void {
+      harborCrabs?.dispose();
+    },
     setRealmBuilderHonouree(name: string): void {
       monumentFx.setHonouree(name);
     },
@@ -1485,6 +1523,16 @@ function buildFromTemplates(
           (index >= microBatchCount || microVisible) &&
           townRootVisible(reveal, staticPiecewise, index);
       }
+      if (harborCrabs) {
+        // The piers lie beyond the town's Low-tier fog-cull footprint. The
+        // shoreline has its own range but shares the town's program gate.
+        harborCrabs.group.visible =
+          harborCrabs.inRange(camX, camZ) &&
+          (!revealGate ||
+            revealGate.allow(STATIC_REVEAL_KEY, true) ||
+            revealGate.rootReady(STATIC_REVEAL_KEY, harborCrabs.group));
+        if (harborCrabs.group.visible) harborCrabs.update(camX, camZ, dt, reducedMotion);
+      }
       // Buildings keep their own fog cull and roof fade, but their FIRST
       // reveal rides the same hold as the batches: while the gate compiles
       // the town they stay hidden until their own group has linked, and once
@@ -1540,7 +1588,10 @@ function buildFromTemplates(
   };
 }
 
-export function buildEastbrookTownView(seed: number): EastbrookTownView {
+export function buildEastbrookTownView(
+  seed: number,
+  harborEnvironment?: HarborCrabEnvironment,
+): EastbrookTownView {
   // Extract once even when an editor/custom world is first: the empty custom
   // root stays isolated, while loader-owned decoded sources can be released and
   // a later same-page switch to the built-in world remains synchronous.
@@ -1557,6 +1608,7 @@ export function buildEastbrookTownView(seed: number): EastbrookTownView {
     (x, z) => terrainHeight(x, z, seed),
     true,
     eastbrookSurfaceAtlasTexture(),
+    harborEnvironment,
   );
   // The harbor waterfront rides the town view's group: quay boardwalk and
   // piers from the same deck rectangles groundHeight walks

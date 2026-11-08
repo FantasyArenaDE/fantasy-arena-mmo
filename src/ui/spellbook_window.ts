@@ -1,3 +1,4 @@
+import { chromeIconUrl } from './chrome_icon_art';
 // Thin DOM painter for the spellbook window.
 //
 // The consumer half of the pure-core + thin-painter split: it paints #spellbook
@@ -382,7 +383,7 @@ export class SpellbookWindow {
     const resetBtnHtml = view.hasFormBars
       ? `<button type="button" class="spellbook-reset ui-btn" data-reset-bar aria-label="${esc(t('abilityUi.spellbook.resetBarAria'))}">${esc(t('abilityUi.spellbook.resetBar'))}</button>`
       : '';
-    el.innerHTML = `<div class="panel-title ui-win-head"><img class="ui-win-art" src="/ui/chrome/spellbook.webp" alt="" draggable="false"><span class="ui-win-title">${esc(t('abilityUi.spellbook.title'))}<span class="spellbook-class ui-win-sub">${esc(t('abilityUi.spellbook.classSubtitle', { className }))}</span></span><div class="panel-title-actions ui-win-actions">${resetBtnHtml}<button type="button" class="x-btn ui-x-btn" data-close aria-label="${esc(t('abilityUi.spellbook.close'))}">${svgIcon('close')}</button></div></div>`;
+    el.innerHTML = `<div class="panel-title ui-win-head"><img class="ui-win-art" src="${chromeIconUrl('spellbook')}" alt="" draggable="false"><span class="ui-win-title">${esc(t('abilityUi.spellbook.title'))}<span class="spellbook-class ui-win-sub">${esc(t('abilityUi.spellbook.classSubtitle', { className }))}</span></span><div class="panel-title-actions ui-win-actions">${resetBtnHtml}<button type="button" class="x-btn ui-x-btn" data-close aria-label="${esc(t('abilityUi.spellbook.close'))}">${svgIcon('close')}</button></div></div>`;
     const list = document.createElement('div');
     list.className = 'spell-list';
     list.setAttribute('role', 'list');

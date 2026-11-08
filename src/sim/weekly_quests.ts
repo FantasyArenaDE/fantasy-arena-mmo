@@ -27,6 +27,7 @@ import {
   type FactionId,
   factionDisplayName,
   maxStandingForLevel,
+  sanitizeFactionId,
 } from './factions';
 import { formatMoney } from './format_money';
 import { DAILY_LOCKOUT_RAID_ROOMS, WEEKLY_LOCKOUT_RAID_ROOMS } from './instances/dungeons';
@@ -135,17 +136,34 @@ export function talkToWeeklyEmissary(
 /** The authoritative pick: alive, beside the emissary, a real offer, and no
  *  charge taken yet this week (a finished one counts as taken), nor an earlier
  *  week's commendation still waiting to be claimed. */
-export function chooseWeeklyQuest(ctx: SimContext, questId: string, pid?: number): void {
+export function chooseWeeklyQuest(
+  ctx: SimContext,
+  questId: string,
+  factionId?: FactionId,
+  pid?: number,
+): void {
   const resolved = ctx.resolve(pid);
   if (!resolved) return;
   const { meta, e: player } = resolved;
   const quest = WEEKLY_QUESTS_BY_ID[questId];
   if (!quest || player.dead || !nearEmissary(ctx, player)) return;
+  if (
+    factionId !== undefined &&
+    (!sanitizeFactionId(factionId) ||
+      (meta.factions?.[factionId] ?? 0) >= maxStandingForLevel(player.level))
+  )
+    return;
   resetWeeklyQuestIfNeeded(ctx, meta);
   if (meta.weeklyQuest) return;
   const week = currentWeeklyQuestWeek(ctx);
   if (!week) return;
-  meta.weeklyQuest = { questId: quest.id, week, count: 0, state: 'active' };
+  meta.weeklyQuest = {
+    questId: quest.id,
+    week,
+    count: 0,
+    state: 'active',
+    ...(factionId ? { commendationFaction: factionId } : {}),
+  };
   meta.wireRev++;
   ctx.emit({ type: 'worldQuestWeeklyChosen', questId: quest.id, pid: meta.entityId });
 }
@@ -160,13 +178,25 @@ export function commendWeeklyQuest(ctx: SimContext, factionId: string, pid?: num
   const resolved = ctx.resolve(pid);
   if (!resolved) return;
   const { meta, e: player } = resolved;
-  if (!(FACTION_IDS as readonly string[]).includes(factionId)) return;
+  const faction = sanitizeFactionId(factionId);
+  if (!faction) return;
   resetWeeklyQuestIfNeeded(ctx, meta);
   const progress = meta.weeklyQuest;
   if (!progress || progress.state !== 'completed' || progress.commended) return;
+  awardCommendation(ctx, meta, player, progress, faction);
+}
+
+function awardCommendation(
+  ctx: SimContext,
+  meta: PlayerMeta,
+  player: Entity,
+  progress: WeeklyQuestProgress,
+  factionId: FactionId,
+): void {
+  if ((meta.factions?.[factionId] ?? 0) >= maxStandingForLevel(player.level)) return;
   const result = awardFactionReputation(
     meta,
-    factionId as FactionId,
+    factionId,
     WEEKLY_QUEST_REWARD.commendationStanding,
     player.level,
   );
@@ -181,7 +211,7 @@ export function commendWeeklyQuest(ctx: SimContext, factionId: string, pid?: num
   ctx.markDeedsDirty(meta.entityId);
   ctx.emit({
     type: 'loot',
-    text: `+${result.gained} ${factionDisplayName(factionId as FactionId)} Standing.`,
+    text: `+${result.gained} ${factionDisplayName(factionId)} Standing.`,
     pid: meta.entityId,
   });
 }
@@ -217,6 +247,9 @@ export function creditWeeklyQuest(ctx: SimContext, meta: PlayerMeta, kind: Weekl
   }
   progress.state = 'completed';
   const player = ctx.entities.get(meta.entityId);
+  const faction = progress.commendationFaction;
+  delete progress.commendationFaction;
+  if (player && faction) awardCommendation(ctx, meta, player, progress, faction);
   const copper = weeklyQuestRewardCopper(player?.level ?? 1);
   meta.copper += copper;
   ctx.emit({ type: 'loot', text: `You receive ${formatMoney(copper)}.`, pid: meta.entityId });
@@ -275,11 +308,13 @@ export function sanitizeWeeklyQuestProgress(value: unknown): WeeklyQuestProgress
       ? row.commended
       : undefined;
   const carried = row.state === 'completed' && commended === undefined && row.carried === true;
+  const faction = row.state === 'active' ? sanitizeFactionId(row.commendationFaction) : undefined;
   return {
     questId: quest.id,
     week: row.week,
     count: row.state === 'completed' ? quest.count : count,
     state: row.state,
+    ...(faction ? { commendationFaction: faction } : {}),
     ...(commended === undefined ? {} : { commended }),
     ...(carried ? { carried: true as const } : {}),
   };

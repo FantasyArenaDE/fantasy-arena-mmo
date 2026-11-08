@@ -392,7 +392,7 @@ import { buildHeroicVariants } from './content/heroic_variants';
 import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
 import { HIGHWATCH_GUILD_NPCS } from './content/highwatch_guild';
 import { IGNIVAR_DROP_ITEMS } from './content/ignivar_drops';
-import { IGNIVAR_LOOT_ITEMS, IGNIVAR_VENDOR_NPCS } from './content/ignivar_loot';
+import { DREAMDANCER_CRUCIBLE_ITEMS, IGNIVAR_LOOT_ITEMS, IGNIVAR_VENDOR_NPCS } from './content/ignivar_loot';
 import { MIREFEN_TAVERN_NPCS } from './content/mirefen_tavern';
 import { MIREFEN_TAVERN_PATRON_NPCS } from './content/mirefen_tavern_patrons';
 import { PROFESSION_ITEMS } from './content/profession_items';
@@ -455,6 +455,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   HEROIC_ITEMS,
   RETIRED_HEROIC_ITEMS,
   IGNIVAR_LOOT_ITEMS,
+  DREAMDANCER_CRUCIBLE_ITEMS,
   WARFARE_ITEMS,
   SEASON2_ITEMS,
   RIFT_ITEMS,
@@ -543,7 +544,7 @@ Object.assign(ITEMS, buildHeroicVariants(ITEMS, MOBS));
 
 // Realm NPCs are appended after brother_halven: NPCs spawn in insertion order
 // before camps, so existing entity ids stay stable (determinism).
-export const NPCS: Record<string, NpcDef> = {
+const BASE_NPCS: Record<string, NpcDef> = {
   ...ZONE1_NPCS,
   ...ZONE2_NPCS,
   [MUSTER_COMMANDER_NPC.id]: MUSTER_COMMANDER_NPC,
@@ -606,6 +607,22 @@ export const NPCS: Record<string, NpcDef> = {
   // reserved id, raised only while the event runs (seasonal/seasonal_tick.ts).
   ...GOURDLIGHT_EVE_NPCS,
 };
+
+// Keep this class's equipment stock separate from the reviewed spatial baseline.
+// Both the simulation's world and the client-side NPC registry use the same rows.
+function withDreamdancerVendorStock(npcs: Record<string, NpcDef>): Record<string, NpcDef> {
+  const stock = { ...npcs };
+  for (const [id, items] of [
+    ['smith_haldren', ['dreamdancer_moonthread_staff', 'dreamcatcher_silver_focus']],
+    ['armorer_hode', ['dreamdancer_starlace_staff', 'dreamcatcher_nightglass_focus']],
+  ] as const) {
+    const npc = npcs[id];
+    if (npc) stock[id] = { ...npc, vendorItems: [...(npc.vendorItems ?? []), ...items] };
+  }
+  return stock;
+}
+
+export const NPCS = withDreamdancerVendorStock(BASE_NPCS);
 
 // Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the
 // whole death-loop data surface from this one merge module.
@@ -1016,6 +1033,7 @@ export const REWARD_ARCHETYPE: Record<PlayerClass, PlayerClass> = {
   mage: 'mage',
   priest: 'mage',
   warlock: 'mage',
+  dreamdancer: 'mage',
   druid: 'mage',
 };
 
@@ -1091,7 +1109,7 @@ export const PLAYER_START = { ...EASTBROOK_LAYOUT.services.playerStart.position 
 export const BASE_WORLD: WorldContent = {
   zones: ZONES,
   camps: CAMPS,
-  npcs: NPCS,
+  npcs: BASE_NPCS,
   groundObjects: GROUND_OBJECTS,
   roads: ROADS,
   props: PROPS,
@@ -1134,7 +1152,11 @@ export const BASE_WORLD: WorldContent = {
   ],
 };
 
-export const BUILTIN_WORLD = applyWorldTouchup(BASE_WORLD, WORLD_TOUCHUP);
+const TOUCHED_WORLD = applyWorldTouchup(BASE_WORLD, WORLD_TOUCHUP);
+export const BUILTIN_WORLD: WorldContent = {
+  ...TOUCHED_WORLD,
+  npcs: TOUCHED_WORLD.npcs === BASE_NPCS ? NPCS : withDreamdancerVendorStock(TOUCHED_WORLD.npcs),
+};
 
 let activeWorld: WorldContent = BUILTIN_WORLD;
 // Bumped on every content swap so content-derived caches (the terrain

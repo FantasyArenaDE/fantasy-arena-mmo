@@ -514,6 +514,7 @@ export type OptionsMenuAction =
   | { kind: 'interfaceUnlock'; unlocked: boolean }
   | { kind: 'wiki' }
   | { kind: 'unstuck' }
+  | { kind: 'characterSelect' }
   | { kind: 'logout' }
   | { kind: 'close' };
 
@@ -523,6 +524,7 @@ export interface OptionsMenuEntry {
 }
 
 export interface OptionsMenuOpts {
+  characterSelectAvailable?: boolean;
   /** The "Report a Bug" row is online-only (it needs an authoritative server
    *  to receive the report). */
   bugReportAvailable: boolean;
@@ -569,6 +571,8 @@ export function buildOptionsMenu(opts: OptionsMenuOpts): OptionsMenuEntry[] {
       action: { kind: 'goto', view: 'bugreport' },
     });
   entries.push({ labelKey: 'hudChrome.unstuck.menuButton', action: { kind: 'unstuck' } });
+  if (opts.characterSelectAvailable)
+    entries.push({ labelKey: 'hud.options.characterSelect', action: { kind: 'characterSelect' } });
   entries.push({ labelKey: 'hud.options.logout', action: { kind: 'logout' } });
   entries.push({ labelKey: 'hud.options.returnToGame', action: { kind: 'close' } });
   return entries;

@@ -18,6 +18,7 @@ import {
   offhandMirrorsWeaponSkin,
 } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
+import { ITEMS } from '../../sim/data';
 import { applyGeometryLod, type GeometryLodLevel } from '../assets/geometry_lod';
 import type { LoadPriority } from '../assets/load_queue_core';
 import { retryDelayMs as gltfRetryDelayMs } from '../assets/load_retry';
@@ -32,6 +33,30 @@ import { backGripFor, slotToChestScale } from './back_grips';
 import { applyClipPositionDrops, applyClipTrackDrops } from './clip_track_drops';
 import { composedVariantBounds, composedVariantEvictions } from './composed_variant_residency_core';
 import { applyEnvSheen } from './env_sheen';
+import { faHumanBPilotAttachment } from './fa_human_b_pilot';
+import { faQuaterniusPilotAttachment, faQuaterniusPilotIsKey } from './fa_quaternius_pilot';
+import { FA_RELEASE_BEARD_URL } from './fa_release_beard';
+import { faQuaterniusReleaseFit } from './fa_quaternius_pilot';
+import {
+  faReleaseChestSurface,
+  faReleaseClassTint,
+  faReleaseCoatMaterial,
+  mountFaReleaseClassLook,
+} from './fa_release_class_look';
+import { fitFaReleaseClothing } from './fa_release_clothing_fit';
+import { faReleaseHumanAttachment, faReleaseHumansEnabled, loadFaReleaseHumanEntryFiles } from './fa_release_humans';
+import { faReleaseCreatureAnimationSource } from './fa_release_creature_anims';
+import { faReleaseKaykitExtraSource, faReleaseKaykitHitSource } from './fa_release_kaykit_hit';
+import {
+  FA_RELEASE_TWO_HAND_MODELS,
+  faReleaseAdditionalGearSource,
+  faReleaseGearEnabled,
+  faReleaseGearSource,
+  faReleaseTwoHandSource,
+} from './fa_release_gear';
+import { faReleaseQuestTotemSource } from './fa_release_quest_totem';
+import { faReleaseSkeletonSource } from './fa_release_skeletons';
+import { faStarterGearEnabled, faStarterGearSource } from './fa_starter_gear';
 import { attachGloamClimb } from './gloam_climb';
 import {
   type HandGrip,
@@ -567,8 +592,9 @@ function attachProp(
   swapKind: 'mainhand' | 'offhand' | null = null,
   stowed = false,
   rightShoulderSheathe = false,
+  sourceOverride: string | null = null,
 ): THREE.Object3D {
-  const gltf = resolvedGltf(att.url);
+  const gltf = resolvedGltf(sourceOverride ?? att.url);
   const payload = flattenWeaponScene(cloneSkinned(gltf.scene));
   if (gltf.animations.length) registerHeldPropIdle(root, payload, gltf.animations);
   primeSkinnedSortSpheres(payload);
@@ -595,8 +621,9 @@ function attachProp(
   const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
   if (variantGrip) {
     applyVariantGrip(payload, att.bone, variantGrip, att.url);
-  } else if (att.position || att.rotationY !== undefined) {
+  } else if (att.position || att.rotationX !== undefined || att.rotationY !== undefined) {
     if (att.position) payload.position.set(...att.position);
+    if (att.rotationX !== undefined) payload.rotation.x = att.rotationX;
     if (att.rotationY !== undefined) payload.rotation.y = att.rotationY;
   } else if (att.gripRef) {
     const ref = findAccessoryNode(root, att.gripRef);
@@ -604,6 +631,7 @@ function attachProp(
   } else if (isHandslotBone(att.bone)) {
     applyHandGrip(payload, root, att.bone, att.url);
   }
+  payload.scale.multiplyScalar(att.boneScale ?? 1);
   // The equipped item's own size (held_item_size_core.ts), about the hand: the whole fit
   // shrinks with the model, so a handle seated through the fist stays through it.
   const size = att.size ?? 1;
@@ -648,6 +676,12 @@ function swapAttachDef(
   weaponSkinId: string | null | undefined = null,
   bareWhenUnarmed = false,
 ): AttachDef | null {
+  const human = faReleaseHumanAttachment(base, weaponItemId);
+  if (human !== undefined) return human;
+  const quaternius = faQuaterniusPilotAttachment(base, weaponItemId);
+  if (quaternius !== undefined) return quaternius;
+  const pilot = faHumanBPilotAttachment(base, weaponItemId);
+  if (pilot !== undefined) return pilot;
   // A DISPLAYED ranged skin takes the ranged hand rule here too, not only on
   // the fixed-attach path (rangedSkinAttachDef): the Combat Mech is a swap-slot
   // body that a hunter can wear, so a drawn bow must move to the left handslot
@@ -681,6 +715,12 @@ function offhandAttachDef(
   offhandItemId: string | null | undefined,
   weaponSkinId: string | null | undefined = null,
 ): AttachDef | null {
+  const human = faReleaseHumanAttachment(base, offhandItemId);
+  if (human !== undefined) return human;
+  const quaternius = faQuaterniusPilotAttachment(base, offhandItemId);
+  if (quaternius !== undefined) return quaternius;
+  const pilot = faHumanBPilotAttachment(base, offhandItemId);
+  if (pilot !== undefined) return pilot;
   const url = offhandModelUrl(offhandItemId, weaponSkinId);
   // The mirrored-skin arm of offhandModelUrl can name a streamed skin GLB; the
   // item's own offhand model is always resident, so degrade to it.
@@ -730,6 +770,40 @@ function resolveBone(root: THREE.Object3D, name: string): THREE.Object3D | null 
 // ---------------------------------------------------------------------------
 
 const gltfByUrl = new Map<string, LoadedGltf>();
+// The preview choice is fixed for this page load, just like the GLTF cache.
+const starterGearPreviewEnabled = faStarterGearEnabled();
+const releaseGearEnabled = faReleaseGearEnabled();
+
+function gearPhysicalSource(url: string): string {
+  return releaseGearEnabled
+    ? faReleaseCreatureAnimationSource(
+        faReleaseKaykitExtraSource(
+          faReleaseKaykitHitSource(
+            faReleaseSkeletonSource(
+              faReleaseQuestTotemSource(
+                faReleaseAdditionalGearSource(faReleaseGearSource(url, true), true),
+                true,
+              ),
+              true,
+            ),
+            true,
+          ),
+          true,
+        ),
+        true,
+      )
+    : faStarterGearSource(url, starterGearPreviewEnabled);
+}
+
+function releaseTwoHandSource(att: AttachDef, itemId: string | null): string | null {
+  const item = itemId ? ITEMS[itemId] : undefined;
+  return faReleaseTwoHandSource(
+    att.url,
+    itemWeaponModelUrl(itemId),
+    item?.kind === 'weapon' ? item.hand : undefined,
+    releaseGearEnabled,
+  );
+}
 
 function assetUrl(url: string): string {
   return visualAssetUrlForGraphics(url, GFX.standardMaterials);
@@ -740,7 +814,12 @@ function assetUrl(url: string): string {
 // tier via assetUrl(), and resolvedGltf() throws "character asset not preloaded"
 // synchronously, so the preload set must be a superset of any tier's placement set or
 // world entry crashes (the character-side twin of the v0.16.0 props P0).
-const allPreloadUrls = characterPreloadUrls(false);
+const allPreloadUrls = [
+  ...new Set([
+    ...characterPreloadUrls(false),
+    ...(releaseGearEnabled ? FA_RELEASE_TWO_HAND_MODELS : []),
+  ]),
+];
 
 // Every iOS WebKit host carves the mob bodies (rift_body_stream_core.ts
 // STREAMED_BODY_URL_PREFIXES) out of the boot gate and STREAMS them after first
@@ -781,13 +860,14 @@ function streamPlanFor(profile: Readonly<GfxSettings>) {
 const initialStreamPlan = streamPlanFor(GFX);
 let streamedUrls = initialStreamPlan.streamed;
 let streamedUrlSet = new Set(streamedUrls);
-const lazyOnDemandUrls = new Set(
-  Object.values(VISUALS).flatMap((def) =>
+const lazyOnDemandUrls = new Set([
+  ...(faReleaseHumansEnabled() ? [FA_RELEASE_BEARD_URL] : []),
+  ...Object.values(VISUALS).flatMap((def) =>
     def.lazyPreload
       ? [def.url, ...(def.animUrls ?? []), ...(def.attach ?? []).map((a) => a.url)]
       : [],
   ),
-);
+]);
 let postEntryStreamUrls = initialStreamPlan.postEntry;
 const preloadUrls = allPreloadUrls.filter((url) => !streamedUrlSet.has(url));
 const characterLoadTasks = new Map<string, Promise<void>>();
@@ -829,18 +909,20 @@ function notifyCharacterAssetReady(url: string): void {
 // permanently non-resident, so key any such future entry resolved.
 function prepareCharacterUrl(url: string, priority?: LoadPriority): Promise<void> {
   if (gltfByUrl.has(url)) return Promise.resolve();
+  const physicalUrl = gearPhysicalSource(url);
   const existing = characterLoadTasks.get(url);
   if (existing) {
     // Asked for again by a caller that needs it now: a body the bulk stream queued must not
     // wait out the rest of the stream, so the loader is asked once more as a demand, which
     // moves its waiting start up (assets/load_queue_core.ts). Same fetch, same task.
     if (priority !== 'background' && streamQueuedUrls.delete(url)) {
-      void loadGltf(url).catch(() => undefined);
+      void loadGltf(physicalUrl).catch(() => undefined);
     }
     return existing;
   }
   if (priority === 'background') streamQueuedUrls.add(url);
-  const load = priority === 'background' ? loadGltf(url, { priority }) : loadGltf(url);
+  const load =
+    priority === 'background' ? loadGltf(physicalUrl, { priority }) : loadGltf(physicalUrl);
   const task = load
     .then((gltf) => {
       gltfByUrl.set(url, gltf);
@@ -912,7 +994,9 @@ export function visualAssetsResident(key: string, fetch = true): boolean {
   // a WOC body's head core streams beside its base (never gating the build)
   if (fetch && def.wocCharacter) ensureWocHeadCoreForFit(def.wocCharacter.fit);
   let resident = true;
-  for (const url of [def.url, ...(def.animUrls ?? [])]) {
+  const urls = [def.url, ...(def.animUrls ?? [])];
+  if (key.startsWith('player_') && faQuaterniusReleaseFit(key)) urls.push(FA_RELEASE_BEARD_URL);
+  for (const url of urls) {
     if (characterAssetResident(url)) continue;
     resident = false;
     if (!fetch || !(streamedUrlSet.has(url) || lazyOnDemandUrls.has(url))) continue;
@@ -952,7 +1036,19 @@ export function directBuildAssetsResident(
         offhandSlot: weaponOverride.offhandSlot,
       }
     : base;
-  for (const { att } of heldPropChoices(def, weaponItemId, null, offhandItemId, bareWhenUnarmed)) {
+  for (const { att, isWeapon, isOffhandSwap } of heldPropChoices(
+    def,
+    weaponItemId,
+    null,
+    offhandItemId,
+    bareWhenUnarmed,
+  )) {
+    const replacement = isWeapon && !isOffhandSwap ? releaseTwoHandSource(att, weaponItemId) : null;
+    if (replacement && !characterAssetResident(replacement)) {
+      resident = false;
+      hostAwaitedUrls.add(replacement);
+      if (!characterRetryArmed.has(replacement)) ensureCharacterUrl(replacement);
+    }
     if (streamedUrlSet.has(att.url) || characterAssetResident(att.url)) continue;
     resident = false;
     hostAwaitedUrls.add(att.url);
@@ -992,7 +1088,14 @@ registerDeferredPreload(() => Promise.all(preloadUrls.map((url) => prepareCharac
 // cores, so no player's body waits on a file once the world is up (woc_entry_preload.ts;
 // the loading model is in src/render/CLAUDE.md "Asset loading"). Nothing of it starts on the
 // launcher, whose previews fetch only what they show (visualAssetsResident).
-registerDeferredPreload(() => loadWocEntryFiles((url) => prepareCharacterUrl(url)));
+registerDeferredPreload(() =>
+  faReleaseHumansEnabled()
+    ? Promise.all([
+        loadFaReleaseHumanEntryFiles((url) => prepareCharacterUrl(url)),
+        prepareCharacterUrl(FA_RELEASE_BEARD_URL),
+      ])
+    : loadWocEntryFiles((url) => prepareCharacterUrl(url)),
+);
 
 let streamedStarted = false;
 /**
@@ -1162,7 +1265,9 @@ export async function charactersReady(maxAttempts = 3): Promise<void> {
       await new Promise((resolve) => setTimeout(resolve, gltfRetryDelayMs(attempt)));
     }
     const results = await Promise.allSettled([
-      ...missingGltf.map((u) => loadGltf(u).then((g) => void gltfByUrl.set(u, g))),
+      ...missingGltf.map((u) =>
+        loadGltf(gearPhysicalSource(u)).then((g) => void gltfByUrl.set(u, g)),
+      ),
       ...missingSkins.map((u) => loadSkinTexInto(u, skinTexByUrl)),
     ]);
     if (attempt === maxAttempts) {
@@ -1339,6 +1444,10 @@ export function characterResidencySources(): { parsedScenes: THREE.Object3D[] } 
   };
 }
 
+export function faReleaseBeardSource(): THREE.Object3D {
+  return resolvedGltf(FA_RELEASE_BEARD_URL).scene;
+}
+
 function resolvedGltf(url: string): LoadedGltf {
   const resolvedUrl = assetUrl(url);
   const g = gltfByUrl.get(resolvedUrl);
@@ -1377,6 +1486,9 @@ function optimizedScene(url: string): THREE.Object3D {
     }
   }
   const root = cloneSkinned(source.scene);
+  if (url.startsWith('/models/chars/players/fantasy-arena/quaternius-pilot/')) {
+    fitFaReleaseClothing(root);
+  }
   // A WOC body merges by material WITHIN a manifest part only: the female
   // pack's boots and gauntlets share one leather material, and a merge across
   // them would weld two independently toggleable slots into one draw.
@@ -1384,7 +1496,9 @@ function optimizedScene(url: string): THREE.Object3D {
   mergeSkinnedParts(
     root,
     animatedNodeNames(clips),
-    woc ? { partitionKey: (mesh) => wocMergePartition(woc, mesh.name) } : undefined,
+    woc
+      ? { partitionKey: (mesh) => wocMergePartition(woc, mesh.name) }
+      : { partitionKey: (mesh) => (mesh.name.startsWith('FA_Hair_') ? mesh.name : '') },
   );
   // After the merge, so only what the merge could not fold is rebaked, and
   // before the palette pass, which reads the (now single) skeleton. A WOC base
@@ -2248,6 +2362,7 @@ export function assembleModel(
     offhandItemId ?? null,
     opts?.bareWhenUnarmed,
   );
+  if (def.faReleaseClass) mountFaReleaseClassLook(root, def.faReleaseClass);
   // Re-orient mis-baked built-in weapon nodes (e.g. the golem axe) in place.
   for (const fix of def.weaponFix ?? []) {
     const node =
@@ -2361,7 +2476,16 @@ function attachAllProps(
     const bone = attachTargetBone(root, att, stowed);
     if (!bone) continue;
     const swapKind = isOffhandSwap ? 'offhand' : isWeapon ? 'mainhand' : null;
-    const payload = attachProp(root, bone, att, swapKind, stowed, def.rightShoulderSheathe);
+    const replacement = isWeapon && !isOffhandSwap ? releaseTwoHandSource(att, weaponItemId) : null;
+    const payload = attachProp(
+      root,
+      bone,
+      att,
+      swapKind,
+      stowed,
+      def.rightShoulderSheathe,
+      replacement,
+    );
     if ((isWeapon && mainhandSkinned) || (isOffhandSwap && offhandSkinned)) payloads.push(payload);
   }
   return payloads;
@@ -2409,7 +2533,10 @@ export function setHeldWeapon(
     if (!att) continue;
     const bone = attachTargetBone(root, att, stowed);
     if (!bone) continue;
-    payloads.push(attachProp(root, bone, att, 'mainhand', stowed, def.rightShoulderSheathe));
+    const replacement = releaseTwoHandSource(att, weaponItemId);
+    payloads.push(
+      attachProp(root, bone, att, 'mainhand', stowed, def.rightShoulderSheathe, replacement),
+    );
   }
   return payloads;
 }
@@ -2894,7 +3021,7 @@ export function applyMaterials(
   claims: TintedMaterialClaims | null = null,
 ): void {
   const tint = tintFor(def, entityColor);
-  const strength = def.tintStrength ?? DEFAULT_TINT_STRENGTH;
+  const chestSurface = def.faReleaseClass ? faReleaseChestSurface(root) : undefined;
   root.traverse((o) => {
     const mesh = o as THREE.Mesh;
     if (!mesh.isMesh) return;
@@ -2903,6 +3030,13 @@ export function applyMaterials(
     // and restores. Tinting either (or re-deriving them from the shared cache
     // on a body-skin change) corrupts live handles, so both stay untouched.
     if (mesh.userData.weaponVfxMesh || mesh.userData.weaponSkinIsolated) return;
+    // The fitted appearance parts own their palette even when the outfit atlas changes.
+    if (mesh.userData.faReleaseAppearancePart) {
+      if (chestSurface && mesh.name === 'FA_ClassKit_spine_03') {
+        mesh.material = faReleaseCoatMaterial(chestSurface);
+      }
+      return;
+    }
     // The class halo's shared additive material must never be re-mapped or
     // tinted (visual.ts adds it after the constructor's applyMaterials for the
     // same reason); a skin or weapon swap re-running this sweep used to wash
@@ -2914,7 +3048,9 @@ export function applyMaterials(
     const source = sourceMaterials.get(mesh) ?? mesh.material;
     sourceMaterials.set(mesh, source);
     const role: MaterialRole = mesh.userData.weaponMesh ? 'weapon' : 'body';
-    const materialTint = role === 'weapon' ? null : tint;
+    const classTint = faReleaseClassTint(def.faReleaseClass, mesh.name, chestSurface);
+    const materialTint = role === 'weapon' ? null : (classTint ?? tint);
+    const strength = classTint !== undefined ? 0.94 : (def.tintStrength ?? DEFAULT_TINT_STRENGTH);
     // An authored surface: the def says so for the body atlas, attachProp
     // tagged it for an AUTHORED_HELD_MODELS prop.
     const authored =
@@ -3102,7 +3238,7 @@ export function prepareVisual(key: string): PreparedVisual {
   // the Reflection draws the class GLB itself, which supplies both sources.
   // The WOC paladin body ships its own vocabulary and no KayKit source clips:
   // the synthesis is the KayKit paladin's (and its derivatives').
-  if (synthesizesPaladinClips(key) && !def.wocCharacter) {
+  if (synthesizesPaladinClips(key) && !def.wocCharacter && !faQuaterniusPilotIsKey(key)) {
     const verdictBase = clips.get(PALADIN_SYNTHESIZED_CLIP_SOURCES[PALADIN_TEMPLARS_VERDICT_CLIP]);
     if (!verdictBase) throw new Error('Paladin Templar Verdict requires 2H_Melee_Attack_Chop');
     clips.set(PALADIN_TEMPLARS_VERDICT_CLIP, createPaladinTemplarsVerdictClip(verdictBase));

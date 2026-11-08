@@ -48,6 +48,12 @@ const TITLE_BASELINE_Y = 20; // px from the canvas top
 const LABEL_FONT = 'bold 12px Georgia';
 const LABEL_HOVER_FONT = 'bold 13px Georgia';
 const LABEL_LINE_WIDTH = 3; // text outline width
+// Stagger the adjacent southern labels without moving their clickable regions.
+const SOUTH_LABEL_Y_OFFSET: Partial<Record<string, number>> = {
+  farshore_isle: 12,
+  eastbrook_vale: -14,
+  proving_shore: 20,
+};
 // Zone wash: how far it fades in from the zone's own bounds, as a fraction of the
 // zone's shorter side, with a floor so a thin band still fades. The fade is what
 // keeps the border two zones share from reading as the drawn straight line it
@@ -106,6 +112,7 @@ export interface ContinentPaintOptions {
 }
 
 export interface ContinentPaintResult {
+  image: ContinentMapModel['image'];
   /** The painted zone regions, for Hud's hover/click hit-test (continentZoneAt). */
   regions: ContinentZoneRegion[];
   /** Ferry markers used by the map window's port hover hit-test. */
@@ -257,7 +264,7 @@ export class ContinentMapPainter {
     });
     const colors = this.resolveColors();
     this.draw(ctx, model, opts.canvasSize, colors);
-    return { regions: model.regions, ports: model.ports };
+    return { image: model.image, regions: model.regions, ports: model.ports };
   }
 
   private draw(
@@ -367,8 +374,9 @@ export class ContinentMapPainter {
     // The zone the player stands in is the one the borders used to call out; its
     // label carries that job now, so the "where am I" read survives their removal.
     ctx.fillStyle = region.isCurrent ? colors.regionCurrentLabel : colors.label;
-    ctx.strokeText(text, region.labelX, region.labelY);
-    ctx.fillText(text, region.labelX, region.labelY);
+    const y = region.labelY + (SOUTH_LABEL_Y_OFFSET[region.zoneId] ?? 0);
+    ctx.strokeText(text, region.labelX, y);
+    ctx.fillText(text, region.labelX, y);
   }
 
   /**

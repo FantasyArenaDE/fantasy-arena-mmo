@@ -57,6 +57,11 @@ export const WEEKLY_LOOT_PROFILES: Readonly<
     fire: { roles: ['caster'], sets: ['pyroclast'] },
     frost: { roles: ['caster'], sets: ['frostquench'] },
   },
+  dreamdancer: {
+    nightweaver: { roles: ['caster'], sets: [] },
+    dreamkeeper: { roles: ['healer'], sets: [] },
+    veilweaver: { roles: ['caster'], sets: [] },
+  },
   warlock: {
     affliction: { roles: ['caster'], sets: ['hexthread'] },
     demonology: { roles: ['caster'], sets: ['gravebrand'] },

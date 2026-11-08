@@ -63,6 +63,7 @@ import type { LoadedGltf } from './assets/loader';
 import { loadGltf, releaseGltf } from './assets/loader';
 import { mediaAssetExists } from './assets/media';
 import { registerDeferredPreload } from './assets/preload';
+import { buildFantasyArenaMirefenTavern } from './fa_mirefen_tavern';
 import { GFX, type GfxSettings } from './gfx';
 import {
   activeCameraInterior,
@@ -109,6 +110,10 @@ import {
 } from './vertex_colour_glb_parts';
 
 const TAVERN_URL = '/models/props/mirefen_tavern.glb';
+// Explicit local test only. The release still requires clearance until the
+// prototype's full gameplay and presentation have been reviewed.
+const OWN_TAVERN_PROTOTYPE =
+  import.meta.env.VITE_FA_BROWSER_RELEASE === '1' || import.meta.env.VITE_FA_TAVERN_PROTOTYPE === '1';
 
 let loaded: LoadedGltf | null = null;
 /** The file `loaded` was read from: the model, or one of its texture-tier files. */
@@ -131,6 +136,7 @@ export function mirefenTavernFile(tier: PlacedTextureTier): string {
 export function prepareMirefenTavernAssets(
   target: Pick<GfxSettings, 'placedTextureTier'> = GFX,
 ): Promise<void> {
+  if (OWN_TAVERN_PROTOTYPE) return Promise.resolve();
   const file = mirefenTavernFile(target.placedTextureTier);
   wantedFile = file;
   if (loaded && loadedFile === file) return Promise.resolve();
@@ -159,7 +165,7 @@ export function prepareMirefenTavernAssets(
   return task;
 }
 
-if (typeof window !== 'undefined') registerDeferredPreload(() => prepareMirefenTavernAssets());
+if (typeof window !== 'undefined' && !OWN_TAVERN_PROTOTYPE) registerDeferredPreload(() => prepareMirefenTavernAssets());
 
 interface TavernTemplate {
   /** The kept non-shell parts merged into one geometry per material, in the model's frame. */
@@ -310,6 +316,37 @@ export function buildMirefenTavern(): THREE.Group {
   clearMirefenTavernShell();
   const group = new THREE.Group();
   group.name = 'mirefenTavern';
+  if (OWN_TAVERN_PROTOTYPE) {
+    const prototype = buildFantasyArenaMirefenTavern();
+    const model = new THREE.Group();
+    model.name = 'fantasyArenaMirefenTavernModel';
+    model.add(prototype.body, buildShell(prototype.shell));
+    model.position.set(TAVERN_ORIGIN.x, TAVERN_FLOOR_Y, TAVERN_ORIGIN.z);
+    model.rotation.y = TAVERN_YAW;
+    const dogIndex = TAVERN_PROPS.findIndex((prop) => prop.kind === 'dog');
+    const dog = TAVERN_PROPS[dogIndex];
+    dogGroup = model.getObjectByName(`tavernProp:${dogIndex}:dog`) as THREE.Group | null;
+    dogWorld = dog ? tavernToWorld(dog.x, dog.z) : TAVERN_ORIGIN;
+    lastParts = [];
+    model.traverse((node) => {
+      if (node instanceof THREE.Mesh && !Array.isArray(node.material)) {
+        lastParts.push({ geometry: node.geometry, material: node.material });
+      }
+    });
+    wallFire = buildTavernWallFire(lastParts);
+    if (wallFire) {
+      model.add(wallFire.group);
+      lastParts.push(...wallFire.parts);
+    }
+    smoke = GFX.effectsTier === 'low' ? null : buildMirefenTavernSmoke();
+    if (smoke) {
+      group.add(smoke.mesh);
+      lastParts.push(mirefenTavernSmokePrewarmPart());
+    }
+    group.add(model);
+    registerCameraInterior(TAVERN_CAMERA_INTERIOR);
+    return group;
+  }
   if (!loaded) {
     console.warn(`mirefen tavern skipped: ${TAVERN_URL} was not preloaded`);
     clearMirefenTavernShell();
@@ -427,13 +464,13 @@ export const MIREFEN_TAVERN_FLAMES: readonly TavernFlameSpot[] = (() => {
 
 /** The live flames to build: none when the model never loaded (no fire without its hearth). */
 export function mirefenTavernFlameSpots(): typeof MIREFEN_TAVERN_FLAMES {
-  return loaded ? MIREFEN_TAVERN_FLAMES : [];
+  return loaded || OWN_TAVERN_PROTOTYPE ? MIREFEN_TAVERN_FLAMES : [];
 }
 
 /** The tavern's point lights, world-positioned (props.ts adds them to the props root and the
  *  fire-light budget, like a campfire's). Empty until the model is loaded. */
 export function mirefenTavernLights(): THREE.PointLight[] {
-  if (!loaded) return [];
+  if (!loaded && !OWN_TAVERN_PROTOTYPE) return [];
   const L = MIREFEN_TAVERN_LIGHTS;
   const out = [light(L.hearth, 'tavernHearth', TAVERN_PIT.x, 1.4, TAVERN_PIT.z)];
   const wf = TAVERN_WALL_FIRE_LIGHT;

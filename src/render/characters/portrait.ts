@@ -15,9 +15,15 @@ import {
   onCharacterAssetReady,
   visualAssetsResident,
 } from './assets';
+import { faQuaterniusPilotHairStyle, faQuaterniusPilotIsKey, faQuaterniusReleaseFit } from './fa_quaternius_pilot';
+import { faReleaseBeardStyle } from './fa_release_beard';
+import { faReleaseEyeValues } from './fa_release_eye_shape';
+import { faReleaseChinWidth, faReleaseMouthId, faReleaseNoseId } from './fa_release_face_shape';
+import { faReleaseEarPiercingId, faReleaseNosePiercingId } from './fa_release_piercing_core';
+import { faReleaseLookSignature } from './fa_release_looks_core';
 import { CLASS_HALO_NAME } from './halo';
 import { VISUALS } from './manifest';
-import { type ModularLook, modularSignature } from './modular';
+import { type ModularLook, modularSignature, normalizeEarringMaterial } from './modular';
 import { createPortraitCaptureLane } from './portrait_capture_lane_core';
 import { headshotAimForHead, type PortraitFraming, portraitFrameParams } from './portrait_framing';
 import { runPortraitPrewarm } from './portrait_prewarm_core';
@@ -242,6 +248,25 @@ const HEAD_KEY_SEGMENT = ':head:';
  *  body with no modular head (every non-WOC rig), for no appearance, and for
  *  the head type's default look (wocHeadPortraitSignature). */
 function portraitHeadSignature(visualKey: string, head: WocHeadAppearanceInput): string {
+  const releaseFit = visualKey.startsWith('player_') ? faQuaterniusReleaseFit(visualKey) : undefined;
+  if (releaseFit) {
+    const ears = faReleaseEarPiercingId(head?.headPiercing);
+    const nose = faReleaseNosePiercingId(head?.headPiercing, head?.nosePiercing);
+    return [
+      'fa-look',
+      faReleaseLookSignature(releaseFit, head),
+      faReleaseChinWidth(head?.headShape),
+      ...faReleaseEyeValues(head?.headShape),
+      faReleaseNoseId(head?.headNose),
+      faReleaseBeardStyle(head?.headBeard),
+      faReleaseMouthId(head?.headMouth),
+      ears,
+      nose,
+      ears === 'none' && nose === 'none' ? 'default' : normalizeEarringMaterial(head?.earringMaterial),
+    ].join('-');
+  }
+  if (faQuaterniusPilotIsKey(visualKey))
+    return `fa-q-${faQuaterniusPilotHairStyle(visualKey, head)}`;
   if (!head) return '';
   const manifest = VISUALS[visualKey]?.wocCharacter;
   if (!manifest) return '';
@@ -744,6 +769,24 @@ function renderPortraitFrame(
   rig.mount.rotation.y = 0;
   // Settle the rig into a stable idle frame before measuring/capturing.
   visual.update(0.4, PORTRAIT_ANIM_STATE, true);
+
+  // The CC0 pilot has a real uppercase Head bone. Its baked mesh bounds include
+  // unused body vertices, so the generic full-body box crops the face wrongly.
+  if (framing === 'headshot' && faQuaterniusPilotIsKey(visualKey)) {
+    visual.root.updateWorldMatrix(true, true);
+    const bone = visual.root.getObjectByName('Head');
+    if (bone) {
+      const head = bone.getWorldPosition(new THREE.Vector3());
+      const fov = portraitFrameParams(framing).fov;
+      const dist = 0.9 / 2 / Math.tan((fov * Math.PI) / 180 / 2);
+      rig.camera.fov = fov;
+      rig.camera.position.set(head.x + 0.03, head.y + 0.22, head.z + dist);
+      rig.camera.lookAt(head.x, head.y + 0.2, head.z);
+      rig.camera.updateProjectionMatrix();
+      rig.renderer.render(rig.scene, rig.camera);
+      return;
+    }
+  }
 
   // Keep the established full-root crop for legacy rigs. WOC's cached skin
   // boxes include large animation margins, so those bodies frame from their

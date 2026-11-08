@@ -105,7 +105,14 @@ export interface SpatialAudioSink {
     x: number,
     y: number,
     z: number,
-    opts?: { gain?: number; cooldown?: number },
+    opts?: {
+      gain?: number;
+      cooldown?: number;
+      cooldownKey?: string;
+      rate?: number;
+      release?: number;
+      ambient?: boolean;
+    },
   ): boolean;
   /** Every variant is decoded before a timed event claims audio ownership. */
   isBuffered?(key: string): boolean;

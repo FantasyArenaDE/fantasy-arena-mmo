@@ -22,6 +22,7 @@ import type {
 import { en } from './i18n.resolved.generated/en';
 import { en_XA } from './i18n.resolved.generated/en_XA';
 import { LOCALE_LOADERS, SUPPORTED_LANGUAGES } from './i18n.resolved.generated/loaders';
+import { browserLanguage } from './browser_language';
 import { pending } from './i18n.resolved.generated/pending';
 import { type InterpolationMemoEntry, interpolateWithMemo } from './i18n_interpolation';
 
@@ -77,6 +78,9 @@ export const supportedLanguages = [...SUPPORTED_LANGUAGES] as SupportedLanguage[
 const SUPPORTED_SET: ReadonlySet<string> = new Set(SUPPORTED_LANGUAGES);
 
 let currentLanguage: SupportedLanguage = 'en';
+if (typeof navigator !== 'undefined') {
+  currentLanguage = browserLanguage(SUPPORTED_LANGUAGES, [...(navigator.languages ?? []), navigator.language]);
+}
 
 // --- en_XA dev-only pseudo-locale --------------------------------------
 //

@@ -23,6 +23,7 @@ export const SPEC_PRIMARY_STAT: Readonly<
   rogue: { assassination: 'agi', combat: 'agi', subtlety: 'agi' },
   priest: { discipline: 'int', holy: 'int', shadow: 'int' },
   shaman: { elemental: 'int', enhancement: 'str', restoration: 'int' },
+  dreamdancer: { nightweaver: 'int', dreamkeeper: 'int', veilweaver: 'int' },
   mage: { arcane: 'int', fire: 'int', frost: 'int' },
   warlock: { affliction: 'int', demonology: 'int', destruction: 'int' },
   druid: { balance: 'int', feral: 'str', restoration: 'int' },

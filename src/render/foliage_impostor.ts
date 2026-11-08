@@ -38,7 +38,7 @@ import {
   type FarFieldPolicy,
   farFieldPolicy,
 } from './far_terrain_core';
-import { collapseWindowUniforms } from './foliage_collapse';
+import { collapseWindowUniforms, FOLIAGE_ISLAND_SCOPE_GLSL } from './foliage_collapse';
 import {
   CANOPY_EMISSIVE_FLOOR,
   IMPOSTOR_ATLAS_BUDGET,
@@ -513,12 +513,14 @@ function impostorMaterial(category: ImpostorCategory, atlas: THREE.Texture): THR
     shader.uniforms.uImpFade = u.uFade;
     shader.uniforms.uImpSpriteFar = u.uSpriteFar;
     shader.uniforms.uImpSinkStart = u.uFogCull;
+    shader.uniforms.uFoliageIslandOnly = u.uFoliageIslandOnly;
     shader.uniforms.uImpViews = { value: CATEGORY_VIEWS[category] };
     shader.uniforms.uImpWind = { value: windStrength };
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
         `#include <common>
+        ${FOLIAGE_ISLAND_SCOPE_GLSL}
         uniform float uTime;
         uniform float uImpSwap;
         uniform float uImpFade;
@@ -574,7 +576,7 @@ function impostorMaterial(category: ImpostorCategory, atlas: THREE.Texture): THR
         `float impJitter = ${IMPOSTOR_JITTER_GLSL};
         float impBegin = uImpSwap - uImpFade * impJitter;
         float impKeep = step(impBegin, impDist) * (1.0 - step(uImpSpriteFar, impDist));
-        if (impKeep == 0.0) {
+        if (impKeep == 0.0 || foliageOutsideIsland(collapseOrigin)) {
           gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
           return;
         }

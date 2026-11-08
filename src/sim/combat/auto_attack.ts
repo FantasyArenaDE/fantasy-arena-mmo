@@ -1,3 +1,4 @@
+import { adminOneHitApplies } from './admin_one_hit';
 import { gliderActionsLocked } from '../glider_action_lock';
 import { shadowActionsLocked } from '../shadow_action_lock';
 // Player auto-attack + the melee/ranged white-hit table, extracted from the Sim
@@ -465,7 +466,7 @@ export function rangedSwing(
   // target (projectile_travel), and fizzle if the target dies before impact.
   scheduleProjectile(ctx, attacker, target, (atk, tgt) => {
     const missChance = swingMissChance(atk, tgt) + blindMissBonus(atk);
-    if (ctx.rng.chance(missChance)) {
+    if (!adminOneHitApplies(ctx, atk, tgt) && ctx.rng.chance(missChance)) {
       ctx.emit({
         type: 'damage',
         sourceId: atk.id,
@@ -493,7 +494,9 @@ export function rangedSwing(
     }
     // ranged white hits suffer the same higher-level crit suppression as melee
     const critChance = Math.max(0.005, atk.critChance - Math.max(0, tgt.level - atk.level) * 0.002);
-    const crit = ctx.rng.chance(consumeNextAttackCrit(ctx, atk) ? 1 : critChance);
+    const crit =
+      adminOneHitApplies(ctx, atk, tgt) ||
+      ctx.rng.chance(consumeNextAttackCrit(ctx, atk) ? 1 : critChance);
     if (crit) dmg *= 2 + atk.critDmgPhysBonus;
     // wand bolts are magic — armor doesn't apply; physical auto shot is mitigated
     if (!ranged.wand) dmg *= 1 - armorReduction(ctx.effectiveArmor(tgt), atk.level);
@@ -575,7 +578,8 @@ export function meleeSwing(
       ? target.dodgeChance
       : 0.05 + Math.max(0, target.level - attacker.level) * 0.005;
   const { parryChance, blockChance } = warriorMeleeDefense(target, attacker);
-  const roll = ctx.rng.next();
+  const oneHit = adminOneHitApplies(ctx, attacker, target);
+  const roll = oneHit ? Infinity : ctx.rng.next();
   if (roll < missChance) {
     ctx.emit({
       type: 'damage',
@@ -681,6 +685,7 @@ export function meleeSwing(
       Math.max(0, target.level - attacker.level) * 0.002,
   );
   const crit =
+    oneHit ||
     ctx.rng.chance(consumeNextAttackCrit(ctx, attacker) ? 1 : critChance) ||
     opts.forceCrit === true;
   if (crit) dmg *= 2 + attacker.critDmgPhysBonus;

@@ -103,22 +103,23 @@ function factionLabel(factionId: FactionId): string {
   return t(`hudChrome.reputation.faction.${factionId}`);
 }
 
+export function weeklyCommendationOptions(world: WeeklyWorld): WeeklyCommendationOption[] {
+  const cap = maxStandingForLevel(world.player?.level ?? 1);
+  return FACTION_IDS.map((factionId) => ({
+    factionId,
+    label: factionLabel(factionId),
+    capped: (world.factions?.[factionId] ?? 0) >= cap,
+    claimed: world.weeklyQuest?.commended === factionId,
+  }));
+}
+
 /** The commendation choice for a finished charge: one option per faction, a
  *  capped faction inert (the sim would refuse it), and the claimed one
  *  marked once the choice is made. Null while the charge is not finished. */
 export function buildWeeklyCommendation(world: WeeklyWorld): WeeklyCommendationView | null {
   const held = world.weeklyQuest;
   if (!held || held.state !== 'completed') return null;
-  const cap = maxStandingForLevel(world.player?.level ?? 1);
   const claimed = held.commended ?? null;
-  const options = FACTION_IDS.map(
-    (factionId): WeeklyCommendationOption => ({
-      factionId,
-      label: factionLabel(factionId),
-      capped: (world.factions?.[factionId] ?? 0) >= cap,
-      claimed: claimed === factionId,
-    }),
-  );
   return {
     heading: t('hudChrome.weekly.commendHeading'),
     // A pick carried past the reset says so in this same line, so the strip
@@ -126,7 +127,7 @@ export function buildWeeklyCommendation(world: WeeklyWorld): WeeklyCommendationV
     note: t(held.carried ? 'hudChrome.weekly.commendCarriedNote' : 'hudChrome.weekly.commendNote', {
       amount: whole(WEEKLY_QUEST_REWARD.commendationStanding),
     }),
-    options,
+    options: weeklyCommendationOptions(world),
     claimedText:
       claimed === null
         ? null

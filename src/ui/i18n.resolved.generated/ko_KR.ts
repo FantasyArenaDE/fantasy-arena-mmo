@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const ko_KR: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "법적 고지",
+    "worldPicker": "세계 선택",
+    "characterPreview": "캐릭터 생성 체험",
+    "desktopDownload": "데스크톱 앱 다운로드",
+    "credits": "제작진 및 라이선스",
+    "sourceProject": "GitHub 원본 프로젝트",
+    "supportProject": "프로젝트 후원",
+    "musicCredits": "음악 제작진",
+    "separateAccount": "이 테스트 버전에는 별도의 MMO 계정이 필요합니다."
+  },
   "referralCards": {
     "title": "친구 초대",
     "subtitle": "함께 모험하며 도장을 모으세요.",
@@ -467,6 +478,77 @@ export const ko_KR: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "배달부",
       "close": "배달부 닫기",
@@ -1767,6 +1849,7 @@ export const ko_KR: EnTranslations = {
       "presets": {
         "classic": "클래식 골드",
         "fancyGold": "화려한 골드",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "미드나이트",
         "parchment": "양피지",
         "highContrast": "고대비"
@@ -2072,8 +2155,8 @@ export const ko_KR: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "업데이트 사용 가능",
-      "body": "World of ClaudeCraft의 새 버전을 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
-      "bodyWithVersion": "World of ClaudeCraft 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
+      "body": "Fantasy Arena MMO의 새 버전을 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
+      "bodyWithVersion": "Fantasy Arena MMO 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
       "notNow": "나중에",
       "update": "업데이트"
     },
@@ -2205,6 +2288,8 @@ export const ko_KR: EnTranslations = {
         "remove": "제거",
         "promote": "승급",
         "bank": "길드 은행",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "간부 대화",
         "motd": "게시판",
         "events": "달력"
@@ -2214,6 +2299,8 @@ export const ko_KR: EnTranslations = {
         "remove": "자신보다 낮은 등급의 구성원을 제거합니다.",
         "promote": "자신보다 낮은 등급의 구성원을 승급하거나 강등하되, 자신의 바로 아래 등급까지만 올릴 수 있습니다.",
         "bank": "길드 은행에 동전과 아이템을 넣고 꺼냅니다. 모든 구성원이 볼 수 있습니다.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "간부 대화를 읽고 말합니다.",
         "motd": "길드 게시판을 편집합니다.",
         "events": "길드 달력 일정을 추가하고 제거합니다."
@@ -3079,7 +3166,7 @@ export const ko_KR: EnTranslations = {
         "offline": "오프라인"
       },
       "diagnostics": {
-        "panelAria": "World of ClaudeCraft 성능 진단",
+        "panelAria": "Fantasy Arena MMO 성능 진단",
         "title": "ClaudeCraft 성능 진단",
         "subtitle": "게임에 맞춘 스캔으로 근거와 코드 수준의 수정안을 제공합니다.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const ko_KR: EnTranslations = {
           }
         },
         "report": {
-          "title": "World of ClaudeCraft 성능 진단",
+          "title": "Fantasy Arena MMO 성능 진단",
           "statusLine": "상태: {status} ({score}/100)",
           "capturedLine": "측정 시간: {captured}",
           "topFindingLine": "최우선 결과: {finding}",
@@ -5422,7 +5509,7 @@ export const ko_KR: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "닫기",
       "keybind": "Discord 패널",
@@ -5836,6 +5923,8 @@ export const ko_KR: EnTranslations = {
       "guildTab": "길드",
       "guildCapacityAria": "사용 중인 길드 은행 칸: {total}칸 중 {used}칸",
       "guildEmpty": "길드 은행이 비어 있습니다.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "길드 금고",
       "guildDepositGold": "돈 넣기",
       "guildWithdrawGold": "돈 꺼내기",
@@ -6446,6 +6535,7 @@ export const ko_KR: EnTranslations = {
       "toolEffectRechargeFull": "{effect}은(는) 이미 완전히 충전되어 있습니다.",
       "toolEffectRechargeToolCapped": "{effect}을(를) 더 충전하려면 더 좋은 {profession} 도구가 필요합니다.",
       "toolEffectRechargeMaterials": "{effect} 재충전에는 {material} x{count}이(가) 필요합니다.",
+      "toolEffectRechargeLocked": "{effect} 재충전에는 {material} x{count}이(가) 필요하지만, 해당 아이템이 잠겨 있습니다. 가방에서 잠금을 해제하세요.",
       "craftingProgress": "제작 중: {total}초 중 {remaining}초 남음.",
       "disenchantingProgress": "분해 중: {total}초 중 {remaining}초 남음.",
       "enchantingProgress": "마법부여 중: {total}초 중 {remaining}초 남음.",
@@ -7978,6 +8068,7 @@ export const ko_KR: EnTranslations = {
         }
       },
       "commendHeading": "사절의 표창",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "선택한 진영 하나에 평판 {amount}, 주 1회.",
       "commendCarriedNote": "지난주 평판 {amount}을(를) 아직 받지 않았습니다. 받으면 새 임무를 고를 수 있습니다.",
       "commendClaimed": "이번 주 표창은 {faction}에게 돌아갔습니다.",
@@ -9202,7 +9293,7 @@ export const ko_KR: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "브라우저에서 무료로 즐기는 클래식 스타일 MMO입니다.",
     "skipToContent": "본문으로 건너뛰기",
@@ -9312,7 +9403,7 @@ export const ko_KR: EnTranslations = {
     },
     "home": {
       "eyebrow": "클래식 스타일 브라우저 MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "세계를 탐험하고, 퀘스트를 수행하고, 친구들과 던전에 도전하세요.",
       "ctaPlay": "지금 플레이",
       "ctaLearn": "플레이 방법",
@@ -10293,7 +10384,7 @@ export const ko_KR: EnTranslations = {
     },
     "worldPage": {
       "heading": "세계",
-      "intro": "World of ClaudeCraft는 당신이 두 발로 가로지르는 하나로 이어진 땅입니다. 옛 길은 남쪽에서 북쪽으로 시작의 골짜기와 늪지와 봉우리를 꿰뚫고, 그것들을 지나 그 너머의 분지와 지도 꼭대기의 눈의 땅까지 계속 올라갑니다. 그 길에서 서쪽으로 더 높은 왕국들이 한 줄, 동쪽으로 또 한 줄 열리고, 밸리의 동쪽 해안 앞바다에는 섬이 하나 놓여 있습니다. 빠른 이동도, 비행 경로도, 마차도 없습니다. 모든 여정은 걷거나 타고 가는 것이므로, 다다르는 일 자체가 모험의 일부입니다.\n\n이 땅은 시간도 셉니다. 낮과 밤의 순환은 당신의 세계에 있는 모두가 함께 쓰는 실제 시계로 돌아가므로, 하늘은 여러분 모두에게 동시에 새벽에서 한낮을 지나 황혼과 어둠으로 옮겨가고, 달은 차고 기울며 오가고, 땅 위의 빛도 그에 따라 바뀝니다. 미니맵을 두른 눈금판이 시각을 읽는 곳입니다.",
+      "intro": "Fantasy Arena MMO는 당신이 두 발로 가로지르는 하나로 이어진 땅입니다. 옛 길은 남쪽에서 북쪽으로 시작의 골짜기와 늪지와 봉우리를 꿰뚫고, 그것들을 지나 그 너머의 분지와 지도 꼭대기의 눈의 땅까지 계속 올라갑니다. 그 길에서 서쪽으로 더 높은 왕국들이 한 줄, 동쪽으로 또 한 줄 열리고, 밸리의 동쪽 해안 앞바다에는 섬이 하나 놓여 있습니다. 빠른 이동도, 비행 경로도, 마차도 없습니다. 모든 여정은 걷거나 타고 가는 것이므로, 다다르는 일 자체가 모험의 일부입니다.\n\n이 땅은 시간도 셉니다. 낮과 밤의 순환은 당신의 세계에 있는 모두가 함께 쓰는 실제 시계로 돌아가므로, 하늘은 여러분 모두에게 동시에 새벽에서 한낮을 지나 황혼과 어둠으로 옮겨가고, 달은 차고 기울며 오가고, 땅 위의 빛도 그에 따라 바뀝니다. 미니맵을 두른 눈금판이 시각을 읽는 곳입니다.",
       "hub": "본거지",
       "mapHeading": "길과 그 너머의 왕국들",
       "mapSub": "퀘스트의 자취는 지도 한가운데를 남에서 북으로 지납니다. 골짜기, 늪지, 봉우리, 그리고 그것들을 지나 분지와 눈의 땅으로. 다른 왕국들은 그 길 뒤가 아니라 그 길을 따라 열리며, 늪지 길의 동쪽과 서쪽 관문을 통해 갑니다. 파쇼어 섬은 밸리의 동쪽 해안에서 건너갑니다. 먼 왕국들로부터 당신을 막아 두는 것은 걸음이 아니라 그곳들의 레벨 구간입니다. 그중 다섯 곳이 가장 높은 구간을 나눠 쓰고 있으니, 준비가 되면 어떤 순서로든 골라 갈 수 있습니다. 파쇼어는 예외로, 일찍 찾아갈 수 있는 낮은 레벨의 땅입니다.",
@@ -11594,7 +11685,7 @@ export const ko_KR: EnTranslations = {
       "importedTexture": "가져온 텍스처 {number}"
     },
     "appTitle": "맵 편집기",
-    "docTitle": "맵 편집기 - World of ClaudeCraft",
+    "docTitle": "맵 편집기 - Fantasy Arena MMO",
     "untitledMap": "제목 없는 맵",
     "liveWorld": {
       "name": "게임 월드 다듬기",
@@ -13756,7 +13847,7 @@ export const ko_KR: EnTranslations = {
     "serverOnline": "온라인",
     "serverOffline": "오프라인",
     "play": "플레이",
-    "playAria": "World of ClaudeCraft 플레이",
+    "playAria": "Fantasy Arena MMO 플레이",
     "playLoading": "불러오는 중",
     "playStarting": "시작하는 중",
     "serverLabel": "월드를 선택하세요",
@@ -13860,6 +13951,41 @@ export const ko_KR: EnTranslations = {
         "default": "클래식",
         "almond": "아몬드형",
         "hooded": "속쌍꺼풀"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const ko_KR: EnTranslations = {
     "extensionHelp": "여기에 지갑이 표시되려면 Solflare Wallet 같은 브라우저 지갑 확장 프로그램이 활성화되어 있어야 합니다.",
     "mobileAppHelp": "Phantom 또는 Solflare를 선택하세요. 지갑 앱에서 승인을 요청합니다. 게임을 열어 둔 채 완료 후 돌아오세요.",
     "seekerAppHelp": "Seed Vault Wallet로 계속하세요. Seed Vault에서 연결 및 인증 요청을 확인한 후 게임으로 돌아오세요.",
-    "standaloneAppHelp": "홈 화면 앱에서는 아직 지갑 연결을 사용할 수 없습니다. Phantom 또는 Solflare를 사용하려면 Safari나 Chrome에서 World of ClaudeCraft를 여세요.",
+    "standaloneAppHelp": "홈 화면 앱에서는 아직 지갑 연결을 사용할 수 없습니다. Phantom 또는 Solflare를 사용하려면 Safari나 Chrome에서 Fantasy Arena MMO를 여세요.",
     "openAppTitle": "{wallet}에서 계속",
     "openAppHelp": "{wallet}을 열어 이 요청을 확인하세요. 지갑 앱을 사용하는 동안 이 게임 탭을 열어 두세요.",
     "openAppButton": "{wallet} 열기",
     "manualReturnBrowserHelp": "승인 후 이 게임 탭으로 돌아오세요. iOS에서 다른 브라우저가 열리면 닫고 원래 브라우저로 직접 돌아오세요.",
-    "manualReturnStandaloneHelp": "승인 후 홈 화면에서 World of ClaudeCraft로 돌아오세요. iOS에서 브라우저가 열리면 닫고 홈 화면 앱을 다시 여세요.",
+    "manualReturnStandaloneHelp": "승인 후 홈 화면에서 Fantasy Arena MMO로 돌아오세요. iOS에서 브라우저가 열리면 닫고 홈 화면 앱을 다시 여세요.",
     "preparingAppButton": "{wallet} 준비 중...",
     "walletAppUnavailable": "{wallet}을 준비하지 못했습니다. 이 창을 닫고 다시 시도하세요.",
     "flowConnect": "지갑을 선택하세요. 인증은 자동으로 계속됩니다.",
@@ -14266,12 +14392,12 @@ export const ko_KR: EnTranslations = {
       "paymentBody": "계정에 연결된 지갑을 선택하고 이 브라우저에서 거래를 승인하세요.",
       "stepUpBody": "계정에 연결된 지갑을 선택하고 $WOC 거래소 승인 메시지에 서명하세요. 서명은 무료이며 자금이 이동하지 않습니다.",
       "extensionHelp": "호환되는 지갑 확장 프로그램을 찾지 못했습니다. Phantom, Solflare 또는 다른 Solana 브라우저 지갑을 설치하거나 잠금 해제한 뒤 다시 시도하세요.",
-      "safety": "World of ClaudeCraft는 복구 문구나 개인 키를 요청하지 않습니다.",
+      "safety": "Fantasy Arena MMO는 복구 문구나 개인 키를 요청하지 않습니다.",
       "continueWith": "{wallet}(으)로 계속",
       "reviewTitle": "지갑에서 검토",
       "reviewBody": "{wallet}의 안내를 따르세요. 이 브라우저 페이지를 열어 두세요.",
       "completeTitle": "지갑 인증 완료",
-      "completeBody": "World of ClaudeCraft 데스크톱 앱으로 돌아갈 수 있습니다.",
+      "completeBody": "Fantasy Arena MMO 데스크톱 앱으로 돌아갈 수 있습니다.",
       "returnButton": "데스크톱 앱으로 돌아가기",
       "failed": "지갑 인증에 실패했거나 만료되었습니다. 데스크톱 앱으로 돌아가 다시 시도하세요.",
       "retry": "다시 시도"
@@ -14370,14 +14496,14 @@ export const ko_KR: EnTranslations = {
     "topPercent": "상위 {percent}%",
     "realmSubtitle": "{realm} 월드",
     "defaultRealm": "ClaudeCraft의 세계",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count}명 모집",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "당신의 전설을 벼리세요: {siteUrl}",
     "arenaStat": "투기장",
     "shareTierBit": ", {tier} 등급 $WOC 보유자",
-    "shareText": "World of ClaudeCraft에서 제 전설을 벼리고 있습니다: {level}레벨 {className}{tierBit}. 제 월드에 합류하세요:",
+    "shareText": "Fantasy Arena MMO에서 제 전설을 벼리고 있습니다: {level}레벨 {className}{tierBit}. 제 월드에 합류하세요:",
     "nativeShareTitle": "ClaudeCraft의 세계",
     "fileNameFallback": "플레이어",
     "actionShareX": "X에 공유",
@@ -14395,6 +14521,7 @@ export const ko_KR: EnTranslations = {
     "statusShareUnsupported": "이 기기에서는 공유가 지원되지 않습니다."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "전사",
     "paladin": "성기사",
     "hunter": "사냥꾼",
@@ -14402,6 +14529,7 @@ export const ko_KR: EnTranslations = {
     "priest": "사제",
     "shaman": "주술사",
     "mage": "마법사",
+    "dreamdancer": "꿈무희",
     "warlock": "흑마법사",
     "druid": "드루이드",
     "warriorAria": "전사 직업",
@@ -14411,6 +14539,7 @@ export const ko_KR: EnTranslations = {
     "priestAria": "사제 직업",
     "shamanAria": "주술사 직업",
     "mageAria": "마법사 직업",
+    "dreamdancerAria": "꿈무희",
     "warlockAria": "흑마법사 직업",
     "druidAria": "드루이드 직업"
   },
@@ -15248,14 +15377,14 @@ export const ko_KR: EnTranslations = {
     "parseService": "WoC 전투 기록"
   },
   "seo": {
-    "title": "World of ClaudeCraft: 클래식 스타일 웹 MMO",
-    "description": "무료 브라우저 MMO, World of ClaudeCraft를 플레이하세요. 세계를 탐험하고, 퀘스트를 완료하고, 친구들과 던전을 공략하세요. 다운로드가 필요 없습니다.",
+    "title": "Fantasy Arena MMO: 클래식 스타일 웹 MMO",
+    "description": "무료 브라우저 MMO, Fantasy Arena MMO를 플레이하세요. 세계를 탐험하고, 퀘스트를 완료하고, 친구들과 던전을 공략하세요. 다운로드가 필요 없습니다.",
     "genre": "MMORPG",
     "playMode": "멀티플레이어",
     "applicationCategory": "게임",
     "operatingSystem": "웹 브라우저",
-    "officialLabel": "World of ClaudeCraft 공식 웹사이트",
-    "officialBody": "World of ClaudeCraft 공식 홈페이지. 온라인으로 플레이하고, 위키를 읽고, 커뮤니티 링크를 여기에서 찾아보세요."
+    "officialLabel": "Fantasy Arena MMO 공식 웹사이트",
+    "officialBody": "Fantasy Arena MMO 공식 홈페이지. 온라인으로 플레이하고, 위키를 읽고, 커뮤니티 링크를 여기에서 찾아보세요."
   },
   "a11y": {
     "goHome": "홈으로 이동",
@@ -15364,16 +15493,16 @@ export const ko_KR: EnTranslations = {
     "notify": {
       "updateReadyTitle": "업데이트 {version} 준비 완료",
       "updateReadyTitleNoVersion": "업데이트 준비 완료",
-      "updateReadyBody": "업데이트를 적용하려면 World of ClaudeCraft를 다시 시작하세요.",
+      "updateReadyBody": "업데이트를 적용하려면 Fantasy Arena MMO를 다시 시작하세요.",
       "partyInviteTitle": "파티 초대",
       "partyInviteBody": "{name}님이 파티에 초대했습니다."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "게임 화면이 응답하지 않습니다. 다시 불러올까요?",
       "reload": "다시 불러오기",
       "quit": "종료",
-      "fatalBody": "World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다."
+      "fatalBody": "Fantasy Arena MMO에 예기치 않은 오류가 발생하여 종료해야 합니다."
     },
     "hostDiag": {
       "saveTitle": "시스템 보고서 저장",
@@ -15500,6 +15629,7 @@ export const ko_KR: EnTranslations = {
       "priest": "치유 / 원거리 DPS",
       "shaman": "치유 / 근접 또는 원거리 DPS",
       "mage": "원거리 DPS",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "원거리 DPS",
       "druid": "탱커 / 치유 / 근접 또는 원거리 DPS"
     },
@@ -15524,6 +15654,7 @@ export const ko_KR: EnTranslations = {
       "priest": "사제는 치유의 빛으로 아군을 치유하고 보호하며, 암흑 마법으로 적의 생명력을 흡수합니다.",
       "shaman": "주술사는 정령을 다루고 무기에 힘을 불어넣으며 번개로 적을 충격시키고 아군을 회복시킵니다.",
       "mage": "마법사는 화염, 냉기, 비전의 힘으로 적을 파괴하고 물을 만들어내며 위협을 얼립니다.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "흑마법사는 악마를 소환하고 저주와 지속 피해 마법을 걸며 적에게서 생명력을 흡수해 버팁니다.",
       "druid": "드루이드는 자연의 힘으로 치유하고 적을 묶으며 동물 형태로 변신해 방어하거나 피해를 줍니다."
     },
@@ -15540,11 +15671,11 @@ export const ko_KR: EnTranslations = {
     "iosStandaloneDetail": "홈 화면 전체 화면 모드입니다. 기기를 가로로 유지하세요.",
     "iosInstallDetail": "iPhone 또는 iPad에서 진짜 전체 화면을 사용하려면 먼저 이 페이지를 홈 화면에 추가하세요.",
     "iosShareStep": "Safari에서 공유를 누른 뒤 홈 화면에 추가를 선택하세요.",
-    "iosOpenStep": "새 홈 화면 아이콘에서 World of ClaudeCraft를 여세요.",
+    "iosOpenStep": "새 홈 화면 아이콘에서 Fantasy Arena MMO를 여세요.",
     "androidStandaloneDetail": "전체 화면 앱 모드입니다. 기기를 가로로 유지하세요.",
     "androidInstallDetail": "Android에서 전체 화면을 사용하려면 이 페이지를 설치하거나 홈 화면에 추가하세요.",
     "androidInstallStep": "Chrome에서 메뉴를 누른 뒤 앱 설치 또는 홈 화면에 추가를 선택하세요.",
-    "androidOpenStep": "새 아이콘에서 World of ClaudeCraft를 여세요.",
+    "androidOpenStep": "새 아이콘에서 Fantasy Arena MMO를 여세요.",
     "otherStandaloneDetail": "기기를 가로 전체 화면으로 유지하세요.",
     "otherInstallDetail": "최상의 모바일 전체 화면 경험을 위해 이 페이지를 설치하거나 홈 화면에 추가하세요."
   },
@@ -15560,8 +15691,8 @@ export const ko_KR: EnTranslations = {
     "confirm": "계속"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - 월드 이용 불가",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - 월드 이용 불가",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "월드 점검",
     "heading": "월드를 일시적으로 이용할 수 없습니다.",
     "body": "게임 서비스를 재시작하고 있으며 Claudemoon은 곧 돌아올 예정입니다. 이 페이지는 자동으로 계속 확인합니다.",
@@ -15762,6 +15893,7 @@ export const ko_KR: EnTranslations = {
       "audio": "오디오",
       "interface": "인터페이스",
       "language": "언어",
+      "characterSelect": "캐릭터 선택",
       "logout": "로그아웃",
       "returnToGame": "게임으로 돌아가기",
       "resetToDefaults": "기본값 복원",
@@ -17376,6 +17508,8 @@ export const ko_KR: EnTranslations = {
       "collectNote": "상인이 보관 중인 수익과 반환된 상품입니다.",
       "saleProceeds": "판매 대금",
       "collectAll": "모두 수령",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "내역",
       "historyEmpty": "아직 판매 내역이 없습니다. 세계 시장에서 판매한 아이템이 여기에 표시됩니다.",
       "historyNote": "세계 시장에서의 최근 판매 내역입니다.",
@@ -19265,6 +19399,66 @@ export const ko_KR: EnTranslations = {
       "revive_pet": {
         "name": "응급 처치",
         "description": "소환수를 응급 처치합니다. 살아 있으면 12초에 걸쳐 3초마다 생명력을 회복합니다. 죽어 있으면 35%의 생명력으로 되살립니다."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const ko_KR: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "은빛 시내 낚싯대"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "소금기 어린 우상"
@@ -31089,8 +31307,8 @@ export const ko_KR: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "선봉대: Slagcrown Vestments",
-        "bonus2": "2세트: Cinderhide의 재사용 대기시간이 30초 감소합니다. 피해를 입어도 주문 시전이 더 이상 지연되지 않습니다.",
-        "bonus4": "4세트: 두 번째 Conflagrate마다 8초 안의 다음 Ruinbolt를 즉시 시전하게 합니다."
+        "bonus2": "2세트: 적 플레이어에게 Ruinbolt가 50% 더 큰 피해를 주지만 시전 시간이 0.7초 길어집니다. 피해를 입어도 주문 시전이 더 이상 지연되지 않습니다.",
+        "bonus4": "4세트: 두 번째 Conflagrate마다 8초 안의 다음 Ruinbolt를 즉시 시전하게 합니다. 이 무료 Ruinbolt는 Desolation을 소모하지 않습니다."
       },
       "vanguard_warrior_arms": {
         "name": "선봉대: Bladewake Battlegear",

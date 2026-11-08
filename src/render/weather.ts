@@ -1,6 +1,10 @@
 import * as THREE from 'three';
+import { isBuiltinWorldActive, zoneContaining } from '../sim/data';
 import type { BiomeId } from '../sim/types';
+import { currentDayNightPhase } from './day_night_clock';
 import { transitionAlpha, WEATHER_ENVIRONMENT_RESPONSE } from './environment_transition_core';
+import { buildRainSurfaces } from './rain_surfaces';
+import { valleyRainbowStrength, valleyRainStrength, valleyShowerAge } from './valley_shower_core';
 import {
   type PrecipMode,
   precipForBiome,
@@ -45,6 +49,10 @@ const HZ = 70;
 const PLAN_INTERVAL = 0.5;
 
 type Precip = PrecipMode;
+
+function valleyPrecipBiome(x: number, z: number): BiomeId {
+  return zoneContaining(x, z)?.id === 'eastbrook_vale' ? 'marsh' : 'vale';
+}
 
 interface PrecipStyle {
   color: number;
@@ -146,6 +154,7 @@ const LIVE_INTENSITY = 0.01;
 
 export class Weather {
   private points: THREE.Points;
+  private readonly rainSurfaces: ReturnType<typeof buildRainSurfaces> | null;
   private material: THREE.PointsMaterial;
   private positions: Float32Array;
   private readonly positionAttribute: THREE.BufferAttribute;
@@ -174,13 +183,16 @@ export class Weather {
   // Remote-weather state: the cached box plan, its refresh clock, and whether
   // spawns are currently masked to the weathered zone's cells (plan found a
   // neighbour's weather rather than the player's own).
+  readonly valleyWeather = new THREE.Vector2();
   private planMode: Precip | null = null;
   private planLocal = true;
   private planTimer = 0;
   private wasLive = false;
+  private valleyMask = false;
   private readonly spawnRng = mulberry32(0x5eed ^ 0x9e37);
 
-  constructor(scene: THREE.Scene, lowGfx: boolean) {
+  constructor(scene: THREE.Scene, lowGfx: boolean, seed?: number) {
+    this.rainSurfaces = seed === undefined ? null : buildRainSurfaces(scene, seed, lowGfx);
     // a smaller pool on the low tier keeps the effect affordable there
     this.count = lowGfx ? 600 : 1500;
     this.positions = new Float32Array(this.count * 3);
@@ -223,6 +235,10 @@ export class Weather {
     this.points.visible = false;
     this.points.userData.renderCategory = 'weather';
     scene.add(this.points);
+  }
+
+  get rainStrength(): number {
+    return this.enabled && this.mode === 'rain' ? this.intensity : 0;
   }
 
   setEnabled(on: boolean): void {
@@ -305,6 +321,7 @@ export class Weather {
     this.dayNight[0] = mul[0];
     this.dayNight[1] = mul[1];
     this.dayNight[2] = mul[2];
+    this.rainSurfaces?.setDayNight(mul);
     this.applyTint();
   }
 
@@ -382,7 +399,19 @@ export class Weather {
         this.planLocal = plan.local;
       }
     }
-    const want: Precip | null = suppressed ? null : this.planMode;
+    const valleyAge =
+      !suppressed &&
+      biome === 'vale' &&
+      isBuiltinWorldActive() &&
+      valleyPrecipBiome(cam.x, cam.z) === 'marsh'
+        ? valleyShowerAge(currentDayNightPhase())
+        : -1;
+    const valleyRain = valleyRainStrength(valleyAge);
+    const localShower = valleyRain > 0;
+    const want: Precip | null = suppressed ? null : localShower ? 'rain' : this.planMode;
+    const valleyMask = localShower || (this.valleyMask && want === null && !suppressed);
+    const masked = valleyMask || !this.planLocal;
+    const spawnBiome = valleyMask ? valleyPrecipBiome : biomeAt;
 
     // While the visible type still differs from what we want, drive opacity to
     // zero first; once faded out, swap the material and let it climb again.
@@ -395,15 +424,27 @@ export class Weather {
       if (this.intensity <= 0.02) {
         this.mode = want;
         this.applyStyle(want);
-        maskedModeSwap = !this.planLocal;
+        maskedModeSwap = masked;
       }
     } else {
-      target = STYLES[this.mode].target;
+      target = STYLES[this.mode].target * (localShower ? valleyRain : 1);
     }
 
     const k = transitionAlpha(dt, WEATHER_ENVIRONMENT_RESPONSE);
     this.intensity += (target - this.intensity) * k;
+    this.valleyWeather.set(
+      valleyRain,
+      want === null ? valleyRainbowStrength(valleyAge, this.intensity) : 0,
+    );
     this.material.opacity = this.intensity;
+    this.rainSurfaces?.update(
+      cam.x,
+      cam.z,
+      dt,
+      !suppressed && this.mode === 'rain' ? this.intensity / STYLES.rain.target : 0,
+      !suppressed,
+      (x, z) => precipForBiome(spawnBiome(x, z)) === 'rain',
+    );
 
     const live = this.intensity > LIVE_INTENSITY;
     this.points.visible = live;
@@ -412,10 +453,9 @@ export class Weather {
     // still barely visible, so wasLive alone cannot identify that boundary.
     // Waiting for each particle's first wrap would open the new effect over
     // the WRONG (clear) side of the border.
-    const masked = !this.planLocal;
-    if (live && masked && (!this.wasLive || maskedModeSwap)) {
+    if (live && masked && (!this.wasLive || maskedModeSwap || valleyMask !== this.valleyMask)) {
       for (let i = 0; i < this.count; i++) {
-        const s = precipSpawnXZ(this.spawnRng, cam.x, cam.z, HX, HZ, this.mode, biomeAt);
+        const s = precipSpawnXZ(this.spawnRng, cam.x, cam.z, HX, HZ, this.mode, spawnBiome);
         if (s) {
           this.positions[i * 3] = s.x;
           this.positions[i * 3 + 2] = s.z;
@@ -423,6 +463,7 @@ export class Weather {
       }
     }
     this.wasLive = live;
+    this.valleyMask = live && valleyMask;
     if (!live) return;
 
     this.time += dt;
@@ -465,7 +506,7 @@ export class Weather {
       // over the weathered zone's own cells (a sampling miss keeps the
       // wrapped position, one stray flake the next wrap re-tries).
       if (wrapped && masked) {
-        const spawn = precipSpawnXZ(this.spawnRng, cam.x, cam.z, HX, HZ, this.mode, biomeAt);
+        const spawn = precipSpawnXZ(this.spawnRng, cam.x, cam.z, HX, HZ, this.mode, spawnBiome);
         if (spawn) {
           pos[j] = spawn.x;
           pos[j + 2] = spawn.z;

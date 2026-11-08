@@ -1,6 +1,11 @@
 import { BIOME_HAZE_DECLARATIONS, biomeHazeFragmentGlsl } from '../biome_haze_field';
+import { PLANKTON_GLSL } from '../plankton_wake';
 import { SCENE_SAMPLE_GLSL } from '../scene_sampling';
 import {
+  SHORE_LAP_CYCLES,
+  SHORE_LAP_DEPTH,
+  SHORE_LAP_X,
+  SHORE_LAP_Z,
   WATER_FIELD_EDGE_FEATHER_UV,
   WATER_FOAM_WIDTH_YARDS,
   WATER_SEABED_CLAMP_YARDS,
@@ -310,6 +315,7 @@ export function oceanSurfaceFragment(opts: OceanSurfaceShaderOptions): string {
   return /* glsl */ `
 ${opts.zoneHaze ? BIOME_HAZE_DECLARATIONS : ''}
 ${SCENE_SAMPLE_GLSL}
+${opts.underside ? '' : PLANKTON_GLSL}
 ${idx.map((i) => `uniform sampler2D uOceanShade${i};`).join('\n')}
 uniform sampler2D uOceanDisp0;
 uniform sampler2D uOceanDisp1;
@@ -644,7 +650,7 @@ ${
   band *= band;
   float lap = 0.52
     + 0.30 * sin(uTime * ${loopSpeed(129)} - shoreDist * 1.9 + foamB.g * 3.0)
-    + 0.26 * sin(uTime * ${loopSpeed(88)} - shoreDist * 1.1 + xz.x * 0.071 + xz.y * 0.053);
+    + 0.26 * sin(uTime * ${loopSpeed(SHORE_LAP_CYCLES)} - shoreDist * ${f(SHORE_LAP_DEPTH)} + xz.x * ${f(SHORE_LAP_X)} + xz.y * ${f(SHORE_LAP_Z)});
   // Surf needs waves to make it: a pond laps, an open coast breaks.
   float swellEnergy = mix(0.12, 1.0, fetch) * mix(0.5, 1.0, clamp(foamScale, 0.0, 1.0));
   // A wash is crisp-edged lace, not a fog: threshold the texture against how
@@ -670,6 +676,8 @@ ${
   // instead of glowing saturated blue.
   float night = 1.0 - clamp(dot(uDayNight, vec3(0.2126, 0.7152, 0.0722)) * 1.4, 0.0, 1.0);
   col = mix(col, vec3(dot(col, vec3(0.2126, 0.7152, 0.0722))) * vec3(0.85, 0.92, 1.1), night * 0.55);
+  vec4 plankton = planktonStroke(xz) * (1.0 - foamCov);
+  col = col * (1.0 - 0.46 * plankton.a) + plankton.rgb;
   float cover = max(edge, foamCov * clamp(edge * 3.0, 0.0, 1.0));
   float alpha;
   if (captured) {

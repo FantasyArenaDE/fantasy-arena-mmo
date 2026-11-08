@@ -4,6 +4,8 @@
 // firewall: it only calls initDesktopDownload() once at landing bootstrap. The
 // pure helpers (detectDesktopPlatform, desktopDownloadUrl) are Node-tested.
 
+import '../styles/fa_download_landing.css';
+
 export type DesktopPlatform = 'mac' | 'win' | 'linux' | 'other';
 
 // The published desktop build on the update host, derived from package.json at
@@ -19,6 +21,12 @@ declare const __APP_VERSION__: string;
 // would throw there; the guard keeps this module importable everywhere.
 export const DESKTOP_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0';
 const DESKTOP_HOST = 'https://updates.worldofclaudecraft.com/desktop';
+const FANTASY_ARENA_DOWNLOADS = import.meta.env.VITE_FA_DESKTOP_DOWNLOADS === '1';
+const FA_DOWNLOAD_ROOT = '/downloads/desktop';
+const FA_ARTIFACT: Partial<Record<DesktopPlatform, string>> = {
+  mac: `fantasy-arena-mmo-0.45.10-mac-arm64-test.zip`,
+  linux: `fantasy-arena-mmo-0.45.10-linux-amd64.deb`,
+};
 
 // electron-builder website-channel artifact names (docs/desktop-release.md):
 // mac ships one universal dmg; the x64 Linux AppImage is named x86_64 (that is
@@ -35,8 +43,9 @@ const ARTIFACT: Partial<Record<DesktopPlatform, string>> = {
 
 // Full download URL for a platform, or null when no artifact is published for it.
 export function desktopDownloadUrl(platform: DesktopPlatform): string | null {
-  const file = ARTIFACT[platform];
-  return file ? `${DESKTOP_HOST}/${file}` : null;
+  if (FANTASY_ARENA_DOWNLOADS && platform === 'win') return `${FA_DOWNLOAD_ROOT}/index.html#win`;
+  const file = (FANTASY_ARENA_DOWNLOADS ? FA_ARTIFACT : ARTIFACT)[platform];
+  return file ? `${FANTASY_ARENA_DOWNLOADS ? FA_DOWNLOAD_ROOT : DESKTOP_HOST}/${file}` : null;
 }
 
 // Best-effort desktop-OS detection from a userAgent string. Pure so Node tests
@@ -67,8 +76,20 @@ export function initDesktopDownload(doc: Document = document): void {
     link.setAttribute('aria-disabled', url ? 'false' : 'true');
     if (url) {
       link.href = url;
+      if (FANTASY_ARENA_DOWNLOADS && platform === 'win') link.removeAttribute('download');
     } else {
       link.removeAttribute('href');
+    }
+  }
+  if (FANTASY_ARENA_DOWNLOADS) {
+    const tab = doc.getElementById('nav-btn-download');
+    tab?.setAttribute('data-fa-download-ready', '');
+    for (const shortcut of doc.querySelectorAll<HTMLAnchorElement>('[data-fa-download-shortcut]')) {
+      shortcut.addEventListener('click', event => {
+        if (!tab || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+        event.preventDefault();
+        tab.click();
+      });
     }
   }
   const detected = detectDesktopPlatform(navigator.userAgent);
@@ -85,3 +106,5 @@ export function initDesktopDownload(doc: Document = document): void {
     hint.hidden = platform !== detected || !desktopDownloadUrl(platform);
   }
 }
+
+

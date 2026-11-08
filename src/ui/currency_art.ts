@@ -16,6 +16,9 @@ const CURRENCY_ICON_DIR = '/ui/currency';
 const HEROIC_MARK_IMAGE_URL = '/ui/items/heroic_mark.webp';
 
 export function currencyImageUrl(id: string): string | null {
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1' && id === 'honor') {
+    return '/ui/fantasy-arena/status/honor.svg';
+  }
   return CURRENCY_IMAGE_IDS.has(id) ? `${CURRENCY_ICON_DIR}/${id}.webp` : null;
 }
 

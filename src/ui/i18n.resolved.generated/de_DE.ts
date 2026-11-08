@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const de_DE: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Impressum",
+    "worldPicker": "Zur Weltenauswahl",
+    "characterPreview": "Charaktereditor ausprobieren",
+    "desktopDownload": "Desktop-App herunterladen",
+    "credits": "Mitwirkende & Lizenzen",
+    "sourceProject": "Quellprojekt auf GitHub",
+    "supportProject": "Projekt unterstützen",
+    "musicCredits": "Musiknachweise",
+    "separateAccount": "Für diese Testfassung brauchst du ein eigenes MMO-Konto."
+  },
   "referralCards": {
     "title": "Freundewerbung",
     "subtitle": "Erlebt gemeinsam Abenteuer. Verdient eure Stempel.",
@@ -467,6 +478,77 @@ export const de_DE: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "Der Gegenstand ist bereits in deinen Taschen. Die Speicherung steht noch aus. Vergib ihn nicht erneut.",
+      "itemSearch": "Gegenstand suchen",
+      "itemSearchHelp": "Nach Gegenstandsnamen oder Item-ID suchen. Die Vergabe erfolgt in deine eigenen Taschen.",
+      "itemResults": "Gefundene Gegenstände",
+      "itemQuantity": "Anzahl",
+      "itemMatches": "{shown} von {count} passenden Gegenständen werden angezeigt.",
+      "itemNoResults": "Keine passenden Gegenstände. Versuche einen anderen Namen oder eine Item-ID.",
+      "giveItem": "In meine Taschen legen",
+      "itemGranted": "{count} × {item} in die eigenen Taschen gelegt",
+      "invalidItem": "Dieser Gegenstand ist nicht mehr verfügbar. Aktualisiere die Suche.",
+      "bagFull": "Deine Taschen haben für diese Anzahl nicht genug Platz.",
+      "adventurers": "KI-Abenteurer",
+      "adventurersOn": "Ein",
+      "adventurersOff": "Aus",
+      "adventurersCount": "Aktive Bots: {count}",
+      "adventurersUnknown": "Status nicht verfügbar.",
+      "adventurersRefresh": "Status aktualisieren",
+      "openMap": "Karte öffnen",
+      "openBags": "Meine Taschen öffnen",
+      "mapTeleport": "Karten-Teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "Meine Taschen: {used} von {capacity} Plätzen belegt",
+      "logHelp": "Deine letzten 20 erfolgreichen Admin-Aktionen in dieser Spielsitzung.",
+      "reloadLog": "Protokoll aktualisieren",
+      "logNotLoaded": "Aktualisiere das Protokoll, um deine letzten Aktionen zu laden.",
+      "logEmpty": "In dieser Sitzung wurden noch keine Admin-Aktionen abgeschlossen.",
+      "mapWorldSummary": "Weltkarte. Admin-Teleport: Strg gedrückt halten und das Ziel anklicken.",
+      "mapZoneSummary": "{zone}. Admin-Teleport: Strg gedrückt halten und das Ziel anklicken.",
+      "mapArrived": "Du bist am Kartenziel angekommen.",
+      "mapBlocked": "Der Teleport ist dort gerade gesperrt. Wähle einen sicheren Ort.",
+      "title": "Admin-Panel",
+      "local": "LOKAL",
+      "close": "Admin-Panel schließen",
+      "sections": "Admin-Bereiche",
+      "self": "Mein Charakter",
+      "players": "Spielerliste",
+      "world": "Welt",
+      "inventory": "Inventar",
+      "log": "Protokoll",
+      "level": "Stufe",
+      "lower": "Stufe senken",
+      "raise": "Stufe erhöhen",
+      "gold": "Gold",
+      "grant": "Geben",
+      "flight": "Freiflug",
+      "takeoff": "Abheben",
+      "land": "Hier landen",
+      "flightSpeed": "Fluggeschwindigkeit",
+      "flightHelp": "Leertaste steigt auf, Strg sinkt ab. Beim Landen setzt du am erreichten Ort auf dem Boden auf.",
+      "runSpeed": "Lauftempo",
+      "heal": "Heilen",
+      "resource": "Ressource auffüllen",
+      "cooldowns": "Cooldowns zurücksetzen",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Platz für ein späteres Update.",
+      "reload": "Spielerliste aktualisieren",
+      "rosterHelp": "Bis zu 200 aktive Spieler auf diesem Realm. Klicke auf einen Namen, um die Teleport-Aktionen zu öffnen.",
+      "noPlayers": "Gerade sind keine anderen sichtbaren Spieler online.",
+      "visit": "Zu ihm",
+      "summon": "Zu mir",
+      "confirmSummon": "Die ausgewählte Figur zu dir teleportieren?",
+      "waiting": "Warte auf den Server…",
+      "ok": "Vom Server bestätigt.",
+      "blocked": "Für diese Figur oder an diesem Ort gerade nicht verfügbar.",
+      "forbidden": "Admin-Berechtigung erforderlich.",
+      "busy": "Bitte warte einen Moment und versuche es erneut.",
+      "saveFailed": "Der Server konnte die Aktion nicht bestätigen. Prüfe deinen Charakter, bevor du sie wiederholst.",
+      "noReply": "Der Server hat die Aktion nicht bestätigt. Prüfe deinen Charakter, bevor du sie wiederholst."
+    },
     "courier": {
       "title": "Kurier",
       "close": "Kurier schließen",
@@ -1542,7 +1624,7 @@ export const de_DE: EnTranslations = {
         "forgeheart_staff": {
           "name": "Schmiedeherz-Stab",
           "look": "Eisenbeschlagener Stab, gekrönt von einem leuchtenden Glutkern im Käfig, Glutrunen entlang des Schafts und aufsteigendes Hitzeflimmern.",
-          "lore": "Eine lebende Kohle aus Bergfeuer, an der Krone in einen Eisenkäfig gesperrt. Lehrmeister Caddis nennt sie den Beweis, dass sich das Feuer der ersten Schmiede zum Dienen binden lässt und nicht nur zum Versiegeln. Hitzeflimmern steigt in einem dünnen, endlosen Band davon auf. Ein Magier mit diesem Stab braucht weder Schmiede noch Wachfeuer. Die Glut, so flüstert man, wurde aus Voskar Glutschwinges eigenem Atem geschöpft und ist seither nicht erkaltet."
+          "lore": "Eine lebende Kohle aus Bergfeuer, an der Krone in einen Eisenkäfig gesperrt. Lehrmeister Caddis nennt sie den Beweis, dass sich das Feuer der ersten Schmiede zum Dienen binden lässt und nicht nur zum Versiegeln. Hitzeflimmern steigt in einem dünnen, endlosen Band davon auf. Wer Zauberkunst beherrscht, braucht mit diesem Stab weder Schmiede noch Wachfeuer. Die Glut, so flüstert man, wurde aus Voskar Glutschwinges eigenem Atem geschöpft und ist seither nicht erkaltet."
         },
         "emberwrought_wand": {
           "name": "Glutgeschmiedeter Zauberstab",
@@ -1552,7 +1634,7 @@ export const de_DE: EnTranslations = {
         "cinderlatch_crossbow": {
           "name": "Glutspanner",
           "look": "Armbrust aus geschwärztem Stahl, glutorangefarbenes Leuchten aus Rissen in den Wurfarmen und eine glimmende Kohle im Schaft.",
-          "lore": "Die seltsamste der glutgeschmiedeten Waffen: Das Feuer des Berges wurde in eine Maschine gegossen. Orangefarbenes Licht sickert aus Rissen in den Wurfarmen, und eine glimmende Kohle im Schaft verhindert, dass die Sehne in Thornpeaks Kälte oder Mirefens Nässe je steif wird. Ihre Bolzen verlassen die Rinne bereits warm und treffen noch heißer. Die Antwort eines Jägers auf eine Mauer, an der auch der Feind die Kälte nicht spürt."
+          "lore": "Die seltsamste der glutgeschmiedeten Waffen: Das Feuer des Berges wurde in eine Maschine gegossen. Orangefarbenes Licht sickert aus Rissen in den Wurfarmen, und eine glimmende Kohle im Schaft verhindert, dass die Sehne in Thornpeaks Kälte oder Mirefens Nässe je steif wird. Ihre Bolzen verlassen die Rinne bereits warm und treffen noch heißer. Die Antwort der Jagdkunst auf eine Mauer, an der auch der Feind die Kälte nicht spürt."
         },
         "ice_fang_sword": {
           "name": "Eiszahn",
@@ -1582,7 +1664,7 @@ export const de_DE: EnTranslations = {
         "everwinter_wand": {
           "name": "Splitter von Everwinter",
           "look": "Eine einzelne Spitze aus leuchtendem cyanfarbenem Gletschereis, Raureif, der aus einem silbernen Kragen blüht, und schwacher kalter Nebel.",
-          "lore": "Eine Spitze aus leuchtendem Gletschereis, die angeblich aus dem tiefen Bergsee unterhalb des Heiligtums gebrochen wurde, wo die Kälte des Berges Zähne hat. Raureif blüht endlos aus ihrem silbernen Kragen und schmilzt weder im Feuer noch im Sommer. Magier halten sie wegen der Kälte nah, die sie ihrer Arbeit verleiht, und in jenen Nächten fern, in denen sie sich zur Krypta von Nythraxis zu neigen und zu lauschen scheint."
+          "lore": "Eine Spitze aus leuchtendem Gletschereis, die angeblich aus dem tiefen Bergsee unterhalb des Heiligtums gebrochen wurde, wo die Kälte des Berges Zähne hat. Raureif blüht endlos aus ihrem silbernen Kragen und schmilzt weder im Feuer noch im Sommer. In der Zauberkunst ist sie für die Kälte geschätzt, die sie einem Zauber verleiht. Nur in den Nächten, in denen sie sich zur Krypta von Nythraxis zu neigen und zu lauschen scheint, hält man sie lieber auf Abstand."
         },
         "winterbite": {
           "name": "Winterbiss",
@@ -1622,7 +1704,7 @@ export const de_DE: EnTranslations = {
         "encore_bow": {
           "name": "Encore, der zweite gefallene Stern",
           "look": "Absurd überdimensionierte Sternenkanone: ein kosmosschwarzer Lauf mit leuchtend goldenen Sternbildern, eine trichterförmige Mündung mit einem flüssiggoldenen Kometengeschoss, Messingbeschläge und eine hölzerne Schulterstütze.",
-          "lore": "Die Schmiede, die den gefallenen Stern bearbeiteten, schufen sechs Relikte daraus und hatten noch immer ein ganzes Fass Sternenmetall übrig. Zu diesem Zeitpunkt hatten die Lehrlinge bereits eigene Vorstellungen. Was vom Amboss kam, ist entweder die erste Feuerwaffe des Reiches oder seine kleinste Belagerungsmaschine: eine Schulterkanone, die weniger einen Schuss abgibt, als einen zweiten, diesmal gezielten Stern anzufordern. Bruder Aldric weigerte sich, sie zu segnen. Etwas derart Lautes, so meinte er, sei dem Himmel längst aufgefallen. Jäger lieben sie. Nichts in ihrem Schussfeld tat das je."
+          "lore": "Die Schmiede, die den gefallenen Stern bearbeiteten, schufen sechs Relikte daraus und hatten noch immer ein ganzes Fass Sternenmetall übrig. Zu diesem Zeitpunkt hatten die Lehrlinge bereits eigene Vorstellungen. Was vom Amboss kam, ist entweder die erste Feuerwaffe des Reiches oder seine kleinste Belagerungsmaschine: eine Schulterkanone, die weniger einen Schuss abgibt, als einen zweiten, diesmal gezielten Stern anzufordern. Bruder Aldric weigerte sich, sie zu segnen. Etwas derart Lautes, so meinte er, sei dem Himmel längst aufgefallen. In der Jagdkunst ist sie beliebt. Nichts in ihrem Schussfeld mochte sie je."
         },
         "meteorlatch_crossbow": {
           "name": "Meteorlatch, das jüngste Gericht des Himmels",
@@ -1767,6 +1849,7 @@ export const de_DE: EnTranslations = {
       "presets": {
         "classic": "Klassisches Gold",
         "fancyGold": "Prächtiges Gold (in Arbeit)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Mitternacht",
         "parchment": "Pergament",
         "highContrast": "Hoher Kontrast"
@@ -2205,6 +2288,8 @@ export const de_DE: EnTranslations = {
         "remove": "Entfernen",
         "promote": "Befördern",
         "bank": "Gildenbank",
+        "bankItems": "Bankgegenstände",
+        "bankGold": "Gildenkasse",
         "officerChat": "Offizierschat",
         "motd": "Schwarzes Brett",
         "events": "Kalender"
@@ -2214,6 +2299,8 @@ export const de_DE: EnTranslations = {
         "remove": "Mitglieder mit einem niedrigeren Rang entfernen.",
         "promote": "Mitglieder mit einem niedrigeren Rang befördern und degradieren, bis zu einem Rang unter dem eigenen.",
         "bank": "Kupfer und Gegenstände in der Gildenbank einzahlen und abheben. Jedes Mitglied kann sie einsehen.",
+        "bankItems": "Gegenstände einlagern und entnehmen.",
+        "bankGold": "Gold bewegen und Lagerplätze kaufen.",
         "officerChat": "Den Offizierschat lesen und darin schreiben.",
         "motd": "Das Schwarze Brett der Gilde bearbeiten.",
         "events": "Termine im Gildenkalender hinzufügen und entfernen."
@@ -2260,9 +2347,9 @@ export const de_DE: EnTranslations = {
       "target": "Visiere die Puppe an, um zu beginnen.",
       "openWindow": "Öffne {meters}.",
       "openWindowTouch": "Öffne {menu} → {more} → {meters}.",
-      "openTab": "Wechsle zum rechten Reiter.",
-      "openTabDamage": "Wechsle zum Reiter Schaden.",
-      "openTabHealing": "Wechsle zum Reiter Heilung.",
+      "openTab": "Öffne das Menü über den Namen der Messung und wähle die passende Messung aus.",
+      "openTabDamage": "Öffne das Menü über den Namen der Messung und wähle „Schaden“ aus.",
+      "openTabHealing": "Öffne das Menü über den Namen der Messung und wähle „Heilung“ aus.",
       "act": "Lande einen Treffer, um die Messung zu starten.",
       "actDamage": "Greife die Puppe an, um die Messung zu starten.",
       "actHealing": "Wirke eine Heilung auf die Puppe, um die Messung zu starten.",
@@ -2270,15 +2357,15 @@ export const de_DE: EnTranslations = {
       "readRow": "Lies deine Zeile und drücke dann Fortfahren.",
       "readRowDamage": "Gesamt ist dein gesamter Schaden in diesem Lauf. DPS ist der Schaden pro Sekunde über den Lauf. Sieh deine Zeile an und drücke dann Fortfahren.",
       "readRowHealing": "Gesamt zählt die wiederhergestellte Gesundheit; Heilung über die volle Gesundheit hinaus zählt nicht. HPS ist die pro Sekunde wiederhergestellte Gesundheit über den Lauf. Lies deine Zeile und drücke dann Fortfahren.",
-      "findRun": "Kehre mit den Pfeilen des Messgeräts zu deinem Übungslauf zurück.",
+      "findRun": "Öffne das Menü über den Kampfnamen und wähle deinen Übungslauf aus.",
       "addAttackToBar": "Füge deinen Angriff aus dem Zauberbuch der Aktionsleiste hinzu und setze ihn an der Puppe ein.",
       "ackContinue": "Fortfahren",
       "viewBreakdown": "Bewege den Mauszeiger über deine Zeile, fokussiere sie oder halte sie gedrückt, um die Aufschlüsselung pro Fähigkeit zu sehen.",
       "endRun": "Schalte Angriff aus und wirke keine Zauber mehr. Nach 5 Sekunden ohne Treffer endet dieser Lauf.",
       "endHealingRun": "Heile 5 Sekunden lang nicht mehr, um diesen Lauf zu beenden; danach kannst du die Lektion wiederholen.",
-      "inspectHistory": "Nutze den Verlaufspfeil, um den abgeschlossenen Lauf anzusehen.",
-      "compareAgain": "Kehre mit dem rechten Pfeil zu Aktuell zurück und greife dann etwa gleich lang dieselbe Puppe an.",
-      "reviewComparison": "Vergleiche mit den Pfeilen Gesamt, DPS und Dauer mit deinem ersten Lauf. Kehre zu diesem Lauf zurück und drücke dann Fertig.",
+      "inspectHistory": "Öffne das Menü über den Kampfnamen und wähle den abgeschlossenen Lauf aus.",
+      "compareAgain": "Öffne das Menü über den Kampfnamen und wähle „Aktuell“. Greife dann etwa gleich lang dieselbe Puppe an.",
+      "reviewComparison": "Vergleiche über das Menü am Kampfnamen Gesamtwert, DPS und Dauer mit deinem ersten Lauf. Wähle danach wieder diesen Lauf und drücke „Fertig“.",
       "ackDone": "Fertig",
       "replay": "Lektion abgeschlossen. Übe frei oder wiederhole diese Anleitung.",
       "replayAction": "Erneut üben",
@@ -2694,7 +2781,7 @@ export const de_DE: EnTranslations = {
       "noRanked": "Noch keine Champions in der Wertung. Seid die Ersten.",
       "ladderOnline": "Rangliste. Jetzt online",
       "noChallengers": "Gerade keine Champions online. Seid die Ersten.",
-      "playerLevelClassTitle": "{name}. Stufe {level} {className}",
+      "playerLevelClassTitle": "{name}. Stufe {level} · {className}",
       "playerClassTitle": "{name}. {className}",
       "crimson": "Karmesin",
       "azure": "Azur",
@@ -4818,7 +4905,7 @@ export const de_DE: EnTranslations = {
       "effigyPlankHide": "Wehrt {pct}% jedes Schlags ab, bis ein Splitterpikenstoß die Laterne in seinem Auge löscht",
       "effigyLanternOut": "Die Laterne des Strohvorarbeiters ist für dich erloschen: Deine Schläge und die deines Begleiters ignorieren seine Bretterhaut und treffen mit voller Wucht",
       "leadenHexLock": "Bleierner Fluch kann dieses Ziel noch nicht erneut verwurzeln",
-      "forbiddenReflectionReady": "Eure nächste berechtigte Hexenmeister-Fähigkeit mit Abklingzeit kann erneut gewirkt werden",
+      "forbiddenReflectionReady": "Eure nächste geeignete Fähigkeit aus dem Hexenwerk mit Abklingzeit kann erneut gewirkt werden",
       "forbiddenReflectionLock": "Forbidden Reflection kann noch nicht erneut vorbereitet werden",
       "internalCooldown": "Dieser Effekt kann erst erneut auslösen, wenn der Timer abgelaufen ist",
       "carriedFlag": "Ihr tragt die gegnerische Flagge. Hebt diesen Effekt auf, um sie fallen zu lassen.",
@@ -4884,8 +4971,8 @@ export const de_DE: EnTranslations = {
         "bleedEdge": "Deine automatischen Angriffstreffer verursachen Klauenwunde: {tick} physischen Schaden pro Stapel alle {every} Sek. für {duration} Sek., bis zu {max} Stapel.",
         "bleedEdgeOther": "Automatische Angriffstreffer verursachen Klauenwunde, eine physische Blutung, die bis zu {max}-mal stapelt. Der Schaden steigt mit der Angriffskraft.",
         "talonWound": "Verursacht alle {every} Sek. {damage} physischen Schaden ({stacks}/{max} Stapel). Jeder neue Stapel erhöht den Schaden und erneuert die Dauer.",
-        "tally": "Kerben: {stacks}/{max}. Setze Kerbholz des Jägers ein, um sie alle für einen Schlag auf dein Ziel auszugeben, der {damage} physischen Schaden verursacht ({perMark} pro Kerbe).",
-        "tallyOther": "Kerben: {stacks}/{max}. Kerbholz des Jägers gibt sie alle für einen physischen Schlag aus, der für jede Kerbe mehr Schaden verursacht.",
+        "tally": "Kerben: {stacks}/{max}. Setze Kerbholz der Jagdkunst ein, um sie alle für einen Schlag auf dein Ziel auszugeben, der {damage} physischen Schaden verursacht ({perMark} pro Kerbe).",
+        "tallyOther": "Kerben: {stacks}/{max}. Kerbholz der Jagdkunst gibt sie alle für einen physischen Schlag aus, der für jede Kerbe mehr Schaden verursacht.",
         "storm": "Ladungen: {stacks}/{max}. Setze Sturmkrug ein, um sie als Blitz freizusetzen, der dein Ziel und bis zu {extra} weitere Feinde im Umkreis von {jumpRange} yd zueinander trifft und jeweils {damage} Naturschaden verursacht ({perCharge} pro Ladung).",
         "stormOther": "Ladungen: {stacks}/{max}. Sturmkrug setzt sie als Naturblitz frei, der das Ziel und bis zu {extra} weitere Feinde trifft und für jede Ladung mehr Schaden verursacht.",
         "echo": "Deine nächsten {casts} direkten Heilungen oder direkten nicht-physischen Schadenstreffer wiederholen sich für {pct}% ihres Wertes.",
@@ -5836,6 +5923,8 @@ export const de_DE: EnTranslations = {
       "guildTab": "Gilde",
       "guildCapacityAria": "Belegte Gildenbankfächer: {used} von {total}",
       "guildEmpty": "Die Gildenbank ist leer.",
+      "guildSortSlot": "Lagerplatz",
+      "guildSortType": "Gegenstandstyp",
       "guildTreasury": "Gildenkasse",
       "guildDepositGold": "Geld einzahlen",
       "guildWithdrawGold": "Geld abheben",
@@ -6446,6 +6535,7 @@ export const de_DE: EnTranslations = {
       "toolEffectRechargeFull": "{effect} ist bereits voll aufgeladen.",
       "toolEffectRechargeToolCapped": "Trage ein besseres {profession}-Werkzeug, um {effect} weiter aufzuladen.",
       "toolEffectRechargeMaterials": "Zum Aufladen von {effect} wird {material} x{count} benötigt.",
+      "toolEffectRechargeLocked": "Zum Aufladen von {effect} brauchst du {material} x{count}. Dein Material ist gesperrt. Entsperre es im Inventar.",
       "craftingProgress": "Du bastelst: noch {remaining}s von {total}s.",
       "disenchantingProgress": "Du entzauberst: noch {remaining}s von {total}s.",
       "enchantingProgress": "Du verzauberst: noch {remaining}s von {total}s.",
@@ -6973,7 +7063,7 @@ export const de_DE: EnTranslations = {
       "noApplicants": "Noch keine Bewerber.",
       "acceptApplicantAria": "{name} annehmen",
       "declineApplicantAria": "{name} ablehnen",
-      "levelClass": "Stufe {level} {className}",
+      "levelClass": "Stufe {level} · {className}",
       "leader": "Anfuhrer: {name}",
       "needs": "Benotigt {roles}",
       "slots": "{size} von {capacity}",
@@ -7978,6 +8068,7 @@ export const de_DE: EnTranslations = {
         }
       },
       "commendHeading": "Empfehlung des Gesandten",
+      "commendChooseLater": "Nach Abschluss wählen",
       "commendNote": "{amount} Ruf bei einer Fraktion deiner Wahl, einmal pro Woche.",
       "commendCarriedNote": "{amount} Ruf von letzter Woche, noch nicht abgeholt. Hole ihn ab, um eine neue Ladung zu wählen.",
       "commendClaimed": "Die Empfehlung dieser Woche ging an die {faction}.",
@@ -9320,7 +9411,7 @@ export const de_DE: EnTranslations = {
         "heading": "Ein klassisches MMO, gemacht zum Loslegen",
         "pillarPlayTitle": "Seite öffnen und spielen",
         "pillarPlayBody": "Kein Download, kein Launcher. Erstelle einen Charakter und du bist in Sekunden in der Welt, am Desktop oder am Smartphone. Native Apps gibt es ebenfalls, falls du eine möchtest.",
-        "pillarClassesTitle": "Neun Klassen, drei Rollen",
+        "pillarClassesTitle": "Klassen für drei Rollen",
         "pillarClassesBody": "Tanken, heilen oder austeilen. Jede Klasse spielt sich so, wie es ihr Archetyp verlangt, mit Talenten, um sie zu deiner eigenen zu machen.",
         "pillarOpenTitle": "Kostenlos und Open Source",
         "pillarOpenBody": "Bis zur Höchststufe kostenlos spielbar, und das ganze Spiel ist Open Source. Kein Pay-to-win, niemals."
@@ -9416,7 +9507,7 @@ export const de_DE: EnTranslations = {
       "step6Body": "Du hast gerade Stufe 2 erreicht. Folge der Questspur aus der Stadt hinaus, und die Welt öffnet sich dir von dort an.",
       "basicsHeading": "Die Grundlagen",
       "resourcesTitle": "Ressourcen",
-      "resourcesBody": "Zauber und Fähigkeiten kosten eine Ressource. Krieger bauen durch Kämpfen Wut auf, Schurken verbrauchen Energie, die sich von selbst auffüllt, und alle anderen wirken Zauber aus einem Vorrat an Mana.",
+      "resourcesBody": "Zauber und Fähigkeiten kosten eine Ressource. Im Kampf erzeugt Kriegskunst Wut. Schurkenkunst nutzt Energie, die sich von selbst auffüllt, und Jagdkunst nutzt Fokus. Die anderen Klassen schöpfen aus einem Manavorrat.",
       "targetingTitle": "Anvisieren und deine Leiste",
       "targetingBody": "Mit Tab wechselst du zwischen Gegnern, mit F interagierst du und plünderst, und deine Aktionsleiste enthält die Fähigkeiten, die du erlernt hast. Ziehe Zauber aus deinem Zauberbuch darauf.",
       "questsTitle": "Quests",
@@ -9472,7 +9563,7 @@ export const de_DE: EnTranslations = {
       "runForward": "Vorwärtslaufen",
       "arrowKeys": "Pfeiltasten",
       "groupPet": "Begleiterbefehle",
-      "petBar": "Begleiterleiste: Angriff, Stopp, Spott, Defensiv, Aggressiv (wenn ein Jäger- oder Hexenmeister-Begleiter beschworen ist)",
+      "petBar": "Begleiterleiste: Angriff, Stopp, Spott, Defensiv, Aggressiv (wenn ein Begleiter gerufen wurde)",
       "attackMoveNote": "Die Angriffsbewegung bleibt aus, bis du sie einschaltest: Öffne das Bedienfeld Tastenbelegung, aktiviere sie, und die Zeile A weiter oben beginnt zu wirken. Steht der Cursor über der Spielwelt, bewegst du dich damit auf den Cursor zu und eröffnest gegen den Feind darunter, oder gegen den ersten Feind, dem du unterwegs begegnest. Solange die Option aktiv ist, löst A diese Angriffsbewegung aus statt nach links zu drehen, drehe also mit der linken Pfeiltaste, die Links drehen standardmäßig ebenfalls trägt, oder gib Links drehen eine eigene Taste.",
       "mobileHeading": "Auf dem Mobilgerät",
       "mobileBody": "Touch-Steuerung erscheint automatisch auf Smartphones und Tablets: ein Bewegungsstick links, Ziehen an beliebiger anderer Stelle zum Umsehen, mit zwei Fingern zusammenziehen, um die Kamera zu zoomen, und Bildschirmtasten für Fähigkeiten und Menüs. Eine Schnellaktionssteuerung am unteren Rand öffnet deine Fenster; den Rest findest du hinter einem eigenen Eintrag Mehr.",
@@ -9609,7 +9700,7 @@ export const de_DE: EnTranslations = {
       "ifAuraBarBelowFrame": "Verschiebt die Stärkungszauberleiste unter dein Einheitenfenster statt darüber. Wirkt nur, solange Stärkungszauber am Spielerfenster angezeigt werden.",
       "ifTargetAurasBelowFrame": "Platziert die Leiste mit Stärkungs- und Schwächungseffekten unter dem Zielrahmen, unter Name und Gesundheitsbalken, statt darüber: die klassische Anordnung. In seiner Standardposition rückt der Zielrahmen samt deinem Zauberbalken und deinen Schlagtimern um eine Leistenzeile nach oben, damit die erste Zeile die Aktionsleiste freilässt. Ein von dir verschobener Rahmen bleibt an seinem Platz.",
       "ifAlwaysShowAllBuffs": "Zeigt jeden aktiven Stärkungseffekt auch bei der Grafikeinstellung Niedrig an und umgeht das übliche Limit für Stärkungssymbole.",
-      "ifShowAuraCaster": "Fügt jedem Tooltip für Segen/Effekt eine Zeile \"Gewirkt von\" hinzu, die nennt, wer ihn angewendet hat. Praktisch, um mehrere Wirkende desselben Effekts auseinanderzuhalten, etwa die Segnungen zweier Paladine.",
+      "ifShowAuraCaster": "Fügt jedem Tooltip für Segen/Effekt eine Zeile \"Gewirkt von\" hinzu, die nennt, wer ihn angewendet hat. Praktisch, um mehrere Wirkende desselben Effekts auseinanderzuhalten, etwa Segen des Paladinschwurs aus zwei verschiedenen Quellen.",
       "ifTargetOfTarget": "Zeigt, wen Ihr Ziel anvisiert, die klassische Art zu erkennen, ob der Tank es noch hält.",
       "ifPetFrame": "Zeigt ein Fenster für Ihren Begleiter.",
       "ifChatFontScale": "Die Textgröße des Chats.",
@@ -9637,11 +9728,11 @@ export const de_DE: EnTranslations = {
     "combat": {
       "intro": "Der Kampf folgt vertrauten Regeln aus klassischen MMOs. Du musst nichts davon studieren, um gut zu spielen, dies ist nur der grobe Aufbau, wie Kämpfe funktionieren.",
       "hitTitle": "Nicht jeder Schlag trifft",
-      "hitBody": "Angriffe können danebengehen, und es kann ihnen ausgewichen werden, und den Angriffen des Gegners ebenso. Zwei weitere Antworten gehören allein den Spielern: Ein Krieger kann einen Schlag mit einer Parade abwehren, und ein Krieger oder Paladin mit einem Schild kann ihn zu einem Block abfangen, beides nur gegen das, was von vorn auf ihn zukommt. Die Kreaturen der Welt tun weder das eine noch das andere, ein Schlag gegen ein Monster landet also, geht daneben oder wird pariert im Sinne eines Ausweichens. Zauber folgen ihrer eigenen Regel und gehen überhaupt nie daneben: Ihnen wird stattdessen widerstanden. Nahe deiner eigenen Stufe zu kämpfen ist es, was deine Treffer sitzen lässt; je größer der Stufenunterschied, desto öfter schlägst du ins Leere.",
+      "hitBody": "Angriffe können danebengehen, und es kann ihnen ausgewichen werden, und den Angriffen des Gegners ebenso. Zwei weitere Antworten gehören allein den Spielern: Mit Kriegskunst kannst du einen Schlag parieren. Mit Kriegskunst oder Paladinschwur kannst du ihn auch mit einem Schild blocken. Beides funktioniert nur gegen Angriffe von vorn. Die Kreaturen der Welt tun weder das eine noch das andere, ein Schlag gegen ein Monster landet also, geht daneben oder wird pariert im Sinne eines Ausweichens. Zauber folgen ihrer eigenen Regel und gehen überhaupt nie daneben: Ihnen wird stattdessen widerstanden. Nahe deiner eigenen Stufe zu kämpfen ist es, was deine Treffer sitzen lässt; je größer der Stufenunterschied, desto öfter schlägst du ins Leere.",
       "mitigationTitle": "Rüstung und Gesundheit halten dich auf den Beinen",
       "mitigationBody": "Rüstung dämpft physische Treffer, bessere Rüstung ist also deine wichtigste Quelle für Standhaftigkeit im Nahkampf. Magie ist eine andere Sache: Zaubern trotzt du mit einem größeren Gesundheitsvorrat und der Chance, einem gänzlich zu widerstehen, nicht mit Rüstung. Schwerere Rüstungsklassen stecken mehr weg, doch nichts macht dich unverwundbar.",
       "resourcesTitle": "Jede Klasse hat ihren eigenen Rhythmus",
-      "resourcesBody": "Krieger bauen mitten im Kampf Wut auf, Schurken verbrauchen Energie, die stetig zurückkehrt, und Zauberwirker verwalten einen Vorrat an Mana. Deine Ressource zu beherrschen ist die halbe Miete, wenn es darum geht, deine Klasse gut zu spielen.",
+      "resourcesBody": "In der Kriegskunst baust du im Kampf Wut auf. In der Schurkenkunst verbrauchst du Energie, die stetig zurückkehrt. Für viele Zauber verwaltest du einen Manavorrat. Deine Ressource zu beherrschen ist die halbe Miete, wenn es darum geht, deine Klasse gut zu spielen.",
       "growTitle": "Du wirst mit jeder Stufe stärker",
       "growBody": "Jede Stufe macht dich widerstandsfähiger und schaltet neue Fähigkeiten frei, bis hinauf zur Höchststufe {cap}. Quests sind der schnellste Weg nach oben; Jagen, Dungeon-Durchgänge, Tiefgänge und die Berufe, die du unterwegs ausübst, runden das Ganze ab.",
       "effectsTitle": "Stärkungen, Schwächungen und Massenkontrolle",
@@ -9653,7 +9744,7 @@ export const de_DE: EnTranslations = {
       "deathTitle": "Wenn du fällst",
       "deathBody": "Erreicht deine Gesundheit null, wirst du dort niedergestreckt, wo du stehst, und dein Körper bleibt liegen. Lass deinen Geist frei, und du erhebst dich als Geist auf dem nächsten Friedhof: schneller zu Fuß als die Lebenden, außer Reichweite deiner Feinde, aber unfähig zu kämpfen, zu plündern oder mit irgendjemandem zu sprechen außer dem Bleichen Hüter, der über den Steinen schwebt. Von dort hast du die Wahl. Lauf mit deinem Geist zurück zu deinem Körper, und du wirst an Ort und Stelle wiederbelebt, mit einem Teil deiner Gesundheit und deines Manas zurück und ganz ohne Strafe. Oder nimm beim Bleichen Hüter eine sofortige Auferstehung dort an, wo du stehst, zum Preis des Zolls des Hüters: eine vorübergehende Schwächung all dessen, was du bist, die umso länger anhält, je erfahrener du bist, und brandneue Charaktere gänzlich verschont. Fällst du in einem Dungeon, wartet dein Geist auf dem Friedhof draußen; lauf mit deinem Geist zurück durch die Tür, und du wirst am Eingang wiederbelebt. Tiefgänge sind die Ausnahme: Fällst du dort, wirst du einfach am Eingang des Tiefgangs wieder auf die Beine gestellt, ein zweiter Fall jedoch beendet den Durchgang. Auf jedem Weg verlierst du weder Erfahrung noch Ausrüstung noch Geld. Setze dich zwischen den Kämpfen, um zu essen und zu trinken, damit du den nächsten in voller Stärke beginnst.",
       "threatTitle": "Wen der Feind angreift",
-      "threatBody": "Jeder Gegner führt eine private Liste darüber, wer ihn am meisten geärgert hat. Schaden erhöht sie, und Heilung ebenso: Eine Heilung legt Bedrohung auf die Gegner, die bereits mit der geheilten Person kämpfen, aufgeteilt unter ihnen, sodass die sicherste Heilung eine ist, die auf jemanden fällt, den der Tank bereits gebunden hat. Tanks schalten eine wehrhafte Haltung oder eine schützende Gestalt ein, die alles, was sie erzeugen, vervielfacht, während die Katzengestalt des Druiden stattdessen Bedrohung abwirft, und eine Verspottung hebt den Wirkenden sofort an die Spitze der Liste und fesselt den Gegner für einige Sekunden an ihn. Gegner wechseln nicht in dem Moment, in dem jemand am Tank vorbeizieht: Es braucht einen klaren Vorsprung, um einen Gegner abzuziehen, und einen größeren Vorsprung auf Distanz als im Nahkampf, sodass ein wenig Geduld am Anfang eines Pulls den Kampf dort hält, wo er hingehört.",
+      "threatBody": "Jeder Gegner führt eine private Liste darüber, wer ihn am meisten geärgert hat. Schaden erhöht sie, und Heilung ebenso: Eine Heilung legt Bedrohung auf die Gegner, die bereits mit der geheilten Person kämpfen, aufgeteilt unter ihnen, sodass die sicherste Heilung eine ist, die auf jemanden fällt, den der Tank bereits gebunden hat. Tanks schalten eine wehrhafte Haltung oder eine schützende Gestalt ein, die alles, was sie erzeugen, vervielfacht, während die Katzengestalt der Druidenkunst stattdessen Bedrohung abwirft, und eine Verspottung hebt den Wirkenden sofort an die Spitze der Liste und fesselt den Gegner für einige Sekunden an ihn. Gegner wechseln nicht in dem Moment, in dem jemand am Tank vorbeizieht: Es braucht einen klaren Vorsprung, um einen Gegner abzuziehen, und einen größeren Vorsprung auf Distanz als im Nahkampf, sodass ein wenig Geduld am Anfang eines Pulls den Kampf dort hält, wo er hingehört.",
       "hazardsTitle": "Das Wasser kann dich töten",
       "breathBody": "Tiefes Wasser lässt sich durchschwimmen, und du kannst darunter abtauchen. Solange dein Kopf unter Wasser ist, erscheint oben am Bildschirm eine blaue Atemleiste und leert sich; durchbrichst du die Oberfläche, füllt sie sich weit schneller wieder, als sie sich geleert hat. Lässt du sie leerlaufen, während du noch unten bist, beginnst du zu ertrinken und verlierst jede Sekunde einen Teil deiner Gesundheit, bis du Luft erreichst, behalte die Leiste bei einem langen Tauchgang also im Auge. Der Tod leert sie, sodass ein Leichenlauf immer mit voller Lunge beginnt.",
       "fatigueBody": "Das Meer kennt keine Mauer. Die Überquerungen, die die Welt dir zumutet, die Meerengen und Weiher zwischen einem Landstrich und dem nächsten sowie die Seen im Landesinneren, sind sicher zu durchschwimmen, egal wie lange es dauert. Schwimmst du stattdessen vom Ufer hinaus in wirklich offenes Wasser, beginnt es, deine Kraft zu zehren: Eine Warnung erscheint, du bekommst ein echtes Zeitfenster, um umzukehren, und danach fügt dir das Meer stetig schwereren Schaden zu, den nichts verhindern kann, bis du zurück Richtung Land schwimmst. Ertrinkst du oder erschöpfst dich so weit vom Ufer entfernt, löst du dich wie bei jedem anderen Tod, behandle den Horizont also als Kulisse und nicht als Ziel.",
@@ -9682,16 +9773,16 @@ export const de_DE: EnTranslations = {
       "framePartyTitle": "Deine Gruppe",
       "framePartyBody": "Gruppenmitglieder stapeln sich links unter deinem Zielfenster, jeweils eine Reihe pro Mitglied. Eine Reihe wird dunkler, wenn dieses Mitglied außer Reichweite gerät, zeigt die Effekte, auf die es sich zu reagieren lohnt, und kann seinen Begleiter daneben anzeigen. Wie viel Gesundheitstext eine Reihe trägt, entscheidest du selbst: keinen, einen Prozentwert, die Zahlen oder beides.",
       "framePetTitle": "Dein Begleiter",
-      "framePetBody": "Jäger, Hexenmeister und alle anderen mit einem herausgerufenen Begleiter erhalten dafür ein kleines Fenster neben ihrem eigenen, mit seinem Namen, seiner Stufe und seiner Gesundheit. Ein Klick auf dieses Fenster wählt deinen Begleiter aus, und Strg+6 tut dasselbe über die Tastatur.",
+      "framePetBody": "Wenn du einen Begleiter rufst, erscheint neben deinem eigenen Fenster ein kleines Fenster mit Name, Stufe und Gesundheit des Begleiters. Ein Klick auf dieses Fenster wählt deinen Begleiter aus, und Strg+6 tut dasselbe über die Tastatur.",
       "framesMoveBody": "Dein Fenster, dein Zielfenster und deine Gruppenfenster lassen sich alle verschieben. Jedes trägt eine kleine Verschieben-Schaltfläche in seiner Ecke: Entsperre sie, ziehe das Fenster dorthin, wo du es haben willst, und sperre es wieder, damit ein versehentlicher Klick es nicht verrückt. Solltest du damit unzufrieden sein, wo sie gelandet sind, setzt Fensterpositionen zurücksetzen in den Optionen sie alle wieder an ihren ursprünglichen Platz.",
       "framesMoveBodyEditFrames": "Dein Einheitenrahmen, dein Zielrahmen und deine Gruppenrahmen können alle verschoben werden. Jeder besitzt eine kleine Verschiebeschaltfläche in der Ecke: entsperre ihn, ziehe ihn an die gewünschte Stelle und sperre ihn wieder, damit ein Fehlklick nichts verschiebt. Rahmen bearbeiten oben im Reiter Rahmen der Interfaceoptionen löst den übrigen Bildschirm gleichzeitig mit diesen drei Rahmen: Aktionsleisten, Zauberleiste, Schwungleiste, Erfahrungsleiste, Minikarte, Schaltflächenleiste, Haustierrahmen, Haltungsleiste, Stärkungs- und Schwächungsreihen sowie den Wunschlistenhinweis. Wenn ein Rahmen falsch steht, setzt Auf Standard zurück am Fuß desselben Reiters alle auf ihren Ausgangsort.",
-      "framesGovernedExtra": "Rahmen bearbeiten löst außerdem den Trackerstapel darunter: verfolgte Quests und Ziele, Fortschritt im Buch der Taten, Reliquiarseiten, vom Handwerk angepinnte Rezepte, das aktuelle Delve, jeden Riss, an dem du teilnimmst, und das verfolgte Rezept oder die Kommission. Ebenfalls enthalten sind die Haustieraktionsleiste neben dem Haustierrahmen, der Zielpunkte-Rahmen für deine Schwächungen auf nahen Gegnern, das Paladin-Medaillon der Hingabe, die Affliction-Leiste des Hexenmeisters, das Zauberproc-Overlay, der Nebenhandschwungtimer für Beidhänder und das Register-Schadensmeterfenster. Jeder Bereich trägt seinen eigenen Namenschip, sobald er gelöst ist.",
+      "framesGovernedExtra": "Rahmen bearbeiten löst außerdem den Trackerstapel darunter: verfolgte Quests und Ziele, Fortschritt im Buch der Taten, Reliquiarseiten, vom Handwerk angepinnte Rezepte, das aktuelle Delve, jeden Riss, an dem du teilnimmst, und das verfolgte Rezept oder die Kommission. Ebenfalls enthalten sind die Haustieraktionsleiste neben dem Haustierrahmen, der Zielpunkte-Rahmen für deine Schwächungen auf nahen Gegnern, das Hingabe-Medaillon des Paladinschwurs, die Gebrechen-Leiste des Hexenwerks, das Zauberproc-Overlay, der Nebenhandschwungtimer für Beidhänder und das Register-Schadensmeterfenster. Jeder Bereich trägt seinen eigenen Namenschip, sobald er gelöst ist.",
       "framesGovernedAuraTracks": "Rahmen bearbeiten löst außerdem die sechs optionalen Aurenleisten, sobald du sie im Reiter Kampf der Interfaceoptionen einschaltest: Meine Stärkungen, defensive Abklingzeiten, meine Schilde, offensive Abklingzeiten, Bewegung und Verstohlenheit sowie Meine Stärkungen auf Verbündeten. Jede Leiste ist zunächst aus und trägt beim Lösen ihren eigenen Namenschip.",
       "frameGroups": "{trackers} kann Quests, Taten, Risse, Tiefgänge, Sammelziele und Reliquiar-Verfolgung zusammenfassen. {auras} kann Ziel-Effekte über Zeit und die sechs Auraspuren zusammenfassen. Aktiviere eine der beiden Gruppen in den Rahmeneinstellungen, oder lass sie aus, um jeden Rahmen einzeln zu bewegen. {tot} enthält eine Ressourcenleiste. {focus} hat drei unabhängig bewegliche Ziele: Umschalt+F1 bis Umschalt+F3 weist sie zu; Strg+F1 bis Strg+F3 wählt sie aus. Ziehe den Schadens- oder Bedrohungsmesser irgendwo außerhalb seiner Schaltflächen, um ihn zu bewegen, und ziehe an seinen Rändern, um ihn in der Größe zu ändern, selbst während die Rahmen gesperrt sind. Solange die Rahmen entsperrt sind, hat Rahmen anzeigen oder ausblenden sein eigenes gruppiertes Menü. Rechtsklicke auf einen entsperrten Rahmen für Größe zurücksetzen oder Rahmenoptionen. Unter Interface > Rahmen findest du außerdem die Rahmeneinstellungen und die einklappbaren Gruppenrahmen-Optionen. Ziel des Ziels an Ziel binden hält diese Rahmen zusammen. Schalte es aus, um Ziel des Ziels getrennt zu bewegen; schaltest du es wieder ein, bleibt die getrennte Position für später erhalten. Zugewiesene Fokus-Rahmen blenden ihre Einrichtungssteuerung aus; rechtsklicke und wähle Fokus aufheben, um sie wiederherzustellen. Zaubern per Mauszeiger funktioniert auch auf Fokus-Rahmen.",
       "framesGovernedTalkingHead": "Durch Bearbeiten von Frames wird auch das Dialogfenster aufgelockert, das die gesprochene Zeile eines NPCs enthält, während sich dieser NPC außerhalb Ihrer Sicht befindet. Es trägt seinen Namenschip, solange es locker ist.",
       "framesGovernedShardpike": "Rahmen bearbeiten löst auch die Splitterpikenleiste: die kurze Reihe mit Aktionen des Questwerkzeugs, die neben deinen Aktionsleisten erscheint, solange du die Splitterpike selbst trägst. Während sie verschiebbar ist, trägt sie ihr Namensschild, damit du sie vor dem Kampf platzieren kannst.",
       "framesGovernedUnitTooltip": "Edit Frames also unlocks the Tooltip frame: the position where the hover card for a creature or another player appears. Drag it where you want the card to grow from, or hide it from Frames Settings if you do not want hover cards.",
-      "framesGovernedPriest": "Mit Rahmen bearbeiten kannst du auch das Medaillon für Düsterzehnt und Zehntbombe des Schattenpriesters verschieben.",
+      "framesGovernedPriest": "Mit Rahmen bearbeiten kannst du auch das Medaillon für Düsterzehnt und Zehntbombe der Schatten-Spezialisierung der Priesterkunst verschieben.",
       "framesGovernedResourceAndHill": "Aktiviere Ressourcenleiste abtrennen im Reiter Rahmen. Dann gibt Rahmen bearbeiten auch deine Ressourcenleiste frei, sodass du Mana, Energie oder Wut unabhängig an einer beliebigen Stelle platzieren kannst. Breite der Ressourcenleiste und Höhe der Ressourcenleiste im selben Reiter passen ihre Größe an. Rahmen bearbeiten gibt auch die Leiste für König des Hügels frei. Hintergrunddeckkraft von König des Hügels im selben Reiter blendet deren Fläche aus, während der Text gut lesbar bleibt.",
       "barsTitle": "Leisten, Timer und Kampftext",
       "barsBody": "Deine Zauberleiste erscheint in der Mitte des Bildschirms, direkt über deinen Aktionsleisten, sobald du zauberst oder kanalisierst, und zeigt den Namen des Zaubers sowie die verbleibende Zeit. Dein Ziel bekommt eine eigene Zauberleiste auf seinem Fenster, sodass du siehst, was kommt, und darauf reagieren kannst.\n\nEine dünne Schwungleiste liegt unter deiner Zauberleiste und füllt sich zwischen deinen Waffenschwüngen, sodass ein Nah- oder Fernkämpfer sehen kann, wann der nächste automatische Treffer landet.\n\nDeine Erfahrungsleiste läuft über die volle Breite unter deinen Aktionsleisten, in Segmente unterteilt, mit einem helleren Abschnitt, der die ausgeruhte Erfahrung zeigt, die du angesammelt hast.\n\nSchwimme unter Wasser, und am oberen Bildschirmrand erscheint eine blaue Atemleiste. Sie leert sich, während dein Kopf unter Wasser ist, blinkt rot auf, sobald sie aufgebraucht ist und du zu ertrinken beginnst, und füllt sich schnell wieder, sobald du auftauchst. Die Leertaste lässt dich nach oben schwimmen, und die Taste zum Abtauchen, standardmäßig Strg, bringt dich tiefer.\n\nSchaden und Heilung schweben als kleine Zahlen über dem auf, was sie getroffen haben, sodass du einen Kampf lesen kannst, ohne Text lesen zu müssen. Der Kampf-Reiter in deinem Chatfenster führt das vollständige schriftliche Protokoll.",
@@ -9833,7 +9924,7 @@ export const de_DE: EnTranslations = {
       "threat": "Auf wen die Gegner, die dich bekämpfen, gerade fokussiert sind.",
       "consider": "Wie gefährlich die Stufe deines Ziels im Vergleich zu deiner ist.",
       "queued": "Die Fähigkeit, die bei deinem nächsten Nahkampfschwung ausgelöst wird.",
-      "overpower": "Für Krieger: ob das Rothand-Fenster, das ein gegnerisches Ausweichen öffnet, noch verfügbar ist.",
+      "overpower": "Für die Kriegskunst: ob das Rothand-Fenster, das ein gegnerisches Ausweichen öffnet, noch verfügbar ist.",
       "groupWorld": "Welt und Reisen",
       "where": "Die Zone, in der du dich befindest, ihr Stufenbereich, und deine Koordinaten.",
       "zones": "Jede Zone in Reisereihenfolge mit ihrem Stufenbereich, und die, in der du dich befindest, markiert.",
@@ -9913,7 +10004,7 @@ export const de_DE: EnTranslations = {
       "restedTerm": "Ausgeruht",
       "restedDef": "Bonuserfahrung, die dein Charakter ansammelt, während er außerhalb des Kampfes in einem Gasthaus rastet. Deine nächsten Tötungen bringen zusätzliche Erfahrung, bis der Vorrat versiegt.",
       "petBarTerm": "Begleiterleiste",
-      "petBarDef": "Die Befehlsreihe, die ein Jäger- oder Hexenmeister-Begleiter hinzufügt: Angriff, Stopp, Spott, Defensiv und Aggressiv, standardmäßig auf Strg plus 1 bis 5 belegt.",
+      "petBarDef": "Die Befehlsreihe, die mit einem gerufenen Begleiter erscheint: Angriff, Stopp, Spott, Defensiv und Aggressiv, standardmäßig auf Strg plus 1 bis 5 belegt.",
       "metersTerm": "Schadensmesser",
       "metersDef": "Das Anzeigefenster der Gruppe für den aktuellen Kampf: verursachter Schaden, gewirkte Heilung und wer die meiste Bedrohung hält, je Begegnung geführt. Öffne es mit seiner Tastenbelegung (standardmäßig Shift+H).",
       "targetMarkerTerm": "Zielmarkierung",
@@ -10023,7 +10114,7 @@ export const de_DE: EnTranslations = {
       "a20": "Öffne im Online-Spiel das Menü mit Esc und wähle Fehler melden. Beschreibe, was passiert ist, und sende es ab: Deine Welt, dein Charakter und dein Standort werden automatisch mitgeschickt, zusammen mit deinen Versions- und Gerätedetails, und du kannst Screenshot anhängen ankreuzen, um ein Bild dessen beizufügen, was du gerade gesehen hast. Sendest du mehrere hintereinander, wirst du eventuell gebeten, einen Moment zu warten, bevor du die nächste schickst."
     },
     "classList": {
-      "heading": "Die neun Klassen",
+      "heading": "Die Klassen",
       "sub": "Tanken, heilen oder austeilen. Wähle die Fantasie, die dich ruft, und mach sie dann mit Talenten zu deiner eigenen."
     },
     "role": {
@@ -10048,19 +10139,19 @@ export const de_DE: EnTranslations = {
       "fullKitHeading": "Das volle Repertoire",
       "fullKitNote": "Das Repertoire, das diese Klasse im Aufstieg lernt, in der Reihenfolge, in der es verfügbar wird. Talente gewähren einige weitere Fähigkeiten und entscheiden, welche deinen Build tragen.",
       "petsHeading": "Dämonen",
-      "petsNote": "Hexenmeister beschwören Dämonen, die an ihrer Seite kämpfen, jeder für eine andere Aufgabe geeignet.",
-      "mageLore": "Magier lenken Feuer und Frost, um Gegner zu vernichten, beschwören einen Wasserelementar, frieren Bedrohungen an Ort und Stelle ein oder biegen die Zeit selbst, um ihre Verbündeten zu schützen und zu heilen.",
+      "petsNote": "Mit Hexenwerk beschwörst du Dämonen, die an deiner Seite kämpfen. Jeder ist für andere Aufgaben geeignet.",
+      "mageLore": "Mit Zauberkunst lenkst du Feuer und Frost, beschwörst einen Wasserelementar, frierst Gegner ein oder biegst die Zeit selbst, um Verbündete zu schützen und zu heilen.",
       "mageEleHeading": "Wasserelementar",
-      "mageEleNote": "Ein Frost-Magier lernt, einen Wasserelementar zu beschwören, einen Fernkampfbegleiter, der von selbst Wasserblitze auf dein Ziel schleudert. Er meldet sich auf der Begleiterleiste wie ein Jäger-Tier oder ein Hexenmeister-Dämon, ist aber nicht dafür gemacht, ein Ziel für dich zu binden.",
+      "mageEleNote": "Mit der Frost-Spezialisierung der Zauberkunst beschwörst du einen Wasserelementar. Er schleudert aus der Ferne selbstständig Wasserblitze auf dein Ziel. Er meldet sich auf der Begleiterleiste wie die Tiere der Jagdkunst und die Dämonen des Hexenwerks, ist aber nicht dafür gemacht, ein Ziel für dich zu binden.",
       "mageEleJet": "Wasserstrahl sitzt als eigene Schaltfläche auf der Begleiterleiste: Klicke ihn an, um einen kühlenden Strahl auf einen Gegner festzulegen, oder rechtsklicke ihn (auf Mobilgeräten gedrückt halten), damit der Elementar ihn von selbst abfeuert, sobald er bereit ist.",
       "formsHeading": "Gestaltwandel",
-      "formsNote": "Ein Druide kämpft, indem er die Gestalt wechselt. Die meisten Druidenfähigkeiten gehören zu einer bestimmten Gestalt, sodass die Form, in der du dich befindest, entscheidet, was du wirken kannst, und der Wechsel kostet etwas Mana. Du kannst innerhalb oder außerhalb des Kampfes wechseln, so oft du willst.",
+      "formsNote": "In der Druidenkunst wechselst du im Kampf die Gestalt. Die meisten Fähigkeiten dieser Klasse gehören zu einer bestimmten Gestalt, sodass die Form, in der du dich befindest, entscheidet, was du wirken kannst, und der Wechsel kostet etwas Mana. Du kannst innerhalb oder außerhalb des Kampfes wechseln, so oft du willst.",
       "formsAutoUnshift": "Ein Heilzauber oder ein Schadenszauber, den du in einer Gestalt wirkst, holt dich selbst daraus hervor. Eine Gestalt auf diese Weise zu verlassen ist gratis und verbraucht keine globale Abklingzeit, ein Sofortzauber geht also in dem Moment los, in dem du ihn drückst. Zurückzuwechseln ist eine gewöhnliche Fähigkeit und kostet weiterhin Mana und deine globale Abklingzeit.",
-      "formsMoonwing": "Ein Gleichgewichts-Druide erhält eine weitere Gestalt, die Mondkingestalt, in der diese Spezialisierung als Zauberwirker kämpft. Wie die Sporenheilerform der Wiederherstellung behält sie deine Zauber; dein Zauberstab funktioniert nur in diesen beiden oder in deiner normalen Zaubergestalt.",
+      "formsMoonwing": "Die Spezialisierung Gleichgewicht eröffnet die Mondkingestalt für den Kampf mit Zaubern. Wie die Sporenheilerform der Wiederherstellung behält sie deine Zauber; dein Zauberstab funktioniert nur in diesen beiden oder in deiner normalen Zaubergestalt.",
       "formsWolfEngage": "Ein Wolf eröffnet den Kampf mit Bruin-Ansturm, wechselt sofort in die Katzengestalt, um das Ziel festzunageln, schließt die Lücke mit Ansprung, wenn er nicht schleicht, und hält einen Gegner mit Niederreißen fest.",
       "formLine": {
         "form_bear": "Die Tank-Gestalt: ein dickes Fell, Wut statt Mana und zusätzliche Bedrohung, damit Gegner weiter auf dich einschlagen.",
-        "form_cat": "Die Nahkampf-Schadensgestalt: Energie und Combopunkte wie ein Schurke, dazu deutlich weniger Bedrohung.",
+        "form_cat": "Die Nahkampf-Schadensgestalt: Energie und Kombopunkte wie in der Schurkenkunst, dazu deutlich weniger Bedrohung.",
         "form_travel": "Die Reisegestalt: deutlich schneller am Boden unterwegs, aber ohne andere Fähigkeiten, bis du zurückwechselst.",
         "form_sporemender": "Die Heilgestalt der Wiederherstellung: robustere Haut und stärkere Heilung bei langsamerem Gang, alle Zauber und dein Mana bleiben erhalten."
       },
@@ -10073,15 +10164,15 @@ export const de_DE: EnTranslations = {
       }
     },
     "classHook": {
-      "warrior": "Ein unerbittlicher Frontkämpfer, der jeden eingesteckten Schlag in Brennstoff für den nächsten verwandelt.",
-      "paladin": "Ein heiliger Krieger, der Verbündete abschirmen, ihre Wunden heilen oder den Hammer niedersausen lassen kann.",
-      "hunter": "Ein Fernkampfschütze mit einem treuen Tier an seiner Seite und einem Trick für jeden Gegner.",
-      "rogue": "Ein Meister der Verstohlenheit und der Gifte, der aus dem Schatten zuschlägt und niemals fair kämpft.",
-      "priest": "Ein hingebungsvoller Heiler, dessen Licht die Gruppe am Leben hält oder dessen Schatten den Feind vernichtet.",
-      "shaman": "Ein Geisterrufer, der Sturm, Feuer und Wasser bändigt und Verbündete zwischen den Blitzen heilt.",
-      "mage": "Ein Zauberweber aus Feuer, Frost und Arkanmagie, der das Schlachtfeld aus der Ferne beherrscht.",
-      "warlock": "Ein dunkler Beschwörer, der Dämonen und Flüche befehligt und Leben gegen verheerende Macht eintauscht.",
-      "druid": "Ein Gestaltwandler, der als Bär tankt, Gegner als Katze zerfleischt oder mitten im Getümmel heilt."
+      "warrior": "Verwandle eingesteckte Schläge in Wut für deinen nächsten Angriff.",
+      "paladin": "Schirme Verbündete ab, heile ihre Wunden oder lass den Hammer niedersausen.",
+      "hunter": "Kämpfe aus der Ferne mit einem gezähmten Tier an deiner Seite und einer passenden Falle für jeden Gegner.",
+      "rogue": "Nutze Gifte und Verstohlenheit, um überraschend aus dem Schatten zuzuschlagen.",
+      "priest": "Halte deine Gruppe mit Licht am Leben oder setze Schattenmagie gegen Gegner ein.",
+      "shaman": "Rufe Geister, bändige Sturm, Feuer und Wasser und heile Verbündete zwischen den Blitzen.",
+      "mage": "Forme Feuer, Frost und arkane Energie, um das Schlachtfeld aus der Ferne zu beherrschen.",
+      "warlock": "Befiehl Dämonen, wirke Flüche und tausche Lebenskraft gegen magische Macht.",
+      "druid": "Wechsle die Gestalt, um als Bär Schaden abzufangen, als Katze anzugreifen oder im Getümmel zu heilen."
     },
     "tag": {
       "melee": "Nahkampf",
@@ -10220,11 +10311,11 @@ export const de_DE: EnTranslations = {
     "family": {
       "beast": {
         "name": "Wildtiere",
-        "desc": "Wilde Tiere aus Wald und Flur, von Wölfen und Ebern bis zu den Wesen, die ihnen nachstellen. Jäger können viele von ihnen zähmen."
+        "desc": "Wilde Tiere aus Wald und Flur, von Wölfen und Ebern bis zu den Wesen, die ihnen nachstellen. Mit Jagdkunst kannst du viele von ihnen zähmen."
       },
       "spider": {
         "name": "Spinnen",
-        "desc": "Netzweber und giftige Lauerer, die in dunklen, verwucherten Orten nisten. Jäger können sie zähmen, genau wie Wildtiere."
+        "desc": "Netzweber und giftige Lauerer, die in dunklen, verwucherten Orten nisten. Mit Jagdkunst kannst du sie ebenso wie Wildtiere zähmen."
       },
       "mudfin": {
         "name": "Mudfins",
@@ -10753,7 +10844,7 @@ export const de_DE: EnTranslations = {
       "viewsTitle": "Zwei Ansichten derselben Karte",
       "viewsBody": "Die 3D-Ansicht zeichnet deine Karte mit der echten Spiel-Engine, was du siehst, ist also, was du bekommst: Ziehen kreist um die Szene, Scrollen zoomt. Die 2D-Übersichtskarte ist die Draufsicht, besser geeignet, um Zonenmarkierungen wie Knotenpunkte, Friedhöfe und interessante Orte zu verschieben, und um einen großen Bereich einzurahmen, bevor du ihn formst. Der Umschalter sitzt in der oberen Leiste.",
       "playtestTitle": "Spiele deine Karte",
-      "playtestBody": "Der Spieltest übergibt die Karte dem Spiel und setzt dich als Krieger hinein. Alles, was du gebaut hast, liegt dir zu Füßen: Lager erscheinen, Sperrwände halten, und Platzierungen mit Kollision schieben dich um sie herum. Hast du genug gesehen, kehr zum Editor zurück und mach weiter.",
+      "playtestBody": "Der Spieltest übergibt die Karte dem Spiel und lässt dich darin mit der Klasse Kriegskunst starten. Alles, was du gebaut hast, liegt dir zu Füßen: Lager erscheinen, Sperrwände halten, und Platzierungen mit Kollision schieben dich um sie herum. Hast du genug gesehen, kehr zum Editor zurück und mach weiter.",
       "sandboxTitle": "Ein Sandkasten, nicht die echte Welt",
       "sandboxBody": "Eigene Karten verändern nie das Spiel, das alle anderen spielen. Ein Spieltest läuft offline in deinem eigenen Browser und spricht nie mit dem Server, sodass nichts, was darin geschieht, deine Charaktere oder die gemeinsame Welt erreicht.",
       "saveTitle": "Deine Arbeit speichern",
@@ -10770,13 +10861,13 @@ export const de_DE: EnTranslations = {
       "lead": "Betrachte die Helden, Monster und Dämonen der Welt aus der Nähe. Wähle ein Modell und ziehe dann, um es zu drehen.",
       "intro": "Jede Figur hier ist dasselbe Modell, dem du im Spiel begegnest, live in deinem Browser gerendert. Wähle eines, um es zu laden.",
       "groupClasses": "Klassen",
-      "groupForms": "Druidengestalten",
+      "groupForms": "Gestalten der Druidenkunst",
       "formBear": "Bruin Form",
       "formCat": "Katzengestalt",
       "formTravel": "Fleet Form",
       "formSporemender": "Sporenheilerform",
       "groupCreatures": "Kreaturen",
-      "groupPets": "Dämonen des Hexenmeisters",
+      "groupPets": "Dämonen des Hexenwerks",
       "pickerLabel": "Wähle ein Modell zum Ansehen",
       "count": "{count} Modelle",
       "noWebgl": "Dieser Browser kann keine 3D-Modelle darstellen. Alles ist trotzdem auf den Klassen- und Bestiarium-Seiten aufgeführt."
@@ -10836,7 +10927,7 @@ export const de_DE: EnTranslations = {
       "cosmeticsCache": "Einige davon stammen aus einer geheimnisvollen kosmetischen Truhe, einem versiegelten Preis, der beim Öffnen eine von drei Qualitätsstufen auswürfelt und dir das passende Aussehen verleiht. Es geht rein um die Optik: Nichts darin macht dich stärker, nur schöner anzusehen.",
       "cosmeticsApply": "Lege dein aktives Aussehen in der Aussehen-Zeile auf deinem Charakterbildschirm fest und wechsle frei zwischen allem, was du freigeschaltet hast.",
       "slotOffhand": "Nebenhand",
-      "offhandBody": "Was die Nebenhand aufnimmt, hängt von deiner Klasse ab. Ein Schild gehört dorthin, ebenso ein gehaltener Fokus wie eine Kugel oder ein Foliant, oder ein Köcher für einen Jäger. Klassen, die beidhändig kämpfen können, stecken stattdessen eine zweite Waffe hinein, zu einem Preis, den man kennen sollte: Mit einer Waffe in jeder Hand zu kämpfen lässt deine gewöhnlichen Schläge merklich häufiger danebengehen, wenn auch deine Fähigkeiten davon unberührt bleiben. Eine zweihändige Waffe braucht normalerweise beide Hände, sodass ihr Anlegen alles verbannt, was die Nebenhand zuvor hielt, es sei denn, deine Spezialisierung gehört zu den seltenen, die zwei davon gleichzeitig tragen können.",
+      "offhandBody": "Was die Nebenhand aufnimmt, hängt von deiner Klasse ab. Ein Schild gehört dorthin, ebenso ein gehaltener Fokus wie eine Kugel oder ein Foliant, oder ein Köcher für die Jagdkunst. Klassen, die beidhändig kämpfen können, stecken stattdessen eine zweite Waffe hinein, zu einem Preis, den man kennen sollte: Mit einer Waffe in jeder Hand zu kämpfen lässt deine gewöhnlichen Schläge merklich häufiger danebengehen, wenn auch deine Fähigkeiten davon unberührt bleiben. Eine zweihändige Waffe braucht normalerweise beide Hände, sodass ihr Anlegen alles verbannt, was die Nebenhand zuvor hielt, es sei denn, deine Spezialisierung gehört zu den seltenen, die zwei davon gleichzeitig tragen können.",
       "bagsSort": "Wird der Rucksack unübersichtlich, räumt die Schaltfläche Sortieren im Taschenfenster ihn mit einem einzigen Klick auf. Teilstapel desselben Gegenstands werden zusammengeführt, und alles wird wieder in einer lesbaren Reihenfolge ausgelegt: zuerst Waffen und Rüstung, dann Taschen, Verbrauchsgüter, Werkzeuge und Reittiere, dann Handwerksmaterialien, wobei jede feine Güte neben ihrer schlichten Fassung liegt, dann Questgegenstände, mit grauem Plunder ganz am Ende, sodass du auf einen Blick siehst, was du verkaufen solltest. Es wird nie etwas erschaffen oder verloren, nur neu geordnet, also ist es immer gefahrlos zu drücken.",
       "requiredLevelBody": "Manche Stücke tragen außerdem eine Mindeststufe, angezeigt auf dem Tooltip. Du kannst ein solches Stück auf jeder Stufe erbeuten, kaufen oder geschenkt bekommen, aber tragen kannst du es erst, sobald du diese Stufe erreichst. Die Anforderung richtet sich danach, woher das Stück stammt, nicht allein nach seiner Farbe, sodass ein Seltenes, das du auf deiner eigenen Stufe gewinnst, meist sofort tragbar ist, während ein Erbstück von weit über dir in deinen Taschen wartet, bis du aufgeholt hast.",
       "sourcesHonor": "Ehre ist das, was das Kämpfen gegen andere Spieler auszahlt, und die Ehrenquartiermeister, WUT in Eastbrook und Kriegsmarschall Draven Kole in Highwatch, führen die Kriegsführungsläden, die man allein mit Ehre kauft: ganze Rüstungsfamilien, Schmuck und Waffen, die kein Münzhändler führt. Die Seite Arena und PvP behandelt, wie du die Ehre selbst verdienst.",
@@ -10987,13 +11078,13 @@ export const de_DE: EnTranslations = {
         },
         "leatherworking": {
           "identityHeading": "Leder für die Schnellen",
-          "identityBody": "Die Leiter steigt von den schlichten Fenbridge-Leder-Beinlingen, -Stiefeln und -Gürteln über die ungewöhnliche Marschpirscherwams, -kapuze und -schultern bis zum seltenen Sumpfwächter-Set, dem besten Leder, das ein Handwerker zuschneiden kann. Zwei Zauberwirker-Stücke runden es ab: das Eastbrook-Druiden-Leder-Feld-Allgemeinstück und die Dämmerfell-Wickel bei Fertigkeit 50.\n\nAuf dem Rad sitzt es zwischen Kochen und Schneiderei. Sein lebendes Paar ist der Ausrüster, Lederverarbeitung und Schneiderei, geschworen vor Weberin Ottilie in Eastbrook; das Fallensteller-Paar mit Kochen ist auf dem Rad benannt, hat aber noch keine Eid-Quest.",
+          "identityBody": "Die Leiter steigt von den schlichten Fenbridge-Leder-Beinlingen, -Stiefeln und -Gürteln über die ungewöhnliche Marschpirscherwams, -kapuze und -schultern bis zum seltenen Sumpfwächter-Set, dem besten Leder, das ein Handwerker zuschneiden kann. Zwei Zauberwirker-Stücke runden es ab: die Lederkleidung der Druidenkunst aus Eastbrook und die Dämmerfell-Wickel bei Fertigkeit 50.\n\nAuf dem Rad sitzt es zwischen Kochen und Schneiderei. Sein lebendes Paar ist der Ausrüster, Lederverarbeitung und Schneiderei, geschworen vor Weberin Ottilie in Eastbrook; das Fallensteller-Paar mit Kochen ist auf dem Rad benannt, hat aber noch keine Eid-Quest.",
           "materialsHeading": "Die Jagd ist die Ernte",
           "materialsBody": "Lederverarbeitung ist das Handwerk, bei dem dein Aufstiegsweg und deine Versorgungslinie dasselbe sind: Raues Fell wird direkt von fellführenden Leichen geerntet, vor allem von Wölfen und Ebern, und jede Leiche bedient nur einen Ernter, wer zuerst kommt, mahlt zuerst. Ein seltener oder besserer Erntewurf gewährt außerdem ein Unberührtes Fell, ein signiertes Exemplar, nach dem das Sumpfwächterwams verlangt, also lege jedes zur Bank, das du findest.\n\nDie Nebenrollen sind wenige: Spinnenbeine und Spinnenseide, Selbstgesponnener Stoff von Humanoiden, ein einzelnes Osmiumerz in jedem seltenen Sumpfwächter-Stück (sechs in den Dämmerfell-Wickeln) und ein Gerbmittel für 16 Kupfer am Tresen der Gerberei. Osmium selbst wird nie beim Händler gekauft: Bau es selbst ab, in Thornpeak oder an den Startadern fast jeder jüngeren Zone (allein die Fernküste gräbt Eisen), oder kaufe es einem anderen Spieler ab.",
           "ladderHeading": "Ausgebildet in Fenbridge",
-          "ladderBody": "Hier ist der Haken: Die Gerberei steht in Fenbridge, an der Straße ins Mirefen-Moor, was Lederverarbeitung zum einzigen Tiefhandwerk macht, das draußen im Moor ausgebildet wird. Gerber Hesk lehrt die Leiter an seinen Bottichen: die Fenbridge-Leder-Sprosse kostenlos bei Fertigkeit 0, die Marschpirscher-Sprosse für 25 Silber pro Rezept ab Fertigkeit 25 und die Sumpfwächter-Sprosse für je 1 Gold ab Fertigkeit 50, wobei sich jede Sprosse öffnet, sobald dein Rang sie erreicht.\n\nDrei Rezepte umgehen den Lehrmeister: Die Feld-Allgemeinstücke (das Gegerbte Lederwams und die Eastbrook-Druidenhaut) lassen sich von Anfang an überall herstellen, und die Dämmerfell-Wickel kennt jeder bei Fertigkeit 50, an die Gerberei gebunden. Beachte, dass der Ausrüster-Eid selbst zurück in Eastbrook bei Ottilie geschworen wird; nur der Unterricht findet im Moor statt.",
+          "ladderBody": "Hier ist der Haken: Die Gerberei steht in Fenbridge, an der Straße ins Mirefen-Moor, was Lederverarbeitung zum einzigen Tiefhandwerk macht, das draußen im Moor ausgebildet wird. Gerber Hesk lehrt die Leiter an seinen Bottichen: die Fenbridge-Leder-Sprosse kostenlos bei Fertigkeit 0, die Marschpirscher-Sprosse für 25 Silber pro Rezept ab Fertigkeit 25 und die Sumpfwächter-Sprosse für je 1 Gold ab Fertigkeit 50, wobei sich jede Sprosse öffnet, sobald dein Rang sie erreicht.\n\nDrei Rezepte umgehen den Lehrmeister: Die Feld-Allgemeinstücke (das Gegerbte Lederwams und die Eastbrook-Haut der Druidenkunst) lassen sich von Anfang an überall herstellen, und die Dämmerfell-Wickel kennt jeder bei Fertigkeit 50, an die Gerberei gebunden. Beachte, dass der Ausrüster-Eid selbst zurück in Eastbrook bei Ottilie geschworen wird; nur der Unterricht findet im Moor statt.",
           "routeHeading": "Meisterwerke und ein funktionierender Weg auf 125",
-          "routeBody": "Jedes Stück mit echten Attributen würfelt auf die Meisterwerk-Chance, solange die feinere Qualität in deine Rang-Grenze passt, die attributtragende Eastbrook-Druidenhaut eingeschlossen, und ein signiertes Unberührtes Fell in einem Sumpfwächterwams liefert den Signiert-Reagenz-Bonus automatisch; Osmium zählt für den Proc als Rang-1-Material. Die attributlosen Leder-Allgemeinstücke können nicht proc'en.\n\nSteigere es auf natürlichem Weg: Ernte ab Stufe eins jeden Wolf und jeden Eber, den du erlegst, lass dich von den beiden Feld-Allgemeinstücken bis 25 tragen, wo immer du gerade stehst, und lerne dann die Leder-Sprosse an den Bottichen, wenn dich die Quests ohnehin ins Moor ziehen. Marschpirscher trägt dich auf 50, und die Sumpfwächter-Stücke sowie die Dämmerfell-Wickel tragen die seltene Stufe von 50 auf 75. Nach 75 fällt der Gewinn dieser Rang-2-Rezepte erst auf die Hälfte und dann auf ein Viertel, rund 150 Herstellungen für die letzten fünfzig Punkte bis zur Obergrenze von 125; unterhalb der Grenze eines Hauptberufs erreichen sie immer noch die Herstellungsgrenze für seltene Qualität, statt hart auf null zu fallen.\n\nDie mobile Gerberei zählt für dieses Handwerk mehr als für jedes andere: Spezialisiere dich bei 75, und eine Satteltasche voller Felle wird am Lagerfeuer zu fertiger Ausrüstung statt zu einem Rückweg nach Fenbridge. Hesks Gerberei-Arbeitsauftrag kauft alle 30 Minuten acht Raue Felle, ein hübscher Ertrag für Häute, die du ohnehin gesammelt hast, und das Buch der Taten markiert Das Gerberhandwerk bei Fertigkeit 50, mit Großmeister-Lederverarbeitung an der Obergrenze."
+          "routeBody": "Jedes Stück mit echten Attributen würfelt auf die Meisterwerk-Chance, solange die feinere Qualität in deine Rang-Grenze passt, die attributtragende Eastbrook-Haut der Druidenkunst eingeschlossen, und ein signiertes Unberührtes Fell in einem Sumpfwächterwams liefert den Signiert-Reagenz-Bonus automatisch; Osmium zählt für den Proc als Rang-1-Material. Die attributlosen Leder-Allgemeinstücke können nicht proc'en.\n\nSteigere es auf natürlichem Weg: Ernte ab Stufe eins jeden Wolf und jeden Eber, den du erlegst, lass dich von den beiden Feld-Allgemeinstücken bis 25 tragen, wo immer du gerade stehst, und lerne dann die Leder-Sprosse an den Bottichen, wenn dich die Quests ohnehin ins Moor ziehen. Marschpirscher trägt dich auf 50, und die Sumpfwächter-Stücke sowie die Dämmerfell-Wickel tragen die seltene Stufe von 50 auf 75. Nach 75 fällt der Gewinn dieser Rang-2-Rezepte erst auf die Hälfte und dann auf ein Viertel, rund 150 Herstellungen für die letzten fünfzig Punkte bis zur Obergrenze von 125; unterhalb der Grenze eines Hauptberufs erreichen sie immer noch die Herstellungsgrenze für seltene Qualität, statt hart auf null zu fallen.\n\nDie mobile Gerberei zählt für dieses Handwerk mehr als für jedes andere: Spezialisiere dich bei 75, und eine Satteltasche voller Felle wird am Lagerfeuer zu fertiger Ausrüstung statt zu einem Rückweg nach Fenbridge. Hesks Gerberei-Arbeitsauftrag kauft alle 30 Minuten acht Raue Felle, ein hübscher Ertrag für Häute, die du ohnehin gesammelt hast, und das Buch der Taten markiert Das Gerberhandwerk bei Fertigkeit 50, mit Großmeister-Lederverarbeitung an der Obergrenze."
         },
         "cooking": {
           "identityHeading": "Der Topf, der die Gruppe ernährt",
@@ -11002,7 +11093,7 @@ export const de_DE: EnTranslations = {
           "materialsHeading": "Eine Vorratskammer, gespeist von Angel, Messer und Furche",
           "materialsBody": "Angeln liefert die kennzeichnenden Zutaten, Zone für Zone: Spiegelforelle und Flussbarsch aus den Gewässern des Eastbrook-Tals, Sumpfhecht und Mooraal aus dem Mirefen-Moor, Frostkiemen-Forelle und Silberkarpfen aus den Thornpeak-Höhen. Die Sprossen mischen die Zonen frei (die kostenlose Sprosse will bereits Sumpfhecht, die mittlere Thornpeaks Frostkieme, und das seltene Abendmahl faltet die Spiegelforelle des Tals wieder ein), sodass einem Koch, der überall angelt, wohin ihn die Straße führt, nie der Vorrat ausgeht.\n\nDie Metzgerseite kommt von geernteten Leichen: Wildfleisch von Ebern und ihresgleichen und, bei einem seltenen oder besseren Erntewurf, ein signiertes Erstklassiges Stück, das Herzstück des Festtagsbratens. Kräuter würzen die besseren Gerichte, ein Aschenholzscheit räuchert den Aal, und Kochsalz kostet 8 Kupfer pro Beutel an Marlows eigenem Stand.",
           "ladderHeading": "Von Dörrfleisch zum großen Braten",
-          "ladderBody": "Gesalzenes Dörrfleisch ist das Feldrezept: von Anfang an bekannt, ein Spinnenbein, überall herstellbar, die Wegzehrung jedes frischen Abenteurers. Die Lehrmeister-Leiter wird in den Eastbrook-Küchen auf der Ostseite des Platzes gekocht: die kostenlose Sprosse bei Fertigkeit 0 (der Barsch, der Jägers Wildspieß, der Kräuter-Sumpfhecht), die mittlere Sprosse bei Fertigkeit 25 für 25 Silber pro Rezept (Eschenholz-Räucheraal, Goldblatt-Wildeintopf, Frostkiemensuppe) und die seltene Sprosse bei Fertigkeit 50 für 1 Gold das Stück (Abendmahl vom Silberkarpfen, Anglers Festmahlschale, Marlows Festtagsbraten).\n\nChargen-Gerichte strecken deine Zutaten: Der Räucheraal und der Wildeintopf servieren zwei pro Herstellung und die Festmahlschale drei. Marlow lehrt jede Sprosse, sobald dein Rang im Kochen sie erreicht.",
+          "ladderBody": "Gesalzenes Dörrfleisch ist das Feldrezept: von Anfang an bekannt, ein Spinnenbein, überall herstellbar, die Wegzehrung jedes frischen Abenteurers. Die Lehrmeister-Leiter wird in den Eastbrook-Küchen auf der Ostseite des Platzes gekocht: die kostenlose Sprosse bei Fertigkeit 0 (der Barsch, der Wildspieß, der Kräuter-Sumpfhecht), die mittlere Sprosse bei Fertigkeit 25 für 25 Silber pro Rezept (Eschenholz-Räucheraal, Goldblatt-Wildeintopf, Frostkiemensuppe) und die seltene Sprosse bei Fertigkeit 50 für 1 Gold das Stück (Abendmahl vom Silberkarpfen, Anglers Festmahlschale, Marlows Festtagsbraten).\n\nChargen-Gerichte strecken deine Zutaten: Der Räucheraal und der Wildeintopf servieren zwei pro Herstellung und die Festmahlschale drei. Marlow lehrt jede Sprosse, sobald dein Rang im Kochen sie erreicht.",
           "routeHeading": "Spezialisierung, nicht Meisterwerke, und der Weg auf 125",
           "routeBody": "Kochen ist die ehrliche Ausnahme der Meisterwerkgeschichte: Ein Mahl hat keine Wertezeile, die verbessert werden könnte, daher procen Gerichte nie und kein Koch sollte ihnen nachjagen. Die Meisterschaft des Berufs ist die Spezialisierung bei 75: ein Fünftel weniger von jeder Zutat, was sich bei Chargengerichten schnell summiert, plus eine mobile Feldküche, damit das Abendessen vor der Dungeontür entstehen kann.\n\nKoche, was du fängst. Verbinde den Aufstieg mit einer Angelsitzung, dann versorgen sich die beiden Fertigkeiten gegenseitig bis nach oben. Trockenfleisch und die kostenlose Stufe bringen dich mit einem Punkt je Herstellung bis 25, die mittlere Stufe bis 50 und die seltene bis 75. Darüber liegen die Apex-Küche, die drei Rollengerichte und Der volle Herd. Kein Trainer lehrt sie, sie kommen aus gefundenen Mustern. Für einen Koch, dessen Hauptberuf Kochen umfasst, heute also den vereidigten Apotheker, gibt eine Apex-Herstellung bis zum Cap 125 den vollen Gewinn. Unter einer Hauptberufsobergrenze lehrt sie nichts: Ein nicht erklärter oder als Hobby ausgeübter Koch arbeitet für den Teller, nicht für Punkte. Die seltenen Gerichte tragen den letzten Weg trotzdem, erst mit halbem und dann viertel Gewinn, ungefähr 150 weitere Herstellungen. Behandle das als Vorrat statt als Grind, denn eine Gilde isst jede Portion.\n\nMarlows Küchenauftrag kauft alle 30 Minuten acht Wildfleisch für Münzen und Erfahrung. Das Buch der Taten markiert Würziger Koch bei 50 und führt bei 125 zum Titel Großmeister des Kochens."
         },
@@ -11010,7 +11101,7 @@ export const de_DE: EnTranslations = {
           "identityHeading": "Flaschen, die Kämpfe entscheiden",
           "identityBody": "Der Beruf wird in der Apotheke von Highwatch ausgeübt, dem Arbeitsplatz von Alchemistin Verane, der Meisterin der Apotheke. Sie lehrt die Rezeptleiter, verkauft Glasfläschchen für 12 Kupfer und zahlt über ihren Arbeitsauftrag Münzen für Kräuter.\n\nIm Berufering steht Alchemie bei den Versuch-und-Irrtum-Berufen, neben Ingenieurskunst und Kochen. Daraus entstehen zwei Paaridentitäten: der Bombardier aus Ingenieurskunst und Alchemie, den man vor Tüftler Gizzel in Eastbrook annimmt, und der Apotheker aus Alchemie und Kochen, dem man vor Koch Marlow die Treue schwört. Einstimme dich auf eines der Paare ein, damit Alchemie zum Hauptberuf wird und deine eigene signierte Arbeit dich weiterlehrt. Das Bombardierpaar öffnet außerdem das Kombinationsrezept Elixier des Bären, während das Apothekerpaar noch kein Kombinationsrezept besitzt. Die Leiter von 0 bis 50 wartet trotzdem nie: Jede dieser Stufen liegt in der seltenen Stufe, unter der nicht erklärte Berufe arbeiten können, daher ist der Weg zum Cap vor jedem Eid offen. Zwei Dinge liegen über dieser Obergrenze und geben ihre Fertigkeit nur einem Hauptberuf: der Beschleunigungskatalysator, das von Verane gelehrte Zwischenrezept der Stufe 75, und die Musterstufen darüber. Ein nicht erklärter oder als Hobby ausgeübter Alchemist braut sie für die Waren, nicht für Punkte.",
           "materialsHeading": "Kräuter, Drüsen, Glas und der Garten",
-          "materialsBody": "Jeder Trank benötigt ein Glasfläschchen plus Kräuter passend zu seiner Sprosse: Schimmerblatt wächst im Eastbrook-Tal, Goldblatt im Sumpfnebel-Moor und Sonnenblüte in den Dornkuppen-Höhen, ein Kraut pro Zone, sodass deine Tränke die Welt mit dir erklimmen. Kräutersammeln ist das natürliche Partnerskill, obwohl das Kaufen von Sammlern oder auf dem Markt genauso funktioniert; tiefere Zonen beherbergen Felder höherer Stufe, die eine bessere Sichel erfordern, also halte dein Werkzeug aktuell, wenn du selbst pflückst.\n\nDie Elixierlinie fügt eine Jäger-Zutat hinzu: Giftdrüsen, geerntet von giftigen Leichen, und das oberste Elixier verlangt eine Makellose Giftdrüse, das signierte seltene Exemplar, das ein glücklicher Leichen-Ernte-Wurf liefert. Wenn du nicht selbst erntst, sind das genau die Waren, für die es sich lohnt, einen Jägerfreund um Mitbringsel zu bitten.",
+          "materialsBody": "Jeder Trank benötigt ein Glasfläschchen plus Kräuter passend zu seiner Sprosse: Schimmerblatt wächst im Eastbrook-Tal, Goldblatt im Sumpfnebel-Moor und Sonnenblüte in den Dornkuppen-Höhen, ein Kraut pro Zone, sodass deine Tränke die Welt mit dir erklimmen. Kräutersammeln ist das natürliche Partnerskill, obwohl das Kaufen von Sammlern oder auf dem Markt genauso funktioniert; tiefere Zonen beherbergen Felder höherer Stufe, die eine bessere Sichel erfordern, also halte dein Werkzeug aktuell, wenn du selbst pflückst.\n\nDie Elixierlinie fügt eine Zutat aus der Jagdkunst hinzu: Giftdrüsen, geerntet von giftigen Leichen, und das oberste Elixier verlangt eine Makellose Giftdrüse, das signierte seltene Exemplar, das ein glücklicher Leichen-Ernte-Wurf liefert. Wenn du nicht selbst erntst, sind das genau die Waren, für die es sich lohnt, jemanden mit Jagdkunst um Mitbringsel zu bitten.",
           "ladderHeading": "Die Rezeptleiter",
           "ladderBody": "Jeder kennt den kleinen Heiltrank von Anfang an und kann ihn überall ohne Station mischen. Die eigentliche Leiter lehrt Verane in der Apotheke, Stufe für Stufe: Rezepte der Fertigkeit 0 sind kostenlos, die Stufe 25 kostet 25 Silber je Rezept und die Stufe 50 kostet 1 Gold je Rezept. Jede Stufe trägt einen Heiltrank, einen Manatrank und ein Ausdauerelixier. Sie reicht von gewöhnlichen Schimmerblattfläschchen mit 120 Gesundheit und 160 Mana über ungewöhnliches Goldblatt mit 200 Gesundheit und 260 Mana bis zum seltenen Sonnenblatt mit 335 Gesundheit und 425 Mana. Seit der Trophäenwirtschaft lehrt die Stufe 25 außerdem einen kleinen Heiltrank aus Talg, eine günstigere Flasche, die etwas schwächer als der Goldblatttrank ist.\n\nDie Elixiere steigen genauso: Das Elixier des Keilers gibt 6 Ausdauer für 10 Minuten, das Vipernbisselixier 9 für 15 Minuten und das Elixier der Schlange 12 für 15 Minuten. Nur das Schlangenelixier ergibt zwei Flaschen je Herstellung. Daneben steht das Elixier des Bären, ein Kombinationsgebräu, das Verane für 25 Silber lehrt, sobald Alchemie 25 erreicht. Es ist überall mischbar, aber nur durch einen eingestimmten Bombardier mit Alchemie und Ingenieurskunst auf 25.\n\nÜber der ganzen Elixierlinie liegt die Fläschchenstufe. Kein Trainer lehrt sie, sie kommt aus gefundenen Mustern. Ein Fläschchen gewährt 13 für 20 Minuten und eröffnet zwei Achsen, die Elixiere nie haben: Angriffskraft und Intelligenz neben der bekannten Ausdauer, je ein Fläschchen pro Rolle. Es hat eigene Regeln: Unabhängig vom Wert wirkt immer nur ein Fläschchen. Ein schwächeres Elixier oder eine Schriftrolle desselben Wertes kann es nicht ersetzen, kein Bann, kein Diebstahl und kein manueller Abbruch entfernt es. Es bleibt über deinen eigenen Tod bestehen, endet aber beim Ausloggen.",
           "routeHeading": "Der Brauer-Weg auf 125",
@@ -11396,7 +11487,7 @@ export const de_DE: EnTranslations = {
       "strTitle": "Stärke",
       "strBody": "Stärke erhöht deine Nahkampf-Angriffskraft, sodass deine Waffenschwünge härter treffen. Sie bewirkt am meisten für die schweren Nahkampfklassen, die im Nahbereich kämpfen.",
       "agiTitle": "Beweglichkeit",
-      "agiBody": "Beweglichkeit schärft dich auf mehrere Weisen: Sie erhöht deine Chance, einen kritischen Treffer zu landen, und deine Chance auszuweichen, und sie fügt ein wenig Rüstung hinzu. Für Schurken und Jäger speist sie zudem die Angriffskraft, und sie treibt die Fernkampfschüsse eines Jägers an.",
+      "agiBody": "Beweglichkeit schärft dich auf mehrere Weisen: Sie erhöht deine Chance, einen kritischen Treffer zu landen, und deine Chance auszuweichen, und sie fügt ein wenig Rüstung hinzu. Für Schurkenkunst und Jagdkunst erhöht sie zudem die Angriffskraft. Auch die Fernkampfschüsse der Jagdkunst profitieren davon.",
       "staTitle": "Ausdauer",
       "staBody": "Ausdauer ist dein Durchhaltevermögen. Mehr Ausdauer bedeutet einen größeren Gesundheitsvorrat, und sie beschleunigt die Gesundheit, die du außerhalb des Kampfes beim Rasten zurückgewinnst. Jede Klasse will etwas davon.",
       "intTitle": "Intelligenz",
@@ -11424,7 +11515,7 @@ export const de_DE: EnTranslations = {
       "hitTitle": "Trefferwertung",
       "hitBody": "Trefferwertung kommt von deiner Ausrüstung und ihren Setboni. Sie lässt deine Angriffe seltener verfehlen und deine Zauber seltener widerstanden werden, und sie macht sich besonders gegen Feinde über deiner eigenen Stufe bezahlt, wo sich Fehlschläge am schnellsten häufen. Dein Bogen zeigt sie als Trefferwertung.",
       "parryTitle": "Parieren",
-      "parryBody": "Parieren ist die ureigene Verteidigung des Kriegers: eine Chance, einen Nahkampfschlag völlig abzuwehren und keinen Schaden zu nehmen, und sie wächst mit Stärke. Nur ein Angriff von vorne lässt sich parieren, ein weiterer Grund, dem, was dich trifft, immer zugewandt zu bleiben. Andere Klassen sehen die Zeile auf ihrem Bogen bei null stehen.",
+      "parryBody": "Parieren gehört zur Kriegskunst: eine Chance, einen Nahkampfschlag völlig abzuwehren und keinen Schaden zu nehmen, und sie wächst mit Stärke. Nur ein Angriff von vorne lässt sich parieren, ein weiterer Grund, dem, was dich trifft, immer zugewandt zu bleiben. Andere Klassen sehen die Zeile auf ihrem Bogen bei null stehen.",
       "warfareTitle": "Kriegsführung",
       "warfareBody": "Kriegsführung ist der eine Wert, der nur gegen andere Spieler zählt: Er erhöht den Schaden, den du ihnen zufügst, und senkt den Schaden, den du von ihnen erleidest, und dein Bogen zeigt beide Hälften in einer Zeile. Gegen Kreaturen bewirkt er gar nichts. Er kommt von der Kriegsführungs-Ausrüstung, die du mit Ehre kaufst, er ist also eine Belohnung fürs PvP-Spielen und nichts, dem du beim Aufsteigen hinterherjagen musst.",
       "warfareBodyPets": "Kriegsführung ist die Wertung, die Ehrenausrüstung für den Kampf gegen Spieler trägt. In Kämpfen zwischen Spielern erhöht sie den Schaden, den du und dein Begleiter anderen Spielern und deren Begleitern zufügen, und verringert den Schaden, den du und dein Begleiter von ihnen erleiden. Sie erhöht außerdem deine maximale Gesundheit überall außer in Dungeons, Schlachtzügen, Tiefgängen und Rissen, sodass ein Spieler in Ehrenausrüstung weit schwerer zu töten ist als einer ohne. Dein Charakterbogen zeigt das alles in einer einzigen Zeile. Sie stammt von der Kriegsführungsausrüstung, die du mit Ehre kaufst, ist also eine Belohnung fürs PvP-Spielen statt etwas, dem du beim Stufenaufstieg nachjagst."
@@ -13862,6 +13953,41 @@ export const de_DE: EnTranslations = {
         "hooded": "Schlupflider"
       }
     },
+    "faLooks": {
+      "browColor": "Brauenfarbe",
+      "beard": "Bart",
+      "makeup": "Schminke",
+      "tattoos": "Tattoos",
+      "facePreset": "Gesichtsform",
+      "doubleBuns": "Doppeldutt",
+      "faceTattoo": "Gesichtstattoo",
+      "bodyTattoo": "Halstattoo",
+      "earJewelry": "Ohrringe",
+      "noseJewelry": "Nasenring",
+      "faceMarks": "Details",
+      "scar": "Narben",
+      "freckles": "Sommersprossen",
+      "scarStyle": {
+        "brow": "Brauenkerbe",
+        "cheek": "Wangennarbe"
+      },
+      "freckleStyle": {
+        "light": "Dezent",
+        "dense": "Dicht"
+      },
+      "preset": {
+        "soft": "Weich",
+        "classic": "Klassisch",
+        "defined": "Markant"
+      },
+      "tattoo": {
+        "none": "Ohne",
+        "streaks": "Streifen",
+        "crest": "Wappen",
+        "bands": "Bänder",
+        "sigil": "Runenzeichen"
+      }
+    },
     "wocBuilder": {
       "cat": {
         "bodyType": "Körperbau",
@@ -14088,7 +14214,7 @@ export const de_DE: EnTranslations = {
     "hairFauxhawk": "Faux Hawk",
     "hairMohawk": "Voller Irokese",
     "hairTopknot": "Top Knot",
-    "hairWarriorbraid": "Kriegerzopf",
+    "hairWarriorbraid": "Kampfzopf",
     "hairHighbun": "Hoher Dutt",
     "hairLowbun": "Tiefer Dutt",
     "hairBraidcrown": "Zopfkranz",
@@ -14377,7 +14503,7 @@ export const de_DE: EnTranslations = {
     "footerCta": "Schmiedet Eure Legende: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", $WOC-Inhaber mit Rang {tier}",
-    "shareText": "Ich schmiede meine Legende in World of ClaudeCraft: Stufe {level} {className}{tierBit}. Tritt meiner Welt bei:",
+    "shareText": "Ich schmiede meine Legende in World of ClaudeCraft: Stufe {level} · {className}{tierBit}. Tritt meiner Welt bei:",
     "nativeShareTitle": "Welt von ClaudeCraft",
     "fileNameFallback": "spieler",
     "actionShareX": "Auf X teilen",
@@ -14395,24 +14521,27 @@ export const de_DE: EnTranslations = {
     "statusShareUnsupported": "Teilen wird auf diesem Gerät nicht unterstützt."
   },
   "classes": {
-    "warrior": "Krieger",
-    "paladin": "Paladin",
-    "hunter": "Jäger",
-    "rogue": "Schurke",
-    "priest": "Priester",
-    "shaman": "Schamane",
-    "mage": "Magier",
-    "warlock": "Hexenmeister",
-    "druid": "Druide",
-    "warriorAria": "Krieger-Klasse",
-    "paladinAria": "Paladin-Klasse",
-    "hunterAria": "Jäger-Klasse",
-    "rogueAria": "Schurke-Klasse",
-    "priestAria": "Priester-Klasse",
-    "shamanAria": "Schamane-Klasse",
-    "mageAria": "Magier-Klasse",
-    "warlockAria": "Hexenmeister-Klasse",
-    "druidAria": "Druide-Klasse"
+    "newBadge": "Neu",
+    "warrior": "Kriegskunst",
+    "paladin": "Paladinschwur",
+    "hunter": "Jagdkunst",
+    "rogue": "Schurkenkunst",
+    "priest": "Priesterkunst",
+    "shaman": "Schamanenkunst",
+    "mage": "Zauberkunst",
+    "dreamdancer": "Traumtanz",
+    "warlock": "Hexenwerk",
+    "druid": "Druidenkunst",
+    "warriorAria": "Klasse Kriegskunst",
+    "paladinAria": "Klasse Paladinschwur",
+    "hunterAria": "Klasse Jagdkunst",
+    "rogueAria": "Klasse Schurkenkunst",
+    "priestAria": "Klasse Priesterkunst",
+    "shamanAria": "Klasse Schamanenkunst",
+    "mageAria": "Klasse Zauberkunst",
+    "dreamdancerAria": "Klasse Traumtanz",
+    "warlockAria": "Klasse Hexenwerk",
+    "druidAria": "Klasse Druidenkunst"
   },
   "controls": {
     "title": "Steuerungsanleitung",
@@ -15292,7 +15421,7 @@ export const de_DE: EnTranslations = {
     "messageRateExceeded": "Du wurdest getrennt, weil du Aktionen zu schnell gesendet hast. Bitte warte einen Moment und melde dich erneut an.",
     "kickedByModerator": "Ein Moderator hat Ihre Verbindung getrennt: {reason}",
     "tips": {
-      "classes": "Tipp: Jede der 9 Klassen spielt sich anders. Probiere einige aus, bevor du dich für eine entscheidest.",
+      "classes": "Tipp: Jede Klasse spielt sich anders. Probiere einige aus, bevor du dich für eine entscheidest.",
       "talents": "Tipp: Du kannst deine Talente jederzeit außerhalb des Kampfes zurücksetzen, eine frühe Wahl ist also nie eine Falle.",
       "dungeons": "Tipp: Versuche einen Dungeon auf heroischer Schwierigkeit, sobald du für den normalen Schwierigkeitsgrad zu gut ausgerüstet bist. Dich erwartet ein härterer und lohnenderer Kampf.",
       "market": "Tipp: Auf dem Weltmarkt kannst du mit Spielern aus dem gesamten Reich kaufen und verkaufen.",
@@ -15429,7 +15558,7 @@ export const de_DE: EnTranslations = {
     "membershipRequired": "Erneuere deine Mitgliedschaft, um diesen Charakter zu spielen.",
     "membershipSlots": "Schalte Plätze mit einer Mitgliedschaft frei",
     "emptySlot": "Verfügbarer Charakterplatz",
-    "levelClass": "Stufe {level} {className}",
+    "levelClass": "Stufe {level} · {className}",
     "inWorld": "in der Welt",
     "takeOver": "Übernehmen",
     "inWorldHint": "Bereits in der Welt. Melde dich anderswo ab oder übernimm den Charakter.",
@@ -15494,14 +15623,15 @@ export const de_DE: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / Nahkampf-DPS",
-      "paladin": "Heiler / Tank / Nahkampf-DPS",
+      "paladin": "Heilung / Tank / Nahkampf-DPS",
       "hunter": "Fernkampf-DPS",
       "rogue": "Nahkampf-DPS",
-      "priest": "Heiler / Fernkampf-DPS",
-      "shaman": "Heiler / Nahkampf- oder Fernkampf-DPS",
+      "priest": "Heilung / Fernkampf-DPS",
+      "shaman": "Heilung / Nahkampf- oder Fernkampf-DPS",
       "mage": "Fernkampf-DPS",
+      "dreamdancer": "Heilung oder Fernkampfschaden",
       "warlock": "Fernkampf-DPS",
-      "druid": "Tank / Heiler / Nahkampf- oder Fernkampf-DPS"
+      "druid": "Tank / Heilung / Nahkampf- oder Fernkampf-DPS"
     },
     "armor": {
       "chainLeatherCloth": "Kette, Leder, Stoff",
@@ -15517,15 +15647,16 @@ export const de_DE: EnTranslations = {
       "macesAxes": "Streitkolben, Äxte"
     },
     "lore": {
-      "warrior": "Krieger sind kampferprobte Nahkämpfer, die Wut aufbauen, wenn sie Schaden verursachen oder erleiden. Sie halten schwere Treffer aus oder zerschmettern Gegner.",
-      "paladin": "Paladine sind heilige Kreuzritter, die mit Segen unterstützen, Wunden mit Mending Light heilen und Schwache in schwerer Rüstung schützen.",
-      "hunter": "Jäger sind Fernkampfspezialisten, die an der Seite eines gezähmten Tieres kämpfen, Gegner mit gezielten und schnellen Schüssen überschütten, sie mit Stichen und erschütterndem Beschuss verlangsamen und je nach Augenblick zwischen ihren Aspekten wechseln.",
-      "rogue": "Schurken sind verstohlene Assassinen, die Energie und Kombopunkte für Angriffe aus den Schatten ausgeben.",
-      "priest": "Priester rufen Mending Light an, um Verbündete zu heilen und zu schützen, während Schattenmagie ihnen erlaubt, Gegnern das Leben zu entziehen.",
-      "shaman": "Schamanen gebieten über die Elemente, erfüllen Waffen mit Macht, treffen Gegner mit Blitzen und stellen Verbündete wieder her.",
-      "mage": "Magier formen Feuer, Frost und arkane Kraft, um Gegner zu vernichten, Wasser zu beschwören und Bedrohungen einzufrieren.",
-      "warlock": "Hexenmeister beschwören Dämonen, wirken Flüche und Schaden über Zeit und saugen Gegnern das Leben aus, um durchzuhalten.",
-      "druid": "Druiden kanalisieren die Natur, heilen Wunden, fesseln Gegner und wechseln in Tierformen für Verteidigung oder Schaden."
+      "warrior": "In der Kriegskunst baust du Wut auf, wenn du Schaden verursachst oder erleidest. Damit fängst du schwere Treffer ab oder landest wuchtige Hiebe.",
+      "paladin": "Mit dem Paladinschwur stärkst du Verbündete durch Segen, heilst mit Heilendem Licht und schützt deine Gruppe in schwerer Rüstung.",
+      "hunter": "In der Jagdkunst kämpfst du an der Seite eines gezähmten Tiers. Gezielte Schüsse, Fallen und wechselnde Aspekte halten Gegner auf Abstand.",
+      "rogue": "Die Schurkenkunst setzt auf Verstohlenheit. Mit Energie und Kombopunkten bereitest du Angriffe aus den Schatten vor.",
+      "priest": "Die Priesterkunst schützt und heilt Verbündete mit heiligem Licht. Mit Schattenmagie entziehst du Gegnern Lebenskraft.",
+      "shaman": "Mit Schamanenkunst bändigst du die Elemente, erfüllst Waffen mit Macht, schleuderst Blitze und heilst Verbündete.",
+      "mage": "Die Zauberkunst formt Feuer, Frost und arkane Energie. Friere Gegner ein, beschwöre einen Wasserelementar oder nutze Zeitmagie zum Schutz deiner Gruppe.",
+      "dreamdancer": "Im Traumtanz verwebst du Traumfäden zu Albträumen oder schützenden Hüllen.",
+      "warlock": "Mit Hexenwerk beschwörst du Dämonen, wirkst Flüche, fügst Gegnern über Zeit Schaden zu und entziehst ihnen Lebenskraft.",
+      "druid": "Mit Druidenkunst heilst du Wunden, fesselst Gegner und wechselst in Tiergestalten, um dich zu verteidigen oder Schaden zu verursachen."
     },
     "aria": "Klassendetails für {className}: Rolle {role}. Startwerte: Stärke {str}, Beweglichkeit {agi}, Ausdauer {sta}, Intelligenz {int}, Willenskraft {spi}.",
     "statBarAria": "{stat}: {value} von 25"
@@ -15762,6 +15893,7 @@ export const de_DE: EnTranslations = {
       "audio": "Audio",
       "interface": "Benutzeroberfläche",
       "language": "Sprache",
+      "characterSelect": "Charakterauswahl",
       "logout": "Ausloggen",
       "returnToGame": "Zurück zum Spiel",
       "resetToDefaults": "Standardwerte",
@@ -16044,7 +16176,7 @@ export const de_DE: EnTranslations = {
       "arenaQueued": "In der Warteschlange des Aschenen Kolosseums (Position {position}).",
       "arenaUnqueued": "Ihr verlasst die Warteschlange des Aschenen Kolosseums.",
       "arenaFoundBanner": "Gegner gefunden: {name}",
-      "arenaFoundLog": "Das Kolosseum stellt Euch {name}, Stufe {level} {className}, gegenüber.",
+      "arenaFoundLog": "Das Kolosseum stellt Euch {name}, Stufe {level} · {className}, gegenüber.",
       "arenaCountdown": "Der Kampf beginnt in {seconds}...",
       "arenaStart": "Kämpft!",
       "arenaDrawBanner": "Arena-Unentschieden gegen {name} ({delta} Wertung)",
@@ -16285,7 +16417,7 @@ export const de_DE: EnTranslations = {
       "friendAdded": "Ihr habt {name} zu Euren Freunden hinzugefügt.",
       "nowIgnoring": "Ihr ignoriert {name} jetzt.",
       "guildInvited": "Ihr habt {name} in Eure Gilde eingeladen.",
-      "levelClass": "St. {level} {className}",
+      "levelClass": "St. {level} · {className}",
       "status": {
         "online": "Online",
         "offline": "Offline",
@@ -16326,7 +16458,7 @@ export const de_DE: EnTranslations = {
       "close": "Arena schließen",
       "offlineNote": "Das Aschene Kolosseum ist eine gewertete 1v1-Arena für die Live-Welt. Spielt online, um Euch einzureihen und die Rangliste zu erklimmen.",
       "playerClassTitle": "{name} - {className}",
-      "playerLevelClassTitle": "{name} - St. {level} {className}",
+      "playerLevelClassTitle": "{name} - St. {level} · {className}",
       "noChallengers": "Noch keine Herausforderer gewertet - sei der Erste.",
       "matchInProgress": "Kampf läuft gegen {name}.",
       "mapName": "Karte: {name}",
@@ -16345,7 +16477,7 @@ export const de_DE: EnTranslations = {
       "statusReturning": "Rückkehr in die Welt... {seconds}",
       "statusFight": "Kämpft bis zur Aufgabe!",
       "vsLine": "VS {name}",
-      "levelClass": "St. {level} {className}"
+      "levelClass": "St. {level} · {className}"
     }
   },
   "abilityUi": {
@@ -17234,7 +17366,7 @@ export const de_DE: EnTranslations = {
     },
     "equipment": {
       "empty": "Leer",
-      "levelClass": "Stufe {level} {className}"
+      "levelClass": "Stufe {level} · {className}"
     },
     "vendor": {
       "basicRiding": "Reitausbildung",
@@ -17376,6 +17508,8 @@ export const de_DE: EnTranslations = {
       "collectNote": "Erlöse und zurückgegebene Waren, die der Händler für Euch hält.",
       "saleProceeds": "Verkaufserlöse",
       "collectAll": "Alles abholen",
+      "relistExpired": "Abgelaufene Angebote neu einstellen",
+      "relistQuote": "{listings} Angebote, {units} Stück. Gesamt zum bisherigen Preis: {price}. Verkaufsprovision: {cut} %.",
       "history": "Verlauf",
       "historyEmpty": "Noch keine Verkäufe. Gegenstände, die Ihr auf dem Weltmarkt verkauft, erscheinen hier.",
       "historyNote": "Eure jüngsten Verkäufe auf dem Weltmarkt.",
@@ -17694,11 +17828,11 @@ export const de_DE: EnTranslations = {
       },
       "cold_snap": {
         "name": "Ruf des Winters",
-        "description": "Beendet die Abklingzeit von Flitzschritt, Frostschleier und Größerer Unsichtbarkeit. (Magiertalent)"
+        "description": "Beendet die Abklingzeit von Flitzschritt, Frostschleier und Größerer Unsichtbarkeit. (Talent der Zauberkunst)"
       },
       "greater_invisibility": {
         "name": "Große Unsichtbarkeit",
-        "description": "Verschwindet für 20 Sek. und entfernt 2 Effekte mit Schaden über Zeit. Wenn die Unsichtbarkeit endet, erleidet Ihr 2 Sek. lang 90% weniger Schaden. (Magiertalent)"
+        "description": "Verschwindet für 20 Sek. und entfernt 2 Effekte mit Schaden über Zeit. Wenn die Unsichtbarkeit endet, erleidet Ihr 2 Sek. lang 90% weniger Schaden. (Talent der Zauberkunst)"
       },
       "hot_streak": {
         "name": "Heiße Serie",
@@ -17706,7 +17840,7 @@ export const de_DE: EnTranslations = {
       },
       "ice_floes": {
         "name": "Eisschollen",
-        "description": "Eure nächsten zwei Zauber mit Zauberzeit können aus der Bewegung gewirkt werden. Hält 15 Sek. lang an. (Magiertalent)"
+        "description": "Eure nächsten zwei Zauber mit Zauberzeit können aus der Bewegung gewirkt werden. Hält 15 Sek. lang an. (Talent der Zauberkunst)"
       },
       "ignition": {
         "name": "Entzündung",
@@ -17714,23 +17848,23 @@ export const de_DE: EnTranslations = {
       },
       "mass_barrier": {
         "name": "Massenbarriere",
-        "description": "Schützt Euch und bis zu 4 Verbündete im Umkreis von 30 m; jeder Schild absorbiert 15 Sek. lang {damage} Schaden. (Magiertalent)"
+        "description": "Schützt Euch und bis zu 4 Verbündete im Umkreis von 30 m; jeder Schild absorbiert 15 Sek. lang {damage} Schaden. (Talent der Zauberkunst)"
       },
       "overload": {
         "name": "Überladung",
-        "description": "Euer nächster Zauber wird um 40% verstärkt, kostet aber 50% mehr Mana. Hält 10 Sek. lang an. (Magiertalent)"
+        "description": "Euer nächster Zauber wird um 40% verstärkt, kostet aber 50% mehr Mana. Hält 10 Sek. lang an. (Talent der Zauberkunst)"
       },
       "power_echo": {
         "name": "Machtecho",
-        "description": "Euer nächster direkter Zauber wiederholt sich mit 50% seiner Stärke auf demselben Ziel. Hält 10 Sek. lang an. (Magiertalent)"
+        "description": "Euer nächster direkter Zauber wiederholt sich mit 50% seiner Stärke auf demselben Ziel. Hält 10 Sek. lang an. (Talent der Zauberkunst)"
       },
       "rings_of_frost": {
         "name": "Frostring",
-        "description": "Beschwört 10 Sek. lang einen Ring. Gegner, die seinen Rand überqueren, werden 4 Sek. lang eingefroren. (Magiertalent)"
+        "description": "Beschwört 10 Sek. lang einen Ring. Gegner, die seinen Rand überqueren, werden 4 Sek. lang eingefroren. (Talent der Zauberkunst)"
       },
       "rune_of_power": {
         "name": "Rune der Macht",
-        "description": "Schreibt 15 Sek. lang eine Rune der Macht zu Euren Füßen: Verbündete im Umkreis von 8 m verursachen 10% mehr Schaden. (Magiertalent)"
+        "description": "Schreibt 15 Sek. lang eine Rune der Macht zu Euren Füßen: Verbündete im Umkreis von 8 m verursachen 10% mehr Schaden. (Talent der Zauberkunst)"
       },
       "summon_water_elemental": {
         "name": "Wasserelementar beschwören",
@@ -17964,15 +18098,15 @@ export const de_DE: EnTranslations = {
       },
       "radiant_devotion": {
         "name": "Strahlende Hingabe",
-        "description": "Erhöht die Zaubermacht von Euch und Euren Gruppenmitgliedern 30 Min. lang um 20. Ersetzt Eure eigene Hingabe der Morgenröte oder Hingabe der Gnade, besteht aber neben den Hingaben anderer Paladine."
+        "description": "Erhöht die Zaubermacht von Euch und Euren Gruppenmitgliedern 30 Min. lang um 20. Ersetzt Eure eigene Hingabe der Morgenröte oder Hingabe der Gnade, besteht aber neben den Hingaben aus anderen Quellen."
       },
       "dawn_devotion": {
         "name": "Hingabe der Morgenröte",
-        "description": "Erhöht die Angriffskraft von Euch und Euren Gruppenmitgliedern 30 Min. lang um 40. Ersetzt Eure eigene Strahlende Hingabe oder Hingabe der Gnade, besteht aber neben den Hingaben anderer Paladine und neben Kriegerrufen."
+        "description": "Erhöht die Angriffskraft von Euch und Euren Gruppenmitgliedern 30 Min. lang um 40. Ersetzt Eure eigene Strahlende Hingabe oder Hingabe der Gnade, besteht aber neben den Hingaben aus anderen Quellen und neben Kampfrufen der Kriegskunst."
       },
       "grace_devotion": {
         "name": "Hingabe der Gnade",
-        "description": "Ihr und Eure Gruppenmitglieder stellt alle 5 Sek. 15 Mana wieder her und zahlt 30 Min. lang 3% weniger Mana. Ersetzt Eure eigene Strahlende Hingabe oder Hingabe der Morgenröte, besteht aber neben den Hingaben anderer Paladine."
+        "description": "Ihr und Eure Gruppenmitglieder stellt alle 5 Sek. 15 Mana wieder her und zahlt 30 Min. lang 3% weniger Mana. Ersetzt Eure eigene Strahlende Hingabe oder Hingabe der Morgenröte, besteht aber neben den Hingaben aus anderen Quellen."
       },
       "recall_the_fallen": {
         "name": "Ruf der Gefallenen",
@@ -18092,7 +18226,7 @@ export const de_DE: EnTranslations = {
       },
       "veilbound_mark": {
         "name": "Schleiermal",
-        "description": "Erleidet jede Sekunde Heiligschaden, verursacht 20% weniger Schaden an dem Paladin, der das Mal gesetzt hat, und erzeugt zusätzliche Bedrohung gegenüber diesem Paladin."
+        "description": "Erleidet jede Sekunde Heiligschaden, verursacht 20% weniger Schaden gegen die Person, die das Mal gesetzt hat, und erzeugt ihr gegenüber zusätzliche Bedrohung."
       },
       "righteous_fury": {
         "name": "Brennender Eid",
@@ -18545,11 +18679,11 @@ export const de_DE: EnTranslations = {
       },
       "berserker_rage": {
         "name": "Brodelnde Raserei",
-        "description": "Ihr verfallt in brodelnde Raserei und erzeugt 20 Wut. (Krieger-Talent)"
+        "description": "Ihr verfallt in brodelnde Raserei und erzeugt 20 Wut. (Talent der Kriegskunst)"
       },
       "crusader_strike": {
         "name": "Eidstoß",
-        "description": "Trifft das Ziel für Waffenschaden plus {damage} Heiligschaden. (Paladin-Talent)"
+        "description": "Trifft das Ziel für Waffenschaden plus {damage} Heiligschaden. (Talent des Paladinschwurs)"
       },
       "chain_heal": {
         "name": "Kaskadenheilung",
@@ -18581,11 +18715,11 @@ export const de_DE: EnTranslations = {
       },
       "primal_exaltation": {
         "name": "Urtümliche Erhebung",
-        "description": "12 Sek. lang werden der Lichtbogenblitz und der Gabelblitz des Donnerrufs 50% schneller gewirkt, und der Lichtbogenblitz gewährt 2 Donner; der Kriegsgeist löst seine Kadenz alle 2 Waffentreffer aus; die Geistflickung fügt der Flickströmung 50% mehr Heilung hinzu. (Schamanentalent)"
+        "description": "12 Sek. lang werden der Lichtbogenblitz und der Gabelblitz des Donnerrufs 50% schneller gewirkt, und der Lichtbogenblitz gewährt 2 Donner; der Kriegsgeist löst seine Kadenz alle 2 Waffentreffer aus; die Geistflickung fügt der Flickströmung 50% mehr Heilung hinzu. (Talent der Schamanenkunst)"
       },
       "stoneward": {
         "name": "Steinwacht",
-        "description": "Schützt einen Verbündeten 60 Sek. lang mit 6 Aufladungen. Schaden verbraucht eine Aufladung, um 5% der maximalen Gesundheit zu heilen, einmal alle 3 Sek. (Schamanentalent)"
+        "description": "Schützt einen Verbündeten 60 Sek. lang mit 6 Aufladungen. Schaden verbraucht eine Aufladung, um 5% der maximalen Gesundheit zu heilen, einmal alle 3 Sek. (Talent der Schamanenkunst)"
       },
       "tidecall": {
         "name": "Gezeitenruf",
@@ -18780,23 +18914,23 @@ export const de_DE: EnTranslations = {
       },
       "summon_imp": {
         "name": "Emberkin beschwören",
-        "description": "Beschwört einen Emberkin unter dem Befehl des Hexenmeisters. Der Emberkin wirkt aus der Ferne Verderbnisblitz auf Eure Feinde. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
+        "description": "Beschwört einen Emberkin der Euren Befehlen folgt. Der Emberkin wirkt aus der Ferne Verderbnisblitz auf Eure Feinde. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
       },
       "summon_voidwalker": {
         "name": "Duskmurk beschwören",
-        "description": "Beschwört einen Duskmurk unter dem Befehl des Hexenmeisters. Dieser zähe Dämon verhöhnt Gegner und nutzt Abyssal Chain, um entfernte gewöhnliche Gegner zurück in Reichweite zu zerren. Bosse lassen sich nicht heranziehen. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
+        "description": "Beschwört einen Duskmurk der Euren Befehlen folgt. Dieser zähe Dämon verhöhnt Gegner und nutzt Abyssal Chain, um entfernte gewöhnliche Gegner zurück in Reichweite zu zerren. Bosse lassen sich nicht heranziehen. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
       },
       "summon_succubus": {
         "name": "Duskborn beschwören",
-        "description": "Beschwört einen Duskborn unter dem Befehl des Hexenmeisters. Der Duskborn ist ein zerbrechlicher Dämon, der schnell zuschlägt und im Nahkampf hart austeilt. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
+        "description": "Beschwört einen Duskborn der Euren Befehlen folgt. Der Duskborn ist ein zerbrechlicher Dämon, der schnell zuschlägt und im Nahkampf hart austeilt. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
       },
       "summon_felhunter": {
         "name": "Spellhound beschwören",
-        "description": "Beschwört einen Spellhound unter dem Befehl des Hexenmeisters. Der Spellhound setzt Feinden aus der Ferne mit Gloombite zu und ist hervorragend darin, Zauberwirker zu jagen. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
+        "description": "Beschwört einen Spellhound der Euren Befehlen folgt. Der Spellhound setzt Feinden aus der Ferne mit Gloombite zu und ist hervorragend darin, Zauberwirker zu jagen. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
       },
       "summon_felguard": {
         "name": "Warfiend beschwören",
-        "description": "Beschwört einen Warfiend unter dem Befehl des Hexenmeisters. Der Warfiend ist ein widerstandsfähiger Nahkampfdämon, der sich in die Schlacht wirft und sich behauptet. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
+        "description": "Beschwört einen Warfiend der Euren Befehlen folgt. Der Warfiend ist ein widerstandsfähiger Nahkampfdämon, der sich in die Schlacht wirft und sich behauptet. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
       },
       "summon_infernal": {
         "name": "Pyre Colossus beschwören",
@@ -18812,7 +18946,7 @@ export const de_DE: EnTranslations = {
       },
       "berserker_stance": {
         "name": "Berserkerhaltung",
-        "description": "Eine tollkühne Kampfhaltung: Eure kritischen Treffer gelingen 3% öfter und treffen 3% härter. Der Furor-Krieger kämpft stets in dieser Haltung."
+        "description": "Eine tollkühne Kampfhaltung: Eure kritischen Treffer gelingen 3% öfter und treffen 3% härter. Mit der Furor-Spezialisierung der Kriegskunst kämpft ihr stets in dieser Haltung."
       },
       "sweeping_strikes": {
         "name": "Ausladender Bogen",
@@ -18928,7 +19062,7 @@ export const de_DE: EnTranslations = {
       },
       "aspect_of_the_wild": {
         "name": "Wildfanggewand",
-        "description": "Inspiriert Verbündete im Umkreis von 30 m mit wilder Kraft und erhöht ihre Angriffskraft 5 Min. lang um 45 und ihr Angriffstempo um 5 %. (Jägertalent)"
+        "description": "Inspiriert Verbündete im Umkreis von 30 m mit wilder Kraft und erhöht ihre Angriffskraft 5 Min. lang um 45 und ihr Angriffstempo um 5 %. (Talent der Jagdkunst)"
       },
       "avatar": {
         "name": "Avatar",
@@ -18940,7 +19074,7 @@ export const de_DE: EnTranslations = {
       },
       "berserk": {
         "name": "Roter Dunst",
-        "description": "Erhöht Eure Angriffskraft 15 Sek. lang um 70. (Druidentalent)"
+        "description": "Erhöht Eure Angriffskraft 15 Sek. lang um 70. (Talent der Druidenkunst)"
       },
       "bladestorm": {
         "name": "Klingensturm",
@@ -18948,11 +19082,11 @@ export const de_DE: EnTranslations = {
       },
       "blink": {
         "name": "Flitzschritt",
-        "description": "Teleportiert Euch 15 m nach vorn und löst Bewegungsunfähigkeitseffekte. (Magiertalent)"
+        "description": "Teleportiert Euch 15 m nach vorn und löst Bewegungsunfähigkeitseffekte. (Talent der Zauberkunst)"
       },
       "bloodlust": {
         "name": "Kriegstrommeln",
-        "description": "Erhöht Angriffs-, Zauber- und Kanalisierungstempo von Gruppen- oder Schlachtzugsverbündeten im Umkreis von 30 m 15 Sek. lang um 30%. Betroffene Verbündete können 10 Min. lang nicht erneut von Kriegstrommeln oder Temporaler Beschleunigung profitieren. (Schamanentalent)"
+        "description": "Erhöht Angriffs-, Zauber- und Kanalisierungstempo von Gruppen- oder Schlachtzugsverbündeten im Umkreis von 30 m 15 Sek. lang um 30%. Betroffene Verbündete können 10 Min. lang nicht erneut von Kriegstrommeln oder Temporaler Beschleunigung profitieren. (Talent der Schamanenkunst)"
       },
       "chain_lightning": {
         "name": "Gabelblitz",
@@ -18972,11 +19106,11 @@ export const de_DE: EnTranslations = {
       },
       "cloak_of_shadows": {
         "name": "Schattenmantel",
-        "description": "Hüllt Euch in Schatten und absorbiert 5 Sek. lang 420 Schaden. (Schurkentalent)"
+        "description": "Hüllt Euch in Schatten und absorbiert 5 Sek. lang 420 Schaden. (Talent der Schurkenkunst)"
       },
       "cone_of_cold": {
         "name": "Frostfeger",
-        "description": "Golpea a nahe Gegner con escarcha e inflige {damage} de daño de Frost. (Magier-Talent)"
+        "description": "Trifft einen nahen Gegner mit Eis und verursacht {damage} Frostschaden. (Talent der Zauberkunst)"
       },
       "counterspell": {
         "name": "Zauberbruch",
@@ -18984,15 +19118,15 @@ export const de_DE: EnTranslations = {
       },
       "curse_of_exhaustion": {
         "name": "Bleierner Fluch",
-        "description": "Verflucht das Ziel und verringert sein Bewegungstempo 12 Sek. lang um 30 %. (Hexenmeistertalent)"
+        "description": "Verflucht das Ziel und verringert sein Bewegungstempo 12 Sek. lang um 30 %. (Talent des Hexenwerks)"
       },
       "death_coil": {
         "name": "Grabspirale",
-        "description": "Trifft den Gegner für {damage} Schattenschaden und versetzt ihn anschließend 3 Sek. lang in Entsetzen. (Hexenmeistertalent)"
+        "description": "Trifft den Gegner für {damage} Schattenschaden und versetzt ihn anschließend 3 Sek. lang in Entsetzen. (Talent des Hexenwerks)"
       },
       "deep_freeze": {
         "name": "Totenfrost",
-        "description": "Congela profundamente a Ziel, inflige {damage} de daño de Frost y lo aturde durante 4 Sek.. (Magier-Talent)"
+        "description": "Friert das Ziel ein, verursacht {damage} Frostschaden und betäubt es 4 Sek. lang. (Talent der Zauberkunst)"
       },
       "desperate_prayer": {
         "name": "Letztes Gebet",
@@ -19000,31 +19134,31 @@ export const de_DE: EnTranslations = {
       },
       "deterrence": {
         "name": "Borstenwacht",
-        "description": "Erhöht Eure Ausweichchance 10 Sek. lang um 50 Prozentpunkte. (Jägertalent)"
+        "description": "Erhöht Eure Ausweichchance 10 Sek. lang um 50 Prozentpunkte. (Talent der Jagdkunst)"
       },
       "earthbind": {
         "name": "Greifende Erde",
-        "description": "Macht Gegner im Umkreis von 4 m um den Zielpunkt 2 Sek. lang bewegungsunfähig und verlangsamt sie danach 6 Sek. lang um 40%. (Schamanentalent)"
+        "description": "Macht Gegner im Umkreis von 4 m um den Zielpunkt 2 Sek. lang bewegungsunfähig und verlangsamt sie danach 6 Sek. lang um 40%. (Talent der Schamanenkunst)"
       },
       "evocation": {
         "name": "Ätherbrunnen",
-        "description": "Kanalisiert 6 Sek. lang: Jede Sekunde werden 100 Mana wiederhergestellt und 8 Zaubermacht aufgebaut. Der Bonus ist während des Kanalisierens stapelbar und hält 15 Sek. lang an. (Magier-Talent)"
+        "description": "Kanalisiert 6 Sek. lang: Jede Sekunde werden 100 Mana wiederhergestellt und 8 Zaubermacht aufgebaut. Der Bonus ist während des Kanalisierens stapelbar und hält 15 Sek. lang an. (Talent der Zauberkunst)"
       },
       "flurry_of_knives": {
         "name": "Messerhagel",
-        "description": "Peitscht alle Gegner im Umkreis von 6 m mit Wurfmessern, verursacht {damage} körperlichen Schaden und gewährt 2 Combopunkte. (Schurkentalent)"
+        "description": "Peitscht alle Gegner im Umkreis von 6 m mit Wurfmessern, verursacht {damage} körperlichen Schaden und gewährt 2 Combopunkte. (Talent der Schurkenkunst)"
       },
       "frenzied_regeneration": {
         "name": "Wilde Heilung",
-        "description": "Stellt im Verlauf von 10 Sek. 40% Eurer maximalen Gesundheit wieder her. Nur in Bärengestalt. (Druidentalent)"
+        "description": "Stellt im Verlauf von 10 Sek. 40% Eurer maximalen Gesundheit wieder her. Nur in Bärengestalt. (Talent der Druidenkunst)"
       },
       "frost_trap": {
         "name": "Reifschlinge",
-        "description": "Friert Gegner im Zielgebiet 3 Sek. lang ein, sodass sie sich weder bewegen noch handeln können. (Jägertalent)"
+        "description": "Friert Gegner im Zielgebiet 3 Sek. lang ein, sodass sie sich weder bewegen noch handeln können. (Talent der Jagdkunst)"
       },
       "ghostly_strike": {
         "name": "Geisterschlag",
-        "description": "Trifft den Gegner für Waffenschaden plus {damage} und erhöht Eure Ausweichchance 7 Sek. lang um 15%. Gewährt 1 Combopunkt. (Schurkentalent)"
+        "description": "Trifft den Gegner für Waffenschaden plus {damage} und erhöht Eure Ausweichchance 7 Sek. lang um 15%. Gewährt 1 Combopunkt. (Talent der Schurkenkunst)"
       },
       "hammer_of_wrath": {
         "name": "Hammer des Zorns",
@@ -19032,24 +19166,24 @@ export const de_DE: EnTranslations = {
       },
       "healing_stream": {
         "name": "Quellbrunnen",
-        "description": "Stellt bei einem verbündeten Ziel im Verlauf von 12 Sek. 120 Gesundheit wieder her. (Schamanentalent)"
+        "description": "Stellt bei einem verbündeten Ziel im Verlauf von 12 Sek. 120 Gesundheit wieder her. (Talent der Schamanenkunst)"
       },
       "howl_of_terror": {
         "name": "Schreckensheulen",
-        "description": "Versetzt Gegner in der Nähe bis zu 5 Sek. lang in Furcht. Schaden in Höhe von insgesamt 8% der maximalen Gesundheit eines Ziels bricht seine Furcht. (Hexenmeistertalent)"
+        "description": "Versetzt Gegner in der Nähe bis zu 5 Sek. lang in Furcht. Schaden in Höhe von insgesamt 8% der maximalen Gesundheit eines Ziels bricht seine Furcht. (Talent des Hexenwerks)"
       },
       "ice_block": {
         "name": "Kalter Sarg",
-        "description": "Schließt Euch 8 Sek. lang in festes Eis ein und macht Euch gegen jeglichen Schaden immun. Entfernt bestehende gewöhnliche schädliche Effekte und verhindert neue gewöhnliche Kontroll-Effekte. Kann während Betäubung oder Verwandlung eingesetzt werden. Ihr könnt währenddessen nicht handeln. Erneut wirken, um den Effekt abzubrechen. (Magier)"
+        "description": "Schließt Euch 8 Sek. lang in festes Eis ein und macht Euch gegen jeglichen Schaden immun. Entfernt bestehende gewöhnliche schädliche Effekte und verhindert neue gewöhnliche Kontroll-Effekte. Kann während Betäubung oder Verwandlung eingesetzt werden. Ihr könnt währenddessen nicht handeln. Erneut wirken, um den Effekt abzubrechen. (Zauberkunst)"
       },
       "inner_focus": {
         "name": "Stiller Geist",
-        "description": "Euer nächster Priesterzauber kostet nichts und ist nicht unterbrechbar. Hält 60 Sek. lang an.",
+        "description": "Euer nächster Zauber aus der Priesterkunst kostet nichts und ist nicht unterbrechbar. Hält 60 Sek. lang an.",
         "specNote_shadow": "Reserviert außerdem einen garantierten kritischen Treffer für deinen nächsten Geistesbruch oder Leerenriss innerhalb von 60 Sek., sofern er trifft. Andere Zauber verbrauchen diesen Bonus nicht. Leerenriss verbraucht weiterhin 3 Ladungen Düsterzehnt. Wird dem Zauber widerstanden, wird der Bonus auf kritische Treffer verbraucht."
       },
       "innervate": {
         "name": "Lebenssaft",
-        "description": "Lebendiger Pflanzensaft quillt 10 Sek. lang in Euch auf und stellt in Wellen 20 Eurer aktuellen Ressource wieder her: Mana, Wut oder Energie. Gestaltwandel unterbricht ihn nicht. Schlaf, Betäubung oder Stasis bringen den Saft zum Stillstand. (Druidentalent)"
+        "description": "Lebendiger Pflanzensaft quillt 10 Sek. lang in Euch auf und stellt in Wellen 20 Eurer aktuellen Ressource wieder her: Mana, Wut oder Energie. Gestaltwandel unterbricht ihn nicht. Schlaf, Betäubung oder Stasis bringen den Saft zum Stillstand. (Talent der Druidenkunst)"
       },
       "pummel": {
         "name": "Kieferbrecher",
@@ -19061,11 +19195,11 @@ export const de_DE: EnTranslations = {
       },
       "mend_pet": {
         "name": "Zusammenflicken",
-        "description": "Sana a freundliches Ziel por {damage} durante 15 Sek.. (Jäger-Talent)"
+        "description": "Heilt ein verbündetes Ziel im Verlauf von 15 Sek. um {damage}. (Talent der Jagdkunst)"
       },
       "meteor": {
         "name": "Himmelsstein",
-        "description": "Ruft einen Meteor auf das Zielgebiet herab, der {damage} Feuerschaden verursacht. Anschließend erleiden Gegner dort 6 Sek. lang alle 2 Sek. 12 bis 18 Feuerschaden. (Magiertalent)"
+        "description": "Ruft einen Meteor auf das Zielgebiet herab, der {damage} Feuerschaden verursacht. Anschließend erleiden Gegner dort 6 Sek. lang alle 2 Sek. 12 bis 18 Feuerschaden. (Talent der Zauberkunst)"
       },
       "temporal_mend": {
         "name": "Temporale Heilung",
@@ -19117,11 +19251,11 @@ export const de_DE: EnTranslations = {
       },
       "mind_sear": {
         "name": "Gedankenbrand",
-        "description": "Kanalisiert 3 Sek. lang und verursacht Gegnern im Umkreis von 8 m um den Zielbereich jede Sekunde {damage} Schattenschaden. Der Schaden steigt mit der Zaubermacht. (Priestertalent)"
+        "description": "Kanalisiert 3 Sek. lang und verursacht Gegnern im Umkreis von 8 m um den Zielbereich jede Sekunde {damage} Schattenschaden. Der Schaden steigt mit der Zaubermacht. (Talent der Priesterkunst)"
       },
       "multi_shot": {
         "name": "Spaltschuss",
-        "description": "Feuert eine Salve auf das Zielgebiet und fügt Gegnern innerhalb von 8 Yards {damage} körperlichen Schaden zu. (Jägertalent)"
+        "description": "Feuert eine Salve auf das Zielgebiet und fügt Gegnern innerhalb von 8 Yards {damage} körperlichen Schaden zu. (Talent der Jagdkunst)"
       },
       "prayer_of_healing": {
         "name": "Chorheilung",
@@ -19129,11 +19263,11 @@ export const de_DE: EnTranslations = {
       },
       "preparation": {
         "name": "Notfallplan",
-        "description": "Schließt die Abklingzeiten von Sprint, Entrinnen und Verschwinden ab. (Schurkentalent)"
+        "description": "Schließt die Abklingzeiten von Sprint, Entrinnen und Verschwinden ab. (Talent der Schurkenkunst)"
       },
       "presence_of_mind": {
         "name": "Rasender Geist",
-        "description": "Macht Euren nächsten Zauber mit Zauberzeit zu einem Spontanzauber. Hält 60 Sek. lang an. (Magier-Talent)"
+        "description": "Macht Euren nächsten Zauber mit Zauberzeit zu einem Spontanzauber. Hält 60 Sek. lang an. (Talent der Zauberkunst)"
       },
       "psychic_scream": {
         "name": "Schreckensschrei",
@@ -19149,11 +19283,11 @@ export const de_DE: EnTranslations = {
       },
       "shadowstep": {
         "name": "Schattengleiten",
-        "description": "Tretet durch die Schatten auf Euer Ziel zu, Freund oder Feind, ohne Duskveil zu brechen. Speichert bis zu 2 Aufladungen. (Schurkentalent)"
+        "description": "Tretet durch die Schatten auf Euer Ziel zu, Freund oder Feind, ohne Duskveil zu brechen. Speichert bis zu 2 Aufladungen. (Talent der Schurkenkunst)"
       },
       "silence": {
         "name": "Stille",
-        "description": "Bringt das Ziel 4 Sek. lang zum Schweigen. (Priestertalent)"
+        "description": "Bringt das Ziel 4 Sek. lang zum Schweigen. (Talent der Priesterkunst)"
       },
       "smoke_screen": {
         "name": "Rauchvorhang",
@@ -19181,11 +19315,11 @@ export const de_DE: EnTranslations = {
       },
       "thieves_chorus": {
         "name": "Chor der Diebe",
-        "description": "Ein gepfiffenes Signal spornt eure Gruppe an: Angriffs-, Zauber- und Kanalisierungstempo für 10 Sek. um 10% erhöht. Verbündete, die kürzlich einen Gruppentempo-Schub erhielten, sind zu erschöpft, um zu profitieren. (Schurkentalent)"
+        "description": "Ein gepfiffenes Signal spornt eure Gruppe an: Angriffs-, Zauber- und Kanalisierungstempo für 10 Sek. um 10% erhöht. Verbündete, die kürzlich einen Gruppentempo-Schub erhielten, sind zu erschöpft, um zu profitieren. (Talent der Schurkenkunst)"
       },
       "tranquility": {
         "name": "Hainlied",
-        "description": "Kanalisiert 4 Sek. lang heilende Energie und heilt Verbündete im Umkreis von 30 m jede Sekunde um 42 bis 52. (Druidentalent)"
+        "description": "Kanalisiert 4 Sek. lang heilende Energie und heilt Verbündete im Umkreis von 30 m jede Sekunde um 42 bis 52. (Talent der Druidenkunst)"
       },
       "venom_dart": {
         "name": "Giftpfeil",
@@ -19265,6 +19399,66 @@ export const de_DE: EnTranslations = {
       "revive_pet": {
         "name": "Zusammenflicken",
         "description": "Stellt deinem lebenden Begleiter 8 Sek. lang jede Sekunde 10 % seiner maximalen Gesundheit wieder her. Ist er tot, wird er stattdessen mit 50 % Gesundheit wiederbelebt."
+      },
+      "dream_thread": {
+        "name": "Traumfaden",
+        "description": "Bindet ein Ziel für 15 Sek. Treffer mit Traumfunke oder wirksame Heilung durch Traumtrost bauen auf dem gebundenen Ziel bis zu drei Ladungen auf. Ein Wechsel des gebundenen Ziels löscht die Ladungen. Im 2v2 hält ein Schadensabschluss von Nachtweben oder Schleierweben die Bindung aufrecht und verringert die erhaltene Heilung des gebundenen Gegners 6 Sek. lang um 40%."
+      },
+      "dream_spark": {
+        "name": "Traumfunke",
+        "description": "Verursacht {damage} Schattenschaden. Ein Treffer auf das gebundene Ziel erzeugt eine Ladung."
+      },
+      "dream_shroud": {
+        "name": "Traumhülle",
+        "description": "Schützt einen Verbündeten. Verbraucht drei Ladungen, um den Grundwert des Schilds zu verdoppeln."
+      },
+      "dream_nightmare": {
+        "name": "Nachtmahr",
+        "description": "Verbraucht drei Ladungen und fügt dem gebundenen Gegner {damage} Schattenschaden zu."
+      },
+      "dream_deep_nightmare": {
+        "name": "Tiefer Nachtmahr",
+        "description": "Verbraucht drei Ladungen und fügt dem gebundenen Gegner {damage} Schattenschaden zu. Ist beim Wirken im 2v2 dein Mondschnitt auf dem Ziel aktiv, erleidet es zusätzlich 4,5 Sek. lang Schattenschaden."
+      },
+      "dream_comfort": {
+        "name": "Traumtrost",
+        "description": "Heilt einen Verbündeten. Wirksame Heilung auf dem gebundenen Verbündeten erzeugt eine Ladung."
+      },
+      "dream_veil": {
+        "name": "Traumschleier",
+        "description": "Verbraucht drei Ladungen und erzeugt beim gebundenen Gegner ein Feld. Es hält 5 Sek. an, schädigt und verlangsamt Gegner darin. Im 2v2 erleidet das gebundene Ziel beim Eintreffen einen zusätzlichen direkten Treffer."
+      },
+      "dream_chorus": {
+        "name": "Traumchor",
+        "description": "Heilt im Umkreis von 16 m um das gewählte Ziel bis zu fünf der am stärksten verwundeten Gruppenmitglieder um jeweils {damage} LP. Wirksame Heilung beim gebundenen und einem weiteren Gruppenmitglied erzeugt eine Ladung und erstattet die Hälfte der Manakosten. Sind es mindestens drei einschließlich des gebundenen Ziels, erhältst du die gesamten Manakosten zurück."
+      },
+      "dream_miststep": {
+        "name": "Nebelschritt",
+        "description": "Legt für {duration} Sek. Nebel in einem Umkreis von 6 m. Jeder Impuls verursacht bei Gegnern im Nebel {damage} Schattenschaden."
+      },
+      "dream_moonrend": {
+        "name": "Mondschnitt",
+        "description": "Verursacht im Verlauf von {duration} Sek. {damage} Schattenschaden. Wird Mondschnitt im 2v2 auf den gebundenen Gegner angewendet, entsteht eine Fadenladung."
+      },
+      "dream_silence": {
+        "name": "Stiller Faden",
+        "description": "Unterbricht den Zauber des Ziels und sperrt dessen Magieschule für 3 Sek."
+      },
+      "dream_glide": {
+        "name": "Traumgleiten",
+        "description": "Löst Verwurzelungen und erhöht dein Bewegungstempo für {duration} Sek. um 35 %."
+      },
+      "dream_reverie": {
+        "name": "Traumruhe",
+        "description": "Stellt 14 % deines maximalen Manas wieder her."
+      },
+      "dream_refuge": {
+        "name": "Mondzuflucht",
+        "description": "Verringert für {duration} Sek. den erlittenen Schaden um 25 %. Mit Traumwacht sind es 40 %, und du kannst Mondzuflucht während eines Zaubers und unabhängig von der globalen Abklingzeit einsetzen."
+      },
+      "dream_unravel": {
+        "name": "Entwirren",
+        "description": "Entfernt einen schädlichen magischen Effekt von einer verbündeten Figur."
       }
     },
     "items": {
@@ -19368,7 +19562,7 @@ export const de_DE: EnTranslations = {
         "name": "Eastbrook-Ritualgewänder"
       },
       "eastbrook_druids_hide": {
-        "name": "Eastbrook-Druidenhaut"
+        "name": "Eastbrook-Haut der Druidenkunst"
       },
       "eastbrook_warded_leggings": {
         "name": "Eastbrook-Schutzbeinlinge"
@@ -20226,7 +20420,7 @@ export const de_DE: EnTranslations = {
         "name": "In der Pfanne gebratener Flussbarsch"
       },
       "hunters_game_skewer": {
-        "name": "Jägers Wildspieß"
+        "name": "Wildspieß"
       },
       "herbed_marsh_pike": {
         "name": "Kräuter-Sumpfhecht"
@@ -24857,6 +25051,30 @@ export const de_DE: EnTranslations = {
       "silverstream_fishing_rod": {
         "name": "Silberbach-Angelrute"
       },
+      "dreamcatcher_focus": {
+        "name": "Traumfänger"
+      },
+      "dreamdancer_staff": {
+        "name": "Traumrute"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Mondfadenrute"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silberner Traumfänger"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Sternenrute"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Traumfänger aus Nachtglas"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Traumrute des Morgenlichts"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Traumfänger des Morgenlichts"
+      },
       "briny_idol": {
         "name": "Salzlaken-Götze"
       },
@@ -25431,7 +25649,7 @@ export const de_DE: EnTranslations = {
         "name": "Gepaarte Klauen"
       },
       "hunters_tally": {
-        "name": "Kerbholz des Jägers"
+        "name": "Kerbholz der Jagdkunst"
       },
       "stormjar": {
         "name": "Sturmglas"
@@ -26882,12 +27100,12 @@ export const de_DE: EnTranslations = {
       "the_merchant": {
         "name": "Der Händler",
         "title": "Hüter des Weltmarkts",
-        "greeting": "Willkommen auf dem Weltmarkt, {className}. Kaufe von Abenteurern aus dem ganzen Reich oder biete deine eigenen Waren an."
+        "greeting": "Willkommen auf dem Weltmarkt. Ob {className} oder eine andere Klasse, hier kannst du im ganzen Reich einkaufen oder eigene Waren anbieten."
       },
       "marshal_redbrook": {
         "name": "Marschall Redbrook",
         "title": "Stadtmarschall",
-        "greeting": "Halte deine Klinge nah, {className}. Das Tal ist nicht mehr, was es war."
+        "greeting": "Halt deine Ausrüstung bereit. Selbst mit {className} solltest du vorsichtig sein. Das Tal ist nicht mehr, was es war."
       },
       "trader_wilkes": {
         "name": "Händler Wilkes",
@@ -26907,7 +27125,7 @@ export const de_DE: EnTranslations = {
       "smith_haldren": {
         "name": "Schmied Haldren",
         "title": "Rüstungs- und Waffenschmied",
-        "greeting": "Achte auf die Funken, {className}. Guter Stahl trennt eine Narbe von einem Grab."
+        "greeting": "Achte auf die Funken. Auch wer {className} beherrscht, weiß guten Stahl zu schätzen. Er trennt eine Narbe von einem Grab."
       },
       "fisherman_brandt": {
         "name": "Fischer Brandt",
@@ -26922,22 +27140,22 @@ export const de_DE: EnTranslations = {
       "stablemaster_marla": {
         "name": "Marla Hitchen",
         "title": "Stallmeisterin",
-        "greeting": "Jeder Reiter kommt auf zwei Beinen herein, {className}. Die Zügel gebe ich erst, wenn Ihr den Valorross reiten könnt, ohne im Dreck zu landen, und Highwatch hat keine Heiler für gebrochene Knochen übrig."
+        "greeting": "Auch wer {className} beherrscht, kommt hier zu Fuß herein. Die Zügel gebe ich erst, wenn Ihr den Valorross reiten könnt, ohne im Dreck zu landen, und Highwatch hat keine Heiler für gebrochene Knochen übrig."
       },
       "warden_fenwick": {
         "name": "Wärter Fenwick",
         "title": "Wärter von Fenbridge",
-        "greeting": "Halt am Tor, {className}. Hinter dem Schilf tötet das Moor für uns."
+        "greeting": "Halt am Tor. Hinter dem Schilf schützt dich auch {className} nicht vor dem Moor."
       },
       "socketwright_skerrit": {
         "name": "Maben Skerrit",
         "title": "der Augenfassungsmacher",
-        "greeting": "Vierzig Jahre ist es her, dass ich dieses Auge geschliffen und in seine Höhle gesetzt habe, und bezahlt wurde ich keinen einzigen Tag. Du willst dem Vorarbeiter wehtun, {className}? Ziel auf mein Werk."
+        "greeting": "Vierzig Jahre ist es her, dass ich dieses Auge geschliffen und in seine Höhle gesetzt habe, und bezahlt wurde ich keinen einzigen Tag. Du willst dem Vorarbeiter mit {className} wehtun? Ziel auf mein Werk."
       },
       "muster_commander": {
         "name": "Kommandant des Aufgebots",
         "title": "Aufgebot von Fenbridge",
-        "greeting": "Erst die Piken, {className}, dann alle anderen. Das ist das ganze Geheimnis, und es hat dieses Lager am Leben gehalten."
+        "greeting": "Erst die Piken, dann alle anderen, auch die mit {className}. Das ist das ganze Geheimnis, und es hat dieses Lager am Leben gehalten."
       },
       "brother_aldric_fen": {
         "name": "Bruder Aldric",
@@ -26962,7 +27180,7 @@ export const de_DE: EnTranslations = {
       "captain_thessaly": {
         "name": "Hauptmann Thessaly",
         "title": "Hauptmann von Highwatch",
-        "greeting": "Zweihundert Jahre steht diese Mauer, {className}. Unter meiner Wache bricht sie nicht, auch wenn sie ächzt."
+        "greeting": "Zweihundert Jahre steht diese Mauer. Ob du {className} beherrschst oder eine andere Kunst, darauf kannst du dich verlassen: Unter meiner Wache bricht sie nicht, auch wenn sie ächzt."
       },
       "brother_aldric_highwatch": {
         "name": "Bruder Aldric",
@@ -26972,7 +27190,7 @@ export const de_DE: EnTranslations = {
       "scout_maren_highwatch": {
         "name": "Späherin Maren",
         "title": "Späherin des Marschalls",
-        "greeting": "Ich verfolgte mit dir Kultisten durch das Moor, und die Spur führte hierher. Die Gipfel sind schlimmer, {className}. Bleib wachsam."
+        "greeting": "Ich verfolgte mit dir Kultisten durch das Moor, und die Spur führte hierher. Die Gipfel sind schlimmer. Selbst mit {className} solltest du wachsam bleiben."
       },
       "quartermaster_bree": {
         "name": "Quartiermeisterin Bree",
@@ -27002,12 +27220,12 @@ export const de_DE: EnTranslations = {
       "loremaster_caddis": {
         "name": "Lehrmeister Caddis",
         "title": "Lehrmeister",
-        "greeting": "Achte auf lockeren Schiefer, {className}. Der Berg ist unruhig geworden, und ich will wissen warum."
+        "greeting": "Achte auf lockeren Schiefer. Davor schützt dich selbst {className} nicht. Der Berg ist unruhig geworden, und ich will wissen, warum."
       },
       "auctioneer_voss": {
         "name": "Auktionator Voss",
         "title": "Hüter des Weltmarkts",
-        "greeting": "Der Weltmarkt ist auch hier geöffnet, {className}. Kauf bei jedem Abenteurer im Reich ein oder biete deine eigenen Waren feil."
+        "greeting": "Der Weltmarkt ist auch hier geöffnet. Mit {className} kannst du hier wie alle anderen im ganzen Reich einkaufen oder eigene Waren feilbieten."
       },
       "bursar_fernando": {
         "name": "Kämmerer Fernando",
@@ -27087,7 +27305,7 @@ export const de_DE: EnTranslations = {
       "keeper_saelwyn": {
         "name": "Hüter Saelwyn",
         "title": "Hüter von Veiled Hollow",
-        "greeting": "Nur wenige deiner Art haben unter diesen Ästen gestanden, {className}. Geh sanft, und sei willkommen."
+        "greeting": "Nur wenige, die {className} beherrschen, haben unter diesen Ästen gestanden. Geh behutsam und sei willkommen."
       },
       "loremother_bryn": {
         "name": "Wissensmutter Bryn",
@@ -27102,7 +27320,7 @@ export const de_DE: EnTranslations = {
       "wardsmith_orun": {
         "name": "Bannschmied Orun",
         "title": "Hüter der Alten Schmieden",
-        "greeting": "Diese Schmieden erkalteten vor Jahrhunderten, {className}, aber ihre Arbeit hält noch immer eine Schneide."
+        "greeting": "Diese Schmieden erkalteten vor Jahrhunderten, aber ihre Arbeit hält noch immer eine Schneide. Wer {className} beherrscht, weiß das zu schätzen."
       },
       "archivist_tullo": {
         "name": "Archivar Tullo",
@@ -27167,7 +27385,7 @@ export const de_DE: EnTranslations = {
       "patron_amos_eelby": {
         "name": "Amos Eelby",
         "title": "Aalfischer",
-        "greeting": "Rück eine Bank heran, {className}. Grissel hier schwört, der große Aal unter Fenbridge sei ein Märchen. Ich hatte ihn schon zweimal in der Hand. Zweimal! Glitschig wie ein Steuereintreiber und fast so lang wie diese Bank."
+        "greeting": "Rück eine Bank heran. Auch wer {className} beherrscht, hat Zeit für eine Geschichte. Grissel hier schwört, der große Aal unter Fenbridge sei ein Märchen. Ich hatte ihn schon zweimal in der Hand. Zweimal! Glitschig wie ein Steuereintreiber und fast so lang wie diese Bank."
       },
       "patron_grissel_sedgeworth": {
         "name": "Grissel Sedgeworth",
@@ -27277,7 +27495,7 @@ export const de_DE: EnTranslations = {
       "salvage_boss_ryna": {
         "name": "Bergungschefin Ryna",
         "title": "Herrin der Wracklinie",
-        "greeting": "Eine {className} mit tauglichen Armen, gut. Die Wracklinie zahlt gut, wenn die Krabben dir genug Finger lassen, um es zu zählen."
+        "greeting": "Du beherrschst {className} und kannst mit anpacken. Gut. Die Wracklinie zahlt gut, wenn die Krabben dir genug Finger lassen, um es zu zählen."
       },
       "pearlmother_isha": {
         "name": "Perlenmutter Isha",
@@ -27332,7 +27550,7 @@ export const de_DE: EnTranslations = {
       "warden_coalfast": {
         "name": "Wächter Coalfast",
         "title": "Kommandant der Schanze",
-        "greeting": "Die Risse kümmert es nicht, dass Gullhaven klein ist, {className}. Wir halten diese Küste, oder es bleibt keine Küste zu halten. Steh mit uns, und ich werde es nicht vergessen."
+        "greeting": "Die Risse kümmert es nicht, dass Gullhaven klein ist. Hier können wir {className} gut gebrauchen. Wir halten diese Küste, oder es bleibt keine Küste zu halten. Steh mit uns, und ich werde es nicht vergessen."
       },
       "riftwatch_ollun": {
         "name": "Risswache Ollun",
@@ -27342,7 +27560,7 @@ export const de_DE: EnTranslations = {
       "quartermaster_edda": {
         "name": "Quartiermeisterin Edda",
         "title": "Waffenmeisterin der Schanze",
-        "greeting": "Stahl und Salz, {className}, das ist alles, was ich noch auszuteilen habe. Nimm es, und lass die Risse bereuen, dass sie sich dort öffneten, wo ich sie erreichen konnte."
+        "greeting": "Stahl und Salz sind alles, was ich noch auszuteilen habe. Wenn du {className} beherrschst, weißt du sicher etwas damit anzufangen. Nimm es, und lass die Risse bereuen, dass sie sich dort öffneten, wo ich sie erreichen konnte."
       },
       "mender_saul": {
         "name": "Heiler Saul",
@@ -27352,7 +27570,7 @@ export const de_DE: EnTranslations = {
       "bellkeeper_tam": {
         "name": "Glockenwärter Tam",
         "title": "Hüter der Wachglocke",
-        "greeting": "Die Glocke ist die einzige Warnung, die uns die Risse geben, {className}. Ein Schlag für die Felder, zwei für die Klippen, drei, wenn es nah genug ist, dass Weglaufen nicht mehr hilft. Behalte sie im Ohr, und sie könnte dich heil erhalten."
+        "greeting": "Die Glocke ist die einzige Warnung vor den Rissen. Auch mit {className} solltest du auf sie hören. Ein Schlag für die Felder, zwei für die Klippen, drei, wenn es nah genug ist, dass Weglaufen nicht mehr hilft. Behalte sie im Ohr, und sie könnte dich heil erhalten."
       },
       "fisher_nell": {
         "name": "Verängstigte Nell",
@@ -27362,7 +27580,7 @@ export const de_DE: EnTranslations = {
       "riftwright_maelis": {
         "name": "Rissschmiedin Maelis",
         "title": "Rift-Schmiedemeister",
-        "greeting": "Eine Riftbound-Band erinnert sich an den Durchbruch, der es geschafft hat, {className}. Bring mir die Band und die Essenz, die die Pausen vergießen, und ich werde ihr beibringen, sich mehr zu erinnern."
+        "greeting": "Ein rissgebundenes Band erinnert sich an den überstandenen Durchbruch. Die Spuren von {className} bleiben darin erhalten. Bring mir das Band und die Essenz aus den Rissen, dann helfe ich dir, seine Erinnerung zu stärken."
       },
       "npc_rift_watch_quartermaster": {
         "name": "Quartiermeister Vaelen",
@@ -27387,37 +27605,37 @@ export const de_DE: EnTranslations = {
       "forgemistress_darva": {
         "name": "Schmiedemeisterin Darva",
         "title": "Meister der Schmiede",
-        "greeting": "Die Schmiede antwortet mir: {className}. Bringt gutes Erz mit und es wird auch euch antworten."
+        "greeting": "Du beherrschst {className}. Ich verstehe die Sprache der Schmiede. Bring gutes Erz mit, dann antwortet sie auch dir."
       },
       "cook_marlow": {
         "name": "Koch Marlow",
         "title": "Meister der Küchen",
-        "greeting": "Nichts verlässt meine Küche halbgar, {className}. Setz dich, iss und dann wieder hinaus mit dir."
+        "greeting": "Ob {className} oder eine andere Kunst, aus meiner Küche bekommst du nichts Halbgares. Setz dich, iss und dann wieder hinaus mit dir."
       },
       "weaver_ottilie": {
         "name": "Weberin Ottilie",
         "title": "Meister des Webstuhls",
-        "greeting": "Achte auf die Fäden, {className}. Eine ruhige Hand am Webstuhl ist mehr wert als eine starke."
+        "greeting": "Achte auf die Fäden. Wie bei {className} kommt es auch am Webstuhl auf eine ruhige Hand an. Sie ist hier mehr wert als eine starke."
       },
       "tinker_gizzel": {
         "name": "Tüftler Gizzel",
         "title": "Meister der Werkzeugmacherei",
-        "greeting": "Federn, Zahnräder und scharfe Kanten, {className}: Die Werkzeugmacherei hat alles, was deinen Händen fehlt."
+        "greeting": "Federn, Zahnräder und scharfe Kanten. Die Werkzeugmacherei hat alles, was dir bei {className} noch fehlt."
       },
       "tanner_hesk": {
         "name": "Gerber Hesk",
         "title": "Meister der Gerberei",
-        "greeting": "Eine Haut ist nur so gut wie ihre Gerbung, {className}. Die Bottiche sind bereit, wenn du es bist."
+        "greeting": "Eine Haut ist nur so gut wie ihre Gerbung. Auch mit {className} kannst du hier etwas Neues lernen. Die Bottiche sind bereit, wenn du es bist."
       },
       "alchemist_verane": {
         "name": "Alchemist Verane",
         "title": "Meister der Apotheke",
-        "greeting": "Zweimal messen, einmal gießen, {className}. In der Apotheke hat niemand Geduld mit verschütteten Reagenzien."
+        "greeting": "Hier zählt wie bei {className} die Genauigkeit. Zweimal messen, einmal gießen. In der Apotheke hat niemand Geduld mit verschütteten Reagenzien."
       },
       "guildmaster_hesper_dunmore": {
         "name": "Hesper Dunmore",
         "title": "Gildenmeister der Laternenhalle",
-        "greeting": "Willkommen in der Laternenhalle, {className}. Tobias hängt die Wochenaufträge am Brett aus, Garrick tauscht unsere Siegel gegen Ehren, die man stolz tragen kann, und Mira findet dir eine Gruppe für jede Tür unter dem Berg. Bring eine Trophäe zurück, und sie hängt in der Halle hinter mir."
+        "greeting": "Willkommen in der Laternenhalle. Mit {className} bist du hier gern gesehen. Tobias hängt die Wochenaufträge am Brett aus, Garrick tauscht unsere Siegel gegen Ehren, die man stolz tragen kann, und Mira findet dir eine Gruppe für jede Tür unter dem Berg. Bring eine Trophäe zurück, und sie hängt in der Halle hinter mir."
       },
       "contract_clerk_tobias_wren": {
         "name": "Tobias Wren",
@@ -27442,12 +27660,12 @@ export const de_DE: EnTranslations = {
       "farmer_teasel": {
         "name": "Bäuerin Teasel",
         "title": "Bäuerin der Fen-Brücke",
-        "greeting": "Sumpfreis und Moorroten-Bete-Samen, {className}, dazu Kompost für ihr Wachstum. Die Reisfelder entwässern langsam, also achte darauf, wohin du trittst."
+        "greeting": "Wer neben {className} etwas anbauen will, bekommt hier Sumpfreis, Samen für Moorrote Bete und den passenden Kompost. Die Reisfelder entwässern langsam, also achte darauf, wohin du trittst."
       },
       "farmer_hollis": {
         "name": "Bauer Hollis",
         "title": "Terrassenbauer von Highwatch",
-        "greeting": "Die Terrassen geben, was der Berg erlaubt, {className}. Ich verkaufe Saatgut und Kompost. Wenn eine deiner Pflanzen verdorrt, arbeite ich die Hülsen wieder in gute Erde ein."
+        "greeting": "Die Terrassen geben, was der Berg erlaubt. Wenn du neben {className} auch etwas anbauen willst, bekommst du bei mir Saatgut und Kompost. Wenn eine deiner Pflanzen verdorrt, arbeite ich die Hülsen wieder in gute Erde ein."
       },
       "farmer_verbena": {
         "name": "Bäuerin Verbena",
@@ -27462,7 +27680,7 @@ export const de_DE: EnTranslations = {
       "instructor_maren": {
         "name": "Ausbilderin Maren",
         "title": "Meisterin der Bewährung",
-        "greeting": "Jeder Held, dem das Tal je gedankt hat, stand einmal genau da, wo du jetzt stehst, {className}, und keiner von ihnen wusste, an welchem Ende man eine Klinge hält. Dafür ist diese Küste da. Frag, übe und scheitere dort, wo Scheitern nichts kostet."
+        "greeting": "Alle, denen das Tal je gedankt hat, haben einmal hier begonnen. Ob {className} oder eine andere Kunst, die ersten Schritte lernt man an dieser Küste. Frag, übe und scheitere dort, wo Scheitern nichts kostet."
       },
       "quartermaster_finch": {
         "name": "Quartiermeisterin Finch",
@@ -27502,7 +27720,7 @@ export const de_DE: EnTranslations = {
       "drillmaster_hale": {
         "name": "Ausbilder Hale",
         "title": "Meister des Kai-Trainings",
-        "greeting": "Die Attrappe hinter mir schlägt nie zurück und fällt nie um, {className}. Entscheidend ist die Summe: Deine Schadensanzeigen zählen jeden Treffer. Wähle sie aus und öffne die Anzeigen, dann führe ich dich durch den Rest."
+        "greeting": "An der Attrappe hinter mir kannst du {className} üben. Sie schlägt nie zurück und fällt nie um. Entscheidend ist die Summe: Deine Schadensanzeigen zählen jeden Treffer. Wähle sie aus und öffne die Anzeigen, dann führe ich dich durch den Rest."
       },
       "cantor_laverock": {
         "name": "Laverock",
@@ -27512,7 +27730,7 @@ export const de_DE: EnTranslations = {
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Gezeitenwächter",
-        "greeting": "Der See trinkt das Mondlicht, {className}, und gibt die Ertränkten zurück. Dreißig Nächte lang habe ich jenes Tor bewacht — und heute Nacht steht es offen."
+        "greeting": "Der See trinkt das Mondlicht und gibt die Ertränkten zurück. Dagegen wird dir {className} von Nutzen sein. Dreißig Nächte lang habe ich jenes Tor bewacht — und heute Nacht steht es offen."
       }
     },
     "quests": {
@@ -27697,7 +27915,7 @@ export const de_DE: EnTranslations = {
       },
       "q_divine_tome": {
         "title": "Der Morgengebundene Foliant",
-        "text": "Das Licht ruht nicht still in Euch, {playerName}. Ich habe gesehen, wie Ihr die Toten zur Ruhe gebettet habt, und ich glaube, Ihr seid bereit für das, was nur wenigen Paladinen je gelehrt wird: den Ritus der Rückrufung, mit dem eine gefallene Seele zu den Lebenden zurückgerufen wird. Seine Worte werden im Morgengebundenen Folianten bewahrt, hier in meiner Obhut, doch ein Buch ist kein Segen, solange die ruhelosen Toten noch über diesen Boden wandeln. Bettet 6 weitere Ruhelose Gebeine zur Erde, und ich beginne, Euch zu unterweisen.",
+        "text": "Das Licht ruht nicht still in Euch, {playerName}. Ich habe gesehen, wie Ihr die Toten zur Ruhe gebettet habt, und ich glaube, Ihr seid bereit für das, was nur wenigen mit dem Paladinschwur je gelehrt wird: den Ritus der Rückrufung, mit dem eine gefallene Seele zu den Lebenden zurückgerufen wird. Seine Worte werden im Morgengebundenen Folianten bewahrt, hier in meiner Obhut, doch ein Buch ist kein Segen, solange die ruhelosen Toten noch über diesen Boden wandeln. Bettet 6 weitere Ruhelose Gebeine zur Erde, und ich beginne, Euch zu unterweisen.",
         "completion": "Der Kapellenhof wird still. Ihr seid bereit für die Worte, {playerName}, doch der Ritus der Rückrufung kann nicht in einer warmen Kapelle gesprochen werden. Er muss dort gesungen werden, wo der Schleier zwischen Leben und Tod dünn wird. Ich gedenke, den Folianten nordwärts in das Moorfenn-Marschland zu tragen. Folgt mir dorthin, und wir bringen dies zu Ende.",
         "objectives": {
           "0": {
@@ -28763,7 +28981,7 @@ export const de_DE: EnTranslations = {
       "q_hollow_old_marrowshell": {
         "title": "Die alte Schale der Untiefen",
         "text": "Der erste Name ist Alter Marrowshell, eine Krabbe von der Größe eines Karrens, die die östlichen Untiefen gejagt hat, seit Eldershine noch kein Tor hatte. Er wandert, {playerName}, also musst du die Küstenlinie entlanggehen, bis du seine Spur kreuzt. Geh nicht allein, und traue seiner Stille nicht.",
-        "completion": "Die Untiefen sind wieder nur Wasser. Ich habe gesehen, wie diese Schale bessere Jäger gebrochen hat als mich, {playerName}. Nicht dich.",
+        "completion": "Die Untiefen sind wieder nur Wasser. Ich habe gesehen, wie diese Schale Leute mit weit mehr Jagderfahrung als ich gebrochen hat, {playerName}. Nicht dich.",
         "objectives": {
           "0": {
             "label": "Alter Marrowshell erlegt"
@@ -31089,8 +31307,8 @@ export const de_DE: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Schlackenkronen-Gewänder",
-        "bonus2": "Die Abklingzeit von Schlackenhaut wird um 30 Sek. verkürzt. Erlittener Schaden verzögert dein Zauberwirken nicht mehr.",
-        "bonus4": "Jede zweite Feuersbrunst lässt deinen nächsten Verderbensblitz innerhalb von 8 Sek. sofort wirken."
+        "bonus2": "Gegen feindliche Spieler verursacht Verderbensblitz 50 % mehr Schaden, braucht aber 0,7 Sek. länger zum Wirken. Erlittener Schaden verzögert dein Zauberwirken nicht mehr.",
+        "bonus4": "Jede zweite Feuersbrunst lässt deinen nächsten Verderbensblitz innerhalb von 8 Sek. sofort wirken. Dieser kostenlose Verderbensblitz verbraucht keine Verwüstung."
       },
       "vanguard_warrior_arms": {
         "name": "Klingensog-Kampfrüstung",

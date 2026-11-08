@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { faReleaseRidingCourseSource } from './fa_release_riding_course';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { buildingCameraHeight } from '../sim/building_layout';
 import { isBuiltinShapedWorld } from '../sim/builtin_shaped_world';
@@ -26,7 +27,7 @@ import {
 import { hash2 } from '../sim/rng';
 import type { BuildingDef } from '../sim/types';
 import { terrainHeight, WATER_LEVEL, waterLevel } from '../sim/world';
-import { type LoadedGltf, loadGltf, releaseGltf } from './assets/loader';
+import { type LoadedGltf, loadGltf, loadTexture, releaseGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { activeWorldHasAuthoredTown } from './authored_town_gate';
 import { attachBiomeHaze } from './biome_haze_field';
@@ -42,6 +43,8 @@ import {
   isEastbrookRebuildStall,
   isEastbrookRebuildWell,
 } from './eastbrook_town';
+import { faReleaseDelveSource } from './fa_release_delve';
+import { faReleaseFurnitureSource } from './fa_release_furniture';
 import {
   isFenbridgeRebuildBuilding,
   isFenbridgeRebuildStall,
@@ -58,6 +61,7 @@ import {
   kitHasUvSurfaceRouting,
   splitKitSurfacesByUv,
 } from './kit_uv_surface_core';
+import { litSmokePuffPrewarmPart } from './lit_smoke_puffs';
 import { cloneMaterialWithHooks } from './material_clone_hooks';
 import {
   buildMirefenTavern,
@@ -95,6 +99,8 @@ import {
 } from './scenery_detail';
 import { shipWakePrewarmParts } from './ship_wake';
 import { mergeBandDepth, mergeStaticMeshes, normalizedStaticGeometry } from './static_merge';
+import { fitFloweringShrub, FLOWERING_SHRUB_URL } from './fa_flowering_shrub';
+import { HOLLOW_HOUSE_BASES, HOLLOW_PALETTE_URL, isHollowHouseKey } from './fa_hollow_houses';
 import { buildScheduledShips, type FerryViewSource } from './transport_ferry_ships';
 import {
   buildTransportShipView,
@@ -208,12 +214,12 @@ export const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
   // into the *_hollow.glb files by tmp/make_kmed_hollow.mjs). Placed via the
   // BuildingDef kinds hollowHouse / hollowInn / hollowChapel / hollowSmith /
   // hollowMarket.
-  kmedHomeA: { url: '/models/props/kmed_home_A_hollow.glb', kit: 'kmed' },
-  kmedHomeB: { url: '/models/props/kmed_home_B_hollow.glb', kit: 'kmed' },
-  kmedTavern: { url: '/models/props/kmed_tavern_hollow.glb', kit: 'kmed' },
-  kmedChurch: { url: '/models/props/kmed_church_hollow.glb', kit: 'kmed' },
-  kmedBlacksmith: { url: '/models/props/kmed_blacksmith_hollow.glb', kit: 'kmed' },
-  kmedMarket: { url: '/models/props/kmed_market_hollow.glb', kit: 'kmed' },
+  kmedHomeA: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? HOLLOW_HOUSE_BASES.kmedHomeA : '/models/props/kmed_home_A_hollow.glb', kit: 'kmed' },
+  kmedHomeB: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? HOLLOW_HOUSE_BASES.kmedHomeB : '/models/props/kmed_home_B_hollow.glb', kit: 'kmed' },
+  kmedTavern: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? HOLLOW_HOUSE_BASES.kmedTavern : '/models/props/kmed_tavern_hollow.glb', kit: 'kmed' },
+  kmedChurch: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? HOLLOW_HOUSE_BASES.kmedChurch : '/models/props/kmed_church_hollow.glb', kit: 'kmed' },
+  kmedBlacksmith: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? HOLLOW_HOUSE_BASES.kmedBlacksmith : '/models/props/kmed_blacksmith_hollow.glb', kit: 'kmed' },
+  kmedMarket: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? HOLLOW_HOUSE_BASES.kmedMarket : '/models/props/kmed_market_hollow.glb', kit: 'kmed' },
   blacksmith: { url: '/models/props/blacksmith.glb', kit: 'village' },
   inn: { url: '/models/props/inn.glb', kit: 'village' },
   bellTower: { url: '/models/props/bell_tower.glb', kit: 'village' },
@@ -234,8 +240,8 @@ export const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
   mushroomTan: { url: '/models/props/mushroom_tan.glb', kit: 'shroom' },
   // The Mirefen mudfin huts (src/sim/mudfin_huts.ts): the art lead's painted
   // Tripo3D huts, baked real size by scripts/assets/build_mudfin_huts.mjs.
-  mudfinHutA: { url: '/models/props/mudfin_hut_a.glb', kit: 'mudfin' },
-  mudfinHutB: { url: '/models/props/mudfin_hut_b.glb', kit: 'mudfin' },
+  mudfinHutA: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? '/models/props/fantasy-arena/mudfin_hut_a.glb' : '/models/props/mudfin_hut_a.glb', kit: 'mudfin' },
+  mudfinHutB: { url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? '/models/props/fantasy-arena/mudfin_hut_b.glb' : '/models/props/mudfin_hut_b.glb', kit: 'mudfin' },
   column: { url: '/models/props/column.glb', kit: 'nature' },
   columnBroken: { url: '/models/props/column_broken.glb', kit: 'nature' },
   statueHead: { url: '/models/props/statue_head.glb', kit: 'nature' },
@@ -376,7 +382,9 @@ export const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
   mushroomGiantPurple: { url: '/models/props/mushroom_giant_purple.glb', kit: 'hollow' },
   mushroomGlowCluster: { url: '/models/props/mushroom_glow_cluster.glb', kit: 'hollow' },
   flowerGlow: { url: '/models/props/flower_glow.glb', kit: 'hollow' },
-  shrubFlowering: { url: '/models/props/shrub_flowering.glb', kit: 'hollow' },
+  shrubFlowering: import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? { url: FLOWERING_SHRUB_URL, kit: 'kfol' }
+    : { url: '/models/props/shrub_flowering.glb', kit: 'hollow' },
   // The Drakelands castle structure set: KayKit Dungeon Remastered (CC0) pieces
   // at walkable scale (shipped by scripts/assets/specs/drakelands_castle.json):
   // curtain walls, gates, stairs, battlement barriers, floors, red banners,
@@ -476,6 +484,15 @@ export const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
   // walk below rather than through ZonePropsDef.decorProps: render-only, no colliders.
   ...MUSTER_KIT_PROP_DEFS,
 };
+
+// The keep and Dawnhold dressers also consume this registry directly. Resolve
+// the exact release sources once here so all loaders agree on the same file;
+// prop keys, placement records and collision logic remain unchanged.
+if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1') {
+  for (const def of Object.values(PROP_ASSET_DEFS)) {
+    def.url = faReleaseDelveSource(faReleaseFurnitureSource(def.url, true), true);
+  }
+}
 
 export type PropKey = keyof typeof PROP_ASSET_DEFS;
 
@@ -581,12 +598,22 @@ function profilePropKeys(target: Readonly<GfxSettings>): readonly PropKey[] {
   return target.standardMaterials ? ALL_PROP_KEYS : LOW_TIER_PROP_KEYS;
 }
 
+let hollowPalette: THREE.Texture | null = null;
+
 function preparePropSource(key: PropKey): Promise<void> {
   if (loadedProps.has(key)) return Promise.resolve();
   const existing = propLoadTasks.get(key);
   if (existing) return existing;
-  const task = loadGltf(PROP_ASSET_DEFS[key].url)
-    .then((gltf) => {
+  const palette = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && isHollowHouseKey(key)
+    ? loadTexture(HOLLOW_PALETTE_URL, { srgb: true, repeat: true })
+    : Promise.resolve(null);
+  const sourceUrl = faReleaseRidingCourseSource(
+    PROP_ASSET_DEFS[key].url,
+    import.meta.env.VITE_FA_BROWSER_RELEASE === '1',
+  );
+  const task = Promise.all([loadGltf(sourceUrl), palette])
+    .then(([gltf, texture]) => {
+      if (texture) hollowPalette = texture;
       loadedProps.set(key, gltf);
       propLoadTasks.delete(key);
     })
@@ -644,6 +671,7 @@ export const propPreloadInternalsForTest = {
   propAssetUrl: Object.fromEntries(
     Object.entries(PROP_ASSET_DEFS).map(([key, def]) => [key, def.url]),
   ) as Record<string, string>,
+  extractProp: propAsset,
 };
 
 // Per-material look overrides, keyed `${kit}:${name}` (falls back to name).
@@ -769,7 +797,12 @@ function convertMaterial(
     ov?.color !== undefined
       ? new THREE.Color(ov.color)
       : (s.color?.clone() ?? new THREE.Color(0xffffff));
-  const map = s.map ?? null;
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && kit === 'kmed' && !hollowPalette) {
+    throw new Error('The release Hollow palette must be preloaded');
+  }
+  const map = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && kit === 'kmed'
+    ? hollowPalette
+    : (s.map ?? null);
   // Tripo-generated 'hollow' kit: one baked painterly albedo per model, glow
   // painted in, smooth normals. Two nudges make them sit beside the
   // hand-authored kits: flat shading (faceted low-poly light response) and a
@@ -1014,13 +1047,17 @@ function propAsset(key: PropKey): PropAsset {
     p.geo.computeBoundingBox();
     p.geo.computeBoundingSphere();
   }
-  const asset: PropAsset = { parts, size: box.getSize(new THREE.Vector3()) };
+  const size = box.getSize(new THREE.Vector3());
+  const fittedSize = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && key === 'shrubFlowering'
+    ? fitFloweringShrub(parts.map((part) => part.geo), size)
+    : size;
+  const asset: PropAsset = { parts, size: fittedSize };
   extractCache.set(key, asset);
   // The extracted float geometry and converted materials are now authoritative.
   // Release the parsed scene's duplicate source buffers without disposing shared
   // textures that the converted materials still reference.
   loadedProps.delete(key);
-  releaseGltf(def.url);
+  releaseGltf(faReleaseRidingCourseSource(def.url, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'));
   return asset;
 }
 
@@ -1031,7 +1068,7 @@ function propMaterialVariantKey(mat: THREE.Material, geo: THREE.BufferGeometry):
   return `${mat.uuid}:${geo.getAttribute('color') ? 'color' : 'plain'}`;
 }
 
-export function buildPropMaterialPrewarmGroup(): THREE.Group {
+export function buildPropMaterialPrewarmGroup(swallowTwin?: THREE.Mesh | null): THREE.Group {
   const group = new THREE.Group();
   group.name = 'prop-material-prewarm';
   group.visible = true;
@@ -1098,6 +1135,9 @@ export function buildPropMaterialPrewarmGroup(): THREE.Group {
     ...wickharborHarborPrewarmParts(),
     ...mirefenTavernPrewarmParts(),
     ...hutSmokePrewarmParts(),
+    ...(import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && GFX.effectsTier === 'low'
+      ? [litSmokePuffPrewarmPart()]
+      : []),
   ]) {
     const mesh = new THREE.Mesh(part.geometry, part.material);
     mesh.castShadow = true;
@@ -1106,6 +1146,7 @@ export function buildPropMaterialPrewarmGroup(): THREE.Group {
   }
   // ...and a sailing ship's wake and bow splash (ship_wake.ts): one points program
   for (const points of shipWakePrewarmParts()) place(points);
+  if (swallowTwin) place(swallowTwin);
   return group;
 }
 
@@ -1815,8 +1856,8 @@ export function buildProps(
   // ...and the Wickharbor ferry wharf at the Wickharbor berth (render/wickharbor_wharf.ts),
   // with the rest of the town's wooden harbor in the same wood (render/wickharbor_harbor.ts)
   if (builtInShaped) {
-    group.add(buildWickharborWharf());
-    group.add(buildWickharborHarbor());
+    group.add(buildWickharborWharf(seed));
+    group.add(buildWickharborHarbor(seed));
   }
   // ...and the Mirefen tavern on the Fenbridge road (render/mirefen_tavern.ts): its walls,
   // roofs, gallery and partitions fade one by one for the camera, its fires, chandelier and lanterns lit like a campfire (root-level,

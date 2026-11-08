@@ -96,9 +96,10 @@ export interface WocHeadTintUniforms {
 }
 
 /** One shader variant of the patch: a role's own, or the body atlas's skin key. */
-type WocTintLayer = WocHeadTintedRole | 'skin_suit';
+type WocTintLayer = WocHeadTintedRole | 'skin_suit' | 'eye_iris';
 
 function layerOf(role: WocHeadTintedRole, surface: WocTintSurface | undefined): WocTintLayer {
+  if (role === 'eye' && surface === 'iris') return 'eye_iris';
   return role === 'skin' && surface === 'suit' ? 'skin_suit' : role;
 }
 
@@ -231,6 +232,11 @@ const ROLE_HAIR_EMISSIVE_GLSL = `#ifdef USE_EMISSIVEMAP
   totalEmissiveRadiance *= wocGlow;
 #endif`;
 
+const EYE_TRANSFER_GLSL = `vec3 hs = wocHtRgb2Hsv(wocHtLin2Srgb(c));
+  float w = smoothstep(rk.y + 0.08, rk.y + 0.22, hs.y) * smoothstep(0.03, 0.1, hs.z);
+  vec3 iris = wocHtSrgb2Lin(wocHtHsv2Rgb(vec3(tk.x, tk.y, clamp(hs.z * (0.4 + tk.z), 0.0, 1.0))));
+  o = mix(c, iris, w);`;
+
 /** The per-layer body of the patch: reads `c` (the texel times the colour, linear), `t` (the
  *  target, linear) and `r` (the reference, linear) and writes `o` (linear). Of the two
  *  uniform colours the skin and eye bodies also read `rk` (the reference's sRGB hue and
@@ -243,10 +249,12 @@ const LAYER_GLSL: Readonly<Record<WocTintLayer, string>> = {
   ${HAIR_TRANSFER_GLSL}`,
   brow: `${ROLE_HAIR_LUMINANCE_GLSL}
   ${HAIR_TRANSFER_GLSL}`,
-  eye: `vec3 hs = wocHtRgb2Hsv(wocHtLin2Srgb(c));
-  float w = smoothstep(rk.y + 0.08, rk.y + 0.22, hs.y) * smoothstep(0.03, 0.1, hs.z);
-  vec3 iris = wocHtSrgb2Lin(wocHtHsv2Rgb(vec3(tk.x, tk.y, clamp(hs.z * (0.4 + tk.z), 0.0, 1.0))));
-  o = mix(c, iris, w);`,
+  eye: EYE_TRANSFER_GLSL,
+  eye_iris: `#ifdef USE_MAP
+  ${EYE_TRANSFER_GLSL}
+  float d = distance(vMapUv, vec2(0.499, 0.5));
+  o = mix(c, o, smoothstep(0.033, 0.046, d) * (1.0 - smoothstep(0.09, 0.106, d)));
+#endif`,
   skin: `${SKIN_BAND_GLSL}
   ${SKIN_TRANSFER_GLSL}`,
   skin_suit: `${SKIN_BAND_GLSL}
@@ -259,6 +267,7 @@ const LAYER_CONSTANTS_GLSL: Readonly<Record<WocTintLayer, string>> = {
   hair: '',
   brow: '',
   eye: '\n  vec2 rk = uWocHtRefHs;\n  vec3 tk = uWocHtTintHsv;',
+  eye_iris: '\n  vec2 rk = uWocHtRefHs;\n  vec3 tk = uWocHtTintHsv;',
   skin: '\n  vec2 rk = uWocHtRefHs;',
   skin_suit: '\n  vec2 rk = uWocHtRefHs;',
 };

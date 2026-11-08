@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const tr_TR: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Yasal bildirim",
+    "worldPicker": "Dünya seçimine dön",
+    "characterPreview": "Karakter oluşturucuyu dene",
+    "desktopDownload": "Masaüstü uygulamasını indir",
+    "credits": "Katkıda bulunanlar ve lisanslar",
+    "sourceProject": "GitHub'daki kaynak proje",
+    "supportProject": "Projeyi destekle",
+    "musicCredits": "Müzik katkıları",
+    "separateAccount": "Bu test sürümü için ayrı bir MMO hesabı gerekir."
+  },
   "referralCards": {
     "title": "Arkadaş Davet Et",
     "subtitle": "Birlikte maceraya atılın. Damgalarınızı kazanın.",
@@ -467,6 +478,77 @@ export const tr_TR: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Kurye",
       "close": "Kuryeyi kapat",
@@ -1767,6 +1849,7 @@ export const tr_TR: EnTranslations = {
       "presets": {
         "classic": "Klasik Altın",
         "fancyGold": "Süslü Altın (Yapım Aşamasında)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Gece Yarısı",
         "parchment": "Parşömen",
         "highContrast": "Yüksek Kontrast"
@@ -2072,8 +2155,8 @@ export const tr_TR: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Güncelleme Mevcut",
-      "body": "World of ClaudeCraft'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
-      "bodyWithVersion": "World of ClaudeCraft'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "body": "Fantasy Arena MMO'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "bodyWithVersion": "Fantasy Arena MMO'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
       "notNow": "Şimdi Değil",
       "update": "Güncelle"
     },
@@ -2205,6 +2288,8 @@ export const tr_TR: EnTranslations = {
         "remove": "Kaldır",
         "promote": "Terfi et",
         "bank": "Lonca Bankası",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Subay Sohbeti",
         "motd": "Duyuru Panosu",
         "events": "Takvim"
@@ -2214,6 +2299,8 @@ export const tr_TR: EnTranslations = {
         "remove": "Daha düşük rütbe taşıyan üyeleri kaldır.",
         "promote": "Daha düşük rütbe taşıyan üyeleri terfi ettir ve rütbe indir, kendilerine kadar bir rütbe aşağısına kadar.",
         "bank": "Lonca bankasında bakır ve öğeleri yatır ve çek. Her üye onu görebilir.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Subay sohbetinde oku ve konuş.",
         "motd": "Lonca duyuru panasını düzenle.",
         "events": "Lonca takvim etkinliklerini ekle ve kaldır."
@@ -3079,7 +3166,7 @@ export const tr_TR: EnTranslations = {
         "offline": "Çevrimdışı"
       },
       "diagnostics": {
-        "panelAria": "World of ClaudeCraft performans tanılama paneli",
+        "panelAria": "Fantasy Arena MMO performans tanılama paneli",
         "title": "ClaudeCraft Performans Doktoru",
         "subtitle": "Kanıt ve kod düzeyinde düzeltmeler sunan, oyuna özgü bir tarama.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const tr_TR: EnTranslations = {
           }
         },
         "report": {
-          "title": "World of ClaudeCraft performans tanısı",
+          "title": "Fantasy Arena MMO performans tanısı",
           "statusLine": "Durum: {status} ({score}/100)",
           "capturedLine": "Yakalandı: {captured}",
           "topFindingLine": "En önemli bulgu: {finding}",
@@ -5422,7 +5509,7 @@ export const tr_TR: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Kapat",
       "keybind": "Discord Paneli",
@@ -5836,6 +5923,8 @@ export const tr_TR: EnTranslations = {
       "guildTab": "Lonca",
       "guildCapacityAria": "Kullanılan lonca bankası yuvaları: {used} / {total}",
       "guildEmpty": "Lonca bankası boş.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Lonca hazinesi",
       "guildDepositGold": "Para Yatır",
       "guildWithdrawGold": "Para Çek",
@@ -6446,6 +6535,7 @@ export const tr_TR: EnTranslations = {
       "toolEffectRechargeFull": "{effect} zaten tam şarjlı.",
       "toolEffectRechargeToolCapped": "{effect} etkisini daha fazla şarj etmek için daha iyi bir {profession} aleti taşıyın.",
       "toolEffectRechargeMaterials": "{effect} şarjı için {material} x{count} gerekir.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Üretim yapıyorsun: {total}sn üzerinden {remaining}sn kaldı.",
       "disenchantingProgress": "Büyü bozuyorsun: {total}sn üzerinden {remaining}sn kaldı.",
       "enchantingProgress": "Büyülüyorsun: {total}sn üzerinden {remaining}sn kaldı.",
@@ -7978,6 +8068,7 @@ export const tr_TR: EnTranslations = {
         }
       },
       "commendHeading": "Elçinin temeddüsü",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "Seçtiğin bir fraksiyona karşı {amount} itibar, haftada bir.",
       "commendCarriedNote": "Geçen haftadan {amount} itibar hâlâ alınmadı. Yeni bir yük seçmek için bunu al.",
       "commendClaimed": "Bu haftanın temeddüsü {faction} tarafına gitti.",
@@ -9202,7 +9293,7 @@ export const tr_TR: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "Tarayıcınızda ücretsiz oynayabileceğiniz klasik tarzda bir MMO.",
     "skipToContent": "Ana içeriğe geç",
@@ -9312,7 +9403,7 @@ export const tr_TR: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klasik tarz tarayıcı MMO'su",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Dünyayı keşfet, görevler üstlen ve arkadaşlarınla zindanlara gir.",
       "ctaPlay": "Şimdi Oyna",
       "ctaLearn": "Nasıl Oynanır",
@@ -10293,7 +10384,7 @@ export const tr_TR: EnTranslations = {
     },
     "worldPage": {
       "heading": "Dünya",
-      "intro": "World of ClaudeCraft, yaya olarak geçtiğin tek parça bir ülkedir. Eski yol güneyden kuzeye, başlangıç vadisi, bataklık ve zirveler boyunca uzanır ve onların ötesine, arkadaki çukura ve haritanın tepesindeki kar ülkesine tırmanmayı sürdürür. Bu yoldan batıya bir üst diyarlar dizisi, doğuya da bir başkası açılır ve Vadi'nin doğu kıyısı açıklarında bir ada bulunur. Hızlı yolculuk yok, uçuş hatları yok, arabalar yok: her yolculuk yürünür ya da at sırtında yapılır, dolayısıyla varmak macerasının bir parçasıdır.\n\nÜlke zamanı da tutar. Bir gündüz gece döngüsü, dünyandaki herkesin paylaştığı gerçek bir saat üzerinde işler; böylece gökyüzü hepiniz için aynı anda şafaktan öğleye, oradan alacakaranlığa ve karanlığa geçer, ay evrelerinden geçerek gelir gider ve yerdeki ışık onunla değişir. Küçük haritanın çevresindeki kadran, saati okuduğun yerdir.",
+      "intro": "Fantasy Arena MMO, yaya olarak geçtiğin tek parça bir ülkedir. Eski yol güneyden kuzeye, başlangıç vadisi, bataklık ve zirveler boyunca uzanır ve onların ötesine, arkadaki çukura ve haritanın tepesindeki kar ülkesine tırmanmayı sürdürür. Bu yoldan batıya bir üst diyarlar dizisi, doğuya da bir başkası açılır ve Vadi'nin doğu kıyısı açıklarında bir ada bulunur. Hızlı yolculuk yok, uçuş hatları yok, arabalar yok: her yolculuk yürünür ya da at sırtında yapılır, dolayısıyla varmak macerasının bir parçasıdır.\n\nÜlke zamanı da tutar. Bir gündüz gece döngüsü, dünyandaki herkesin paylaştığı gerçek bir saat üzerinde işler; böylece gökyüzü hepiniz için aynı anda şafaktan öğleye, oradan alacakaranlığa ve karanlığa geçer, ay evrelerinden geçerek gelir gider ve yerdeki ışık onunla değişir. Küçük haritanın çevresindeki kadran, saati okuduğun yerdir.",
       "hub": "Ana üs",
       "mapHeading": "Yol ve ötesindeki diyarlar",
       "mapSub": "Görev izi haritanın ortasından güneyden kuzeye uzanır: vadi, bataklık, zirveler ve onların ötesinde çukur ile kar. Diğer diyarlar bu yolun ardından değil, boyunca açılır; bataklık yolunun doğusundaki ve batısındaki kapılardan, Farshore adasına ise Vadi'nin doğu kıyısından ulaşılır. Seni uzak diyarlardan uzak tutan şey yürüyüş değil, onların seviye kuşaklarıdır: beşi en üst kuşağı paylaşır, dolayısıyla hazır olduğunda onları istediğin sırayla ele alabilirsin. Farshore istisnadır, erken ziyaret edebileceğin düşük seviyeli bir ülke.",
@@ -11594,7 +11685,7 @@ export const tr_TR: EnTranslations = {
       "importedTexture": "İçe aktarılan doku {number}"
     },
     "appTitle": "Harita Editörü",
-    "docTitle": "Harita Editörü - World of ClaudeCraft",
+    "docTitle": "Harita Editörü - Fantasy Arena MMO",
     "untitledMap": "Adsız Harita",
     "liveWorld": {
       "name": "Canlı dünya rötuşları",
@@ -13756,7 +13847,7 @@ export const tr_TR: EnTranslations = {
     "serverOnline": "Çevrimiçi",
     "serverOffline": "Çevrimdışı",
     "play": "Oyna",
-    "playAria": "World of ClaudeCraft oyna",
+    "playAria": "Fantasy Arena MMO oyna",
     "playLoading": "Yükleniyor",
     "playStarting": "Başlatılıyor",
     "serverLabel": "Dünyanı seç",
@@ -13860,6 +13951,41 @@ export const tr_TR: EnTranslations = {
         "default": "Klasik",
         "almond": "Badem",
         "hooded": "Düşük Göz Kapaklı"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const tr_TR: EnTranslations = {
     "extensionHelp": "Burada bir cüzdan görmek için Solflare Wallet gibi bir tarayıcı cüzdan uzantısını etkin tutun.",
     "mobileAppHelp": "Phantom veya Solflare'i seç. Cüzdan uygulan onay isteyecek. Bu oyunu açık bırak ve bittiğinde geri dön.",
     "seekerAppHelp": "Seed Vault Wallet ile devam et. Bağlantı ve doğrulama isteklerini Seed Vault'ta incele, sonra oyuna dön.",
-    "standaloneAppHelp": "Ana Ekran uygulamasında cüzdan bağlantıları henüz mevcut değil. Phantom veya Solflare kullanmak için World of ClaudeCraft'ı Safari veya Chrome'da aç.",
+    "standaloneAppHelp": "Ana Ekran uygulamasında cüzdan bağlantıları henüz mevcut değil. Phantom veya Solflare kullanmak için Fantasy Arena MMO'ı Safari veya Chrome'da aç.",
     "openAppTitle": "{wallet}'da devam et",
     "openAppHelp": "Bu isteği incelemek için {wallet}'u aç. Cüzdan uygulaması etkinken bu oyun sekmesini açık bırak.",
     "openAppButton": "{wallet}'u aç",
     "manualReturnBrowserHelp": "Onayladıktan sonra bu oyun sekmesine dön. iOS başka bir tarayıcı açarsa, kapat ve orijinal tarayıcıya manuel olarak dön.",
-    "manualReturnStandaloneHelp": "Onayladıktan sonra Ana Ekranından World of ClaudeCraft'a dön. iOS bir tarayıcı açarsa, kapat ve Ana Ekran uygulamasını manuel olarak yeniden aç.",
+    "manualReturnStandaloneHelp": "Onayladıktan sonra Ana Ekranından Fantasy Arena MMO'a dön. iOS bir tarayıcı açarsa, kapat ve Ana Ekran uygulamasını manuel olarak yeniden aç.",
     "preparingAppButton": "{wallet} hazırlanıyor...",
     "walletAppUnavailable": "{wallet} hazırlanamadı. Bu pencereyi kapat ve tekrar dene.",
     "flowConnect": "Bir cüzdan seçin. Doğrulama otomatik olarak devam eder.",
@@ -14266,12 +14392,12 @@ export const tr_TR: EnTranslations = {
       "paymentBody": "Hesabına bağlı cüzdanı seç ve bu tarayıcıda işlemi onayla.",
       "stepUpBody": "Hesabına bağlı cüzdanı seç ve $WOC Borsası yetkilendirme mesajını imzala. İmzalamak ücretsizdir ve hiçbir para hareket ettirmez.",
       "extensionHelp": "Uyumlu cüzdan uzantısı bulunamadı. Phantom, Solflare veya başka bir Solana tarayıcı cüzdanını yükle ya da kilidini aç, ardından tekrar dene.",
-      "safety": "World of ClaudeCraft hiçbir zaman kurtarma ifadeni veya özel anahtarını istemez.",
+      "safety": "Fantasy Arena MMO hiçbir zaman kurtarma ifadeni veya özel anahtarını istemez.",
       "continueWith": "{wallet} ile devam et",
       "reviewTitle": "Cüzdanında incele",
       "reviewBody": "{wallet}'dan gelen istemi takip et. Bu tarayıcı sayfasını açık bırak.",
       "completeTitle": "Cüzdan yetkilendirmesi tamamlandı",
-      "completeBody": "World of ClaudeCraft masaüstü uygulamasına dönebilirsin.",
+      "completeBody": "Fantasy Arena MMO masaüstü uygulamasına dönebilirsin.",
       "returnButton": "Masaüstü uygulamasına dön",
       "failed": "Cüzdan yetkilendirmesi başarısız oldu veya süresi doldu. Masaüstü uygulamasına dön ve tekrar dene.",
       "retry": "Tekrar dene"
@@ -14369,16 +14495,16 @@ export const tr_TR: EnTranslations = {
     "levelClass": "Seviye {level} - {className}",
     "topPercent": "İLK %{percent}",
     "realmSubtitle": "{realm} Dünyası",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Fantasy Arena MMO",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count} davet edildi",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Efsaneni yarat: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", {tier}-derece $WOC sahibi",
-    "shareText": "World of ClaudeCraft'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Dünyama katıl:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareText": "Fantasy Arena MMO'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Dünyama katıl:",
+    "nativeShareTitle": "Fantasy Arena MMO",
     "fileNameFallback": "oyuncu",
     "actionShareX": "X'te Paylaş",
     "actionCopyReferral": "Davet Bağlantısını Kopyala",
@@ -14395,6 +14521,7 @@ export const tr_TR: EnTranslations = {
     "statusShareUnsupported": "Bu cihazda paylaşım desteklenmiyor."
   },
   "classes": {
+    "newBadge": "Yeni",
     "warrior": "Savaşçı",
     "paladin": "Paladin",
     "hunter": "Avcı",
@@ -14402,6 +14529,7 @@ export const tr_TR: EnTranslations = {
     "priest": "Rahip",
     "shaman": "Şaman",
     "mage": "Büyücü",
+    "dreamdancer": "Rüya Dansçısı",
     "warlock": "Karabüyücü",
     "druid": "Druid",
     "warriorAria": "Savaşçı sınıfı",
@@ -14411,6 +14539,7 @@ export const tr_TR: EnTranslations = {
     "priestAria": "Rahip sınıfı",
     "shamanAria": "Şaman sınıfı",
     "mageAria": "Büyücü sınıfı",
+    "dreamdancerAria": "Rüya Dansçısı",
     "warlockAria": "Karabüyücü sınıfı",
     "druidAria": "Druid sınıfı"
   },
@@ -15248,13 +15377,13 @@ export const tr_TR: EnTranslations = {
     "parseService": "WoC Parse Servisi"
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klasik Tarzı Web MMO'su",
-    "description": "Ücretsiz bir tarayıcı MMO'su olan World of ClaudeCraft'ı oyna. Keşfet, görevleri tamamla ve arkadaşlarınla zindanlara gir. İndirmeye gerek yok.",
+    "title": "Fantasy Arena MMO: Klasik Tarzı Web MMO'su",
+    "description": "Ücretsiz bir tarayıcı MMO'su olan Fantasy Arena MMO'ı oyna. Keşfet, görevleri tamamla ve arkadaşlarınla zindanlara gir. İndirmeye gerek yok.",
     "genre": "MMORPG",
     "playMode": "Çok Oyunculu",
     "applicationCategory": "Oyun",
     "operatingSystem": "Web tarayıcısı",
-    "officialLabel": "Resmi World of ClaudeCraft web sitesi",
+    "officialLabel": "Resmi Fantasy Arena MMO web sitesi",
     "officialBody": "World of ClaudeCraft'ın resmi sitesi. Çevrimiçi oyna, wiki'yi oku ve topluluk bağlantılarını burada bul."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const tr_TR: EnTranslations = {
     "notify": {
       "updateReadyTitle": "{version} güncellemesi hazır",
       "updateReadyTitleNoVersion": "Güncelleme hazır",
-      "updateReadyBody": "Güncellemeyi uygulamak için World of ClaudeCraft'ı yeniden başlat.",
+      "updateReadyBody": "Güncellemeyi uygulamak için Fantasy Arena MMO'ı yeniden başlat.",
       "partyInviteTitle": "Grup daveti",
       "partyInviteBody": "{name} seni grubuna davet etti."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "Oyun görünümü çalışmayı durdurdu. Yeniden yüklensin mi?",
       "reload": "Yeniden Yükle",
       "quit": "Çık",
-      "fatalBody": "World of ClaudeCraft beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor."
+      "fatalBody": "Fantasy Arena MMO beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor."
     },
     "hostDiag": {
       "saveTitle": "Sistem raporunu kaydet",
@@ -15500,6 +15629,7 @@ export const tr_TR: EnTranslations = {
       "priest": "Şifacı / Menzilli DPS",
       "shaman": "Şifacı / Yakın veya Menzilli DPS",
       "mage": "Menzilli DPS",
+      "dreamdancer": "Şifacı / Menzilli hasar",
       "warlock": "Menzilli DPS",
       "druid": "Tank / Şifacı / Yakın veya Menzilli DPS"
     },
@@ -15524,6 +15654,7 @@ export const tr_TR: EnTranslations = {
       "priest": "Rahipler müttefikleri iyileştirmek ve korumak için Onaran Işık'a başvurur; Gölge büyüsü ise düşmanlarının canını emmelerine olanak tanır.",
       "shaman": "Şamanlar elementlere komuta eder; silahlara güç katar, düşmanları yıldırımla sarsar ve müttefikleri iyileştirir.",
       "mage": "Büyücüler Ateş, Buz ve gizem gücünü bükerek düşmanları yok eder, su çağırır ve tehditleri olduğu yerde dondurur.",
+      "dreamdancer": "Rüya ipliklerini kâbuslara ve koruyucu örtülere dönüştüren bir büyücü.",
       "warlock": "Karabüyücüler şeytanlar çağırır, lanetler ve süregelen hasar büyüleri uygular ve dayanmak için düşmanlardan can emer.",
       "druid": "Druidler doğayı yönlendirir; yaraları iyileştirir, düşmanları kıskaca alır ve savunma ya da hasar için hayvan formlarına bürünür."
     },
@@ -15540,11 +15671,11 @@ export const tr_TR: EnTranslations = {
     "iosStandaloneDetail": "Ana ekran tam ekran modundasınız. Cihazı yatay konumda tutun.",
     "iosInstallDetail": "iPhone veya iPad'de gerçek tam ekran için önce bu sayfayı Ana Ekranınıza yükleyin.",
     "iosShareStep": "Safari'de Paylaş'a, ardından Ana Ekrana Ekle'ye dokunun.",
-    "iosOpenStep": "World of ClaudeCraft'ı yeni Ana Ekran simgesinden açın.",
+    "iosOpenStep": "Fantasy Arena MMO'ı yeni Ana Ekran simgesinden açın.",
     "androidStandaloneDetail": "Tam ekran uygulama modundasınız. Cihazı yatay konumda tutun.",
     "androidInstallDetail": "Android'de tam ekran için önce bu sayfayı yükleyin veya Ana ekranınıza ekleyin.",
     "androidInstallStep": "Chrome'da menüye dokunun, ardından Uygulamayı yükle veya Ana ekrana ekle seçeneğini seçin.",
-    "androidOpenStep": "World of ClaudeCraft'ı yeni simgeden açın.",
+    "androidOpenStep": "Fantasy Arena MMO'ı yeni simgeden açın.",
     "otherStandaloneDetail": "Cihazınızı yatay tam ekran konumunda tutun.",
     "otherInstallDetail": "En iyi tam ekran mobil deneyim için bu sayfayı yükleyin veya Ana ekranınıza ekleyin."
   },
@@ -15560,8 +15691,8 @@ export const tr_TR: EnTranslations = {
     "confirm": "Devam Et"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Dünya Kullanılamıyor",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Dünya Kullanılamıyor",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Dünya bakımı",
     "heading": "Dünya geçici olarak kullanılamıyor.",
     "body": "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
@@ -15762,6 +15893,7 @@ export const tr_TR: EnTranslations = {
       "audio": "Ses",
       "interface": "Arayüz",
       "language": "Dil",
+      "characterSelect": "Karakter Seçimi",
       "logout": "Çıkış Yap",
       "returnToGame": "Oyuna Dön",
       "resetToDefaults": "Varsayılanlara Sıfırla",
@@ -17376,6 +17508,8 @@ export const tr_TR: EnTranslations = {
       "collectNote": "Tüccar'ın senin için tuttuğu kazançlar ve geri dönen mallar.",
       "saleProceeds": "Satış geliri",
       "collectAll": "Hepsini Topla",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Geçmiş",
       "historyEmpty": "Henüz satış yok. Dünya Pazarında sattığın eşyalar burada gösterilir.",
       "historyNote": "Dünya Pazarındaki son satışların.",
@@ -19265,6 +19399,66 @@ export const tr_TR: EnTranslations = {
       "revive_pet": {
         "name": "Yarasını Sar",
         "description": "Yaşayan yoldaşının azami canının %10'unu 8 sn boyunca her saniye yeniler. Yoldaşın ölüyse, bunun yerine onu %50 canla diriltir."
+      },
+      "dream_thread": {
+        "name": "Rüya İpliği",
+        "description": "Bir hedefi 15 sn. boyunca bağlar. Bağlı hedefe isabet eden Rüya Kıvılcımı veya etkili Rüya Tesellisi, en fazla üç iplik biriktirir. Hedef değiştiğinde tüm iplikler kaybolur. 2’ye 2 karşılaşmalarda Gece Örgüsü ve Örtü Örgüsü bitiricileri bağı korur ve hedefin aldığı iyileştirmeyi 6 sn. boyunca %40 azaltır."
+      },
+      "dream_spark": {
+        "name": "Rüya Kıvılcımı",
+        "description": "{damage} Gölge hasarı verir. Bağlı hedefe hasar veren bir isabet bir iplik ekler."
+      },
+      "dream_shroud": {
+        "name": "Rüya Örtüsü",
+        "description": "Bir müttefike kalkan verir. Üç iplik harcayarak kalkanın temel gücünü iki katına çıkarır."
+      },
+      "dream_nightmare": {
+        "name": "Kâbus",
+        "description": "Üç iplik harcar ve bağlı düşmana {damage} Gölge hasarı verir."
+      },
+      "dream_deep_nightmare": {
+        "name": "Derin Kâbus",
+        "description": "Üç iplik harcar ve bağlı düşmana {damage} Gölge hasarı verir. 2’ye 2 karşılaşmalarda, kullandığında hedefte Ay Yarası etkinse 4,5 sn. boyunca ek Gölge hasarı verir."
+      },
+      "dream_comfort": {
+        "name": "Rüya Tesellisi",
+        "description": "Bir müttefiki iyileştirir. Bağlı müttefike yapılan etkili iyileştirme bir iplik ekler."
+      },
+      "dream_veil": {
+        "name": "Rüya Perdesi",
+        "description": "Üç iplik harcar ve bağlı düşmanın konumunda 5 sn. süren bir alan oluşturur. Her dalga alandaki düşmanlara hasar verir ve onları yavaşlatır. 2’ye 2 karşılaşmalarda bağlı düşman ayrıca anında bir darbe alır."
+      },
+      "dream_chorus": {
+        "name": "Rüya Korosu",
+        "description": "Seçilen müttefikin 16 yarda çevresindeki en ağır yaralı en fazla beş grup üyesine {damage} can yeniler. Bağlı müttefik ve bir başka grup üyesi etkili biçimde iyileşirse bir iplik kazanır ve mana bedelinin yarısını geri alırsın. Bağlı müttefik dâhil en az üç kişi iyileşirse bedelin tamamı geri döner."
+      },
+      "dream_miststep": {
+        "name": "Sis Adımı",
+        "description": "6 yarda yarıçapında {duration} sn. süren bir sis oluşturur. Her dalga sis içindeki düşmanlara {damage} Gölge hasarı verir."
+      },
+      "dream_moonrend": {
+        "name": "Ay Yarası",
+        "description": "{duration} sn. boyunca {damage} Gölge hasarı verir. 2’ye 2 karşılaşmalarda bağlı düşmana uygulandığında bir iplik ekler."
+      },
+      "dream_silence": {
+        "name": "Sessiz İplik",
+        "description": "Hedefin büyüsünü keser ve aynı büyü okulunu 3 sn. boyunca kilitler."
+      },
+      "dream_glide": {
+        "name": "Rüya Süzülüşü",
+        "description": "Köklenme etkilerini kaldırır ve hareket hızını {duration} sn. boyunca %35 artırır."
+      },
+      "dream_reverie": {
+        "name": "Düş Huzuru",
+        "description": "Azami mananın %14’ünü yeniler."
+      },
+      "dream_refuge": {
+        "name": "Ay Sığınağı",
+        "description": "Aldığın hasarı {duration} sn. boyunca %25 azaltır. Rüya Muhafızlarında bu oran %40’tır. Rüya Muhafızları bu yeteneği büyü yaparken ve genel bekleme süresini tetiklemeden kullanabilir."
+      },
+      "dream_unravel": {
+        "name": "İpliği Çöz",
+        "description": "Bir müttefikin üzerindeki bir zararlı büyü etkisini kaldırır."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const tr_TR: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Gümüş dere oltası"
+      },
+      "dreamcatcher_focus": {
+        "name": "Rüya Kapanı"
+      },
+      "dreamdancer_staff": {
+        "name": "Rüya Örgüsü Asası"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Ay İpliği Asası"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Gümüş Rüya Kapanı"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Yıldız Danteli Asası"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Gece Camı Rüya Kapanı"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Şafak Örtüsü Rüya Asası"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Şafak Örtüsü Rüya Kapanı"
       },
       "briny_idol": {
         "name": "Tuzlu Put"
@@ -31089,8 +31307,8 @@ export const tr_TR: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Cüruf Kütü Giysileri",
-        "bonus2": "Cinderhide'ın bekleme süresi 30 san azalır. Alınan hasar artık büyü yapmanı geciktirmez.",
-        "bonus4": "Her ikinci Conflagrate, sonraki Ruinbolt'u 8 saniye içinde anlık yapar."
+        "bonus2": "Düşman oyunculara karşı Ruinbolt %50 daha fazla hasar verir ama yapılması 0,7 san daha uzun sürer. Alınan hasar artık büyü yapmanı geciktirmez.",
+        "bonus4": "Her ikinci Conflagrate, sonraki Ruinbolt'u 8 saniye içinde anlık yapar. Bu bedava Ruinbolt, Desolation tüketmez."
       },
       "vanguard_warrior_arms": {
         "name": "Kılıç Silksi Savaş Giysileri",

@@ -34,6 +34,7 @@
 // bucket level (the shadow registers in foliage.ts), not per instance.
 
 import { IMPOSTOR_JITTER_GLSL } from './foliage_impostor_core';
+import { ISLAND_RECT } from './island_isolation_core';
 
 /**
  * Which window a material's instances collapse against:
@@ -77,6 +78,21 @@ const uBuildingMax: UniformValue = { value: FAR_SEED };
 const uFogCull: UniformValue = { value: FAR_SEED };
 const uFade: UniformValue = { value: 0 };
 const uSpriteFar: UniformValue = { value: FAR_SEED };
+const uFoliageIslandOnly: UniformValue = { value: 0 };
+
+/** The tutorial streams only its own ground. Reject mainland scenery in both
+ * geometry and impostors, even when the camera can see far over the water. */
+export function setFoliageIslandOnly(islandOnly: boolean): void {
+  uFoliageIslandOnly.value = islandOnly ? 1 : 0;
+}
+
+export const FOLIAGE_ISLAND_SCOPE_GLSL = `
+uniform float uFoliageIslandOnly;
+bool foliageOutsideIsland(vec2 origin) {
+  return uFoliageIslandOnly > 0.0 &&
+    (origin.x < ${ISLAND_RECT.minX.toFixed(1)} || origin.x >= ${ISLAND_RECT.maxX.toFixed(1)} ||
+     origin.y < ${ISLAND_RECT.minZ.toFixed(1)} || origin.y >= ${ISLAND_RECT.maxZ.toFixed(1)});
+}`;
 
 export interface CollapseWindowValues {
   treeMax: number;
@@ -115,14 +131,17 @@ export function collapseWindowUniforms(): {
   uFogCull: UniformValue;
   uFade: UniformValue;
   uSpriteFar: UniformValue;
+  uFoliageIslandOnly: UniformValue;
 } {
-  return { uTreeMax, uRockMax, uDressMax, uBuildingMax, uFogCull, uFade, uSpriteFar };
+  return {
+    uTreeMax, uRockMax, uDressMax, uBuildingMax, uFogCull, uFade, uSpriteFar, uFoliageIslandOnly,
+  };
 }
 
 const COLLAPSE_PARS = `
 uniform float uCollapseMin;
 uniform float uCollapseMax;
-uniform float uCollapseFade;`;
+uniform float uCollapseFade;${FOLIAGE_ISLAND_SCOPE_GLSL}`;
 
 // Injected at the first stable vertex-main anchor. The decision depends only
 // on the instance translation and camera uniform, so rejected instances can
@@ -139,7 +158,7 @@ const COLLAPSE_VERTEX = `
   float collapseJitter = ${IMPOSTOR_JITTER_GLSL};
   float collapseEnd = uCollapseMax - uCollapseFade * collapseJitter;
   float collapseKeep = step(uCollapseMin, collapseDist) * (1.0 - step(collapseEnd, collapseDist));
-  if (collapseKeep == 0.0) {
+  if (collapseKeep == 0.0 || foliageOutsideIsland(collapseOrigin)) {
     gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
     return;
   }
@@ -174,6 +193,7 @@ export function applyInstanceCollapse(mat: CollapsibleMaterial, role: CollapseRo
     shader.uniforms.uCollapseMin = ZERO;
     shader.uniforms.uCollapseMax = max;
     shader.uniforms.uCollapseFade = fade;
+    shader.uniforms.uFoliageIslandOnly = uFoliageIslandOnly;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', `#include <common>${COLLAPSE_PARS}`)
       .replace('#include <uv_vertex>', COLLAPSE_VERTEX);

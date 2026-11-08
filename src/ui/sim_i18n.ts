@@ -714,6 +714,10 @@ const baseEnTable = {
   'worldPvp.tooSoon': 'World PvP: wait a moment before switching again.',
   'worldPvp.disabled': 'World PvP disabled.',
   'worldPvp.staysEnabled': 'World PvP stays enabled.',
+  // A tank pet's taunt switching a hostile player's target onto the pet
+  // (src/sim/pet/pet_pvp_taunt.ts): {pet} is the pet's name, {name} the player's.
+  'pvp.petTauntYou': '{pet} taunts you: your target switches to it.',
+  'pvp.petTauntOther': '{pet} taunts {name}: their target switches to it.',
   'worldPvp.disablingIn': 'World PvP will be disabled in {minutes} minutes.',
   'worldPvp.alreadyEnabled': 'World PvP is already enabled.',
   'worldPvp.alreadyDisabled': 'World PvP is already disabled.',
@@ -1279,7 +1283,7 @@ const baseEnTable = {
   'aura.improvedImmolate': 'Improved Immolate',
   'aura.demonArmor': 'Demon Armor',
   'aura.desolation': 'Desolation',
-  'aura.destructionRuin': 'Ruin',
+  'aura.destructionRuin': 'Wrack',
   'aura.ruinousBrand': 'Ruinous Brand',
   'aura.duskfireClaim': 'Duskfire Claim',
   'aura.duskweaveCloak': 'Duskweave Cloak',
@@ -3484,6 +3488,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'El JcJ mundial está desactivado en este reino.',
     'worldPvp.sanctuary': 'Esto es un santuario: aquí el JcJ mundial está desactivado.',
     'worldPvp.staysEnabled': 'El JcJ mundial permanece activado.',
+    'pvp.petTauntYou': '{pet} te provoca: tu objetivo cambia a él.',
+    'pvp.petTauntOther': '{pet} provoca a {name}: su objetivo cambia a él.',
     'worldPvp.tooSoon': 'JcJ mundial: espera un momento antes de cambiarlo de nuevo.',
     'worldPvp.usage': 'Uso: /pvp, /pvp on, o /pvp off.',
     'error.uniqueCarried': 'Solo puedes llevar uno de ese objeto.',
@@ -4844,6 +4850,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'El JcJ mundial está desactivado en este reino.',
     'worldPvp.sanctuary': 'Esto es un santuario: aquí el JcJ mundial está desactivado.',
     'worldPvp.staysEnabled': 'El JcJ mundial permanece activado.',
+    'pvp.petTauntYou': '{pet} te provoca: tu objetivo cambia a él.',
+    'pvp.petTauntOther': '{pet} provoca a {name}: su objetivo cambia a él.',
     'worldPvp.tooSoon': 'JcJ mundial: espera un momento antes de cambiarlo de nuevo.',
     'worldPvp.usage': 'Uso: /pvp, /pvp on, o /pvp off.',
     'error.uniqueCarried': 'Solo puedes llevar uno de ese objeto.',
@@ -6233,6 +6241,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Le JcJ mondial est désactivé sur ce royaume.',
     'worldPvp.sanctuary': 'Ceci est un sanctuaire : le JcJ mondial est inactif ici.',
     'worldPvp.staysEnabled': 'Le JcJ mondial reste activé.',
+    'pvp.petTauntYou': '{pet} vous provoque : votre cible passe sur lui.',
+    'pvp.petTauntOther': '{pet} provoque {name} : sa cible passe sur lui.',
     'worldPvp.tooSoon': 'JcJ mondial : attendez un instant avant de rebasculer.',
     'worldPvp.usage': 'Utilisation : /pvp, /pvp on, ou /pvp off.',
     'aura.hoardBoulderDaze': 'Écrasé',
@@ -7699,6 +7709,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Le JcJ mondial est désactivé sur ce royaume.',
     'worldPvp.sanctuary': 'Ceci est un sanctuaire : le JcJ mondial est inactif ici.',
     'worldPvp.staysEnabled': 'Le JcJ mondial reste activé.',
+    'pvp.petTauntYou': '{pet} vous provoque : votre cible passe sur lui.',
+    'pvp.petTauntOther': '{pet} provoque {name} : sa cible passe sur lui.',
     'worldPvp.tooSoon': 'JcJ mondial : attendez un instant avant de rebasculer.',
     'worldPvp.usage': 'Utilisation : /pvp, /pvp on, ou /pvp off.',
     'aura.hoardBoulderDaze': 'Écrasé',
@@ -9376,6 +9388,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Il PvP Mondiale è disattivato su questo reame.',
     'worldPvp.sanctuary': 'Questo è un santuario: qui il PvP Mondiale è disattivato.',
     'worldPvp.staysEnabled': 'Il PvP Mondiale resta attivato.',
+    'pvp.petTauntYou': '{pet} ti provoca: il tuo bersaglio passa su di lui.',
+    'pvp.petTauntOther': '{pet} provoca {name}: il suo bersaglio passa su di lui.',
     'worldPvp.tooSoon': 'PvP Mondiale: aspetta un momento prima di cambiare di nuovo.',
     'worldPvp.usage': 'Uso: /pvp, /pvp on, oppure /pvp off.',
     'aura.hoardBoulderDaze': 'Schiacciato',
@@ -10827,6 +10841,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Welt-PvP ist auf diesem Realm deaktiviert.',
     'worldPvp.sanctuary': 'Dies ist ein Schutzgebiet: Welt-PvP ist hier ausgeschaltet.',
     'worldPvp.staysEnabled': 'Welt-PvP bleibt aktiviert.',
+    'pvp.petTauntYou': '{pet} verspottet dich: Dein Ziel wechselt zu ihm.',
+    'pvp.petTauntOther': '{pet} verspottet {name}: Das Ziel wechselt zu ihm.',
     'worldPvp.tooSoon': 'Welt-PvP: Wartet einen Moment, bevor Ihr erneut umschaltet.',
     'worldPvp.usage': 'Verwendung: /pvp, /pvp on oder /pvp off.',
     'aura.hoardBoulderDaze': 'Zerschmettert',
@@ -12193,6 +12209,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': '世界 PvP 在此服务器已禁用。',
     'worldPvp.sanctuary': '这里是圣域：世界 PvP 在此关闭。',
     'worldPvp.staysEnabled': '世界 PvP 将保持开启。',
+    'pvp.petTauntYou': '{pet} 嘲讽了你：你的目标切换为它。',
+    'pvp.petTauntOther': '{pet} 嘲讽了 {name}：对方的目标切换为它。',
     'worldPvp.tooSoon': '世界 PvP：请稍等片刻后再切换。',
     'worldPvp.usage': '用法：/pvp、/pvp on 或 /pvp off。',
     'error.uniqueCarried': '你只能携带该物品中的一个。',
@@ -13478,6 +13496,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': '此世界已停用世界 PvP。',
     'worldPvp.sanctuary': '此地是聖域：世界 PvP 在這裡已關閉。',
     'worldPvp.staysEnabled': '世界 PvP 將維持啟用狀態。',
+    'pvp.petTauntYou': '{pet} 嘲諷了你：你的目標切換為牠。',
+    'pvp.petTauntOther': '{pet} 嘲諷了 {name}：對方的目標切換為牠。',
     'worldPvp.tooSoon': '世界 PvP：請稍候片刻後再切換。',
     'worldPvp.usage': '用法：/pvp、/pvp on 或 /pvp off。',
     'error.uniqueCarried': '你只能攜帶該物品中的一個。',
@@ -14803,6 +14823,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': '이 서버에서는 월드 PvP가 비활성화되어 있습니다.',
     'worldPvp.sanctuary': '이곳은 성역입니다: 월드 PvP가 꺼져 있습니다.',
     'worldPvp.staysEnabled': '월드 PvP가 계속 활성화 상태로 유지됩니다.',
+    'pvp.petTauntYou': '{pet}이(가) 당신을 도발했습니다. 대상이 도발한 소환수로 바뀝니다.',
+    'pvp.petTauntOther': '{pet}이(가) {name}을(를) 도발했습니다. 대상이 도발한 소환수로 바뀝니다.',
     'worldPvp.tooSoon': '월드 PvP: 다시 전환하려면 잠시 기다리세요.',
     'worldPvp.usage': '사용법: /pvp, /pvp on, 또는 /pvp off.',
     'error.uniqueCarried': '이 아이템은 하나만 소지할 수 있습니다.',
@@ -16132,6 +16154,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'このレルムではワールドPvPが無効になっています。',
     'worldPvp.sanctuary': 'ここは聖域です：ワールドPvPは無効です。',
     'worldPvp.staysEnabled': 'ワールドPvPは有効のままです。',
+    'pvp.petTauntYou': '{pet}があなたを挑発しました。ターゲットがそのペットに切り替わります。',
+    'pvp.petTauntOther': '{pet}が{name}を挑発しました。相手のターゲットがそのペットに切り替わります。',
     'worldPvp.tooSoon': 'ワールドPvP：切り替えるにはもう少し待ってください。',
     'worldPvp.usage': '使い方：/pvp、/pvp on、/pvp off のいずれかを入力してください。',
     'error.uniqueCarried': 'このアイテムは1個だけ持つことができます。',
@@ -17485,6 +17509,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'O PvP Mundial está desativado neste reino.',
     'worldPvp.sanctuary': 'Isto é um santuário: o PvP Mundial está desligado aqui.',
     'worldPvp.staysEnabled': 'O PvP Mundial continua ativado.',
+    'pvp.petTauntYou': '{pet} provoca você: seu alvo muda para ele.',
+    'pvp.petTauntOther': '{pet} provoca {name}: o alvo passa para ele.',
     'worldPvp.tooSoon': 'PvP Mundial: espere um instante antes de alternar de novo.',
     'worldPvp.usage': 'Uso: /pvp, /pvp on, ou /pvp off.',
     'aura.hoardBoulderDaze': 'Esmagado',
@@ -18911,6 +18937,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Мировое PvP отключено в этом мире.',
     'worldPvp.sanctuary': 'Это святилище: здесь мировое PvP отключено.',
     'worldPvp.staysEnabled': 'Мировое PvP остаётся включённым.',
+    'pvp.petTauntYou': '{pet} провоцирует вас: ваша цель переключается на него.',
+    'pvp.petTauntOther': '{pet} провоцирует {name}: цель переключается на него.',
     'worldPvp.tooSoon': 'Мировое PvP: подождите немного, прежде чем переключать снова.',
     'worldPvp.usage': 'Использование: /pvp, /pvp on или /pvp off.',
     'error.uniqueCarried': 'Вы можете носить только один такой предмет.',
@@ -19601,6 +19629,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Světové PvP je na této říši vypnuté.',
     'worldPvp.sanctuary': 'Tohle je útočiště: světové PvP je tu vypnuté.',
     'worldPvp.staysEnabled': 'Světové PvP zůstává zapnuté.',
+    'pvp.petTauntYou': '{pet} tě provokuje: tvůj cíl se přepne na něj.',
+    'pvp.petTauntOther': '{pet} provokuje {name}: cíl se přepne na něj.',
     'worldPvp.tooSoon': 'Světové PvP: než to zase přepneš, chvíli počkej.',
     'worldPvp.usage': 'Použití: /pvp, /pvp on, nebo /pvp off.',
     'aura.hoardBoulderDaze': 'Zdrcen',
@@ -20386,6 +20416,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Wereldgevecht is op deze wereld uitgeschakeld.',
     'worldPvp.sanctuary': 'Dit is een toevluchtsoord: Wereldgevecht is hier uit.',
     'worldPvp.staysEnabled': 'Wereldgevecht blijft ingeschakeld.',
+    'pvp.petTauntYou': '{pet} daagt je uit: je doelwit wisselt naar hem.',
+    'pvp.petTauntOther': '{pet} daagt {name} uit: diens doelwit wisselt naar hem.',
     'worldPvp.tooSoon': 'Wereld-PvP: wacht even voordat je opnieuw schakelt.',
     'worldPvp.usage': 'Gebruik: /pvp, /pvp on, of /pvp off.',
     'aura.hoardBoulderDaze': 'Verpletterd',
@@ -21161,6 +21193,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'World PvP jest wyłączony na tym królestwie.',
     'worldPvp.sanctuary': 'To jest sanktuarium: World PvP jest tutaj wyłączony.',
     'worldPvp.staysEnabled': 'World PvP pozostaje włączony.',
+    'pvp.petTauntYou': '{pet} prowokuje cię: twój cel zmienia się na niego.',
+    'pvp.petTauntOther': '{pet} prowokuje {name}: cel zmienia się na niego.',
     'worldPvp.tooSoon': 'Świat PvP: poczekaj chwilę, zanim spróbujesz ponownie.',
     'worldPvp.usage': 'Użycie: /pvp, /pvp on, albo /pvp off.',
     'aura.hoardBoulderDaze': 'Przygnieciony',
@@ -21707,7 +21741,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     ...BASE_NEW.id_ID,
     'error.bagEquipHasProperty': 'Tas itu tidak bisa dipakai selama memiliki atribut khusus.',
     'error.unknownAbility': 'Kamu belum mengetahui kemampuan itu.',
-    'error.notEnoughRuin': 'Ruin tidak cukup!',
+    'error.notEnoughRuin': 'Wrack tidak cukup!',
     'error.burningPactRequired': 'Kobaran Api membutuhkan Pakta Membara pada target.',
     'error.shellskinPreventsAttacks': 'Kulit Cangkang mencegah serangan.',
     'error.tithefiendNeedsDirge':
@@ -21917,6 +21951,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Pertempuran Dunia dinonaktifkan di dunia ini.',
     'worldPvp.sanctuary': 'Ini adalah tempat suci: Pertempuran Dunia mati di sini.',
     'worldPvp.staysEnabled': 'Pertempuran Dunia tetap diaktifkan.',
+    'pvp.petTauntYou': '{pet} memprovokasimu: targetmu beralih kepadanya.',
+    'pvp.petTauntOther': '{pet} memprovokasi {name}: targetnya beralih kepadanya.',
     'aura.carryingFreight': 'Membawa Muatan',
     'aura.duskweaveCloak': 'Jubah Tenun Senja',
     'aura.naturesBoon': 'Karunia Alam',
@@ -22704,6 +22740,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Bu alanda Dünya PvP devre dışı.',
     'worldPvp.sanctuary': 'Burası bir kutsal bölge: Dünya PvP burada kapalı.',
     'worldPvp.staysEnabled': 'Dünya PvP etkin kalıyor.',
+    'pvp.petTauntYou': '{pet} seni kışkırtıyor: hedefin ona geçiyor.',
+    'pvp.petTauntOther': '{pet}, {name} adlı oyuncuyu kışkırtıyor: hedefi ona geçiyor.',
     'worldPvp.tooSoon': 'Dünya PvP: yeniden değiştirmeden önce bir an bekle.',
     'worldPvp.usage': 'Kullanım: /pvp, /pvp on veya /pvp off.',
     'aura.hoardBoulderDaze': 'Ezilmiş',
@@ -23250,7 +23288,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagEquipHasProperty':
       'Du kan inte utrusta den här väskan så länge den har en särskild egenskap.',
     'error.unknownAbility': 'Du kan inte den förmågan.',
-    'error.notEnoughRuin': 'Inte tillräckligt med Ruin!',
+    'error.notEnoughRuin': 'Inte tillräckligt med Wrack!',
     'error.burningPactRequired': 'Storbrand kräver Brinnande pakt på målet.',
     'error.shellskinPreventsAttacks': 'Skalhud förhindrar attacker.',
     'error.tithefiendNeedsDirge':
@@ -23476,6 +23514,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Världs PvP är inaktiverad på denna realm.',
     'worldPvp.sanctuary': 'Detta är ett helgedom: Världs PvP är av här.',
     'worldPvp.staysEnabled': 'Världs PvP förblir aktiverad.',
+    'pvp.petTauntYou': '{pet} hånar dig: ditt mål byts till den.',
+    'pvp.petTauntOther': '{pet} hånar {name}: målet byts till den.',
     'worldPvp.tooSoon': 'World PvP: vänta en stund innan du byter igen.',
     'worldPvp.usage': 'Användning: /pvp, /pvp on, eller /pvp off.',
     'aura.hoardBoulderDaze': 'Krossad',
@@ -24024,7 +24064,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     ...BASE_NEW.vi_VN,
     'error.bagEquipHasProperty': 'Không thể trang bị túi này khi nó còn mang thuộc tính đặc biệt.',
     'error.unknownAbility': 'Bạn chưa học kỹ năng đó.',
-    'error.notEnoughRuin': 'Không đủ Ruin!',
+    'error.notEnoughRuin': 'Không đủ Wrack!',
     'error.burningPactRequired': 'Bùng Cháy cần mục tiêu đang chịu Khế Ước Rực Cháy.',
     'error.shellskinPreventsAttacks': 'Da Mai ngăn không cho tấn công.',
     'error.tithefiendNeedsDirge': 'Quỷ Thập Phân của bạn cần một kẻ địch đang chịu Ai Ca Mục Rữa.',
@@ -24248,6 +24288,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'PvP Thế Giới bị tắt trên lãnh địa này.',
     'worldPvp.sanctuary': 'Đây là một nơi thánh: PvP Thế Giới bị tắt ở đây.',
     'worldPvp.staysEnabled': 'PvP Thế Giới vẫn được bật.',
+    'pvp.petTauntYou': '{pet} khiêu khích bạn: mục tiêu của bạn chuyển sang nó.',
+    'pvp.petTauntOther': '{pet} khiêu khích {name}: mục tiêu của họ chuyển sang nó.',
     'worldPvp.tooSoon': 'Chiến đấu Thế Giới: chờ một chút rồi chuyển lại.',
     'worldPvp.usage': 'Cách dùng: /pvp, /pvp on, hoặc /pvp off.',
     'aura.hoardBoulderDaze': 'Mê Hoặc Từ Tảng Đá',
@@ -24795,7 +24837,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagEquipHasProperty':
       'Du kan ikke iføre dig denne taske, så længe den har en særlig egenskab.',
     'error.unknownAbility': 'Du kender ikke den evne.',
-    'error.notEnoughRuin': 'Ikke nok Ruin!',
+    'error.notEnoughRuin': 'Ikke nok Wrack!',
     'error.burningPactRequired': 'Antændelse kræver Brændende Pagt på målet.',
     'error.shellskinPreventsAttacks': 'Skalhud forhindrer angreb.',
     'error.tithefiendNeedsDirge':
@@ -25020,6 +25062,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'worldPvp.realmDisabled': 'Verdenskamp er deaktiveret på dette rige.',
     'worldPvp.sanctuary': 'Dette er et helligsted: verdenskamp er slukket her.',
     'worldPvp.staysEnabled': 'Verdenskamp forbliver aktiveret.',
+    'pvp.petTauntYou': '{pet} håner dig: dit mål skifter til den.',
+    'pvp.petTauntOther': '{pet} håner {name}: målet skifter til den.',
     'worldPvp.tooSoon': 'Verden-PvP: vent et øjeblik før du skifter igen.',
     'worldPvp.usage': 'Brug: /pvp, /pvp on, eller /pvp off.',
     'aura.hoardBoulderDaze': 'Knust',
@@ -25345,7 +25389,7 @@ const PET_DICT_DE: Record<PetSimMessageKey, string> = {
   'error.permanentPetAbandonFrame':
     'Dauerhafte Begleiter können nur über das Begleiterfenster aufgegeben werden.',
   'error.summonUnavailable': 'Diese Beschwörung ist nicht verfügbar.',
-  'error.huntersAbandonPets': 'Nur Jäger können Begleiter aufgeben.',
+  'error.huntersAbandonPets': 'Nur mit Jagdkunst kannst du Tierbegleiter freilassen.',
   'error.petClassesRename': 'Nur Begleiterklassen können Begleiter umbenennen.',
   'error.petNameInvalid':
     'Der Begleitername muss 2-16 Buchstaben, Leerzeichen, Bindestriche oder Apostrophe enthalten und mit einem Buchstaben beginnen.',
@@ -25360,10 +25404,10 @@ const PET_DICT_DE: Record<PetSimMessageKey, string> = {
     'Knurren deines Begleiters hat Abklingzeit. {autoState} Bereit in {seconds}s.',
   'petGrowl.autoOn': 'Automatischer Spott ist aktiviert.',
   'petGrowl.autoOff': 'Automatischer Spott ist deaktiviert.',
-  'error.huntersFeedPets': 'Nur Jäger können Begleiter füttern.',
+  'error.huntersFeedPets': 'Nur mit Jagdkunst kannst du Tierbegleiter füttern.',
   'error.petFoodOnly': 'Dein Begleiter kann nur Nahrung fressen.',
   'error.petFullHealth': 'Dein Begleiter hat bereits volle Gesundheit.',
-  'error.warlocksDemonHeal': 'Nur Hexenmeister können Dämonenheilung kanalisieren.',
+  'error.warlocksDemonHeal': 'Nur mit Hexenwerk kannst du Dämonenheilung kanalisieren.',
   'error.youAreDead': 'Du bist tot.',
   'error.youAreStunned': 'Du bist betäubt.',
   'error.noLivingDemon': 'Du hast keinen lebenden Dämon.',
@@ -27274,7 +27318,7 @@ const AURA_NAME_KEY: Record<string, SimMessageKey> = {
   'Improved Immolate': 'aura.improvedImmolate',
   'Demon Armor': 'aura.demonArmor',
   Desolation: 'aura.desolation',
-  Ruin: 'aura.destructionRuin',
+  Wrack: 'aura.destructionRuin',
   'Ruinous Brand': 'aura.ruinousBrand',
   'Duskfire Claim': 'aura.duskfireClaim',
   'Duskweave Cloak': 'aura.duskweaveCloak',
@@ -27375,6 +27419,13 @@ const WARLOCK_TALENT_AURA_NAMES: ReadonlySet<string> = new Set([
 // ability's localized name here so the buff bar and combat log never paint
 // raw English in a non-English locale.
 const ABILITY_NAMED_AURA_IDS: Readonly<Record<string, string>> = {
+  'Dream Thread': 'dream_thread',
+  'Dream Shroud': 'dream_shroud',
+  'Dream Veil': 'dream_veil',
+  'Deep Nightmare': 'dream_deep_nightmare',
+  Moonrend: 'dream_moonrend',
+  'Dream Glide': 'dream_glide',
+  'Moon Refuge': 'dream_refuge',
   'Tithe Bomb': 'spirit_bomb',
   'Bruin Rush': 'bear_charge',
   Lunge: 'lunge',
@@ -29699,6 +29750,43 @@ function localizeSimMoneyText(text: string): string {
   return formatMoney(copper);
 }
 
+const classIdBySimName = new Map(Object.values(CLASSES).map(({ id, name }) => [name, id]));
+const germanResourceNames: Readonly<Record<string, string>> = {
+  Energy: 'Energie', Focus: 'Fokus', Rage: 'Wut',
+};
+
+function localizeGermanClassReadout(text: string): string | null {
+  const className = (name: string): string => {
+    const id = classIdBySimName.get(name);
+    return id ? tEntity({ kind: 'class', id, field: 'name' }) : name;
+  };
+  const stats = /^Level (\d+) (\w+) — HP (\d+\/\d+)(?:, (\w+) (\d+\/\d+))?\. AP (\d+), Crit ([\d.]+)%, Armor (\d+)\.$/.exec(text);
+  if (stats) {
+    const resource = stats[4] ? `, ${germanResourceNames[stats[4]] ?? stats[4]} ${stats[5]}` : '';
+    const crit = formatNumber(Number(stats[7]), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    return `Stufe ${stats[1]} · ${className(stats[2])} — LP ${stats[3]}${resource}. Angriffskraft ${stats[6]}, Kritisch ${crit} %, Rüstung ${stats[8]}.`;
+  }
+  const inspect = /^(.+): Level (\d+) (\w+): HP (dead|\d+%)\.$/.exec(text);
+  if (inspect) {
+    const health = inspect[4] === 'dead' ? 'gefallen' : inspect[4];
+    return `${inspect[1]}: Stufe ${inspect[2]} · ${className(inspect[3])}: LP ${health}.`;
+  }
+  const roster = /^(Party|Raid) \((\d+\/\d+)\): (.+)\.$/.exec(text);
+  if (roster) {
+    const members = roster[3]
+      .replace(/\(Lvl (\d+) (\w+), (\(dead\)|\d+%)\)/g, (_, level: string, name: string, health: string) =>
+        `(Stufe ${level} · ${className(name)}, ${health === '(dead)' ? 'gefallen' : health})`)
+      .replaceAll(' [leader]', ' [Leitung]');
+    const group = roster[1] === 'Raid' ? 'Schlachtzug' : 'Gruppe';
+    return `${group} (${roster[2]}): ${members}.`;
+  }
+  if (text === 'Overpower is a warrior ability; your class cannot use it.') {
+    const ability = tEntity({ kind: 'ability', id: 'overpower', field: 'name' });
+    return `${ability} gehört zur ${className('Warrior')}. Deine Klasse kann diese Fähigkeit nicht einsetzen.`;
+  }
+  return null;
+}
+
 const RULES: Rule[] = [
   {
     re: /^You have learned Advanced Riding\. Your mount speed is increased by (\d+)%\.$/,
@@ -31130,6 +31218,16 @@ const RULES: Rule[] = [
   // sim's 'Ng Ns Nc' money re-formats through the locale money formatter.
   // LAST on purpose: the two broadest shapes here ('You defeat X.' and
   // 'X defeats you.') must never shadow a more specific rule above.
+  // A tank pet's PvP taunt (src/sim/pet/pet_pvp_taunt.ts): the victim's line and
+  // the owner's. The pet name maps through locMob; the player name splices verbatim.
+  {
+    re: /^(.+) taunts you: your target switches to it\.$/,
+    build: (m) => tSim('pvp.petTauntYou', { pet: locMob(m[1]) }),
+  },
+  {
+    re: /^(.+) taunts (.+): their target switches to it\.$/,
+    build: (m) => tSim('pvp.petTauntOther', { pet: locMob(m[1]), name: m[2] }),
+  },
   {
     re: /^World PvP will be disabled in (\d+) minutes\.$/,
     build: (m) => tSim('worldPvp.disablingIn', { minutes: formatNumber(Number(m[1])) }),
@@ -31282,6 +31380,10 @@ export function localizeSimText(text: string): string | null {
   if (traceReaction !== null) return traceReaction;
   const exactKey = EXACT[text];
   if (exactKey) return tSim(exactKey);
+  if (getLanguage() === 'de_DE') {
+    const classReadout = localizeGermanClassReadout(text);
+    if (classReadout !== null) return classReadout;
+  }
   for (const rule of RULES) {
     const m = rule.re.exec(text);
     if (m) return rule.build(m);

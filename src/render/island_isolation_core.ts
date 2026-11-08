@@ -152,6 +152,23 @@ export function islandHorizonHaze(): { near: number; far: number } {
   return { near: ISLAND_HAZE_NEAR_YD, far: ISLAND_HAZE_FAR_YD };
 }
 
+/** Give both terrain meshes the same muted silhouette across the strait. A
+ * previously prepared mainland chunk can still be visible from the island. */
+export function islandMainlandFogGlsl(worldXZ: string): string {
+  const min = `vec2(${ISLAND_RECT.minX}.0, ${ISLAND_RECT.minZ}.0)`;
+  const max = `vec2(${ISLAND_RECT.maxX}.0, ${ISLAND_RECT.maxZ}.0)`;
+  return `#ifdef USE_FOG
+    if (all(greaterThanEqual(cameraPosition.xz, ${min}))
+        && all(lessThanEqual(cameraPosition.xz, ${max}))) {
+      vec2 coastPoint = ${worldXZ};
+      float beyondIsland = distance(coastPoint, clamp(coastPoint, ${min}, ${max}));
+      float seaMist = 0.9 * smoothstep(0.0, 22.0, beyondIsland);
+      gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, seaMist);
+    }
+  #endif
+  #include <fog_fragment>`;
+}
+
 /**
  * The residency question, asked per chunk cell: should this cell count as
  * PENDING ground for the fog clamp?

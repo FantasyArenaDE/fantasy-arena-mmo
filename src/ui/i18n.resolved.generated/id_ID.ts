@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const id_ID: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Pemberitahuan hukum",
+    "worldPicker": "Pilih dunia",
+    "characterPreview": "Coba pembuat karakter",
+    "desktopDownload": "Unduh aplikasi desktop",
+    "credits": "Kredit dan lisensi",
+    "sourceProject": "Proyek sumber di GitHub",
+    "supportProject": "Dukung proyek",
+    "musicCredits": "Kredit musik",
+    "separateAccount": "Versi uji ini memerlukan akun MMO terpisah."
+  },
   "referralCards": {
     "title": "Ajak Teman",
     "subtitle": "Berpetualang bersama. Raih capmu.",
@@ -467,6 +478,77 @@ export const id_ID: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Kurir",
       "close": "Tutup kurir",
@@ -1767,6 +1849,7 @@ export const id_ID: EnTranslations = {
       "presets": {
         "classic": "Emas Klasik",
         "fancyGold": "Emas Mewah (WIP)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Tengah Malam",
         "parchment": "Perkamen",
         "highContrast": "Kontras Tinggi"
@@ -2072,8 +2155,8 @@ export const id_ID: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Pembaruan Tersedia",
-      "body": "Versi baru World of ClaudeCraft tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.",
-      "bodyWithVersion": "Versi {version} World of ClaudeCraft tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.",
+      "body": "Versi baru Fantasy Arena MMO tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.",
+      "bodyWithVersion": "Versi {version} Fantasy Arena MMO tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.",
       "notNow": "Jangan sekarang",
       "update": "Perbarui"
     },
@@ -2205,6 +2288,8 @@ export const id_ID: EnTranslations = {
         "remove": "Hapus",
         "promote": "Promosikan",
         "bank": "Bank Guild",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Obrolan Perwira",
         "motd": "Papan Pengumuman",
         "events": "Kalender"
@@ -2214,6 +2299,8 @@ export const id_ID: EnTranslations = {
         "remove": "Hapus anggota yang memiliki pangkat lebih rendah.",
         "promote": "Promosikan dan turunkan anggota yang memiliki pangkat lebih rendah, hingga satu pangkat di bawah pangkat mereka.",
         "bank": "Setor dan tarik tembaga dan item di bank guild. Setiap anggota dapat melihatnya.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Baca dan berbicara di obrolan perwira.",
         "motd": "Edit papan pengumuman guild.",
         "events": "Tambah dan hapus acara kalender guild."
@@ -3079,7 +3166,7 @@ export const id_ID: EnTranslations = {
         "offline": "Luring"
       },
       "diagnostics": {
-        "panelAria": "Diagnostik performa World of ClaudeCraft",
+        "panelAria": "Diagnostik performa Fantasy Arena MMO",
         "title": "Dokter Performa ClaudeCraft",
         "subtitle": "Pemindaian khusus permainan dengan bukti dan perbaikan tingkat kode.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const id_ID: EnTranslations = {
           }
         },
         "report": {
-          "title": "Diagnosis performa World of ClaudeCraft",
+          "title": "Diagnosis performa Fantasy Arena MMO",
           "statusLine": "Status: {status} ({score}/100)",
           "capturedLine": "Tertangkap: {captured}",
           "topFindingLine": "Temuan teratas: {finding}",
@@ -5422,7 +5509,7 @@ export const id_ID: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Tutup",
       "keybind": "Panel Discord",
@@ -5836,6 +5923,8 @@ export const id_ID: EnTranslations = {
       "guildTab": "Guild",
       "guildCapacityAria": "Slot bank guild terpakai: {used} dari {total}",
       "guildEmpty": "Bank guild kosong.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Kas guild",
       "guildDepositGold": "Setor uang",
       "guildWithdrawGold": "Tarik uang",
@@ -6446,6 +6535,7 @@ export const id_ID: EnTranslations = {
       "toolEffectRechargeFull": "{effect} sudah terisi penuh.",
       "toolEffectRechargeToolCapped": "Bawa alat {profession} yang lebih baik untuk mengisi {effect} lebih jauh.",
       "toolEffectRechargeMaterials": "Mengisi ulang {effect} membutuhkan {material} x{count}.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Kamu sedang membuat: {remaining} dtk dari {total} dtk tersisa.",
       "disenchantingProgress": "Kamu sedang menghancurkan pemantraan: {remaining} dtk dari {total} dtk tersisa.",
       "enchantingProgress": "Kamu sedang memantrai: {remaining} dtk dari {total} dtk tersisa.",
@@ -7978,6 +8068,7 @@ export const id_ID: EnTranslations = {
         }
       },
       "commendHeading": "Komendasi Utusan",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount} berdiri pada salah satu faksi pilihanmu, sekali seminggu.",
       "commendCarriedNote": "{amount} reputasi dari minggu lalu masih belum diklaim. Klaim untuk memilih muatan baru.",
       "commendClaimed": "Komendasi minggu ini pergi ke {faction}.",
@@ -9202,7 +9293,7 @@ export const id_ID: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "MMO bergaya klasik yang bisa kamu mainkan gratis di peramban.",
     "skipToContent": "Lewati ke konten utama",
@@ -9312,7 +9403,7 @@ export const id_ID: EnTranslations = {
     },
     "home": {
       "eyebrow": "MMO browser bergaya klasik",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Jelajahi dunia, selesaikan quest, dan taklukkan dungeon bersama teman.",
       "ctaPlay": "Main Sekarang",
       "ctaLearn": "Cara Bermain",
@@ -10293,7 +10384,7 @@ export const id_ID: EnTranslations = {
     },
     "worldPage": {
       "heading": "Dunia",
-      "intro": "World of ClaudeCraft adalah satu daratan bersambung yang kamu seberangi dengan berjalan kaki. Jalan tua membentang dari selatan ke utara melewati lembah awal, rawa, dan puncak, dan terus mendaki melampauinya ke cekungan di baliknya serta negeri salju di puncak peta. Sederet alam yang lebih tinggi terbuka dari jalan itu ke barat dan sederet lagi ke timur, dan sebuah pulau terletak di lepas pantai timur Lembah. Tidak ada perjalanan cepat, tidak ada jalur terbang, dan tidak ada kereta: setiap perjalanan ditempuh dengan berjalan atau berkuda, jadi tibanya adalah bagian dari petualangan.\n\nDaratan itu juga menghitung waktu. Siklus siang dan malam berjalan di atas jam sungguhan yang dibagi semua orang di duniamu, sehingga langit beranjak dari fajar ke tengah hari lalu ke senja dan gelap untuk kalian semua sekaligus, bulan datang dan pergi melalui fase-fasenya, dan cahaya di tanah berubah bersamanya. Piringan di sekeliling peta kecilmu adalah tempat kamu membaca jam.",
+      "intro": "Fantasy Arena MMO adalah satu daratan bersambung yang kamu seberangi dengan berjalan kaki. Jalan tua membentang dari selatan ke utara melewati lembah awal, rawa, dan puncak, dan terus mendaki melampauinya ke cekungan di baliknya serta negeri salju di puncak peta. Sederet alam yang lebih tinggi terbuka dari jalan itu ke barat dan sederet lagi ke timur, dan sebuah pulau terletak di lepas pantai timur Lembah. Tidak ada perjalanan cepat, tidak ada jalur terbang, dan tidak ada kereta: setiap perjalanan ditempuh dengan berjalan atau berkuda, jadi tibanya adalah bagian dari petualangan.\n\nDaratan itu juga menghitung waktu. Siklus siang dan malam berjalan di atas jam sungguhan yang dibagi semua orang di duniamu, sehingga langit beranjak dari fajar ke tengah hari lalu ke senja dan gelap untuk kalian semua sekaligus, bulan datang dan pergi melalui fase-fasenya, dan cahaya di tanah berubah bersamanya. Piringan di sekeliling peta kecilmu adalah tempat kamu membaca jam.",
       "hub": "Markas utama",
       "mapHeading": "Jalan dan alam-alam di baliknya",
       "mapSub": "Jejak misi membentang dari selatan ke utara di tengah peta: lembah, rawa, puncak, dan terus melampauinya ke cekungan serta salju. Alam-alam lain terbuka di sepanjang jalan itu, bukan sesudahnya, lewat gerbang di timur dan barat jalan rawa, sementara pulau Farshore dicapai dari pantai timur Lembah. Yang menahanmu dari alam-alam jauh adalah pita levelnya, bukan perjalanannya: lima di antaranya berbagi pita tertinggi, jadi begitu kamu siap kamu bisa mengambilnya dalam urutan apa pun. Farshore adalah pengecualian, negeri berlevel rendah yang bisa kamu kunjungi sejak awal.",
@@ -11594,7 +11685,7 @@ export const id_ID: EnTranslations = {
       "importedTexture": "Tekstur impor {number}"
     },
     "appTitle": "Editor Peta",
-    "docTitle": "Editor Peta - World of ClaudeCraft",
+    "docTitle": "Editor Peta - Fantasy Arena MMO",
     "untitledMap": "Peta Tanpa Judul",
     "liveWorld": {
       "name": "Penyempurnaan dunia aktif",
@@ -13756,7 +13847,7 @@ export const id_ID: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Main",
-    "playAria": "Mainkan World of ClaudeCraft",
+    "playAria": "Mainkan Fantasy Arena MMO",
     "playLoading": "Memuat",
     "playStarting": "Memulai",
     "serverLabel": "Pilih dunia Anda",
@@ -13860,6 +13951,41 @@ export const id_ID: EnTranslations = {
         "default": "Klasik",
         "almond": "Berbentuk Almon",
         "hooded": "Kelopak Tertutup"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const id_ID: EnTranslations = {
     "extensionHelp": "Agar dompet tampil di sini, biarkan ekstensi dompet peramban seperti Solflare Wallet tetap aktif.",
     "mobileAppHelp": "Pilih Phantom atau Solflare. Aplikasi dompetmu akan meminta persetujuan. Jaga permainan ini tetap terbuka dan kembali ke sana saat selesai.",
     "seekerAppHelp": "Lanjutkan dengan Seed Vault Wallet. Tinjau permintaan koneksi dan verifikasi di Seed Vault, lalu kembali ke permainan.",
-    "standaloneAppHelp": "Koneksi dompet belum tersedia di aplikasi Layar Utama. Buka World of ClaudeCraft di Safari atau Chrome untuk menggunakan Phantom atau Solflare.",
+    "standaloneAppHelp": "Koneksi dompet belum tersedia di aplikasi Layar Utama. Buka Fantasy Arena MMO di Safari atau Chrome untuk menggunakan Phantom atau Solflare.",
     "openAppTitle": "Lanjutkan di {wallet}",
     "openAppHelp": "Buka {wallet} untuk meninjau permintaan ini. Jaga tab permainan ini tetap terbuka saat aplikasi dompet aktif.",
     "openAppButton": "Buka {wallet}",
     "manualReturnBrowserHelp": "Setelah persetujuan, kembali ke tab permainan ini. Jika iOS membuka browser lain, tutup dan kembali ke browser asli secara manual.",
-    "manualReturnStandaloneHelp": "Setelah persetujuan, kembali ke World of ClaudeCraft dari Layar Utamamu. Jika iOS membuka browser, tutup dan buka kembali aplikasi Layar Utama secara manual.",
+    "manualReturnStandaloneHelp": "Setelah persetujuan, kembali ke Fantasy Arena MMO dari Layar Utamamu. Jika iOS membuka browser, tutup dan buka kembali aplikasi Layar Utama secara manual.",
     "preparingAppButton": "Mempersiapkan {wallet}...",
     "walletAppUnavailable": "{wallet} tidak dapat dipersiapkan. Tutup jendela ini dan coba lagi.",
     "flowConnect": "Pilih sebuah dompet. Verifikasi berlanjut secara otomatis.",
@@ -14266,12 +14392,12 @@ export const id_ID: EnTranslations = {
       "paymentBody": "Pilih dompet yang tertaut ke akunmu dan setujui transaksi di browser ini.",
       "stepUpBody": "Pilih dompet yang tertaut ke akunmu dan tanda tangani pesan otorisasi $WOC Exchange. Penandatanganan ini gratis dan tidak memindahkan dana apa pun.",
       "extensionHelp": "Tidak ada ekstensi dompet yang kompatibel ditemukan. Instal atau buka Phantom, Solflare, atau dompet browser Solana lainnya, lalu coba lagi.",
-      "safety": "World of ClaudeCraft tidak pernah meminta frasa pemulihan atau kunci privatmu.",
+      "safety": "Fantasy Arena MMO tidak pernah meminta frasa pemulihan atau kunci privatmu.",
       "continueWith": "Lanjutkan dengan {wallet}",
       "reviewTitle": "Tinjau di dompetmu",
       "reviewBody": "Ikuti perintah dari {wallet}. Jaga halaman browser ini tetap terbuka.",
       "completeTitle": "Otorisasi dompet selesai",
-      "completeBody": "Kamu dapat kembali ke aplikasi desktop World of ClaudeCraft.",
+      "completeBody": "Kamu dapat kembali ke aplikasi desktop Fantasy Arena MMO.",
       "returnButton": "Kembali ke aplikasi desktop",
       "failed": "Otorisasi dompet gagal atau kedaluwarsa. Kembali ke aplikasi desktop dan coba lagi.",
       "retry": "Coba Lagi"
@@ -14369,16 +14495,16 @@ export const id_ID: EnTranslations = {
     "levelClass": "Level {level} - {className}",
     "topPercent": "TERATAS {percent}%",
     "realmSubtitle": "Dunia {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Fantasy Arena MMO",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count} direkrut",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Tempa legendamu: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", pemegang $WOC peringkat {tier}",
-    "shareText": "Aku sedang menempa legendaku di World of ClaudeCraft: Level {level} {className}{tierBit}. Bergabunglah dengan duniaku:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareText": "Aku sedang menempa legendaku di Fantasy Arena MMO: Level {level} {className}{tierBit}. Bergabunglah dengan duniaku:",
+    "nativeShareTitle": "Fantasy Arena MMO",
     "fileNameFallback": "pemain",
     "actionShareX": "Bagikan ke X",
     "actionCopyReferral": "Salin Tautan Rujukan",
@@ -14395,6 +14521,7 @@ export const id_ID: EnTranslations = {
     "statusShareUnsupported": "Berbagi tidak didukung pada perangkat ini."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "Prajurit",
     "paladin": "Paladin",
     "hunter": "Pemburu",
@@ -14402,6 +14529,7 @@ export const id_ID: EnTranslations = {
     "priest": "Pendeta",
     "shaman": "Dukun",
     "mage": "Penyihir",
+    "dreamdancer": "Penari Mimpi",
     "warlock": "Penyihir Iblis",
     "druid": "Druid",
     "warriorAria": "Kelas Prajurit",
@@ -14411,6 +14539,7 @@ export const id_ID: EnTranslations = {
     "priestAria": "Kelas Pendeta",
     "shamanAria": "Kelas Dukun",
     "mageAria": "Kelas Penyihir",
+    "dreamdancerAria": "Penari Mimpi",
     "warlockAria": "Kelas Penyihir Iblis",
     "druidAria": "Kelas Druid"
   },
@@ -15248,13 +15377,13 @@ export const id_ID: EnTranslations = {
     "parseService": "Layanan Parse WoC"
   },
   "seo": {
-    "title": "World of ClaudeCraft: MMO Web Bergaya Klasik",
-    "description": "Mainkan World of ClaudeCraft, MMO peramban gratis. Jelajahi dunia, selesaikan quest, dan taklukkan dungeon bersama teman. Tanpa perlu mengunduh.",
+    "title": "Fantasy Arena MMO: MMO Web Bergaya Klasik",
+    "description": "Mainkan Fantasy Arena MMO, MMO peramban gratis. Jelajahi dunia, selesaikan quest, dan taklukkan dungeon bersama teman. Tanpa perlu mengunduh.",
     "genre": "MMORPG",
     "playMode": "Multipemain",
     "applicationCategory": "Permainan",
     "operatingSystem": "Peramban web",
-    "officialLabel": "Situs resmi World of ClaudeCraft",
+    "officialLabel": "Situs resmi Fantasy Arena MMO",
     "officialBody": "Situs resmi World of ClaudeCraft. Main daring, baca wiki, dan temukan tautan komunitas di sini."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const id_ID: EnTranslations = {
     "notify": {
       "updateReadyTitle": "Pembaruan {version} siap",
       "updateReadyTitleNoVersion": "Pembaruan siap",
-      "updateReadyBody": "Mulai ulang World of ClaudeCraft untuk menerapkan pembaruan.",
+      "updateReadyBody": "Mulai ulang Fantasy Arena MMO untuk menerapkan pembaruan.",
       "partyInviteTitle": "Undangan Kelompok",
       "partyInviteBody": "{name} telah mengundangmu ke kelompoknya."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "Tampilan gim berhenti bekerja. Muat ulang?",
       "reload": "Muat Ulang",
       "quit": "Keluar",
-      "fatalBody": "World of ClaudeCraft mengalami kesalahan tak terduga dan perlu ditutup."
+      "fatalBody": "Fantasy Arena MMO mengalami kesalahan tak terduga dan perlu ditutup."
     },
     "hostDiag": {
       "saveTitle": "Simpan laporan sistem",
@@ -15500,6 +15629,7 @@ export const id_ID: EnTranslations = {
       "priest": "Penyembuh / DPS Jarak Jauh",
       "shaman": "Penyembuh / DPS Jarak Dekat atau Jauh",
       "mage": "DPS Jarak Jauh",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "DPS Jarak Jauh",
       "druid": "Tank / Penyembuh / DPS Jarak Dekat atau Jauh"
     },
@@ -15524,6 +15654,7 @@ export const id_ID: EnTranslations = {
       "priest": "Pendeta memanggil Cahaya Pemulih untuk menyembuhkan dan melindungi sekutu, sementara sihir Bayangan memungkinkan mereka menyedot nyawa musuh.",
       "shaman": "Dukun memerintah unsur-unsur alam, mengisi senjata dengan kekuatan, mengejutkan musuh dengan petir, dan memulihkan sekutu.",
       "mage": "Penyihir menundukkan kekuatan Api, Beku, dan Arkana untuk membinasakan musuh, memanggil air, dan membekukan ancaman di tempat.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "Penyihir Iblis memanggil iblis, menebar kutukan dan sihir kerusakan berkelanjutan, serta menyedot nyawa musuh untuk bertahan.",
       "druid": "Druid menyalurkan kekuatan alam, menyembuhkan luka, membelit musuh, dan berubah ke wujud hewan untuk bertahan atau menyerang."
     },
@@ -15540,11 +15671,11 @@ export const id_ID: EnTranslations = {
     "iosStandaloneDetail": "Kamu berada dalam mode layar penuh layar-beranda. Pertahankan perangkat dalam posisi lanskap.",
     "iosInstallDetail": "Untuk layar penuh sejati di iPhone atau iPad, pasang halaman ini ke Layar Beranda terlebih dahulu.",
     "iosShareStep": "Di Safari, ketuk Bagikan, lalu Tambahkan ke Layar Beranda.",
-    "iosOpenStep": "Buka World of ClaudeCraft dari ikon Layar Beranda yang baru.",
+    "iosOpenStep": "Buka Fantasy Arena MMO dari ikon Layar Beranda yang baru.",
     "androidStandaloneDetail": "Kamu berada dalam mode aplikasi layar penuh. Pertahankan perangkat dalam posisi lanskap.",
     "androidInstallDetail": "Untuk layar penuh di Android, pasang halaman ini atau tambahkan ke layar Beranda terlebih dahulu.",
     "androidInstallStep": "Di Chrome, ketuk menu, lalu Pasang aplikasi atau Tambahkan ke layar Beranda.",
-    "androidOpenStep": "Buka World of ClaudeCraft dari ikon baru.",
+    "androidOpenStep": "Buka Fantasy Arena MMO dari ikon baru.",
     "otherStandaloneDetail": "Pertahankan perangkatmu dalam layar penuh posisi lanskap.",
     "otherInstallDetail": "Pasang atau tambahkan halaman ini ke layar Beranda untuk pengalaman seluler layar penuh terbaik."
   },
@@ -15560,8 +15691,8 @@ export const id_ID: EnTranslations = {
     "confirm": "Lanjutkan"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Dunia Tidak Tersedia",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Dunia Tidak Tersedia",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Pemeliharaan dunia",
     "heading": "Dunia sementara tidak tersedia.",
     "body": "Kami sedang memulai ulang layanan game dan memperkirakan Claudemoon akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.",
@@ -15762,6 +15893,7 @@ export const id_ID: EnTranslations = {
       "audio": "Audio",
       "interface": "Antarmuka",
       "language": "Bahasa",
+      "characterSelect": "Pemilihan Karakter",
       "logout": "Keluar",
       "returnToGame": "Kembali ke Permainan",
       "resetToDefaults": "Kembalikan ke Bawaan",
@@ -17376,6 +17508,8 @@ export const id_ID: EnTranslations = {
       "collectNote": "Pendapatan dan barang kembalian yang disimpan Pedagang untukmu.",
       "saleProceeds": "Hasil penjualan",
       "collectAll": "Ambil Semua",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Riwayat",
       "historyEmpty": "Belum ada penjualan. Item yang kamu jual di Pasar Dunia muncul di sini.",
       "historyNote": "Penjualan terbaru mu di Pasar Dunia.",
@@ -19265,6 +19399,66 @@ export const id_ID: EnTranslations = {
       "revive_pet": {
         "name": "Obati",
         "description": "Memulihkan 10% nyawa maksimum pendampingmu yang hidup setiap detik selama 8 dtk. Jika pendampingmu mati, hidupkan kembali dengan 50% nyawa."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const id_ID: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Joran arus perak"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "Berhala Asin"
@@ -31089,8 +31307,8 @@ export const id_ID: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Gaun Mahkota Terak",
-        "bonus2": "Jeda Kulit Bara dikurangi 30 detik. Kerusakan yang diterima tidak lagi menunda perapalan mantra Anda.",
-        "bonus4": "Setiap Kobaran Api kedua membuat Baut Reruntuhan berikutnya dalam 8 detik instan."
+        "bonus2": "Terhadap pemain musuh, Baut Reruntuhan memberikan 50% lebih banyak kerusakan tetapi butuh 0,7 detik lebih lama untuk dirapal. Kerusakan yang diterima tidak lagi menunda perapalan mantra Anda.",
+        "bonus4": "Setiap Kobaran Api kedua membuat Baut Reruntuhan berikutnya dalam 8 detik instan. Baut Reruntuhan gratis itu tidak menghabiskan Kemusnahan."
       },
       "vanguard_warrior_arms": {
         "name": "Peralatan Pertempuran Pelepasan Blade",

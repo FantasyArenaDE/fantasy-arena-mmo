@@ -1,24 +1,24 @@
-// Game cursor PNGs live in public/ui/cursors/ (served from ./ui/cursors/ at runtime).
+// Original Fantasy Arena cursor PNGs, served from public/fantasy-arena/cursors/.
 
 export type HoverCursorKind = 'default' | 'attack' | 'friendly' | 'seat' | 'gear';
 
 const BASE = import.meta.env.BASE_URL;
 
 function pngCursor(file: string, hotX: number, hotY: number, fallback: string): string {
-  return `url("${BASE}ui/cursors/${file}") ${hotX} ${hotY}, ${fallback}`;
+  return `url("${BASE}fantasy-arena/cursors/${file}") ${hotX} ${hotY}, ${fallback}`;
 }
 
 /** Default cursor — the ornate arrow. */
-export const CURSOR_HAND = pngCursor('arrow.png', 7, 2, 'default');
+export const CURSOR_HAND = pngCursor('arrow.png', 5, 3, 'default');
 
 /** Camera drag while mouse-look is enabled. */
 export const CURSOR_GRAB = pngCursor('hand-grab.png', 11, 16, 'grabbing');
 
 /** Anything interactive under the pointer — the ornate gauntlet finger. */
-export const CURSOR_ATTACK = pngCursor('gauntlet.png', 6, 4, 'pointer');
+export const CURSOR_ATTACK = pngCursor('gauntlet.png', 10, 5, 'pointer');
 
 /** Players, party members and friendly NPCs — also the gauntlet finger. */
-export const CURSOR_FRIENDLY = pngCursor('gauntlet.png', 6, 4, 'pointer');
+export const CURSOR_FRIENDLY = pngCursor('gauntlet.png', 10, 5, 'pointer');
 
 /** A seat under the pointer (a click sits you there): the ornate chair. */
 export const CURSOR_SEAT = pngCursor('seat-chair.png', 4, 3, 'pointer');

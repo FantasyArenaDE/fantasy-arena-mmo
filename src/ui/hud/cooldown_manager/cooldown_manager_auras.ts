@@ -83,11 +83,12 @@ export const ENGINE_AURAS: Readonly<Record<PlayerClass, readonly EngineRow[]>> =
     { kind: 'gloomtithe', name: 'Gloomtithe' },
   ],
   shaman: [],
+  dreamdancer: [{ kind: 'dream_thread', name: 'Dream Thread' }],
   mage: [{ kind: 'icicles', name: 'Icicles' }],
   warlock: [
     { kind: 'soul_fragments', name: 'Soul Fragments' },
     { kind: 'necromancy_death_echo', name: 'Death Echo' },
-    { kind: 'destruction_ruin', name: 'Ruin' },
+    { kind: 'destruction_ruin', name: 'Wrack' },
     { kind: 'desolation', name: 'Desolation' },
   ],
   druid: [

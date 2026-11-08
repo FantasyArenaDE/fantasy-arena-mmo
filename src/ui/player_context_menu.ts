@@ -77,7 +77,7 @@ export function selfPlayerContextActions(
   state: SelfPlayerContextState,
 ): PlayerContextAction<SelfPlayerContextActionId>[] {
   const actions: PlayerContextAction<SelfPlayerContextActionId>[] = [];
-  if (state.inParty && state.isLeader && !state.isRaid && state.partySize >= 5) {
+  if (state.inParty && state.isLeader && !state.isRaid && state.partySize >= 2) {
     actions.push({ id: 'convert-raid', label: t('hud.chat.context.convertToRaid') });
   }
   if (state.inParty && state.isLeader && state.isRaid && state.partySize <= 5) {

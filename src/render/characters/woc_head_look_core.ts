@@ -223,7 +223,7 @@ export function wocHeadPortraitSignature(app: WocHeadAppearanceInput, type: WocH
  *  own atlas, a dark suit with skin painted only on the hands and the neck base. Its
  *  skin tint keys tighter than a head piece's and is off while the body draws a class
  *  under-armor atlas instead (woc_skin_tint_core.ts owns both rules). */
-export type WocTintSurface = 'suit';
+export type WocTintSurface = 'suit' | 'iris';
 
 /** What one tinted material's texels are measured against: its tint role and its
  *  reference, LINEAR RGB (hair and brow read only the first channel, a luminance),

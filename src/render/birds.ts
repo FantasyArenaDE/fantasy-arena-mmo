@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { DUNGEON_X_THRESHOLD, isBuiltinWorldActive } from '../sim/data';
+import { DUNGEON_X_THRESHOLD, isBuiltinWorldActive, zoneAt } from '../sim/data';
 import { GFX } from './gfx';
 
 // Ambient high-altitude BIRD FLOCK — a render-only flourish, no sim state.
@@ -11,7 +11,7 @@ import { GFX } from './gfx';
 
 export interface BirdsView {
   group: THREE.Group;
-  update(px: number, pz: number, dt: number): void;
+  update(px: number, pz: number, dt: number, heading?: number, openAir?: boolean): void;
 }
 
 /** Editor overrides for the ambient flock; absent fields keep the shipped look. */
@@ -61,22 +61,66 @@ interface Bird {
   bobAmp: number;
 }
 
-function buildBird(mat: THREE.Material): Bird {
+type BirdKind = 'field' | 'swan';
+
+function buildBird(mat: THREE.Material, kind?: BirdKind): Bird {
   const obj = new THREE.Group();
 
   // Each wing is a flat quad pivoting at the shoulder (origin), lying in the
   // XZ plane and extending along ±X with its chord along Z. Flapping then rides
   // a single rotation about the forward (Z) axis — no Euler-order surprises.
-  const leftGeo = new THREE.PlaneGeometry(WING_LEN, WING_CHORD);
-  leftGeo.rotateX(-Math.PI / 2);
-  leftGeo.translate(WING_LEN / 2, 0, 0);
-  const rightGeo = new THREE.PlaneGeometry(WING_LEN, WING_CHORD);
-  rightGeo.rotateX(-Math.PI / 2);
-  rightGeo.translate(-WING_LEN / 2, 0, 0);
+  const wing = (side: number) => {
+    if (!kind) {
+      const geo = new THREE.PlaneGeometry(WING_LEN, WING_CHORD);
+      geo.rotateX(-Math.PI / 2);
+      return geo.translate((side * WING_LEN) / 2, 0, 0);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(
+        [
+          0,
+          0,
+          0.3,
+          side * 0.7,
+          0,
+          0.15,
+          side * 1.65,
+          0,
+          -0.16,
+          side * 1.25,
+          0,
+          -0.46,
+          side * 0.36,
+          0,
+          -0.39,
+          0,
+          0,
+          -0.24,
+        ],
+        3,
+      ),
+    );
+    geo.setIndex([0, 1, 5, 1, 4, 5, 1, 2, 3, 1, 3, 4]);
+    return geo;
+  };
 
-  const lw = new THREE.Mesh(leftGeo, mat);
-  const rw = new THREE.Mesh(rightGeo, mat);
+  const lw = new THREE.Mesh(wing(1), mat);
+  const rw = new THREE.Mesh(wing(-1), mat);
   obj.add(lw, rw);
+  if (kind) {
+    const body = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 5), mat);
+    body.scale.set(0.19, 0.14, 0.51);
+    obj.add(body);
+    if (kind === 'swan') {
+      const neck = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 5), mat);
+      neck.scale.set(0.083, 0.095, 0.52);
+      neck.position.set(0, 0.11, 0.65);
+      neck.rotation.x = -0.16;
+      obj.add(neck);
+    }
+  }
 
   return {
     obj,
@@ -92,14 +136,39 @@ function buildBird(mat: THREE.Material): Bird {
 }
 
 export function buildBirds(seed: number, cfg?: BirdsConfig): BirdsView {
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && !cfg) {
+    const group = new THREE.Group();
+    group.name = 'regional-birds';
+    const field = buildFlock(
+      seed,
+      { count: GFX.standardMaterials ? 8 : 5, formation: false },
+      'field',
+    );
+    const swans = buildFlock(seed ^ 0x4621, { count: 3 }, 'swan');
+    group.add(field.group, swans.group);
+    return {
+      group,
+      update(px, pz, dt, heading, openAir = true) {
+        const biome = zoneAt(px, pz).biome;
+        const waterCountry =
+          biome === 'vale' || biome === 'beach' || biome === 'fen' || biome === 'marsh';
+        field.update(px, pz, dt, heading, openAir);
+        swans.update(px, pz, dt, heading, openAir && waterCountry);
+      },
+    };
+  }
+  return buildFlock(seed, cfg);
+}
+
+function buildFlock(seed: number, cfg?: BirdsConfig, kind?: BirdKind): BirdsView {
   const rand = mulberry32((seed ^ 0x5f3b21) >>> 0);
   const group = new THREE.Group();
-  group.name = 'birds';
+  group.name = kind ?? 'birds';
 
   // Dark, double-sided, fog-aware silhouettes — read as specks against the sky
   // and fade into the haze at the rim like the clouds do.
   const mat = new THREE.MeshBasicMaterial({
-    color: 0x2b2f38,
+    color: kind === 'swan' ? 0xf1ecdd : 0x2b2f38,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.82,
@@ -114,7 +183,7 @@ export function buildBirds(seed: number, cfg?: BirdsConfig): BirdsView {
   const formation = cfg?.formation ?? true;
   const birds: Bird[] = [];
   for (let i = 0; i < count; i++) {
-    const b = buildBird(mat);
+    const b = buildBird(mat, kind);
     if (formation) {
       // Loose V-formation: pairs fan out behind a leader, left/right alternating.
       const rank = Math.ceil(i / 2);
@@ -128,11 +197,11 @@ export function buildBirds(seed: number, cfg?: BirdsConfig): BirdsView {
       b.oz = (rand() - 0.5) * (14 + count);
       b.oy = (rand() - 0.5) * 8;
     }
-    b.flapSpeed = 5.5 + rand() * 3.5;
+    b.flapSpeed = kind === 'swan' ? 3.6 + rand() : 5.5 + rand() * 3.5;
     b.flapPhase = rand() * Math.PI * 2;
     b.bobAmp = 0.4 + rand() * 0.5;
     const s = 0.7 + rand() * 0.7; // size variety = fake depth
-    b.obj.scale.setScalar(s);
+    b.obj.scale.setScalar(s * (kind === 'swan' ? 1.18 : 1));
     birds.push(b);
     group.add(b.obj);
   }
@@ -142,33 +211,40 @@ export function buildBirds(seed: number, cfg?: BirdsConfig): BirdsView {
   let cx = 0;
   let cz = 0;
   const builtin = isBuiltinWorldActive();
-  const altMin = builtin ? BUILTIN_ALT_MIN : ALT_MIN;
-  const altMax = builtin ? BUILTIN_ALT_MAX : ALT_MAX;
+  const altMin = kind === 'swan' ? 29 : builtin ? BUILTIN_ALT_MIN : ALT_MIN;
+  const altMax = kind === 'swan' ? 43 : builtin ? BUILTIN_ALT_MAX : ALT_MAX;
   let cy = (altMin + altMax) / 2;
   let heading = 0;
   let speed = SPEED_MIN;
   let phase = 0;
   let seeded = false;
 
-  function reseat(px: number, pz: number): void {
-    const bearing = rand() * Math.PI * 2;
-    cx = px + Math.sin(bearing) * SPAWN_RADIUS;
-    cz = pz + Math.cos(bearing) * SPAWN_RADIUS;
+  function reseat(px: number, pz: number, viewHeading?: number): void {
+    const bearing =
+      viewHeading === undefined
+        ? rand() * Math.PI * 2
+        : viewHeading + (kind === 'swan' ? 0.68 : -0.5);
+    const radius = viewHeading === undefined ? SPAWN_RADIUS : kind === 'swan' ? 72 : 98;
+    cx = px + Math.sin(bearing) * radius;
+    cz = pz + Math.cos(bearing) * radius;
     cy = altMin + rand() * (altMax - altMin);
     // Aim roughly back across the player's neighbourhood, with a lateral skew
     // so the flock crosses the sky rather than flying straight at the camera.
     const toPlayer = Math.atan2(px - cx, pz - cz);
-    heading = toPlayer + (rand() - 0.5) * 1.3;
+    heading =
+      viewHeading === undefined
+        ? toPlayer + (rand() - 0.5) * 1.3
+        : bearing + (kind === 'swan' ? -1 : 1) * Math.PI * 0.64;
     speed = SPEED_MIN + rand() * (SPEED_MAX - SPEED_MIN);
   }
 
-  function update(px: number, pz: number, dt: number): void {
+  function update(px: number, pz: number, dt: number, viewHeading?: number, openAir = true): void {
     // No birds inside dungeons / arena interiors — the sky isn't rendered there.
-    group.visible = px <= DUNGEON_X_THRESHOLD;
+    group.visible = openAir && px <= DUNGEON_X_THRESHOLD;
     if (!group.visible) return;
 
     if (!seeded) {
-      reseat(px, pz);
+      reseat(px, pz, kind ? viewHeading : undefined);
       seeded = true;
     }
 

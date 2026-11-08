@@ -79,6 +79,8 @@ export interface PlacedTownSpec {
    *  frame): they join the building before its materials convert, so they fade, cull and
    *  reveal with it (Highwatch's guild sign, highwatch_guild_sign.ts). */
   readonly decorate?: (buildingId: string) => readonly THREE.Object3D[];
+  /** Optional local source override; logical building IDs and placement stay unchanged. */
+  readonly sourceFileOverride?: (url: string, tier: PlacedTextureTier) => string | null;
 }
 
 export interface PlacedTownView {
@@ -191,7 +193,8 @@ export function createPlacedTownKit(spec: PlacedTownSpec) {
   const interiors = createPlacedTownInteriors();
 
   function prepareSource(url: string, tier: PlacedTextureTier = GFX.placedTextureTier) {
-    const file = placedTextureTierPath(url, tier, mediaAssetExists);
+    const file =
+      spec.sourceFileOverride?.(url, tier) ?? placedTextureTierPath(url, tier, mediaAssetExists);
     const residentFile = loadedSourceFiles.get(url);
     if (loadedSources.has(url) && residentFile === file) return Promise.resolve();
     const existing = sourceLoadTasks.get(url);

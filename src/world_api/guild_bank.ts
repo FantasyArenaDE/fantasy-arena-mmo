@@ -38,6 +38,8 @@ export interface GuildBankInfo {
   // membership stamp, never client-derived: the UI renders from this flag, and
   // the sim refuses every op regardless of what a tampered client sends.
   canEdit: boolean;
+  canEditItems?: boolean;
+  canEditGold?: boolean;
 }
 
 // ---------------------------------------------------------------------------

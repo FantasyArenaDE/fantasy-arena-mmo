@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const vi_VN: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Thông báo pháp lý",
+    "worldPicker": "Chọn thế giới",
+    "characterPreview": "Thử tạo nhân vật",
+    "desktopDownload": "Tải ứng dụng máy tính",
+    "credits": "Ghi công và giấy phép",
+    "sourceProject": "Dự án gốc trên GitHub",
+    "supportProject": "Ủng hộ dự án",
+    "musicCredits": "Ghi công âm nhạc",
+    "separateAccount": "Bản thử nghiệm này cần một tài khoản MMO riêng."
+  },
   "referralCards": {
     "title": "Giới Thiệu Bạn",
     "subtitle": "Cùng Phiêu Lưu. Kiếm Những Con Tem.",
@@ -467,6 +478,77 @@ export const vi_VN: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Người Chuyển Đồ",
       "close": "Đóng Người Chuyển Đồ",
@@ -1767,6 +1849,7 @@ export const vi_VN: EnTranslations = {
       "presets": {
         "classic": "Vàng Cổ Điển",
         "fancyGold": "Vàng Sang Trọng (Đang Phát Triển)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Nửa Đêm",
         "parchment": "Giấy Da",
         "highContrast": "Tương Phản Cao"
@@ -2072,8 +2155,8 @@ export const vi_VN: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Có Bản Cập Nhật",
-      "body": "Đã có phiên bản mới của World of ClaudeCraft. Cập nhật ngay để nhận các bản sửa lỗi và cải tiến mới nhất.",
-      "bodyWithVersion": "Đã có phiên bản {version} của World of ClaudeCraft. Cập nhật ngay để nhận các bản sửa lỗi và cải tiến mới nhất.",
+      "body": "Đã có phiên bản mới của Fantasy Arena MMO. Cập nhật ngay để nhận các bản sửa lỗi và cải tiến mới nhất.",
+      "bodyWithVersion": "Đã có phiên bản {version} của Fantasy Arena MMO. Cập nhật ngay để nhận các bản sửa lỗi và cải tiến mới nhất.",
       "notNow": "Không phải bây giờ",
       "update": "Cập Nhật"
     },
@@ -2205,6 +2288,8 @@ export const vi_VN: EnTranslations = {
         "remove": "Loại Bỏ",
         "promote": "Thăng Chức",
         "bank": "Ngân Hàng Bang Hội",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Trò Chuyện Sĩ Quan",
         "motd": "Bảng Tin",
         "events": "Lịch"
@@ -2214,6 +2299,8 @@ export const vi_VN: EnTranslations = {
         "remove": "Loại bỏ các thành viên nắm giữ hạng thấp hơn.",
         "promote": "Thăng chức và giáng chức các thành viên nắm giữ hạng thấp hơn, lên đến một hạng dưới chính họ.",
         "bank": "Gửi và rút đồng xu và vật phẩm trong ngân hàng bang hội. Mọi thành viên đều có thể xem nó.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Đọc và nói trong trò chuyện sĩ quan.",
         "motd": "Chỉnh sửa bảng tin bang hội.",
         "events": "Thêm và xóa các sự kiện lịch bang hội."
@@ -3079,7 +3166,7 @@ export const vi_VN: EnTranslations = {
         "offline": "Ngoại Tuyến"
       },
       "diagnostics": {
-        "panelAria": "Chẩn đoán hiệu năng World of ClaudeCraft",
+        "panelAria": "Chẩn đoán hiệu năng Fantasy Arena MMO",
         "title": "Bác Sĩ Hiệu Năng ClaudeCraft",
         "subtitle": "Một lượt quét dành riêng cho trò chơi, kèm bằng chứng và cách khắc phục ở cấp độ mã nguồn.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const vi_VN: EnTranslations = {
           }
         },
         "report": {
-          "title": "Chẩn đoán hiệu năng World of ClaudeCraft",
+          "title": "Chẩn đoán hiệu năng Fantasy Arena MMO",
           "statusLine": "Trạng thái: {status} ({score}/100)",
           "capturedLine": "Đã thu thập: {captured}",
           "topFindingLine": "Phát hiện hàng đầu: {finding}",
@@ -5422,7 +5509,7 @@ export const vi_VN: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Đóng",
       "keybind": "Bảng Discord",
@@ -5836,6 +5923,8 @@ export const vi_VN: EnTranslations = {
       "guildTab": "Bang Hội",
       "guildCapacityAria": "Ô ngân hàng bang hội đã dùng: {used} trên {total}",
       "guildEmpty": "Ngân hàng bang hội trống rỗng.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Ngân khố bang hội",
       "guildDepositGold": "Gửi tiền",
       "guildWithdrawGold": "Rút tiền",
@@ -6446,6 +6535,7 @@ export const vi_VN: EnTranslations = {
       "toolEffectRechargeFull": "{effect} đã được nạp đầy rồi.",
       "toolEffectRechargeToolCapped": "Hãy mang công cụ {profession} tốt hơn để nạp thêm cho {effect}.",
       "toolEffectRechargeMaterials": "Nạp lại {effect} cần {material} x{count}.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Bạn đang chế tác: còn {remaining} giây trên tổng {total} giây.",
       "disenchantingProgress": "Bạn đang hủy pháp khắc: còn {remaining} giây trên tổng {total} giây.",
       "enchantingProgress": "Bạn đang pháp khắc: còn {remaining} giây trên tổng {total} giây.",
@@ -7978,6 +8068,7 @@ export const vi_VN: EnTranslations = {
         }
       },
       "commendHeading": "Giới thiệu của sứ giả",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount} danh vọng cho một phe phái của lựa chọn của bạn, một lần mỗi tuần.",
       "commendCarriedNote": "{amount} danh vọng từ tuần trước vẫn chưa nhận. Nhận để chọn lượt nạp mới.",
       "commendClaimed": "Giới thiệu của tuần này đã trao cho {faction}.",
@@ -9202,7 +9293,7 @@ export const vi_VN: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "Một MMO phong cách cổ điển bạn chơi miễn phí ngay trên trình duyệt.",
     "skipToContent": "Chuyển đến nội dung chính",
@@ -9312,7 +9403,7 @@ export const vi_VN: EnTranslations = {
     },
     "home": {
       "eyebrow": "MMO cổ điển trên trình duyệt",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Khám phá thế giới, nhận nhiệm vụ và chinh phục hầm ngục cùng bạn bè.",
       "ctaPlay": "Chơi Ngay",
       "ctaLearn": "Cách Chơi",
@@ -10293,7 +10384,7 @@ export const vi_VN: EnTranslations = {
     },
     "worldPage": {
       "heading": "Thế giới",
-      "intro": "World of ClaudeCraft là một vùng đất liền mạch mà bạn băng qua bằng đôi chân. Con đường cũ chạy từ nam lên bắc, xuyên qua thung lũng khởi đầu, đầm lầy và các đỉnh núi, rồi vẫn leo tiếp qua chúng vào lòng chảo phía sau và xứ tuyết ở đầu bản đồ. Một dãy vương quốc cao hơn mở ra từ con đường ấy về phía tây và một dãy khác về phía đông, còn một hòn đảo nằm ngoài bờ đông của Thung Lũng. Không có di chuyển nhanh, không tuyến bay và không xe ngựa: mọi hành trình đều đi bộ hoặc cưỡi thú, nên việc tới nơi là một phần của cuộc phiêu lưu.\n\nVùng đất cũng giữ thời gian. Một chu kỳ ngày đêm chạy trên chiếc đồng hồ thật mà tất cả mọi người trên thế giới của bạn cùng chia sẻ, nên bầu trời chuyển từ hừng đông qua chính ngọ tới hoàng hôn rồi bóng tối cho tất cả các bạn cùng lúc, mặt trăng đến rồi đi qua các pha của nó, và ánh sáng trên mặt đất đổi thay theo. Mặt số quanh bản đồ nhỏ là nơi bạn đọc giờ.",
+      "intro": "Fantasy Arena MMO là một vùng đất liền mạch mà bạn băng qua bằng đôi chân. Con đường cũ chạy từ nam lên bắc, xuyên qua thung lũng khởi đầu, đầm lầy và các đỉnh núi, rồi vẫn leo tiếp qua chúng vào lòng chảo phía sau và xứ tuyết ở đầu bản đồ. Một dãy vương quốc cao hơn mở ra từ con đường ấy về phía tây và một dãy khác về phía đông, còn một hòn đảo nằm ngoài bờ đông của Thung Lũng. Không có di chuyển nhanh, không tuyến bay và không xe ngựa: mọi hành trình đều đi bộ hoặc cưỡi thú, nên việc tới nơi là một phần của cuộc phiêu lưu.\n\nVùng đất cũng giữ thời gian. Một chu kỳ ngày đêm chạy trên chiếc đồng hồ thật mà tất cả mọi người trên thế giới của bạn cùng chia sẻ, nên bầu trời chuyển từ hừng đông qua chính ngọ tới hoàng hôn rồi bóng tối cho tất cả các bạn cùng lúc, mặt trăng đến rồi đi qua các pha của nó, và ánh sáng trên mặt đất đổi thay theo. Mặt số quanh bản đồ nhỏ là nơi bạn đọc giờ.",
       "hub": "Căn cứ nhà",
       "mapHeading": "Con đường và những vương quốc bên kia",
       "mapSub": "Lối mòn nhiệm vụ chạy từ nam lên bắc dọc giữa bản đồ: thung lũng, đầm lầy, đỉnh núi, rồi vượt qua chúng vào lòng chảo và vùng tuyết. Các vương quốc khác mở ra dọc con đường đó chứ không phải sau nó, qua những cánh cổng phía đông và phía tây con đường đầm lầy, còn đảo Farshore thì tới được từ bờ đông của Thung Lũng. Thứ giữ bạn khỏi các vương quốc xa là dải cấp độ của chúng, không phải quãng đường: năm trong số đó cùng chia dải cao nhất, nên khi đã sẵn sàng bạn có thể đi chúng theo bất kỳ thứ tự nào. Farshore là ngoại lệ, một xứ cấp thấp mà bạn có thể ghé thăm từ sớm.",
@@ -11594,7 +11685,7 @@ export const vi_VN: EnTranslations = {
       "importedTexture": "Họa Tiết Đã Nhập {number}"
     },
     "appTitle": "Trình Chỉnh Sửa Bản Đồ",
-    "docTitle": "Trình Chỉnh Sửa Bản Đồ - World of ClaudeCraft",
+    "docTitle": "Trình Chỉnh Sửa Bản Đồ - Fantasy Arena MMO",
     "untitledMap": "Bản Đồ Chưa Đặt Tên",
     "liveWorld": {
       "name": "Chỉnh Sửa Nhỏ Thế Giới Trực Tiếp",
@@ -13756,7 +13847,7 @@ export const vi_VN: EnTranslations = {
     "serverOnline": "Trực Tuyến",
     "serverOffline": "Ngoại Tuyến",
     "play": "Chơi",
-    "playAria": "Chơi World of ClaudeCraft",
+    "playAria": "Chơi Fantasy Arena MMO",
     "playLoading": "Đang Tải",
     "playStarting": "Đang Bắt Đầu",
     "serverLabel": "Chọn thế giới của bạn",
@@ -13860,6 +13951,41 @@ export const vi_VN: EnTranslations = {
         "default": "Cổ Điển",
         "almond": "Hạnh nhân",
         "hooded": "Mí Sụp"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const vi_VN: EnTranslations = {
     "extensionHelp": "Để thấy ví ở đây, hãy giữ một tiện ích ví trình duyệt như Solflare Wallet đang hoạt động.",
     "mobileAppHelp": "Hãy chọn Phantom hoặc Solflare. Ứng dụng ví của bạn sẽ yêu cầu phê duyệt. Giữ trò chơi này mở và quay lại khi hoàn thành.",
     "seekerAppHelp": "Tiếp tục với ví Seed Vault. Hãy xem xét các yêu cầu kết nối và xác minh trong Seed Vault, rồi quay lại trò chơi.",
-    "standaloneAppHelp": "Kết nối ví chưa có sẵn trong ứng dụng Màn hình chính. Hãy mở World of ClaudeCraft trong Safari hoặc Chrome để sử dụng Phantom hoặc Solflare.",
+    "standaloneAppHelp": "Kết nối ví chưa có sẵn trong ứng dụng Màn hình chính. Hãy mở Fantasy Arena MMO trong Safari hoặc Chrome để sử dụng Phantom hoặc Solflare.",
     "openAppTitle": "Tiếp tục trong {wallet}",
     "openAppHelp": "Hãy mở {wallet} để xem xét yêu cầu này. Giữ tab trò chơi này mở trong khi ứng dụng ví đang hoạt động.",
     "openAppButton": "Mở {wallet}",
     "manualReturnBrowserHelp": "Sau khi phê duyệt, hãy quay lại tab trò chơi này. Nếu iOS mở một trình duyệt khác, hãy đóng nó và quay lại trình duyệt gốc thủ công.",
-    "manualReturnStandaloneHelp": "Sau khi phê duyệt, hãy quay lại World of ClaudeCraft từ Màn hình chính của bạn. Nếu iOS mở một trình duyệt, hãy đóng nó và mở lại ứng dụng Màn hình chính thủ công.",
+    "manualReturnStandaloneHelp": "Sau khi phê duyệt, hãy quay lại Fantasy Arena MMO từ Màn hình chính của bạn. Nếu iOS mở một trình duyệt, hãy đóng nó và mở lại ứng dụng Màn hình chính thủ công.",
     "preparingAppButton": "Đang chuẩn bị {wallet}...",
     "walletAppUnavailable": "Không thể chuẩn bị {wallet}. Hãy đóng cửa sổ này và thử lại.",
     "flowConnect": "Chọn một ví. Quá trình xác minh sẽ tiếp tục tự động.",
@@ -14266,12 +14392,12 @@ export const vi_VN: EnTranslations = {
       "paymentBody": "Hãy chọn ví đã liên kết với tài khoản của bạn và phê duyệt giao dịch trong trình duyệt này.",
       "stepUpBody": "Chọn ví đã liên kết với tài khoản của bạn và ký thông báo ủy quyền $WOC Exchange. Việc ký là miễn phí và không chuyển khoản tiền nào.",
       "extensionHelp": "Không tìm thấy tiện ích mở rộng ví tương thích nào. Hãy cài đặt hoặc mở khóa Phantom, Solflare hoặc ví trình duyệt Solana khác, rồi thử lại.",
-      "safety": "World of ClaudeCraft không bao giờ yêu cầu cụm từ khôi phục hoặc khóa riêng tư của bạn.",
+      "safety": "Fantasy Arena MMO không bao giờ yêu cầu cụm từ khôi phục hoặc khóa riêng tư của bạn.",
       "continueWith": "Tiếp tục với {wallet}",
       "reviewTitle": "Xem xét trong ví của bạn",
       "reviewBody": "Làm theo hướng dẫn từ {wallet}. Giữ trang trình duyệt này mở.",
       "completeTitle": "Ủy quyền ví hoàn tất",
-      "completeBody": "Bạn có thể quay lại ứng dụng máy tính World of ClaudeCraft.",
+      "completeBody": "Bạn có thể quay lại ứng dụng máy tính Fantasy Arena MMO.",
       "returnButton": "Quay lại ứng dụng máy tính",
       "failed": "Ủy quyền ví thất bại hoặc đã hết hạn. Hãy quay lại ứng dụng máy tính và thử lại.",
       "retry": "Thử Lại"
@@ -14369,16 +14495,16 @@ export const vi_VN: EnTranslations = {
     "levelClass": "Cấp {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "Thế Giới {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Fantasy Arena MMO",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count} người được chiêu mộ",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Rèn nên huyền thoại của bạn: {siteUrl}",
     "arenaStat": "Đấu Trường",
     "shareTierBit": ", người nắm giữ $WOC hạng {tier}",
-    "shareText": "Tôi đang rèn nên huyền thoại của mình trong World of ClaudeCraft: {className} cấp {level}{tierBit}. Hãy tham gia thế giới của tôi:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareText": "Tôi đang rèn nên huyền thoại của mình trong Fantasy Arena MMO: {className} cấp {level}{tierBit}. Hãy tham gia thế giới của tôi:",
+    "nativeShareTitle": "Fantasy Arena MMO",
     "fileNameFallback": "nguoichoi",
     "actionShareX": "Chia Sẻ Lên X",
     "actionCopyReferral": "Sao Chép Liên Kết Giới Thiệu",
@@ -14395,6 +14521,7 @@ export const vi_VN: EnTranslations = {
     "statusShareUnsupported": "Thiết bị này không hỗ trợ chia sẻ."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "Chiến Binh",
     "paladin": "Thánh Kỵ Sĩ",
     "hunter": "Thợ Săn",
@@ -14402,6 +14529,7 @@ export const vi_VN: EnTranslations = {
     "priest": "Tu Sĩ",
     "shaman": "Shaman",
     "mage": "Pháp Sư",
+    "dreamdancer": "Vũ Công Mộng",
     "warlock": "Thuật Sĩ Hắc Ám",
     "druid": "Druid",
     "warriorAria": "Lớp nhân vật Chiến Binh",
@@ -14411,6 +14539,7 @@ export const vi_VN: EnTranslations = {
     "priestAria": "Lớp nhân vật Tu Sĩ",
     "shamanAria": "Lớp nhân vật Shaman",
     "mageAria": "Lớp nhân vật Pháp Sư",
+    "dreamdancerAria": "Vũ Công Mộng",
     "warlockAria": "Lớp nhân vật Thuật Sĩ Hắc Ám",
     "druidAria": "Lớp nhân vật Druid"
   },
@@ -15248,13 +15377,13 @@ export const vi_VN: EnTranslations = {
     "parseService": "Dịch vụ parse WoC"
   },
   "seo": {
-    "title": "World of ClaudeCraft: MMO Web Phong Cách Cổ Điển",
-    "description": "Chơi World of ClaudeCraft, MMO miễn phí trên trình duyệt. Khám phá, hoàn thành nhiệm vụ và chinh phục hầm ngục cùng bạn bè. Không cần tải về.",
+    "title": "Fantasy Arena MMO: MMO Web Phong Cách Cổ Điển",
+    "description": "Chơi Fantasy Arena MMO, MMO miễn phí trên trình duyệt. Khám phá, hoàn thành nhiệm vụ và chinh phục hầm ngục cùng bạn bè. Không cần tải về.",
     "genre": "MMORPG",
     "playMode": "Nhiều người chơi",
     "applicationCategory": "Trò chơi",
     "operatingSystem": "Trình duyệt web",
-    "officialLabel": "Trang web World of ClaudeCraft chính thức",
+    "officialLabel": "Trang web Fantasy Arena MMO chính thức",
     "officialBody": "Trang chủ chính thức của World of ClaudeCraft. Chơi trực tuyến, đọc wiki và tìm các liên kết cộng đồng tại đây."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const vi_VN: EnTranslations = {
     "notify": {
       "updateReadyTitle": "Bản cập nhật {version} đã sẵn sàng",
       "updateReadyTitleNoVersion": "Bản cập nhật đã sẵn sàng",
-      "updateReadyBody": "Khởi động lại World of ClaudeCraft để áp dụng bản cập nhật.",
+      "updateReadyBody": "Khởi động lại Fantasy Arena MMO để áp dụng bản cập nhật.",
       "partyInviteTitle": "Lời mời tổ đội",
       "partyInviteBody": "{name} đã mời bạn gia nhập tổ đội của họ."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "Khung trò chơi đã ngừng hoạt động. Tải lại chứ?",
       "reload": "Tải lại",
       "quit": "Thoát",
-      "fatalBody": "World of ClaudeCraft gặp lỗi không mong muốn và cần đóng lại."
+      "fatalBody": "Fantasy Arena MMO gặp lỗi không mong muốn và cần đóng lại."
     },
     "hostDiag": {
       "saveTitle": "Lưu báo cáo hệ thống",
@@ -15500,6 +15629,7 @@ export const vi_VN: EnTranslations = {
       "priest": "Trị Liệu / DPS Tầm Xa",
       "shaman": "Trị Liệu / DPS Cận Chiến hoặc Tầm Xa",
       "mage": "DPS Tầm Xa",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "DPS Tầm Xa",
       "druid": "Đỡ Đòn / Trị Liệu / DPS Cận Chiến hoặc Tầm Xa"
     },
@@ -15524,6 +15654,7 @@ export const vi_VN: EnTranslations = {
       "priest": "Tu Sĩ kêu gọi Thánh Quang Chữa Lành để chữa lành và che chắn cho đồng minh, trong khi ma thuật Bóng Tối cho phép họ hút sinh lực của kẻ thù.",
       "shaman": "Shaman điều khiển các nguyên tố, ban sức mạnh cho vũ khí, gây choáng kẻ thù bằng sấm sét, và hồi phục cho đồng minh.",
       "mage": "Pháp Sư điều khiển sức mạnh Hỏa, Băng và uy lực bí thuật để tiêu diệt kẻ thù, triệu hồi nước, và đóng băng các mối đe dọa tại chỗ.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "Thuật Sĩ Hắc Ám triệu hồi quỷ dữ, gieo lời nguyền và ma thuật sát thương theo thời gian, và hút sinh lực từ kẻ thù để trường tồn.",
       "druid": "Druid khơi dẫn sức mạnh thiên nhiên, chữa lành vết thương, trói buộc kẻ thù, và biến hình thành các dạng thú để phòng thủ hoặc gây sát thương."
     },
@@ -15540,11 +15671,11 @@ export const vi_VN: EnTranslations = {
     "iosStandaloneDetail": "Bạn đang ở chế độ toàn màn hình từ màn hình chính. Hãy giữ thiết bị ở chế độ ngang.",
     "iosInstallDetail": "Để chơi toàn màn hình thực sự trên iPhone hoặc iPad, hãy cài đặt trang này vào Màn hình chính trước.",
     "iosShareStep": "Trong Safari, chạm vào Chia sẻ, rồi chọn Thêm vào Màn hình chính.",
-    "iosOpenStep": "Mở World of ClaudeCraft từ biểu tượng mới trên Màn hình chính.",
+    "iosOpenStep": "Mở Fantasy Arena MMO từ biểu tượng mới trên Màn hình chính.",
     "androidStandaloneDetail": "Bạn đang ở chế độ ứng dụng toàn màn hình. Hãy giữ thiết bị ở chế độ ngang.",
     "androidInstallDetail": "Để chơi toàn màn hình trên Android, hãy cài đặt trang này hoặc thêm vào Màn hình chính trước.",
     "androidInstallStep": "Trong Chrome, chạm vào menu, rồi chọn Cài đặt ứng dụng hoặc Thêm vào Màn hình chính.",
-    "androidOpenStep": "Mở World of ClaudeCraft từ biểu tượng mới.",
+    "androidOpenStep": "Mở Fantasy Arena MMO từ biểu tượng mới.",
     "otherStandaloneDetail": "Hãy giữ thiết bị ở chế độ ngang toàn màn hình.",
     "otherInstallDetail": "Hãy cài đặt hoặc thêm trang này vào Màn hình chính để có trải nghiệm toàn màn hình tốt nhất trên di động."
   },
@@ -15560,8 +15691,8 @@ export const vi_VN: EnTranslations = {
     "confirm": "Tiếp Tục"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Thế Giới Không Khả Dụng",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Thế Giới Không Khả Dụng",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Bảo trì thế giới",
     "heading": "Thế giới tạm thời không khả dụng.",
     "body": "Chúng tôi đang khởi động lại dịch vụ trò chơi và dự kiến Claudemoon sẽ trở lại trong giây lát. Trang này sẽ tự động tiếp tục kiểm tra.",
@@ -15762,6 +15893,7 @@ export const vi_VN: EnTranslations = {
       "audio": "Âm thanh",
       "interface": "Giao Diện",
       "language": "Ngôn Ngữ",
+      "characterSelect": "Chọn nhân vật",
       "logout": "Đăng Xuất",
       "returnToGame": "Trở Lại Trò Chơi",
       "resetToDefaults": "Khôi Phục Mặc Định",
@@ -17376,6 +17508,8 @@ export const vi_VN: EnTranslations = {
       "collectNote": "Tiền lời và hàng hóa trả lại mà Thương Nhân đang giữ cho bạn.",
       "saleProceeds": "Tiền bán được",
       "collectAll": "Thu Tất Cả",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Lịch sử",
       "historyEmpty": "Chưa có bán hàng. Các vật phẩm bạn bán trên Thị Trường Thế Giới sẽ hiển thị ở đây.",
       "historyNote": "Các bán hàng gần đây của bạn trên Thị Trường Thế Giới.",
@@ -19265,6 +19399,66 @@ export const vi_VN: EnTranslations = {
       "revive_pet": {
         "name": "Băng Bó",
         "description": "Hồi 10% máu tối đa cho bạn đồng hành còn sống mỗi giây trong 8 giây. Nếu bạn đồng hành đã chết, hồi sinh nó với 50% máu."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const vi_VN: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Cần câu suối bạc"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "Thần Tượng Mặn Mòi"
@@ -31089,8 +31307,8 @@ export const vi_VN: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Slagcrown Vestments",
-        "bonus2": "Cooldown Da Than Hồng giảm 30 giây. Sát thương phải chịu không còn làm chậm việc thi triển phép.",
-        "bonus4": "Cứ hai lần Bùng Cháy làm cho Tia Hủy Diệt tiếp theo của bạn trong vòng 8 giây tức thời."
+        "bonus2": "Khi đối đầu người chơi địch, Tia Hủy Diệt gây thêm 50% sát thương nhưng thời gian thi triển dài hơn 0,7 giây. Sát thương phải chịu không còn làm chậm việc thi triển phép.",
+        "bonus4": "Cứ hai lần Bùng Cháy làm cho Tia Hủy Diệt tiếp theo của bạn trong vòng 8 giây tức thời. Tia Hủy Diệt miễn phí đó không tiêu hao Điêu Tàn."
       },
       "vanguard_warrior_arms": {
         "name": "Bladewake Battlegear",

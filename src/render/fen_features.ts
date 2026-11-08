@@ -26,6 +26,7 @@ import {
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { GFX, ZONE_FEATURE_CELL_SIZE } from './gfx';
+import { buildFenMushroomCluster, FEN_MUSHROOM_RED, FEN_MUSHROOM_TAN } from './fa_fen_mushrooms';
 import { activeWorldPromoted } from './promoted_scenery_gate';
 import { renderLayerDisabled } from './render_dev_flags';
 import { thinLeanDressing } from './zone_dressing_lod_core';
@@ -93,9 +94,13 @@ type FenPropKey = keyof typeof FEN_PROP_URLS;
 const propScenes: Partial<Record<FenPropKey, THREE.Group>> = {};
 for (const key of Object.keys(FEN_PROP_URLS) as FenPropKey[]) {
   registerDeferredPreload(() =>
-    loadGltf(FEN_PROP_URLS[key]).then((gltf) => {
-      propScenes[key] = gltf.scene;
-    }),
+    import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && key === 'mushrooms'
+      ? Promise.all([loadGltf(FEN_MUSHROOM_RED), loadGltf(FEN_MUSHROOM_TAN)]).then(([red, tan]) => {
+          propScenes.mushrooms = buildFenMushroomCluster(red.scene, tan.scene);
+        })
+      : loadGltf(FEN_PROP_URLS[key]).then((gltf) => {
+          propScenes[key] = gltf.scene;
+        }),
   );
 }
 

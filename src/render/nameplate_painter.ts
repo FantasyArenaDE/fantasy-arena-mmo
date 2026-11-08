@@ -63,6 +63,7 @@ import { nameplateSubRowsLift } from './nameplate_heraldry_core';
 import { NameplatePaintGate } from './nameplate_paint_gate_core';
 import {
   type NameplatePickCandidate,
+  nameplateAnchorPickable,
   pickNameplateHealthBarAt,
   raiseNameplateCandidate,
 } from './nameplate_pick_core';
@@ -448,7 +449,7 @@ export class NameplatePainter {
         anchor.hpVisible = state.hpVisible;
         anchor.castVisible = state.castVisible;
         anchor.boss = state.frame === 'boss';
-        anchor.pickable = id !== player.id && !entity.dead;
+        anchor.pickable = nameplateAnchorPickable(entity, player.id);
       } else {
         this.anchorScratch.push({
           id,
@@ -457,7 +458,7 @@ export class NameplatePainter {
           hpVisible: state.hpVisible,
           castVisible: state.castVisible,
           boss: state.frame === 'boss',
-          pickable: id !== player.id && !entity.dead,
+          pickable: nameplateAnchorPickable(entity, player.id),
         });
       }
       this.anchorCount++;
@@ -932,11 +933,13 @@ export class NameplatePainter {
     const elite = !!template?.elite;
     const boss = !!template?.boss;
     state.friendlyPet = isFriendlyPet(entity, this.world.entities, this.isHostilePlayer);
-    const mobName = isBuddyMob(entity)
-      ? entityDisplayName(entity)
-      : entity.ownerId !== null
-        ? (localizeSimAuraName(entity.name) ?? entity.name)
-        : mobDisplayName(entity.templateId);
+    const mobName = entity.aiVisual
+      ? entity.name
+      : isBuddyMob(entity)
+        ? entityDisplayName(entity)
+        : entity.ownerId !== null
+          ? (localizeSimAuraName(entity.name) ?? entity.name)
+          : mobDisplayName(entity.templateId);
     state.name = entity.dead ? t('worldContent.corpseName', { name: mobName }) : mobName;
     state.nameColor = '#fff';
     state.level = entity.dead

@@ -15,6 +15,7 @@ export interface ProjectStats {
 }
 
 export async function loadProjectStats(fetchStats: () => Promise<ProjectStats>): Promise<void> {
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') return;
   // Realm status now lives in the realm dropdown, both in the trigger sub-line
   // and inside the Online option, so update every instance by class.
   const characterEls = document.querySelectorAll<HTMLElement>('.js-stat-characters');

@@ -8,7 +8,7 @@
 // reference and reaches Hud only through its deps.
 import { audio } from '../game/audio';
 import { WEEKLY_QUESTS_BY_ID } from '../sim/content/weekly_quests';
-import type { FactionId } from '../sim/factions';
+import { type FactionId, sanitizeFactionId } from '../sim/factions';
 import type { IWorld } from '../world_api';
 import { markDialogRoot } from './dialog_root';
 import { esc } from './esc';
@@ -17,9 +17,11 @@ import { svgIcon } from './ui_icons';
 import {
   buildWeeklyQuestDialog,
   buildWeeklyQuestsView,
+  type WeeklyCommendationOption,
   type WeeklyCommendationView,
   type WeeklyQuestCardView,
   type WeeklyQuestDialogView,
+  weeklyCommendationOptions,
 } from './weekly_quests_view';
 
 export interface WeeklyQuestsWindowDeps {
@@ -103,6 +105,9 @@ export class WeeklyQuestsWindow {
   private render(focus: 'open' | 'dialog' | null): void {
     const root = this.deps.root();
     const world = this.deps.world();
+    const commendation = root.querySelector<HTMLSelectElement>('[data-wk-faction]');
+    const faction = sanitizeFactionId(commendation?.value);
+    const restoreCommendation = commendation === root.ownerDocument.activeElement;
     const view = buildWeeklyQuestsView(world, Date.now());
     markDialogRoot(root, { labelledBy: 'weekly-quests-title' });
     const dialog =
@@ -123,7 +128,14 @@ export class WeeklyQuestsWindow {
       (view.commendation
         ? this.commendHtml(view.commendation)
         : `<div class="wk-foot">${esc(view.footer)}</div>`) +
-      (dialog ? this.dialogHtml(dialog, view) : '');
+      (dialog ? this.dialogHtml(dialog, view, weeklyCommendationOptions(world)) : '');
+    const selection = root.querySelector<HTMLSelectElement>('[data-wk-faction]');
+    if (
+      selection &&
+      faction &&
+      Array.from(selection.options).some((option) => option.value === faction && !option.disabled)
+    )
+      selection.value = faction;
     root.querySelector('[data-close]')?.addEventListener('click', () => this.close());
     root.querySelectorAll<HTMLButtonElement>('[data-wk-choose]').forEach((button) => {
       button.addEventListener('click', () => {
@@ -135,7 +147,11 @@ export class WeeklyQuestsWindow {
     root.querySelector('[data-wk-accept]')?.addEventListener('click', () => {
       const questId = this.dialogQuestId;
       this.dialogQuestId = null;
-      if (questId) world.chooseWeeklyQuest(questId);
+      const selected = sanitizeFactionId(
+        root.querySelector<HTMLSelectElement>('[data-wk-faction]')?.value,
+      );
+      if (questId && selected) world.chooseWeeklyQuest(questId, selected);
+      else if (questId) world.chooseWeeklyQuest(questId);
       this.lastSig = '';
       this.render(null);
     });
@@ -154,6 +170,7 @@ export class WeeklyQuestsWindow {
     });
     if (focus === 'open') (root.querySelector('[data-close]') as HTMLElement | null)?.focus();
     if (focus === 'dialog') (root.querySelector('[data-wk-accept]') as HTMLElement | null)?.focus();
+    if (restoreCommendation) root.querySelector<HTMLSelectElement>('[data-wk-faction]')?.focus();
   }
 
   private cardHtml(card: WeeklyQuestCardView): string {
@@ -199,7 +216,14 @@ export class WeeklyQuestsWindow {
   private dialogHtml(
     dialog: WeeklyQuestDialogView,
     view: { emissaryName: string; emissaryTitle: string; emissaryPortrait: string },
+    factions: WeeklyCommendationOption[],
   ): string {
+    const options = factions
+      .map(
+        ({ factionId, label, capped }) =>
+          `<option value="${esc(factionId)}"${capped ? ' disabled' : ''}>${esc(label)}</option>`,
+      )
+      .join('');
     return (
       `<div class="wk-backdrop"><div class="wk-dialog" role="dialog" aria-modal="true" aria-labelledby="weekly-quest-dialog-title">` +
       `<div class="wk-dialog-head"><span class="wk-portrait" style="background-image:url('${esc(view.emissaryPortrait)}')"></span>` +
@@ -213,6 +237,7 @@ export class WeeklyQuestsWindow {
       `<div class="wk-dialog-sub">${esc(t('hudChrome.weekly.rewards'))}</div>` +
       `<div class="wk-dialog-row"><span>${esc(t('hudChrome.weekly.alsoReceive'))}</span><b>${esc(dialog.rewardMoney)}</b></div>` +
       `<div class="wk-dialog-row wk-dialog-row-standing"><span>${esc(dialog.rewardStanding)}</span></div>` +
+      `<div class="wk-dialog-row"><label for="wk-reward-faction">${esc(t('hudChrome.weekly.commendHeading'))}</label><select id="wk-reward-faction" class="ui-input" data-wk-faction><option value="">${esc(t('hudChrome.weekly.commendChooseLater'))}</option>${options}</select></div>` +
       `<div class="wk-reward"><span class="wk-reward-icon" style="background-image:url('${esc(dialog.rewardItemIcon)}')"></span><span><span class="wk-reward-name">${esc(dialog.rewardItem)}</span><span class="wk-reward-desc">${esc(dialog.rewardItemDesc)}</span></span></div>` +
       `<div class="wk-note">${esc(dialog.note)}</div>` +
       `<div class="wk-actions"><button type="button" class="wk-btn wk-btn-accept" data-wk-accept>${esc(dialog.accept)}</button>` +

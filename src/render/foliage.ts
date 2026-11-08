@@ -39,6 +39,7 @@ import {
   applyInstanceCollapse,
   type CollapseRole,
   type CollapseWindowValues,
+  setFoliageIslandOnly,
   updateCollapseUniforms,
 } from './foliage_collapse';
 import {
@@ -146,6 +147,8 @@ import {
 } from './ground_decor_prewarm';
 import { ghostHideGeometry, withInstancedDitherFade } from './instanced_dither_fade';
 import { InstancedOccluderGhosts } from './instanced_occluder_ghosts';
+import { patchMorningDewFragment } from './morning_dew_core';
+import { islandIsolationActive } from './island_isolation_core';
 import {
   advanceInstanceCountInto,
   farFieldDensityFractionForValues,
@@ -159,6 +162,7 @@ import { freezeStaticMatrices } from './static_matrix';
 import { groundGrassColorAt, groundLushnessAt } from './terrain_chunk_build';
 import { type FlowerKind, flowerTuftTexture, grassTuftTexture } from './textures';
 import { hideableGhostSources, type TreeHideable, updateTreeHides } from './tree_hide_fade';
+import { buildWoodpeckerPerches, type WoodpeckerPerch } from './woodpecker_perches';
 import { applySurfaceDetail, foliageWornFamilyFor } from './worn_stone';
 
 // The renderer seeds the far-placement mirrors through this module's surface.
@@ -589,6 +593,7 @@ const GRASS_BUILDING_PADDING = 0.35;
 
 export interface FoliageView {
   group: THREE.Group;
+  woodpeckerPerches: readonly WoodpeckerPerch[];
   /**
    * Per-frame: grass fade + ring rebuild, fog culling of far tree buckets.
    * `fogNear`/`fogFar` are the LIVE fog (residency-clamped): they drive the
@@ -1637,7 +1642,12 @@ function placeSpecies(
         group.items.forEach((d, i) => {
           treeInstanceMatrix(d, spec, seed, m);
           im.setMatrixAt(i, m);
-          group.handles[i].parts.push({ mesh: im, index: i, visibleMatrix: m.clone() });
+          group.handles[i].parts.push({
+            mesh: im,
+            index: i,
+            visibleMatrix: m.clone(),
+            bark: !part.isLeaf,
+          });
           if (part.isLeaf) {
             const baseHex =
               typeof spec.leafTint === 'number' ? spec.leafTint : spec.leafTint[d.biome];
@@ -2341,6 +2351,7 @@ function applyGrassShader(
   mat: THREE.Material,
   uniforms: { uPlayerPos: { value: THREE.Vector2 }; uFadeFar: { value: number } },
   capBand: GrassCapCollapseBand | null,
+  morningDew = false,
 ): void {
   // On tiers where the solid blade carpet runs (the exact buildBladeGrass
   // condition in blade_grass.ts), the carpet owns the near-field ground
@@ -2354,7 +2365,7 @@ function applyGrassShader(
   const classicWind = isBuiltinWorldActive();
   // The wind variant rides the base key, so the boot prewarm's arms and the
   // live material still compose through grassCardProgramCacheKey alike.
-  const baseProgramKey = `${mat.customProgramCacheKey()}${classicWind ? '' : '|tuft-wind'}`;
+  const baseProgramKey = `${mat.customProgramCacheKey()}${classicWind ? '' : '|tuft-wind'}${morningDew ? '|dew' : ''}`;
   mat.onBeforeCompile = (sh) => {
     sh.uniforms.uTime = sharedUniforms.uTime;
     sh.uniforms.uPlayerPos = uniforms.uPlayerPos;
@@ -2392,6 +2403,10 @@ function applyGrassShader(
     // constant lets the static geometry omit 12 bytes of normal input per vertex.
     sh.vertexShader = patchConstantUpNormalVertexShader(sh.vertexShader);
     sh.fragmentShader = patchGrassFragmentShader(sh.fragmentShader);
+    if (morningDew) {
+      sh.uniforms.uMorningDew = sharedUniforms.uMorningDew;
+      sh.fragmentShader = patchMorningDewFragment(sh.fragmentShader);
+    }
   };
   const cacheKey = grassCardProgramCacheKey(capBand, baseProgramKey);
   mat.customProgramCacheKey = () => cacheKey;
@@ -2612,7 +2627,7 @@ function buildGrassRing(
           alphaTest: 0.35,
         }),
   );
-  applyGrassShader(mat, uniforms, capCollapseBand);
+  applyGrassShader(mat, uniforms, capCollapseBand, true);
   // Chunk meshes are built per frame as you walk, so no boot compile root ever
   // sees this material (ground_decor_prewarm.ts).
   registerGroundDecorPrewarmDraw({ geometry: geo, material: mat, instanceColor: true });
@@ -3447,8 +3462,6 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
   const group = new THREE.Group();
   group.name = 'foliage';
   const bucketMeshes: BucketMesh[] = [];
-  // One compile root per distinct bucket program: every bucket sharing a key
-  // draws the same program, so linking the representative warms them all.
   const revealRootByKey = new Map<string, THREE.Object3D>();
   let revealGate: FoliageBucketRevealGate | null = null;
   const treeHideables: TreeHideable[] = [];
@@ -3465,9 +3478,7 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
   const modelVisibleTrianglesByLod: Record<string, number> = {};
   let modelDraws = 0;
   let modelTriangles = 0;
-  // Reused by the per-frame bucket cull below. Allocating this input inside the
-  // loop generated one short-lived object per foliage bucket per frame (well
-  // over 100 MB of garbage in a 12-second gameplay sample).
+  // Shared by all buckets to avoid per-bucket allocation each frame.
   const bucketWindow: BucketWindowInput = {
     centerDist: 0,
     radius: 0,
@@ -3482,7 +3493,6 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
     fogLimit: 0,
   };
   const frameWindows = createFoliageFrameWindows();
-  // Reused per frame like bucketWindow: the resolver's input is a plain block.
   const frameInput: FoliageFrameInput = {
     modelQuality: 1,
     leanFoliage: false,
@@ -3502,7 +3512,6 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
   const collapseProbe = createCollapseProbe();
   const packedProbe = createCollapseProbe();
   let shadowPackSerial = 0;
-  // Reused per frame for the same reason as bucketWindow above.
   const collapseWindows: CollapseWindowValues = {
     treeMax: 0,
     rockMax: 0,
@@ -3599,10 +3608,8 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
     revealRootByKey.set(b.reveal.key, b.mesh);
     drawSources.set(b.reveal.key, { geometry: b.mesh.geometry, material: meshMaterial(b.mesh) });
   }
-  // The camera-occluder ghosts (instanced_occluder_ghosts.ts): plain-Mesh
-  // stand-ins minted on the first frame a trunk blocks the camera, so no boot
-  // sweep and no reveal gate can ever see them. They are not bucket meshes, so
-  // they get no reveal-gate key: the twin below is their only cover.
+  // Camera-occluder ghosts are plain meshes outside bucket reveal; their
+  // boot twins cover the first frame a trunk blocks the camera.
   for (const draw of foliageGhostPrewarmDraws(hideableGhostSources(treeHideables))) {
     drawPaths.push(draw.path);
     drawSources.set(foliageProgramKey(draw.path), {
@@ -3630,6 +3637,7 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
   freezeStaticMatrices(group);
   return {
     group,
+    woodpeckerPerches: buildWoodpeckerPerches(treeHideables, seed),
     setRevealGate(gate: FoliageBucketRevealGate | null): void {
       revealGate = gate;
     },
@@ -3666,6 +3674,7 @@ export function buildFoliage(seed: number, webgl?: THREE.WebGLRenderer): Foliage
       dt: number,
       reducedMotion = false,
     ): void {
+      setFoliageIslandOnly(isBuiltinWorldActive() && islandIsolationActive(camX, camZ));
       grass.update(px, pz, camX, camY, camZ, projectionPixels, dt);
       updateTreeHides(
         treeHideables,

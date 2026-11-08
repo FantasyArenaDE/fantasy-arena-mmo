@@ -130,7 +130,7 @@ export function restoreArenaReturnPools(ctx: SimContext, e: Entity, pools: Arena
 // Ashen Coliseum 1v1 arena tuning consts (moved with the slice). FIESTA_COUNTDOWN
 // is the only Fiesta const the ranked match-start path needs; the rest of the
 // Fiesta tuning stays on Sim with createFiestaState (A3).
-const ARENA_COUNTDOWN = 5; // gates pre-fight: heal up, no swings land yet
+export const ARENA_COUNTDOWN = 10; // gates ranked pre-fight while players load in
 const ARENA_RETURN_DELAY = 5; // aftermath: hold on the sands before going home
 const ARENA_MAX_DURATION = 150; // seconds; a stalling match resolves on hp%
 export const ARENA_BASE_RATING = 1500; // every character starts here, unranked

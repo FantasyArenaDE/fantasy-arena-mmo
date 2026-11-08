@@ -504,6 +504,7 @@ export interface MapPaintOptions {
  *  plus the painted quest areas for the hover tooltip's hit-test. */
 export interface MapPaintResult {
   view: MapViewRect;
+  region: OverworldMapModel['region'];
   cursor: 'grab' | 'default';
   questAreas: MapQuestAreaMarker[];
   worldQuests: MapWorldQuestMarker[];
@@ -615,6 +616,7 @@ export class MapWindowPainter {
     this.draw(ctx, model, opts.zoneBg, opts.canvasSize, colors, profile);
     return {
       view: model.view,
+      region: model.region,
       cursor: model.cursor,
       questAreas: model.questAreas,
       worldQuests: model.worldQuests,

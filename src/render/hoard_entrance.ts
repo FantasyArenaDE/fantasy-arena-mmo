@@ -18,11 +18,12 @@ import { markSharedGeometry, markSharedMaterial } from './shared_resource';
 
 const URL = '/models/props/hoard_entrance.glb';
 let source: THREE.Group | undefined;
-if (typeof window !== 'undefined')
+const releaseGeometry = import.meta.env.VITE_FA_BROWSER_RELEASE === '1';
+if (typeof window !== 'undefined' && !releaseGeometry)
   registerDeferredPreload(async () => {
     source = (await loadGltf(URL)).scene;
   });
-export const hoardEntrancePreloadInternalsForTest = { urls: [URL] };
+export const hoardEntrancePreloadInternalsForTest = { urls: releaseGeometry ? [] : [URL] };
 
 const box = markSharedGeometry(new THREE.BoxGeometry(1, 1, 1));
 const pebble = markSharedGeometry(new THREE.IcosahedronGeometry(1, 0));
@@ -99,6 +100,19 @@ function fallback(): THREE.Group {
   lid.scale.set(2.4, 0.16, 2);
   lid.position.z = 1;
   hatch.add(lid);
+  if (releaseGeometry) {
+    const trim = surfaceMat({ color: 0x9b7642, metalness: 0.32, roughness: 0.68 });
+    for (const x of [-0.79, 0.79]) {
+      const strap = new THREE.Mesh(box, trim);
+      strap.scale.set(0.13, 0.044, 1.97);
+      strap.position.set(x, 0.09, 1);
+      hatch.add(strap);
+    }
+    const pull = new THREE.Mesh(box, trim);
+    pull.scale.set(0.4, 0.12, 0.14);
+    pull.position.set(0, 0.16, 1.66);
+    hatch.add(pull);
+  }
   root.add(hatch);
   return root;
 }

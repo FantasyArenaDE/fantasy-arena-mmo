@@ -10,6 +10,7 @@
 // Draws ZERO rng, so a caller's position in the tick cannot fork the
 // deterministic draw order. `src/sim`-pure (src/sim/CLAUDE.md).
 
+import { discardAdminFlight } from './admin_character_modes';
 import { cancelProfessionSessionOnDisplacement } from './professions/session_teardown';
 import type { SimContext } from './sim_context';
 import { settleTeleportArrival } from './teleport_arrival';
@@ -21,6 +22,7 @@ export function displacePlayer(
   landing: { x: number; z: number; facing: number },
   text: string,
 ): void {
+  discardAdminFlight(p);
   // The one every-teleport session teardown (session_teardown.ts): a
   // click-entry mid-cast is reachable and the rule is scoped to every
   // teleport, not the likely ones.

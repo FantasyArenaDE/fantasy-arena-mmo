@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const da_DK: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Juridiske oplysninger",
+    "worldPicker": "Vælg en verden",
+    "characterPreview": "Prøv figurskaberen",
+    "desktopDownload": "Hent computerappen",
+    "credits": "Medvirkende og licenser",
+    "sourceProject": "Kildeprojektet på GitHub",
+    "supportProject": "Støt projektet",
+    "musicCredits": "Musikkreditering",
+    "separateAccount": "Denne testversion kræver en separat MMO-konto."
+  },
   "referralCards": {
     "title": "Henvis en ven",
     "subtitle": "På eventyr sammen. Fortjen jeres stempler.",
@@ -467,6 +478,77 @@ export const da_DK: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Kurer",
       "close": "Luk kureren",
@@ -1767,6 +1849,7 @@ export const da_DK: EnTranslations = {
       "presets": {
         "classic": "Klassisk guld",
         "fancyGold": "Flot guld (under udvikling)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Midnat",
         "parchment": "Pergament",
         "highContrast": "Høj kontrast"
@@ -2072,8 +2155,8 @@ export const da_DK: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Opdatering tilgængelig",
-      "body": "En ny version af World of ClaudeCraft er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
-      "bodyWithVersion": "Version {version} af World of ClaudeCraft er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
+      "body": "En ny version af Fantasy Arena MMO er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
+      "bodyWithVersion": "Version {version} af Fantasy Arena MMO er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
       "notNow": "Ikke nu",
       "update": "Opdater"
     },
@@ -2205,6 +2288,8 @@ export const da_DK: EnTranslations = {
         "remove": "Fjern",
         "promote": "Forfrem",
         "bank": "Laug bank",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Officerchats",
         "motd": "Oplysningstavle",
         "events": "Kalender"
@@ -2214,6 +2299,8 @@ export const da_DK: EnTranslations = {
         "remove": "Fjern medlemmer der holder en lavere rang.",
         "promote": "Forfrem og nedgrader medlemmer der holder en lavere rang, op til en rang under deres egen.",
         "bank": "Indsæt og hent kobber og genstande i laugbanken. Alle medlemmer kan se den.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Læs og tale i officerchats.",
         "motd": "Rediger laugoplysningstavlen.",
         "events": "Tilføj og fjern laugkalenderarrangementer."
@@ -3079,7 +3166,7 @@ export const da_DK: EnTranslations = {
         "offline": "Offline"
       },
       "diagnostics": {
-        "panelAria": "World of ClaudeCraft ydelsesdiagnostik",
+        "panelAria": "Fantasy Arena MMO ydelsesdiagnostik",
         "title": "ClaudeCraft Ydelsesdoktor",
         "subtitle": "En spilspecifik scanning med beviser og rettelser på kodeniveau.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const da_DK: EnTranslations = {
           }
         },
         "report": {
-          "title": "World of ClaudeCraft ydelsesdiagnose",
+          "title": "Fantasy Arena MMO ydelsesdiagnose",
           "statusLine": "Status: {status} ({score}/100)",
           "capturedLine": "Optaget: {captured}",
           "topFindingLine": "Vigtigste fund: {finding}",
@@ -5422,7 +5509,7 @@ export const da_DK: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Luk",
       "keybind": "Discord-panel",
@@ -5836,6 +5923,8 @@ export const da_DK: EnTranslations = {
       "guildTab": "Laug",
       "guildCapacityAria": "Brugte laugsbankpladser: {used} af {total}",
       "guildEmpty": "Laugsbanken er tom.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Laugets skatkammer",
       "guildDepositGold": "Indsæt penge",
       "guildWithdrawGold": "Tag penge ud",
@@ -6446,6 +6535,7 @@ export const da_DK: EnTranslations = {
       "toolEffectRechargeFull": "{effect} er allerede fuldt opladet.",
       "toolEffectRechargeToolCapped": "Bær et bedre {profession}-værktøj for at oplade {effect} yderligere.",
       "toolEffectRechargeMaterials": "Genopladning af {effect} kræver {material} x{count}.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Du fremstiller: {remaining}s af {total}s tilbage.",
       "disenchantingProgress": "Du affortryller: {remaining}s af {total}s tilbage.",
       "enchantingProgress": "Du fortryller: {remaining}s af {total}s tilbage.",
@@ -7978,6 +8068,7 @@ export const da_DK: EnTranslations = {
         }
       },
       "commendHeading": "Sendebuds tilkendegivelse",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount} anseelse til en fraktion efter dit valg, én gang om ugen.",
       "commendCarriedNote": "{amount} omdømme fra sidste uge er endnu ikke hentet. Hent det for at vælge en ny ladning.",
       "commendClaimed": "Denne uges tilkendegivelse gik til {faction}.",
@@ -9202,7 +9293,7 @@ export const da_DK: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "En klassisk MMO, du spiller gratis i din browser.",
     "skipToContent": "Spring til hovedindhold",
@@ -9312,7 +9403,7 @@ export const da_DK: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klassisk browser-MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Udforsk verdenen, tag på quests, og kæmp dig gennem dungeons med venner.",
       "ctaPlay": "Spil nu",
       "ctaLearn": "Sådan spiller du",
@@ -10293,7 +10384,7 @@ export const da_DK: EnTranslations = {
     },
     "worldPage": {
       "heading": "Verdenen",
-      "intro": "World of ClaudeCraft er ét sammenhængende land, som du krydser til fods. Den gamle vej løber fra syd mod nord gennem startdalen, sumpen og tinderne, og den bliver ved med at stige forbi dem ind i lavningen bagved og snelandet øverst på kortet. En række højere riger åbner sig fra den vej mod vest og en anden mod øst, og en ø ligger ud for Dalens østkyst. Der er ingen hurtigrejse, ingen flyveruter og ingen vogne: hver færd går til fods eller til hest, så det at komme frem hører med til eventyret.\n\nLandet holder også tiden. En døgncyklus løber på et virkeligt ur, som alle på din verden deler, så himlen skifter fra daggry over middag til skumring og mørke for jer alle på én gang, månen kommer og går gennem sine faser, og lyset på jorden skifter med den. Skiven omkring dit minikort er dér, du aflæser timen.",
+      "intro": "Fantasy Arena MMO er ét sammenhængende land, som du krydser til fods. Den gamle vej løber fra syd mod nord gennem startdalen, sumpen og tinderne, og den bliver ved med at stige forbi dem ind i lavningen bagved og snelandet øverst på kortet. En række højere riger åbner sig fra den vej mod vest og en anden mod øst, og en ø ligger ud for Dalens østkyst. Der er ingen hurtigrejse, ingen flyveruter og ingen vogne: hver færd går til fods eller til hest, så det at komme frem hører med til eventyret.\n\nLandet holder også tiden. En døgncyklus løber på et virkeligt ur, som alle på din verden deler, så himlen skifter fra daggry over middag til skumring og mørke for jer alle på én gang, månen kommer og går gennem sine faser, og lyset på jorden skifter med den. Skiven omkring dit minikort er dér, du aflæser timen.",
       "hub": "Hjemmebase",
       "mapHeading": "Vejen og rigerne hinsides",
       "mapSub": "Opgavesporet løber fra syd mod nord ned gennem kortets midte: dal, sump, tinder, og videre forbi dem ind i lavningen og sneen. De andre riger åbner sig langs den vej frem for efter den, gennem porte øst og vest for sumpvejen, mens øen Farshore nås fra Dalens østkyst. Det, der holder dig ude af de fjerne riger, er deres niveaubånd, ikke vandringen: fem af dem deler det øverste bånd, så når du først er klar, kan du tage dem i den rækkefølge, du vil. Farshore er undtagelsen, lavniveauland som du kan besøge tidligt.",
@@ -11594,7 +11685,7 @@ export const da_DK: EnTranslations = {
       "importedTexture": "Importeret tekstur {number}"
     },
     "appTitle": "Korteditor",
-    "docTitle": "Korteditor - World of ClaudeCraft",
+    "docTitle": "Korteditor - Fantasy Arena MMO",
     "untitledMap": "Unavngivet kort",
     "liveWorld": {
       "name": "Justeringer af den aktuelle verden",
@@ -13756,7 +13847,7 @@ export const da_DK: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spil",
-    "playAria": "Spil World of ClaudeCraft",
+    "playAria": "Spil Fantasy Arena MMO",
     "playLoading": "Indlæser",
     "playStarting": "Starter",
     "serverLabel": "Vælg din verden",
@@ -13860,6 +13951,41 @@ export const da_DK: EnTranslations = {
         "default": "Klassiske",
         "almond": "Mandelformede",
         "hooded": "Tunge øjenlåg"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const da_DK: EnTranslations = {
     "extensionHelp": "For at se en pung her skal du holde en browser-pungudvidelse som Solflare Wallet aktiv.",
     "mobileAppHelp": "Vælg Phantom eller Solflare. Din pung-app beder om godkendelse. Hold dette spil åbent og vend tilbage, når du er færdig.",
     "seekerAppHelp": "Fortsæt med Seed Vault Wallet. Gennemgå forbindelses- og verificeringsanmodningerne i Seed Vault, og vend derefter tilbage til spillet.",
-    "standaloneAppHelp": "Pungforbindelser er endnu ikke tilgængelige i startskærmsappen. Åbn World of ClaudeCraft i Safari eller Chrome for at bruge Phantom eller Solflare.",
+    "standaloneAppHelp": "Pungforbindelser er endnu ikke tilgængelige i startskærmsappen. Åbn Fantasy Arena MMO i Safari eller Chrome for at bruge Phantom eller Solflare.",
     "openAppTitle": "Fortsæt i {wallet}",
     "openAppHelp": "Åbn {wallet} for at gennemgå denne anmodning. Hold denne spil-fane åben, mens pung-appen er aktiv.",
     "openAppButton": "Åbn {wallet}",
     "manualReturnBrowserHelp": "Efter godkendelse kan du vende tilbage til denne spil-fane. Hvis iOS åbner en anden browser, skal du lukke den og manuelt vende tilbage til den oprindelige browser.",
-    "manualReturnStandaloneHelp": "Efter godkendelse kan du vende tilbage til World of ClaudeCraft fra din startskærm. Hvis iOS åbner en browser, skal du lukke den og manuelt genåbne startskærmsappen.",
+    "manualReturnStandaloneHelp": "Efter godkendelse kan du vende tilbage til Fantasy Arena MMO fra din startskærm. Hvis iOS åbner en browser, skal du lukke den og manuelt genåbne startskærmsappen.",
     "preparingAppButton": "Forbereder {wallet}...",
     "walletAppUnavailable": "{wallet} kunne ikke forberedes. Luk dette vindue og prøv igen.",
     "flowConnect": "Vælg en pung. Verificeringen fortsætter automatisk.",
@@ -14266,12 +14392,12 @@ export const da_DK: EnTranslations = {
       "paymentBody": "Vælg den pung, der er tilknyttet din konto, og godkend transaktionen i denne browser.",
       "stepUpBody": "Vælg den pung, der er knyttet til din konto, og underskriv godkendelsesbeskeden til $WOC-børsen. Det er gratis at underskrive, og ingen midler flyttes.",
       "extensionHelp": "Ingen kompatibel pung-udvidelse blev fundet. Installer eller lås Phantom, Solflare eller en anden Solana-browserpung op og prøv derefter igen.",
-      "safety": "World of ClaudeCraft beder aldrig om din genoprettelsesfrase eller private nøgle.",
+      "safety": "Fantasy Arena MMO beder aldrig om din genoprettelsesfrase eller private nøgle.",
       "continueWith": "Fortsæt med {wallet}",
       "reviewTitle": "Gennemse i din pung",
       "reviewBody": "Følg prompten fra {wallet}. Hold denne browserside åben.",
       "completeTitle": "Pung-godkendelse fuldført",
-      "completeBody": "Du kan nu vende tilbage til World of ClaudeCraft-skrivebordsappen.",
+      "completeBody": "Du kan nu vende tilbage til Fantasy Arena MMO-skrivebordsappen.",
       "returnButton": "Vend tilbage til skrivebordsapp",
       "failed": "Pung-godkendelse mislykkedes eller udløb. Vend tilbage til skrivebordsappen og prøv igen.",
       "retry": "Prøv igen"
@@ -14369,16 +14495,16 @@ export const da_DK: EnTranslations = {
     "levelClass": "Niveau {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "Verdenen {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Fantasy Arena MMO",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count} rekrutteret",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Smed din legende: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", {tier}-rangeret $WOC-ejer",
-    "shareText": "Jeg smeder min legende i World of ClaudeCraft: Niveau {level} {className}{tierBit}. Slut dig til min verden:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareText": "Jeg smeder min legende i Fantasy Arena MMO: Niveau {level} {className}{tierBit}. Slut dig til min verden:",
+    "nativeShareTitle": "Fantasy Arena MMO",
     "fileNameFallback": "spiller",
     "actionShareX": "Del på X",
     "actionCopyReferral": "Kopiér henvisningslink",
@@ -14395,6 +14521,7 @@ export const da_DK: EnTranslations = {
     "statusShareUnsupported": "Deling understøttes ikke på denne enhed."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "Kriger",
     "paladin": "Paladin",
     "hunter": "Jæger",
@@ -14402,6 +14529,7 @@ export const da_DK: EnTranslations = {
     "priest": "Præst",
     "shaman": "Shaman",
     "mage": "Magiker",
+    "dreamdancer": "Drømmedanser",
     "warlock": "Heksemester",
     "druid": "Druide",
     "warriorAria": "Kriger-klasse",
@@ -14411,6 +14539,7 @@ export const da_DK: EnTranslations = {
     "priestAria": "Præst-klasse",
     "shamanAria": "Shaman-klasse",
     "mageAria": "Magiker-klasse",
+    "dreamdancerAria": "Drømmedanser",
     "warlockAria": "Heksemester-klasse",
     "druidAria": "Druide-klasse"
   },
@@ -15248,13 +15377,13 @@ export const da_DK: EnTranslations = {
     "parseService": "WoC Parse-tjeneste"
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klassisk-inspireret web-MMO",
-    "description": "Spil World of ClaudeCraft, en gratis browser-MMO. Udforsk, løs quests, og gå i dungeons med venner. Ingen download nødvendig.",
+    "title": "Fantasy Arena MMO: Klassisk-inspireret web-MMO",
+    "description": "Spil Fantasy Arena MMO, en gratis browser-MMO. Udforsk, løs quests, og gå i dungeons med venner. Ingen download nødvendig.",
     "genre": "MMORPG",
     "playMode": "Flerspiller",
     "applicationCategory": "Spil",
     "operatingSystem": "Webbrowser",
-    "officialLabel": "Officiel World of ClaudeCraft-hjemmeside",
+    "officialLabel": "Officiel Fantasy Arena MMO-hjemmeside",
     "officialBody": "Den officielle side for World of ClaudeCraft. Spil online, læs wikien, og find fællesskabslinks her."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const da_DK: EnTranslations = {
     "notify": {
       "updateReadyTitle": "Opdatering {version} er klar",
       "updateReadyTitleNoVersion": "Opdatering er klar",
-      "updateReadyBody": "Genstart World of ClaudeCraft for at anvende opdateringen.",
+      "updateReadyBody": "Genstart Fantasy Arena MMO for at anvende opdateringen.",
       "partyInviteTitle": "Gruppeinvitation",
       "partyInviteBody": "{name} inviterede dig til en gruppe."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "Spilvisningen holdt op med at virke. Genindlæs den?",
       "reload": "Genindlæs",
       "quit": "Afslut",
-      "fatalBody": "World of ClaudeCraft stødte på en uventet fejl og skal lukke."
+      "fatalBody": "Fantasy Arena MMO stødte på en uventet fejl og skal lukke."
     },
     "hostDiag": {
       "saveTitle": "Gem systemrapport",
@@ -15500,6 +15629,7 @@ export const da_DK: EnTranslations = {
       "priest": "Healer / Afstands-DPS",
       "shaman": "Healer / Nærkamps- eller Afstands-DPS",
       "mage": "Afstands-DPS",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "Afstands-DPS",
       "druid": "Tank / Healer / Nærkamps- eller Afstands-DPS"
     },
@@ -15524,6 +15654,7 @@ export const da_DK: EnTranslations = {
       "priest": "Præster påkalder Lægende Lys for at helbrede og skærme allierede, mens Skyggemagi lader dem dræne livet af deres fjender.",
       "shaman": "Shamaner befaler elementerne, gennemtrænger våben med kraft, chokerer fjender med lyn og genopretter allierede.",
       "mage": "Magikere bøjer Ild-, Frost- og arkankraft for at tilintetgøre fjender, frembringe vand og fryse trusler på stedet.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "Heksemestre tilkalder dæmoner, kaster forbandelser og skade-over-tid-magi og suger liv fra fjender for at holde ud.",
       "druid": "Druider kanaliserer naturen, helbreder sår, omslynger fjender og skifter til dyreformer til forsvar eller skade."
     },
@@ -15540,11 +15671,11 @@ export const da_DK: EnTranslations = {
     "iosStandaloneDetail": "Du er i fuldskærmstilstand fra startskærmen. Hold enheden i liggende format.",
     "iosInstallDetail": "For ægte fuldskærm på iPhone eller iPad skal du først installere denne side på din startskærm.",
     "iosShareStep": "I Safari skal du trykke på Del og derefter Føj til hjemmeskærm.",
-    "iosOpenStep": "Åbn World of ClaudeCraft fra det nye ikon på startskærmen.",
+    "iosOpenStep": "Åbn Fantasy Arena MMO fra det nye ikon på startskærmen.",
     "androidStandaloneDetail": "Du er i fuldskærms-apptilstand. Hold enheden i liggende format.",
     "androidInstallDetail": "For fuldskærm på Android skal du først installere denne side eller føje den til din startskærm.",
     "androidInstallStep": "I Chrome skal du trykke på menuen og derefter Installér app eller Føj til startskærm.",
-    "androidOpenStep": "Åbn World of ClaudeCraft fra det nye ikon.",
+    "androidOpenStep": "Åbn Fantasy Arena MMO fra det nye ikon.",
     "otherStandaloneDetail": "Hold din enhed i liggende fuldskærm.",
     "otherInstallDetail": "Installér eller føj denne side til din startskærm for den bedste mobile fuldskærmsoplevelse."
   },
@@ -15560,8 +15691,8 @@ export const da_DK: EnTranslations = {
     "confirm": "Fortsæt"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Verden utilgængelig",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Verden utilgængelig",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Verdens-vedligeholdelse",
     "heading": "Verdenen er midlertidigt utilgængelig.",
     "body": "Vi genstarter spiltjenesten og forventer, at Claudemoon vender tilbage om kort tid. Denne side bliver ved med at tjekke automatisk.",
@@ -15762,6 +15893,7 @@ export const da_DK: EnTranslations = {
       "audio": "Lyd",
       "interface": "Brugerflade",
       "language": "Sprog",
+      "characterSelect": "Figurvalg",
       "logout": "Log ud",
       "returnToGame": "Tilbage til spillet",
       "resetToDefaults": "Nulstil til standard",
@@ -17376,6 +17508,8 @@ export const da_DK: EnTranslations = {
       "collectNote": "Indtjening og returnerede varer, som Købmanden holder for dig.",
       "saleProceeds": "Salgsindtægt",
       "collectAll": "Hent alt",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Historie",
       "historyEmpty": "Ingen salg endnu. Varer du sælger på Verden Marked vises her.",
       "historyNote": "Dine seneste salg på Verden Marked.",
@@ -19265,6 +19399,66 @@ export const da_DK: EnTranslations = {
       "revive_pet": {
         "name": "Lappe sammen",
         "description": "Genopretter 10 % af din levende ledsagers maksimale helbred hvert sekund i 8 sek. Hvis din ledsager er død, genoplives den i stedet med 50 % helbred."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const da_DK: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Sølvbæk-fiskestang"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "Saltvandsafgud"
@@ -31089,8 +31307,8 @@ export const da_DK: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Slagkrone Gevandter",
-        "bonus2": "Glødehud nedtælling reduceres med 30 sek. Skade, du tager, forsinker ikke længere dine besværgelser.",
-        "bonus4": "Hver anden Antændelse gør din næste Undergangslyn inden 8 sek øjeblikkelig."
+        "bonus2": "Mod fjendtlige spillere gør Undergangslyn 50 % mere skade, men tager 0,7 sek længere at kaste. Skade, du tager, forsinker ikke længere dine besværgelser.",
+        "bonus4": "Hver anden Antændelse gør din næste Undergangslyn inden 8 sek øjeblikkelig. Det gratis Undergangslyn forbruger ikke Ødelæggelse."
       },
       "vanguard_warrior_arms": {
         "name": "Klingevågning Krigs-udstyr",

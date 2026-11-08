@@ -1,3 +1,4 @@
+import { DREAMDANCER_ABILITIES, DREAMDANCER_CLASS, DREAMKEEPER_MOON_REFUGE, DREAM_REFUGE } from './dreamdancer';
 import { type AbilityOutputScaling, buildAbilityOutputScaling } from '../ability_output_scaling';
 import { resolveTalentHitMult } from '../talent_hit_mult';
 import {
@@ -83,6 +84,7 @@ const START_RATIONS_MANA = [
 ];
 
 export const CLASSES: Record<PlayerClass, ClassDef> = {
+  dreamdancer: DREAMDANCER_CLASS,
   warrior: {
     id: 'warrior',
     name: 'Warrior',
@@ -653,6 +655,7 @@ export const PRIEST_PSALM_OF_WARDING_SPELL_POWER_COEFF = 0.1;
 export const MAGE_MASS_BARRIER_SPELL_POWER_COEFF = 0.25;
 
 export const ABILITIES: Record<string, AbilityDef> = {
+  ...DREAMDANCER_ABILITIES,
   courier: COURIER_ABILITY,
   ...PALADIN_CORE_ABILITIES,
   // ====================== WARRIOR ======================
@@ -9562,7 +9565,7 @@ export function abilitiesKnownAt(
   for (const g of mods?.grants ?? []) if (!ids.includes(g.ability)) ids.push(g.ability);
 
   for (const id of ids) {
-    const def = ABILITIES[id];
+    const def = id === DREAM_REFUGE && mods?.spec === 'dreamkeeper' ? DREAMKEEPER_MOON_REFUGE : ABILITIES[id];
     if (!def) continue;
     // Retired ids stay in ABILITIES so persisted action bars can identify and
     // discard them, but they are not authoritative actions. Keeping them in

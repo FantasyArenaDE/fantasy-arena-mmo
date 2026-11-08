@@ -128,7 +128,7 @@ function resolveDesktopConfig({ packagedMetadata, env, isPackaged } = {}) {
   const origins = resolveDesktopOrigins({ packagedMetadata, env, isPackaged });
   return {
     distribution,
-    updaterEnabled: updaterAllowed({ distribution, isPackaged }),
+    updaterEnabled: packagedMetadata?.wocDesktop?.autoUpdates !== false && updaterAllowed({ distribution, isPackaged }),
     wocExchangeEnabled: wocExchangeSupported({ packagedMetadata, env, isPackaged }),
     crashSubmitUrl: resolveCrashSubmitUrl({ packagedMetadata, env, isPackaged }),
     updateChannel: updateChannelForOrigin(origins.apiOrigin),

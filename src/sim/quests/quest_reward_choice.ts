@@ -59,6 +59,7 @@ export const QUEST_REWARD_SPEC_WEIGHTS: Readonly<
   priest: { discipline: HEALER, holy: HEALER, shadow: CASTER },
   shaman: { elemental: CASTER, enhancement: STR_HYBRID, restoration: HEALER },
   mage: { arcane: CASTER, fire: CASTER, frost: CASTER },
+  dreamdancer: { nightweaver: CASTER, dreamkeeper: HEALER, veilweaver: CASTER },
   warlock: { affliction: CASTER, demonology: CASTER, destruction: CASTER },
   druid: { balance: CASTER, feral: STR_MELEE, restoration: HEALER },
 };
@@ -72,6 +73,7 @@ const LEVELING_SPEC: Readonly<Record<PlayerClass, string>> = {
   priest: 'shadow',
   shaman: 'enhancement',
   mage: 'frost',
+  dreamdancer: 'nightweaver',
   warlock: 'affliction',
   druid: 'balance',
 };

@@ -60,7 +60,9 @@ if (typeof window !== 'undefined') {
   // Deferred, never eager (tests/defer_launcher_preloads.test.ts): world content.
   registerDeferredPreload(() =>
     Promise.all([
-      loadGltf(STANDARD_URL).then((g) => (loaded.standard = g.scene)),
+      ...(import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+        ? []
+        : [loadGltf(STANDARD_URL).then((g) => (loaded.standard = g.scene))]),
       loadGltf(EYE_URL).then((g) => (loaded.eye = g.scene)),
       loadGltf(GRAPNEL_URL).then((g) => (loaded.grapnel = g.scene)),
     ]).then(() => undefined),

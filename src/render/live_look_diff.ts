@@ -94,9 +94,9 @@ function bodyPickOf(app: Record<string, unknown> | null | undefined): 'female' |
 }
 
 /** The dressing diff, run AFTER the base visual settled: a WOC modular body
- *  dresses itself from the worn set (the six armor slots and the paperdoll eye)
- *  with a visibility flip per part, never a rebuild; every other rig answers
- *  false at once. Returns whether the body changed. */
+ *  dresses itself from the worn set (the six armor slots and the paperdoll eye).
+ *  The CC0 class kit changes only the chest tint. Neither rebuilds the body.
+ *  Returns whether the body changed. */
 export function diffWornArmor(e: Entity, visual: WocDressable): boolean {
   // Only a player has a worn set to dress from. A mob on a WOC body (the
   // Nythraxis court's vision of Captain Aldren rides the warrior def) keeps

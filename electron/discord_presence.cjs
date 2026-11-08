@@ -83,7 +83,7 @@ const DISCORD_CLIENT_ID_PATTERN = /^\d{15,22}$/;
  * supersedes the earlier no-hardcoded-fallback stance, which was the correct
  * reading only while no registration existed.
  */
-const DEFAULT_DISCORD_APP_ID = '1537920691200983141';
+const DEFAULT_DISCORD_APP_ID = '1568361606717509662';
 
 /**
  * The app id for this build. Precedence: an unset WOC_DISCORD_APP_ID means

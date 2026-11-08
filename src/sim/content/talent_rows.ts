@@ -1,3 +1,4 @@
+import { DREAMDANCER_ROWS } from './dreamdancer';
 import type { PlayerClass } from '../types';
 import {
   DRUID_CHOICE_ROWS,
@@ -40,6 +41,7 @@ export interface ClassChoiceRows {
 }
 
 export const ROW_TREES = {
+  dreamdancer: DREAMDANCER_ROWS,
   warrior: WARRIOR_ROWS,
   paladin: PALADIN_CHOICE_ROWS.rows,
   hunter: HUNTER_CHOICE_ROWS.rows,

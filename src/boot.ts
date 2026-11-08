@@ -7,6 +7,8 @@
 import './styles/index.css';
 import { DESKTOP_APP, NATIVE_APP } from './client_origin';
 import { BOOT_PENDING_CLASS, BOOT_SPLASH_ID } from './ui/boot_splash_core';
+import { browserLanguage } from './ui/browser_language';
+import { SUPPORTED_LANGUAGES } from './ui/i18n.resolved.generated/loaders';
 import { ART_DEFERRED_CLASS, afterLoadSettles, runLandingFirst } from './ui/landing_first';
 import { bootModeFor } from './ui/landing_first_core';
 
@@ -21,6 +23,11 @@ function storageGetter(storage: () => Storage): (key: string) => string | null {
 }
 
 const startClient = () => import('./main');
+
+// This distribution has no upstream news/wiki or project-stat services.
+if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+  document.documentElement.classList.add('fa-browser-release');
+}
 
 // The backdrop video's poster only shows in the native and desktop shells (the website
 // hides the video), so index.html carries it as data-poster rather than every visit
@@ -41,6 +48,7 @@ const mode = bootModeFor({
   search: location.search,
   nativeApp: NATIVE_APP,
   desktopApp: DESKTOP_APP,
+  browserLocale: browserLanguage(SUPPORTED_LANGUAGES, [...(navigator.languages ?? []), navigator.language]),
   stored: storageGetter(() => localStorage),
   session: storageGetter(() => sessionStorage),
 });

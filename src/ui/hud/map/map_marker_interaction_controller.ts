@@ -33,6 +33,8 @@ import {
   worldQuestMarkerAt,
 } from '../../map_window_view';
 
+import { AdminMapTeleport } from './admin_map_teleport';
+
 export interface MapMarkerInteractionDeps {
   names: MapSemanticNameResolvers;
   npc(marker: MapNpcMarker): string;
@@ -52,6 +54,7 @@ export interface MapMarkerInteractionDeps {
 const EMPTY_MARKERS = Object.freeze([]) as readonly never[];
 
 export class MapMarkerInteractionController {
+  readonly adminTeleport = new AdminMapTeleport();
   questAreas: readonly MapQuestAreaMarker[] = EMPTY_MARKERS;
   worldQuests: readonly MapWorldQuestMarker[] = EMPTY_MARKERS;
   worldBosses: readonly MapWorldBossMarker[] = EMPTY_MARKERS;
@@ -215,6 +218,7 @@ export class MapMarkerInteractionController {
   }
 
   clear(): void {
+    this.adminTeleport.clear();
     this.stopPortRefresh();
     this.questAreas = EMPTY_MARKERS;
     this.worldQuests = EMPTY_MARKERS;

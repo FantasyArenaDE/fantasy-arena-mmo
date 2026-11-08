@@ -28,9 +28,10 @@
 import { corpseInteractionAvailability } from './corpse_interaction';
 import { deadTargetSelectable } from './dead_target';
 import { gmHiddenFrom } from './gm_presence';
-import { isBuddyMob } from './pet/buddy_ai';
+import { buddyUnselectableBy, isBuddyMob } from './pet/buddy_ai';
 import type { PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
+import { summonConcealedFrom } from './summon_concealment';
 import { orderTabTargets, stepTabTarget, TAB_QUERY_RADIUS, type TabStep } from './tab_target';
 import type { Entity } from './types';
 
@@ -78,6 +79,10 @@ export class Targeting {
     }
     const e = this.ctx.entities.get(id);
     if (!e || (e.dead && !this.deadEntitySelectableFor(e, p.id))) return;
+    // A buddy (src/sim/pet/buddy_ai.ts) is visible but never interactable:
+    // only its owner may select it (for the rename/autoloot menu).
+    if (buddyUnselectableBy(e, p.id)) return;
+    if (summonConcealedFrom(this.ctx, p, e)) return;
     // A hidden GM never reached this client's snapshot; refuse a forged id too.
     if (gmHiddenFrom(this.ctx.entities, p, e)) return;
     if (this.stopsAutoAttackOnSwitch(r.meta, p, id)) p.autoAttack = false;
@@ -178,6 +183,7 @@ export class Targeting {
     // AoE-eligible purely by association. Mirrors the isHostileTo exclusion
     // in sim.ts.
     if (isBuddyMob(target)) return false;
+    if (summonConcealedFrom(this.ctx, attacker, target)) return false;
     if (this.ctx.isHostileTo(attacker, target)) return true;
     if (target.kind === 'mob' && target.ownerId !== null) {
       const owner = this.ctx.entities.get(target.ownerId);
@@ -205,6 +211,7 @@ export class Targeting {
     const out: { e: Entity; d: number }[] = [];
     this.ctx.grid.forEachInRadius(p.pos.x, p.pos.z, 40, (e, d2) => {
       if (e.id === p.id || e.dead || !this.ctx.isFriendlyTo(p, e)) return;
+      if (summonConcealedFrom(this.ctx, p, e)) return;
       out.push({ e, d: Math.sqrt(d2) });
     });
     return out;

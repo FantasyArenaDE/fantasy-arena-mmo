@@ -34,6 +34,7 @@ import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { currentDayNightPhase } from './day_night_clock';
 import { floorVfxRenderOrder } from './floor_vfx_layer';
+import { buildFantasyArenaHollowCrypt } from './fa_hollow_crypt_entrance';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
 import {
   CRYPT_MIST_FIELDS,
@@ -59,7 +60,7 @@ const PROPS_URL = '/models/props/hollow_crypt_entrance_props.glb';
 const GROWTH_URL = '/models/props/hollow_crypt_entrance_growth.glb';
 const URLS = [MAIN_URL, WALLS_URL, PROPS_URL, GROWTH_URL] as const;
 const sources = new Map<string, THREE.Group>();
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   for (const url of URLS) {
     registerDeferredPreload(() =>
       loadGltf(url).then((gltf) => {
@@ -650,14 +651,18 @@ export function buildHollowCryptEntrance(seed: number): HollowCryptEntranceView 
   const chapel = new THREE.Group();
   chapel.name = 'hollowCryptEntranceBody';
   chapel.position.set(door.x, base, door.z);
-  const main = sources.get(MAIN_URL);
-  chapel.add(main ? seat(main, true) : fallbackChapel());
-  for (const url of [WALLS_URL, PROPS_URL]) {
-    const source = sources.get(url);
-    if (source) chapel.add(seat(source, true));
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+    chapel.add(buildFantasyArenaHollowCrypt(door, base, seed));
+  } else {
+    const main = sources.get(MAIN_URL);
+    chapel.add(main ? seat(main, true) : fallbackChapel());
+    for (const url of [WALLS_URL, PROPS_URL]) {
+      const source = sources.get(url);
+      if (source) chapel.add(seat(source, true));
+    }
+    const growth = sources.get(GROWTH_URL);
+    if (growth) chapel.add(seat(growth, false));
   }
-  const growth = sources.get(GROWTH_URL);
-  if (growth) chapel.add(seat(growth, false));
   chapel.add(stairWindows());
   const tier = resolveUiEffectsProfile({
     presetLabel: GFX.tier,

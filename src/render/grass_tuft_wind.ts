@@ -2,6 +2,7 @@
 // foliage.ts (the monolith ratchet) when the Studio's tuft wind was gated to
 // authored maps. Pure string builders: no Three, no DOM.
 
+import { GUST_RATE, GUST_X, GUST_Z } from './ambient_wind_core';
 import { GRASS_WIND_TIME_SCALE } from './tree_sway';
 
 // Slow travelling gust, shared by the canopy and grass shaders: it scales the
@@ -10,7 +11,7 @@ import { GRASS_WIND_TIME_SCALE } from './tree_sway';
 // flapping at one fixed strength. Same rate and world scale in both keeps the
 // canopy and the meadow in the same weather.
 export const windGustGlsl = (x: string, z: string, t = 'uTime'): string =>
-  `0.6 + 0.4 * sin(${t} * 0.6 + ${x} * 0.05 + ${z} * 0.04)`;
+  `0.6 + 0.4 * sin(${t} * ${GUST_RATE} + ${x} * ${GUST_X} + ${z} * ${GUST_Z})`;
 
 /**
  * The tuft-card sway, injected after `tuftBase` is declared.

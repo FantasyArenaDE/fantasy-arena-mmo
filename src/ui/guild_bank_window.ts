@@ -31,9 +31,11 @@
 
 import { audio } from '../game/audio';
 import { ITEMS } from '../sim/data';
+import { compareBagStacks } from '../sim/inventory_sort';
 import { isItemLocked } from '../sim/item_lock';
 import type { GuildBankLogKind, IWorld } from '../world_api';
 import { bagCornerMark, bagRimClasses } from './bag_corner_mark_view';
+import { qualityKeyRank, UNKNOWN_QUALITY_RANK } from './bag_filter';
 import { bagFineMark } from './bag_fine_mark_view';
 import { bagInstanceGlyphKind } from './bag_instance_glyph_view';
 import { showBuyConfirmPrompt } from './bank_buy_prompt';
@@ -139,6 +141,7 @@ export class GuildBankTab {
   // all this pane's business; BankWindow reads it through the getters below for
   // its repaint gate and its scroll scoping.
   private view: GuildBankPaneView = 'contents';
+  private sort: 'slot' | 'type' | 'quality' = 'slot';
   // The history's selected filter slice. Owned here beside the sub-view for
   // the same reason: the pane's read passes it to the world, and the world
   // drops its loaded pages the moment the kind it is read under changes.
@@ -243,7 +246,15 @@ export class GuildBankTab {
     // '__proto__') indexes to a truthy Function, which would send an unknown
     // server item id down the KNOWN arm below. The release's stale-client sweep
     // made every other bags/bank read go through this; the guild pane follows.
-    return buildGuildBankView(world.guildBankInfo, (id) => knownItemDef(ITEMS, id), world.copper);
+    const lookup = (id: string) => knownItemDef(ITEMS, id);
+    const model = buildGuildBankView(world.guildBankInfo, lookup, world.copper);
+    if (model.kind !== 'guild' || this.sort === 'slot') return model;
+    const rank = (slot: GuildBankSlotModel) =>
+      slot.known ? qualityKeyRank(slot.qualityKey) : UNKNOWN_QUALITY_RANK;
+    const slots = [...model.slots].sort(
+      (a, b) => (this.sort === 'quality' ? rank(a) - rank(b) : 0) || compareBagStacks(a, b, lookup),
+    );
+    return { ...model, slots };
   }
 
   /** Release an in-flight rung when the authoritative command path refuses it. */
@@ -321,6 +332,26 @@ export class GuildBankTab {
     capacity.textContent = t('hudChrome.bank.capacity', { used, total });
     capacity.setAttribute('aria-label', t('hudChrome.bank.guildCapacityAria', { used, total }));
     el.appendChild(capacity);
+    const sort = document.createElement('select');
+    sort.className = 'bag-sort ui-input';
+    sort.dataset.focusKey = 'gbank:sort';
+    sort.setAttribute('aria-label', t('hudChrome.bank.sortAria'));
+    for (const [key, label] of [
+      ['slot', 'hudChrome.bank.guildSortSlot'],
+      ['type', 'hudChrome.bank.guildSortType'],
+      ['quality', 'hudChrome.bags.sortQuality'],
+    ] as const) {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = t(label);
+      option.selected = this.sort === key;
+      sort.appendChild(option);
+    }
+    sort.addEventListener('change', () => {
+      this.sort = sort.value === 'type' || sort.value === 'quality' ? sort.value : 'slot';
+      this.deps.requestRender();
+    });
+    el.appendChild(sort);
     // The read-only note lands BEFORE the treasury row (assistive tech should
     // meet the explanation before the disabled controls it explains).
     if (model.readOnly) {
@@ -558,21 +589,21 @@ export class GuildBankTab {
       grid.innerHTML = `<div class="bank-empty">${esc(t('hudChrome.bank.guildEmpty'))}</div>`;
       return;
     }
-    // NO filter/sort layer and NO unknown-id drop: every slot renders at its
-    // wire index, dormant ones visibly distinct (the carried-forward line).
+    // Sorting changes display order only. Each cell retains its wire index.
+    const readOnly = !(model.canEditItems ?? !model.readOnly);
     for (const slot of model.slots) {
       // The exact-source withdraw session (absent on a read-only pane and on a
       // dormant slot, where no withdraw exists) rides both doors into the
       // dialog: desktop right-click and the touch-only Sources button.
       const withdrawSelection =
-        model.readOnly || slot.dormant
+        readOnly || slot.dormant
           ? undefined
           : guildMaterialWithdrawSelection(this.deps.world(), slot.itemId, slot.slotIndex, () => {
               this.deps.hideTooltip();
               this.deps.onInventoryChanged();
               this.deps.requestRender();
             });
-      const cell = this.buildCell(slot, model.readOnly, withdrawSelection);
+      const cell = this.buildCell(slot, readOnly, withdrawSelection);
       const item = knownItemDef(ITEMS, slot.itemId);
       const itemName = item ? itemDisplayName(item) : slot.itemId;
       grid.appendChild(cell);

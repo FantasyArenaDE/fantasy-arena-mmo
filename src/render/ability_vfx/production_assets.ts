@@ -66,6 +66,12 @@ export function warriorKitAssetsState(): WarriorKitAssetsState {
   return assetsState;
 }
 
+/** The release uses the existing engine VFX while the authored sheet kit has
+ * no cleared provenance. Constrained devices already use that same fallback. */
+export function warriorKitUnavailable(constrainedMemory: boolean): boolean {
+  return constrainedMemory || import.meta.env?.VITE_FA_BROWSER_RELEASE === '1';
+}
+
 /** Start (or join) the one load of the Warrior kit's textures, fragments and
  *  contact sheets. Resolves true once every asset is resident, false when the
  *  device declined them. A failed load resets so a later request can retry.
@@ -75,7 +81,7 @@ export function warriorKitAssetsState(): WarriorKitAssetsState {
 export function ensureWarriorKitAssets(constrainedMemory: boolean): Promise<boolean> {
   if (assetsTask && assetsState === 'ready') return restoreImageSheets();
   if (assetsTask) return assetsTask;
-  if (constrainedMemory) {
+  if (warriorKitUnavailable(constrainedMemory)) {
     assetsState = 'declined';
     return Promise.resolve(false);
   }

@@ -103,7 +103,7 @@ export interface ContinentMapInput {
 }
 
 /** Aspect (width / height) used to lay out the regions when no art has decoded
- *  yet (matches the shipped world_overview.webp so the layout does not jump when
+ *  yet (matches the shipped terrain plate so the layout does not jump when
  *  the plate arrives; pinned to the file's real pixel size by
  *  tests/continent_map_view.test.ts, so re-cropping the plate must update this). */
 export const CONTINENT_FALLBACK_ASPECT = 543 / 1100;

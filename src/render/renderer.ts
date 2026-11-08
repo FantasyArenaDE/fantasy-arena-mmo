@@ -150,6 +150,7 @@ import {
   buildCelestialSprites,
   type CelestialSprites,
 } from './celestial_sprites';
+import { dayCloudSunlight } from './fa_day_clouds';
 import {
   CHARACTER_CULL_ALL,
   CHARACTER_CULL_CASTS,
@@ -272,6 +273,8 @@ import { fogFarForBuiltGround, groundViewConeHalfAngle } from './chunk_residency
 import { buildCityClutter, type CityClutterView } from './city_clutter';
 import { CLICK_MARKER_LIFETIME } from './click_marker';
 import { buildCliffScree, type CliffScreeView } from './cliff_scree';
+import { buildCoastalGulls } from './coastal_gulls';
+import { buildCoastalSpray } from './coastal_spray';
 import { type CompileArmHost, linkColorPrograms, linkShadowPrograms } from './compile_arms';
 import type { CompileGateResult } from './compile_gate';
 import { CompileGateQueue, SerialGateLane, settlePendingSwap } from './compile_gate';
@@ -298,6 +301,7 @@ import {
   type CharacterLodBands,
   characterLodBandsInto,
 } from './crowd_lod';
+import { buildDawnFox } from './dawn_fox';
 import { buildDawnholdFeatures, type DawnholdFeaturesView } from './dawnhold_features';
 import { currentDayNightPhase, currentLunarPhase, dayNightPhaseOverride } from './day_night_clock';
 import {
@@ -456,6 +460,7 @@ import {
 import { characterGhostLook } from './ghost_style_core';
 import { GlacialFrontVisual } from './glacial_front_visual';
 import { GoblinRocketSledFx } from './goblin_rocket_sled_fx';
+import { buildForestSunbeams } from './forest_sunbeams';
 import { updateGodRayShafts } from './god_ray_shafts';
 import { createGpuPrepAdmission } from './gpu_prep_admission';
 import { createGpuPrepBudget } from './gpu_prep_budget_core';
@@ -479,6 +484,7 @@ import {
 import { buildGroundObjectSparkle, groundObjectSparkleMaterial } from './ground_object_sparkle';
 import { emitGroundPuff } from './ground_puff';
 import { createGroundTilt, type GroundTiltState, stepGroundTilt } from './ground_tilt_core';
+import { buildHarborSwallows } from './harbor_swallows';
 import { buildHauntFeatures, type HauntFeaturesView } from './haunt_features';
 import { buildHauntedPumpkin, syncHauntedPumpkin } from './haunted_pumpkin';
 import { usedJsHeapMb } from './heap_sample';
@@ -547,6 +553,7 @@ import { buildMailboxPillar } from './mailbox';
 import { type MeleeContactHost, presentMeleeContact } from './melee_contact_present';
 import { meteorLandingBurst } from './meteor_landing_burst';
 import { buildMobNightGlow, type MobNightGlowView } from './mob_night_glow';
+import { morningDewAmount, nearDewMeadow } from './morning_dew_core';
 import { buildMotes, type MotesView } from './motes';
 import type { MountGlows } from './mount_glow';
 import type { MountLamps } from './mount_lamps';
@@ -834,6 +841,7 @@ import {
 } from './shadow_texel_snap_core';
 import { disposeUnsharedMeshResources } from './shared_resource';
 import { shipShadowHold } from './ship_shadow_hold';
+import { buildShoreTracks } from './shore_tracks';
 import {
   buildSky,
   ensureSkyAssetsAt,
@@ -851,6 +859,8 @@ import { enterSpellEvent, leaveSpellEvent } from './spell_effects_switch';
 import { SpiritGrade } from './spirit_grade';
 import { spiritVeilFamilyPrewarmEntry } from './spirit_veil_prewarm';
 import { SporeBurstVisuals } from './spore_burst_visual';
+import { buildStarterButterflies } from './starter_butterflies';
+import { buildStarterFrogs } from './starter_frogs';
 import { StaticInteriorTracker } from './static_interior_tracker';
 import {
   freezeStaticMatrices,
@@ -870,6 +880,7 @@ import {
   type TargetConeOverlay,
 } from './target_cone_overlay';
 import { newTargetHighlightFlags, type TargetHighlightFlags } from './target_highlight_core';
+import { buildTavernAmbience } from './tavern_ambience';
 import { attachTemplateModelVfx } from './template_model_vfx';
 import {
   syncTemporalHourglassVisual,
@@ -946,6 +957,7 @@ import { weaponVfxShedScale } from './weapon_vfx_shed_core';
 import { Weather } from './weather';
 import { precipForBiome } from './weather_field_core';
 import { createRendererWebGL, type WebGLPowerPreference } from './webgl_context_fallback';
+import { buildWoodpecker, type WoodpeckerView } from './woodpecker';
 import { buildWorldAmbientSources, footstepSurfaceAt } from './world_audio';
 import { WorldBossLayer } from './world_boss_layer';
 import { playWorldCueFx } from './world_cue_fx';
@@ -1709,6 +1721,7 @@ export class Renderer {
   private moonUp = 0;
   private starAmt = 0; // 0 day, 1 deep night: star-field strength for the sky dome
   private waterView: WaterView;
+  private coastalSpray: ReturnType<typeof buildCoastalSpray> | null = null;
   private lastWaterSimulationPasses = 0;
   // The waterRipples setting (default on), threaded in via setWaterRipples
   // because render modules never read the settings store directly. Held here
@@ -1728,6 +1741,9 @@ export class Renderer {
   private cliffScree: CliffScreeView;
   private cityClutter: CityClutterView;
   private birds: BirdsView;
+  private dawnFox: ReturnType<typeof buildDawnFox>;
+  private shoreTracks: ReturnType<typeof buildShoreTracks>;
+  private harborSwallows: ReturnType<typeof buildHarborSwallows>;
   // The Mirefen impact site is a landmark of the BUILT-IN world; an authored
   // map covering its coordinates must not inherit it.
   private impactSite: ImpactSiteView | null;
@@ -1746,6 +1762,9 @@ export class Renderer {
   // The island rail's guidance coordinator (beacon fizz + golden trail).
   private worldGuidance!: WorldGuidance;
   private nightAccents: NightAccentsView | null = null;
+  private starterFrogs: ReturnType<typeof buildStarterFrogs> | null = null;
+  private coastalGulls: ReturnType<typeof buildCoastalGulls> | null = null;
+  private starterButterflies: ReturnType<typeof buildStarterButterflies> | null = null;
   private mobNightGlow: MobNightGlowView | null = null;
   // Contact blobs under nearby bodies, built ONLY on the tiers that cast no
   // dynamic shadow (null everywhere else), plus the one scratch slot the
@@ -1828,6 +1847,7 @@ export class Renderer {
   /** The foliage bucket reveal gate (armed at world entry, like the bands). */
   private foliageRevealGate: RevealGateCore | null = null;
   private eastbrookTownView!: EastbrookTownView;
+  private tavernAmbience: ReturnType<typeof buildTavernAmbience> | null = null;
 
   /** Re-bake the monument's projected name (src/game/realm_builder_boot.ts). */
   setRealmBuilderHonouree(name: string): void {
@@ -2050,6 +2070,7 @@ export class Renderer {
   private readonly surfaceAtForAudio = (x: number, z: number, y: number): Surface =>
     this.surfaceAt(x, z, y);
   private audioSink: SpatialAudioSink | null = null;
+  private woodpecker?: WoodpeckerView;
   private readonly ambientPointSources: readonly AmbientPointSource[];
   // Reused scratch buffers for the per-frame rift ambience merge in
   // updateCamera: avoids allocating two arrays plus an object per match every
@@ -2088,6 +2109,7 @@ export class Renderer {
   private post: PostPipeline | null = null;
   private gpuTimerProbe: GpuTimerProbe | null = null;
   private godRays: THREE.Sprite[] = [];
+  private forestSunbeams: ReturnType<typeof buildForestSunbeams> | null = null;
   // Eased per-biome god-ray strength (BIOME_GOD_RAYS via updateAmbience): the
   // shafts are "sun through bright air" and read as detached glowing streaks
   // over the twilight and gloom realms, so those fade them out entirely.
@@ -2545,6 +2567,12 @@ export class Renderer {
       }
     }
 
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+      this.forestSunbeams = buildForestSunbeams(this.sim.cfg.seed);
+      setRenderCategory(this.forestSunbeams.beams, 'props');
+      this.scene.add(this.forestSunbeams.beams);
+    }
+
     // A returning character can log out anywhere in a zone, not only at a
     // hub, so ensureZone builds the cells nearest the actual entry position
     // first (a bounded reorder inside each zone build) rather than wherever
@@ -2588,6 +2616,11 @@ export class Renderer {
     this.waterView = buildWater(this.sim.cfg.seed, this.webgl);
     setRenderCategory(this.waterView.group, 'water');
     this.scene.add(this.waterView.group);
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+      this.coastalSpray = buildCoastalSpray(this.sim.cfg.seed, this.lowGfx);
+      setRenderCategory(this.coastalSpray.mesh, 'water');
+      this.scene.add(this.coastalSpray.mesh);
+    }
     freezeStaticSubtreeMatrices(this.waterView.group); // water animates via uniforms, never transforms
     this.waterView.setWavesEnabled(this.waterRipplesEnabled);
     // Interior authoring uses explicit room fluids; the outdoor ocean plane sits
@@ -2654,6 +2687,15 @@ export class Renderer {
     this.birds = buildBirds(this.sim.cfg.seed);
     setRenderCategory(this.birds.group, 'ambient');
     this.scene.add(this.birds.group);
+    this.dawnFox = buildDawnFox(this.sim.cfg.seed, (root) => this.compileGate(root, false, 'ambient:dawn-fox'));
+    setRenderCategory(this.dawnFox.group, 'ambient');
+    this.scene.add(this.dawnFox.group);
+    this.shoreTracks = buildShoreTracks(this.sim.cfg.seed, this.terrainView.group);
+    setRenderCategory(this.shoreTracks.mesh, 'props');
+    this.scene.add(this.shoreTracks.mesh);
+    this.harborSwallows = buildHarborSwallows(this.sim.cfg.seed);
+    setRenderCategory(this.harborSwallows.group, 'ambient');
+    this.scene.add(this.harborSwallows.group);
     this.impactSite = isBuiltinWorldActive() ? buildImpactSite(this.sim.cfg.seed) : null;
     if (this.impactSite) {
       setRenderCategory(this.impactSite.group, 'props');
@@ -2704,7 +2746,11 @@ export class Renderer {
     // every building stays an individual camera-fade target, and Eastbrook's
     // and Fenbridge's civic and repeated geometry is initialization-batched
     // (Highwatch and the painted towns are painted buildings only, painted_towns.ts).
-    this.eastbrookTownView = buildEastbrookTownView(this.sim.cfg.seed);
+    this.eastbrookTownView = buildEastbrookTownView(this.sim.cfg.seed, {
+      sun: this.sunDir,
+      playerFeet: () => this.sim.player.pos,
+      rainStrength: () => this.weather?.rainStrength ?? 0,
+    });
     this.fenbridgeTownView = buildFenbridgeTownView(this.sim.cfg.seed);
     const placed = buildPlacedTownViews(this.sim.cfg.seed, this.sim);
     this.townViews = [this.eastbrookTownView, this.fenbridgeTownView, ...placed];
@@ -2712,6 +2758,12 @@ export class Renderer {
       setRenderCategory(town.group, 'props');
       this.scene.add(town.group);
       freezeStaticSubtreeMatrices(town.group);
+    }
+
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+      this.tavernAmbience = buildTavernAmbience(this.townViews.map((town) => town.group), this.lowGfx);
+      setRenderCategory(this.tavernAmbience.mesh, 'props');
+      this.scene.add(this.tavernAmbience.mesh);
     }
     bd('towns');
 
@@ -2855,6 +2907,17 @@ export class Renderer {
     this.nightAccents = buildNightAccents(this.sim.cfg.seed);
     setRenderCategory(this.nightAccents.group, 'props');
     this.scene.add(this.nightAccents.group);
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+      this.starterButterflies = buildStarterButterflies(this.sim.cfg.seed);
+      setRenderCategory(this.starterButterflies.group, 'props');
+      this.scene.add(this.starterButterflies.group);
+      this.starterFrogs = buildStarterFrogs(this.sim.cfg.seed);
+      setRenderCategory(this.starterFrogs.group, 'props');
+      this.scene.add(this.starterFrogs.group);
+      this.coastalGulls = buildCoastalGulls(this.sim.cfg.seed);
+      setRenderCategory(this.coastalGulls.group, 'props');
+      this.scene.add(this.coastalGulls.group);
+    }
     bd('night-accents');
     // One residency table at the end of the build (dev console): where the
     // decoded bytes sit at exactly the point the iPhone 17 Pro is killed.
@@ -3012,6 +3075,12 @@ export class Renderer {
         meteorLandingBurst(this.abilityVfx, this.vfx, this.sim.cfg.seed, x, z, meteor),
     );
     const gate = this.worldCompileGate();
+    this.woodpecker = buildWoodpecker(
+      this.scene,
+      this.foliage.woodpeckerPerches,
+      (root) => this.compileGate(root, true, 'eastbrook-woodpecker'),
+      () => this.audioSink,
+    );
     this.varkhulForgestormVisuals = new VarkhulForgestormVisuals(this.scene, this.groundSample, gate);
     this.nythraxisMechanicVisuals = new NythraxisMechanicVisuals(
       this.scene,
@@ -3188,7 +3257,11 @@ export class Renderer {
     );
 
     // ambient precipitation: biome-driven snow/rain that rides with the camera
-    this.weather = new Weather(this.scene, this.lowGfx);
+    this.weather = new Weather(
+      this.scene,
+      this.lowGfx,
+      import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? this.sim.cfg.seed : undefined,
+    );
     this.underwaterView.setCompileGate(this.worldCompileGate() ?? null, () => this.waterView);
 
     // post chain (bloom + grade, GTAO on ultra); medium gets the grade-only
@@ -3313,9 +3386,13 @@ export class Renderer {
     // Unbind this dome from the sky module's live-binding set, or a replaced
     // renderer's dome would pin its last biome pair against eviction forever.
     bestEffort(() => this.skyView?.dispose());
+    bestEffort(() => this.dawnFox?.dispose());
+    bestEffort(() => this.eastbrookTownView?.disposeHarborCrabs());
     for (const target of this.envRTs.values()) bestEffort(() => target.dispose());
     this.envRTs.clear();
     disposeRendererPrewarmAndGroundFx(this, bestEffort);
+    bestEffort(() => this.harborSwallows?.dispose());
+    bestEffort(() => this.shoreTracks?.dispose());
     disposeRendererWorldViews(
       this.terrainView,
       this.farTerrainView,
@@ -3350,18 +3427,17 @@ export class Renderer {
     // WebGL2 checks that can throw: the partial-construction cleanup arm
     // reaches here with it still unset.
     bestEffort(() => this.nameplatePainter?.dispose());
-    // The layer is renderer-owned. Clearing it catches a pending DocumentFragment
-    // batch or any renderer DOM surface added after the explicit maps above.
+    // Clearing the layer also catches pending renderer-owned DOM batches.
     bestEffort(() => this.nameplateLayer.replaceChildren());
     bestEffort(() => this.travelSpeedFx?.dispose());
     bestEffort(() => this.worldGuidance?.dispose());
+    bestEffort(() => this.woodpecker?.dispose());
     bestEffort(() => this.varkhulForgestormVisuals?.dispose());
     this.varkhulForgestormVisuals = undefined;
     bestEffort(() => this.nythraxisMechanicVisuals?.dispose());
     this.nythraxisMechanicVisuals = undefined;
-    // Renderer-owned (not a module singleton): the graphics-rebuild teardown
-    // comes through HERE (shutdown -> disposeRendererResources), so the blob
-    // pool, texture and material release with the rest of the GPU state.
+    // Graphics rebuilds dispose renderer-owned resources before GL teardown.
+    bestEffort(() => this.eastbrookTownView?.dispose());
     bestEffort(() => this.blobShadows?.dispose());
     this.blobShadows = null;
     cleanupErrors.push(...(this.dungeons?.disposeAllInteriorResources().errors ?? []));
@@ -4987,7 +5063,7 @@ export class Renderer {
       fogFar,
       this.camera.position.y,
     );
-    this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar);
+    this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar, focusX, focusZ);
     this.authoredLayers?.updateDecals(this.camera.position.x, this.camera.position.z, fogFar);
     this.farTerrainView.update(
       this.camera.position.x,
@@ -5043,7 +5119,7 @@ export class Renderer {
       this.reducedMotion(),
     );
     sceneryDetail.updateSceneryDetail(this.camera.position.x, this.camera.position.z);
-    this.fish.update(p.pos.x, p.pos.z, dt);
+    this.fish.update(p.pos.x, p.pos.z, dt, this.fogState === 'outdoor');
     this.abilityVfx.update(dt, this.reducedMotion());
     this.vfx.update(dt);
     this.vfx.prepareDraw(this.camera);
@@ -6160,8 +6236,11 @@ export class Renderer {
         priority: 45,
         required: true,
         run: () => {
-          propMaterialPrewarmGroup = buildPropMaterialPrewarmGroup();
+          propMaterialPrewarmGroup = buildPropMaterialPrewarmGroup(
+            this.harborSwallows.prewarmMesh(),
+          );
           propMaterialPrewarmGroup.position.set(p.pos.x, p.pos.y, p.pos.z - 18);
+          this.shoreTracks.prewarm(propMaterialPrewarmGroup);
           setRenderCategory(propMaterialPrewarmGroup, 'prewarm');
           this.scene.add(propMaterialPrewarmGroup);
         },
@@ -9268,8 +9347,14 @@ export class Renderer {
       this.hemi.groundColor.lerp(this.dnColorScratch, k);
       const baseSun = this.lowGfx ? lowSunIntensity(GFX, g, biome) : SUN_INTENSITY;
       const baseHemi = this.lowGfx ? lowHemiIntensity(GFX, g, biome) : hemiOutdoorIntensity();
+      const sunlight = dayCloudSunlight(
+        this.skyView.currentBiomeBlend(),
+        this.camera.position,
+        this.sunDir,
+        this.time,
+      );
       this.sun.intensity +=
-        (baseSun * g.lightScale * (light.sunScale ?? 1) - this.sun.intensity) * k;
+        (baseSun * g.lightScale * (light.sunScale ?? 1) * sunlight - this.sun.intensity) * k;
       // The ambient half rides its own higher night floor, so terrain shape and
       // body silhouettes survive deep night while the moon key light stays dim.
       this.hemi.intensity +=
@@ -9338,7 +9423,7 @@ export class Renderer {
     this.lightDir.copy(this.sunDir).lerp(this.moonDir, blend).normalize();
     interiorKeyLightDirection(this.fogState, this.lightDir);
     setWaterSunDirection(this.lightDir);
-    setWaterDayNight(this.dnGrade.fog);
+    setWaterDayNight(this.dnGrade.fog, this.dnGlobalNight);
     setFarTerrainNightGrade(this.dnGrade.nightAmt);
     const anchor = this.shadowSnappedAnchor;
     anchor.x = pp.x;
@@ -9367,9 +9452,6 @@ export class Renderer {
   /** Is the camera under real sky? The overworld, Wildheart's open field, and
    *  the Thornhollow Fields hollow all render the dome; every enclosed state
    *  (dungeon, temple, rift, underwater) does not. */
-  /** Drive the field wards off the live match view: the form-up gate while the
-   *  countdown holds, and the grave ward while the player waits as a spirit.
-   *  Only visibility flags, so this is cheap enough for the per-frame block. */
   /** The gate a streamed world group attaches through; none without parallel compile. */
   worldCompileGate(): ((target: THREE.Object3D) => Promise<unknown>) | undefined {
     return this.asyncCompileSupported ? (target) => this.compileGate(target) : undefined;
@@ -9399,7 +9481,14 @@ export class Renderer {
       this.camera,
       this.sunDir,
       this.moonDir,
-      this.sunUp,
+      this.sunUp * (1 - this.weather.valleyWeather.x * 0.85) *
+        dayCloudSunlight(
+          this.skyView.currentBiomeBlend(),
+          this.camera.position,
+          this.sunDir,
+          this.time,
+          0.83,
+        ),
       this.moonUp,
       this.fogState === 'outdoor',
       currentLunarPhase(),
@@ -9667,6 +9756,12 @@ export class Renderer {
     // every tier that casts real shadows).
     this.blobShadows?.begin();
     this.worldBoss.beginViews();
+    this.shoreTracks.begin(
+      this.time,
+      this.camera.position.x,
+      this.camera.position.z,
+      this.fogState === 'outdoor' && isBuiltinWorldActive(),
+    );
 
     for (const [id, v] of this.views) {
       const e = sim.entities.get(id);
@@ -10579,7 +10674,7 @@ export class Renderer {
         st.casting &&
         e.castingAbility !== null &&
         ABILITIES[e.castingAbility]?.selfCentered === true;
-      st.swimming = swimming || e.climbing === true;
+      st.swimming = swimming;
       st.submerged = submerged;
       st.swimPitch = v.swimPitch;
       st.bankRoll = v.bankRoll;
@@ -10592,6 +10687,24 @@ export class Renderer {
       // Facts about the ENTITY that override what its displayed motion implies
       // (battle-stance engagement, ice-slide suppression): anim_state_entity_core.
       applyEntityAnimOverrides(st, e, visuallyDead, characterEffects, hasStealth);
+      this.shoreTracks.sample(
+        id,
+        e.kind,
+        e.templateId,
+        ax,
+        ay,
+        az,
+        settled &&
+          st.moving &&
+          !logicallyMounted &&
+          !e.climb &&
+          !e.climbing &&
+          !st.sitting &&
+          !e.ghost &&
+          !active.flies &&
+          requestedForm === 'base' &&
+          !hasStealth,
+      );
       // Reset and prewarm mount audio BEFORE this frame can dispatch movement
       // cues. A completed summon or live swap must not start the new idle/run
       // voice only to have the transition edge immediately tear it down below.
@@ -11042,6 +11155,7 @@ export class Renderer {
     }
     this.worldBoss.endViews();
     this.lastVisibleRigCount = visibleRigCount;
+    this.shoreTracks.finish();
     this.blobShadows?.commit();
     this.drainWeaponSkinApplies();
 
@@ -11399,7 +11513,7 @@ export class Renderer {
         }
       }
     }
-    this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar);
+    this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar, focusX, focusZ);
     this.authoredLayers?.updateDecals(this.camera.position.x, this.camera.position.z, fogFar);
     this.farTerrainView.update(
       this.camera.position.x,
@@ -11428,6 +11542,14 @@ export class Renderer {
     this.hollowGates.update(camX, camY, camZ, eyeX, eyeY, eyeZ, dt, this.reducedMotion());
     updateSetPieceOccluders(camX, camY, camZ, eyeX, eyeY, eyeZ, dt, this.reducedMotion());
     worldStart = this.markRendererWorldPhase(worldPhaseMs, 'props', worldStart);
+    sharedUniforms.uMorningDew.value.set(
+      this.sunDir.x,
+      this.sunDir.z,
+      morningDewAmount(
+        currentDayNightPhase(),
+        this.fogState === 'outdoor' && isBuiltinWorldActive() && nearDewMeadow(camX, camZ),
+      ),
+    );
     this.foliage.update(
       p.pos.x,
       p.pos.z,
@@ -11451,9 +11573,16 @@ export class Renderer {
     );
     sceneryDetail.updateSceneryDetail(camX, camZ);
     worldStart = this.markRendererWorldPhase(worldPhaseMs, 'foliage', worldStart);
-    this.fish.update(p.pos.x, p.pos.z, dt);
+    this.fish.update(p.pos.x, p.pos.z, dt, this.fogState === 'outdoor');
+    this.woodpecker?.update(p.pos.x, p.pos.z, dt, this.fogState === 'outdoor');
     worldStart = this.markRendererWorldPhase(worldPhaseMs, 'fish', worldStart);
-    this.motes.update(p.pos.x, p.pos.z, dt);
+    this.motes.update(
+      p.pos.x,
+      p.pos.z,
+      dt,
+      this.fogState === 'outdoor' && !this.reducedMotion() ? this.time : NaN,
+      this.camYaw,
+    );
     // The wilderness night layer rides beside the ambient motes: same
     // player-centred streaming contract, but gated on real dark and anchored to
     // world cells for the flora (see night_accents.ts).
@@ -11462,12 +11591,21 @@ export class Renderer {
     // Like the motes: the drifting fireflies are the shipped world's ambience;
     // an authored map opts in (TerrainStyle.motes) or carries none.
     const driftOn = isBuiltinWorldActive() || getActiveWorldContent().terrainStyle?.motes === true;
+    this.starterFrogs?.update(this.time, p.pos.x, p.pos.z, driftOn && this.fogState === 'outdoor');
+    this.starterButterflies?.update(
+      driftOn && this.fogState === 'outdoor' ? this.sunDir.y : NaN,
+      this.time,
+      p.pos.x,
+      p.pos.z,
+    );
     this.nightAccents?.update(
       driftOn && this.fogState === 'outdoor' ? wildGlowAmount(this.dnGlobalNight) : 0,
       this.time,
       dt,
       p.pos.x,
       p.pos.z,
+      this.fogState === 'outdoor' ? this.sunDir.y : NaN,
+      this.sunDir.x,
     );
     this.bladeGrass.update(focusX, focusZ);
     // fogFar here is subsystemCullFar(): the residency-clamped detail
@@ -11483,10 +11621,36 @@ export class Renderer {
     this.amberFeatures?.update(this.time);
     this.nightFeatures?.update(this.time);
     this.hauntFeatures?.update(this.time);
-    this.jungleFeatures?.update(this.time);
+    this.jungleFeatures?.update(this.time, this.reducedMotion());
     this.gardenFeatures?.update(this.time);
     this.galeFeatures?.update(this.time);
-    this.birds.update(p.pos.x, p.pos.z, dt);
+    this.birds.update(
+      p.pos.x,
+      p.pos.z,
+      dt,
+      this.camYaw,
+      this.fogState === 'outdoor',
+    );
+    this.coastalGulls?.update(
+      this.time,
+      p.pos.x,
+      p.pos.z,
+      driftOn && this.fogState === 'outdoor' ? this.sunDir.y : NaN,
+    );
+    this.harborSwallows.update(
+      this.time,
+      camX,
+      camZ,
+      this.fogState === 'outdoor' && this.dnGlobalNight < 0.5 && !this.reducedMotion(),
+    );
+    this.dawnFox.update(
+      this.time,
+      dt,
+      currentDayNightPhase(),
+      p.pos.x,
+      p.pos.z,
+      this.fogState === 'outdoor' && isBuiltinWorldActive(),
+    );
     this.impactSite?.update(p.pos.x, p.pos.z, dt);
     if (
       this.placedAssetsView &&
@@ -11537,10 +11701,25 @@ export class Renderer {
       this.skyView.setStars(this.starAmt, this.time);
     }
     // precipitation only falls outdoors and in the open (precip_shelter.ts); indoors pass null.
-    // The sampler lets a neighbouring zone's weather fall inside the box while
-    // the player stands outside it (weather_field_core.ts).
+    // Neighbouring precipitation uses the same box, masked to its own cells.
     // Precipitation is unlit, so it takes the grade explicitly or snow stays
     // pure white at midnight. Same multiply as the fog and the water surface.
+    this.coastalSpray?.update(
+      this.time,
+      this.camera,
+      this.fogState === 'outdoor' &&
+        this.waterView.group.visible &&
+        this.waterRipplesEnabled &&
+        !this.reducedMotion(),
+      this.dnGrade.fog,
+    );
+    this.tavernAmbience?.update(
+      this.time,
+      this.camera.position.x,
+      this.camera.position.z,
+      this.dnGlobalNight,
+      this.fogState === 'outdoor' && !this.reducedMotion(),
+    );
     this.weather.setDayNight(this.dnGrade.fog);
     this.weather.update(
       this.camera.position,
@@ -11548,6 +11727,7 @@ export class Renderer {
       precipBiomeAt(this.fogState === 'outdoor', p.pos.x, p.pos.y, p.pos.z),
       zoneBiomeAt,
     );
+    this.skyView.setValleyWeather(this.weather.valleyWeather);
     worldStart = this.markRendererWorldPhase(worldPhaseMs, 'sky', worldStart);
     this.updateCelestialSprites();
     worldStart = this.markRendererWorldPhase(worldPhaseMs, 'sunSprites', worldStart);
@@ -11765,12 +11945,13 @@ export class Renderer {
 
   // light shafts fade in as the camera turns toward the sun, outdoor only
   private updateGodRays(): void {
+    this.forestSunbeams?.update(this.camera.position, this.sunDir, this.fogState === 'outdoor');
     updateGodRayShafts(
       this.godRays,
       this.camera,
       this.sunDir,
       this.time,
-      this.sunUp,
+      this.sunUp * (1 - this.weather.valleyWeather.x * 0.85),
       this.godRayZoneScale,
       this.fogState === 'outdoor',
     );

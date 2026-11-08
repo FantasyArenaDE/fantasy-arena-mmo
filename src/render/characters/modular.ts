@@ -1,3 +1,7 @@
+import { FA_EXTRA_HAIR_IDS } from './fa_release_hair_core';
+import { FA_RELEASE_BROWS, FA_RELEASE_MOUTHS, FA_RELEASE_NOSES } from './fa_release_face_options';
+import { FA_RELEASE_EAR_PIERCING_IDS } from './fa_release_piercing_core';
+import { FA_RELEASE_BEARD_IDS } from './fa_release_beard_core';
 // Modular character composition, pure data + selection math, no three.js.
 //
 // The modular warrior ships as ONE GLB (`models/chars/modular/warrior_modular.glb`)
@@ -11,6 +15,7 @@
 // This module owns the picking and the colour math so both are unit-testable
 // without a GL context (`tests/modular_character.test.ts`).
 
+import { FA_BODY_TATTOOS, FA_FACE_TATTOOS, FA_FACE_SCARS, FA_FRECKLES, FA_NOSE_PIERCINGS } from '../../world_api/appearance';
 import { UNDERHAIR } from './underhair.generated';
 import {
   WOC_HEAD_MORPH_KEYS,
@@ -252,11 +257,11 @@ export const NEUTRAL_HEAD_SHAPE: WocHeadShape = Object.fromEntries(
 /** Every id any head type offers per slot, the set normalizeAppearance keeps.
  *  Built once: normalizeAppearance runs on every look a consumer composes. */
 const WOC_HEAD_SLOT_IDS: Readonly<Record<WocHeadSlot, readonly string[]>> = {
-  hair: wocHeadSlotIds('hair'),
-  beard: wocHeadSlotIds('beard'),
-  nose: wocHeadSlotIds('nose'),
-  mouth: wocHeadSlotIds('mouth'),
-  brows: wocHeadSlotIds('brows'),
+  hair: [...wocHeadSlotIds('hair'), ...FA_EXTRA_HAIR_IDS],
+  beard: [...new Set([...wocHeadSlotIds('beard'), ...FA_RELEASE_BEARD_IDS])],
+  nose: [...wocHeadSlotIds('nose'), ...FA_RELEASE_NOSES],
+  mouth: [...wocHeadSlotIds('mouth'), ...FA_RELEASE_MOUTHS],
+  brows: [...wocHeadSlotIds('brows'), ...FA_RELEASE_BROWS],
   ears: wocHeadSlotIds('ears'),
   eyes: wocHeadSlotIds('eyes'),
 };
@@ -325,9 +330,13 @@ export type EarringStyle =
 // Blush and eyeshadow have no part in the way (cheek and eyelid are bare head
 // skin) and are a decal: see makeup.ts.
 
-export type LipShade = 'none' | 'rose' | 'coral' | 'ruby' | 'berry' | 'plum' | 'nude';
-export type BlushShade = 'none' | 'peach' | 'rose' | 'warm' | 'mauve';
-export type ShadowShade = 'none' | 'smoke' | 'bronze' | 'plum' | 'teal' | 'rose';
+export type LipShade =
+  | 'none' | 'rose' | 'coral' | 'ruby' | 'berry' | 'plum' | 'nude'
+  | 'smoke' | 'mauve' | 'peach';
+export type BlushShade = 'none' | 'peach' | 'rose' | 'warm' | 'mauve' | 'nude' | 'coral' | 'berry';
+export type ShadowShade =
+  | 'none' | 'smoke' | 'bronze' | 'plum' | 'teal' | 'rose'
+  | 'mauve' | 'berry' | 'ruby' | 'peach';
 
 export const LIP_SHADES: readonly LipShade[] = [
   'none',
@@ -337,8 +346,13 @@ export const LIP_SHADES: readonly LipShade[] = [
   'berry',
   'plum',
   'nude',
+  'smoke',
+  'mauve',
+  'peach',
 ];
-export const BLUSH_SHADES: readonly BlushShade[] = ['none', 'peach', 'rose', 'warm', 'mauve'];
+export const BLUSH_SHADES: readonly BlushShade[] = [
+  'none', 'peach', 'rose', 'warm', 'mauve', 'nude', 'coral', 'berry',
+];
 export const SHADOW_SHADES: readonly ShadowShade[] = [
   'none',
   'smoke',
@@ -346,6 +360,10 @@ export const SHADOW_SHADES: readonly ShadowShade[] = [
   'plum',
   'teal',
   'rose',
+  'mauve',
+  'berry',
+  'ruby',
+  'peach',
 ];
 
 /** sRGB hex per shade. `none` carries no colour and is never looked up, the
@@ -357,12 +375,18 @@ export const LIP_COLORS: Record<Exclude<LipShade, 'none'>, number> = {
   berry: 0x8e2f52,
   plum: 0x6d2b47,
   nude: 0xb98274,
+  smoke: 0x554453,
+  mauve: 0xab658c,
+  peach: 0xe59579,
 };
 export const BLUSH_COLORS: Record<Exclude<BlushShade, 'none'>, number> = {
   peach: 0xe08a6b,
   rose: 0xd4718a,
   warm: 0xc9604f,
   mauve: 0xa96b83,
+  nude: 0xc38b77,
+  coral: 0xe57165,
+  berry: 0xaa476b,
 };
 export const SHADOW_COLORS: Record<Exclude<ShadowShade, 'none'>, number> = {
   smoke: 0x5a5560,
@@ -370,6 +394,10 @@ export const SHADOW_COLORS: Record<Exclude<ShadowShade, 'none'>, number> = {
   plum: 0x6b3f63,
   teal: 0x35636a,
   rose: 0xa8617a,
+  mauve: 0x8c77a4,
+  berry: 0x984c71,
+  ruby: 0xa1334b,
+  peach: 0xd59870,
 };
 
 /** The colour a shade paints with, or null for `none`. */
@@ -529,6 +557,11 @@ export interface ModularAppearance {
   lipstick: LipShade;
   blush: BlushShade;
   eyeshadow: ShadowShade;
+  faceTattoo: (typeof FA_FACE_TATTOOS)[number];
+  bodyTattoo: (typeof FA_BODY_TATTOOS)[number];
+  nosePiercing?: (typeof FA_NOSE_PIERCINGS)[number];
+  faceScar: (typeof FA_FACE_SCARS)[number];
+  freckles: (typeof FA_FRECKLES)[number];
   /** The colorway the worn armour is dyed with, `classic` is the atlas as
    *  authored. One choice re-dyes whatever set (or mix of sets) is worn, each
    *  material through its own set's band; see OUTFIT_COLORWAYS. */
@@ -600,6 +633,11 @@ export const DEFAULT_APPEARANCE: ModularAppearance = {
   lipstick: 'none',
   blush: 'none',
   eyeshadow: 'none',
+  faceTattoo: 'none',
+  bodyTattoo: 'none',
+  nosePiercing: undefined,
+  faceScar: 'none',
+  freckles: 'none',
   outfit: 'classic',
   // The default body is male, so the head builder starts on Type A's look.
   headHair: WOC_HEAD_TYPES.a.defaults.hair,
@@ -1294,6 +1332,12 @@ export const EARRING_MATERIAL_IDS: readonly EarringMaterial[] = [
   'default',
   ...(Object.keys(EARRING_MATERIALS) as Exclude<EarringMaterial, 'default'>[]),
 ];
+
+export function normalizeEarringMaterial(value: unknown): EarringMaterial {
+  return EARRING_MATERIAL_IDS.find((id) => id === value) ?? 'default';
+}
+
+const HEAD_PIERCING_IDS = [...WOC_PIERCING_IDS, ...FA_RELEASE_EAR_PIERCING_IDS];
 
 /** What to paint an `E2_*` mesh with, or null to leave the atlas alone
  *  (`default`, an unknown id from an old save, or no earrings worn). */
@@ -2329,6 +2373,11 @@ export function normalizeAppearance(
     lipstick: pick(a?.lipstick, LIP_SHADES, d.lipstick),
     blush: pick(a?.blush, BLUSH_SHADES, d.blush),
     eyeshadow: pick(a?.eyeshadow, SHADOW_SHADES, d.eyeshadow),
+    faceTattoo: pick(a?.faceTattoo, FA_FACE_TATTOOS, d.faceTattoo),
+    bodyTattoo: pick(a?.bodyTattoo, FA_BODY_TATTOOS, d.bodyTattoo),
+    nosePiercing: a?.nosePiercing === undefined ? undefined : pick(a.nosePiercing, FA_NOSE_PIERCINGS, 'none'),
+    faceScar: pick(a?.faceScar, FA_FACE_SCARS, d.faceScar),
+    freckles: pick(a?.freckles, FA_FRECKLES, d.freckles),
     // an appearance saved before lashes existed has no opinion, so it gets the
     // gender's default rather than being read as "switched off"
     lashes:
@@ -2356,7 +2405,7 @@ export function normalizeAppearance(
     headBrows: headPick(a?.headBrows, 'brows'),
     headEars: headPick(a?.headEars, 'ears'),
     headEyes: headPick(a?.headEyes, 'eyes'),
-    headPiercing: pick(a?.headPiercing, WOC_PIERCING_IDS, headDefaults.piercing),
+    headPiercing: pick(a?.headPiercing, HEAD_PIERCING_IDS, headDefaults.piercing),
     // a look saved before brow colour existed has no opinion, so its brows
     // follow its own hair (the same channel, already clamped to the same
     // range) rather than snapping to the default brown under red hair

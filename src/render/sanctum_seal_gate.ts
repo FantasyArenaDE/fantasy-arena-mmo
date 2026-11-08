@@ -22,6 +22,7 @@ import { terrainHeight } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { floorVfxRenderOrder } from './floor_vfx_layer';
+import { buildFantasyArenaSanctumGate, buildFantasyArenaSanctumIce } from './fa_sanctum_seal_gate';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
 import { decorateMistMaterial, mistNoiseTexture } from './ignivar_mist_gate';
 import {
@@ -42,7 +43,7 @@ const GATE_URL = '/models/props/sanctum_seal_gate.glb';
 const PROPS_URL = '/models/props/sanctum_seal_gate_props.glb';
 const ICE_URL = '/models/props/sanctum_seal_gate_ice.glb';
 const sources = new Map<string, THREE.Group>();
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   for (const url of [GATE_URL, PROPS_URL, ICE_URL]) {
     registerDeferredPreload(() =>
       loadGltf(url).then((gltf) => {
@@ -349,10 +350,14 @@ export function buildSanctumSealGate(seed: number): SanctumSealGateView {
   const gate = new THREE.Group();
   gate.name = 'sanctumSealGateBody';
   gate.position.set(door.x, base, door.z);
-  const gateSource = sources.get(GATE_URL);
-  gate.add(gateSource ? seat(gateSource, true) : fallbackGate());
-  const propsSource = sources.get(PROPS_URL);
-  if (propsSource) gate.add(seat(propsSource, true));
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+    gate.add(buildFantasyArenaSanctumGate(door, base, seed));
+  } else {
+    const gateSource = sources.get(GATE_URL);
+    gate.add(gateSource ? seat(gateSource, true) : fallbackGate());
+    const propsSource = sources.get(PROPS_URL);
+    if (propsSource) gate.add(seat(propsSource, true));
+  }
   gate.add(mistFilm());
   gate.add(rimeFan(door, base, seed));
   const fx = resolveUiEffectsProfile({
@@ -367,8 +372,9 @@ export function buildSanctumSealGate(seed: number): SanctumSealGateView {
   const ice = new THREE.Group();
   ice.name = 'sanctumIceTongue';
   ice.position.copy(gate.position);
-  const iceSource = sources.get(ICE_URL);
+  const iceSource = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? undefined : sources.get(ICE_URL);
   if (iceSource) ice.add(seat(iceSource, false));
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') ice.add(buildFantasyArenaSanctumIce());
   group.add(ice);
   const light = new THREE.PointLight(
     SANCTUM_RUNE_LIGHT.color,

@@ -25,7 +25,13 @@ export type ThemeKnob =
 
 export type ThemeKnobs = Record<ThemeKnob, string>;
 
-export type PresetId = 'classic' | 'midnight' | 'parchment' | 'highContrast' | 'fancyGold';
+export type PresetId =
+  | 'fantasyArena'
+  | 'classic'
+  | 'midnight'
+  | 'parchment'
+  | 'highContrast'
+  | 'fancyGold';
 
 export interface ThemeState {
   preset: PresetId;
@@ -60,6 +66,7 @@ export const THEME_KNOB_LABEL_KEY: Record<ThemeKnob, string> = {
 };
 
 export const PRESET_ORDER: PresetId[] = [
+  'fantasyArena',
   'classic',
   'fancyGold',
   'midnight',
@@ -69,6 +76,17 @@ export const PRESET_ORDER: PresetId[] = [
 
 // `classic` reproduces the shipped gold/dark palette; the others are alternates.
 export const THEME_PRESETS: Record<PresetId, ThemeKnobs> = {
+  fantasyArena: {
+    accent: '#f0cc8d',
+    border: '#89613d',
+    panel: '#32171e',
+    text: '#fff1db',
+    textMuted: '#d1b8a4',
+    hp: '#1eb838',
+    mana: '#2b7bd4',
+    rage: '#c0392b',
+    energy: '#e4c531',
+  },
   classic: {
     accent: '#ffd100',
     border: '#6f5a2a',
@@ -120,7 +138,7 @@ export const THEME_PRESETS: Record<PresetId, ThemeKnobs> = {
   // values. Selecting it does two things: these knobs retune the whole UI's
   // palette, and applyTheme (main.ts) stamps the .fancy-gold-ui root class
   // that turns on the gilded filigree window frame (perf_ornament_svg.ts +
-  // components.css); every other preset keeps the classic flat panels.
+  // components.css).
   // Accent/border are drawn from the same --color-gold-* ramp the filigree
   // paints with (accent = gold-400's warm gilt, border = gold-700's deep
   // leaf), over a warm near-black panel, so the general chrome reads as one
@@ -138,7 +156,7 @@ export const THEME_PRESETS: Record<PresetId, ThemeKnobs> = {
   },
 };
 
-export const DEFAULT_PRESET: PresetId = 'classic';
+export const DEFAULT_PRESET: PresetId = 'fantasyArena';
 export const DEFAULT_THEME: ThemeState = { preset: DEFAULT_PRESET, custom: {} };
 
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;

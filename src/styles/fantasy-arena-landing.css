@@ -1,0 +1,435 @@
+/* Shared lobby colors for login, roster and creator. */
+body[data-website-redesign] {
+  --fa-lobby-wine: #3c151be8;
+  --fa-lobby-shadow: #160a10f2;
+  --fa-lobby-input: #200d12;
+  --fa-lobby-hover: #53202a;
+  --fa-lobby-ink: #321418;
+  --fa-lobby-border: #af7c60;
+  --fa-lobby-bronze: #c5975c;
+  --fa-lobby-gold: #f4d49b;
+  --fa-lobby-ivory: #f5e6d5;
+}
+/* Fantasy Arena landing layers sit behind the original game controls. */
+body[data-website-redesign]:not(.native-app):not(.desktop-app) #start-screen-backdrop:has(> .fa-mmo-backdrop){background:#190910!important}
+body[data-website-redesign]:not(.native-app):not(.desktop-app) #start-screen-backdrop:has(> .fa-mmo-backdrop) > :not(.fa-mmo-backdrop){display:none!important}
+.fa-mmo-backdrop{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;background:#1b0a0f}
+.fa-mmo-scene,.fa-mmo-warmth,.fa-mmo-sparks,.fa-mmo-vignette{position:absolute;inset:0;pointer-events:none}
+.fa-mmo-scene{inset:-3%;background:#190a10 url('/fantasy-arena/portal-background.webp') center 50%/cover no-repeat;animation:fa-mmo-drift 32s ease-in-out infinite alternate;will-change:transform}
+.fa-mmo-warmth{background:radial-gradient(ellipse at 74% 48%,#ffba5c52,transparent 23%),radial-gradient(ellipse at 20% 80%,#a8371f22,transparent 50%);mix-blend-mode:screen;animation:fa-mmo-breathe 7s ease-in-out infinite alternate}
+.fa-mmo-sparks{background-image:radial-gradient(circle at 14% 20%,#f7c975a8 0 1px,transparent 3px),radial-gradient(circle at 30% 69%,#ffad5488 0 1px,transparent 3px),radial-gradient(circle at 62% 18%,#ffe1a888 0 1px,transparent 3px),radial-gradient(circle at 86% 79%,#ffbd6388 0 1px,transparent 3px);background-size:250px 190px,300px 250px,360px 300px,270px 230px;opacity:.42;animation:fa-mmo-embers 18s linear infinite}
+.fa-mmo-vignette{background:linear-gradient(90deg,#19080dd9 0%,#19080d6e 35%,#19080d24 65%,#19080d70),linear-gradient(0deg,#13070dbb,transparent 45%,#14080d72)}
+@keyframes fa-mmo-drift{from{transform:scale(1.025) translateX(-.3%)}to{transform:scale(1.055) translateX(.3%)}}
+@keyframes fa-mmo-breathe{from{opacity:.38}to{opacity:.85}}
+@keyframes fa-mmo-embers{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 -190px,0 -250px,0 -300px,0 -230px}}
+body[data-website-redesign]:not(.native-app):not(.desktop-app) .homepage-header{background:linear-gradient(#16080eea,#1b0b0f92)!important;border-bottom:1px solid #c9996a66!important}
+body[data-website-redesign] #header-logo-btn .header-logo,body[data-website-redesign] #title-logo{display:none!important}
+body[data-website-redesign] #header-logo-btn .website-wordmark{display:inline-block;color:#f3dcaa;font:700 14px Georgia,serif;letter-spacing:.1em;text-shadow:0 2px 8px #000}
+body[data-website-redesign] :is(#mode-select,#login-panel,#forgot-panel,#reset-panel){padding:32px!important;max-width:470px!important;min-width:0;background:linear-gradient(145deg,var(--fa-lobby-wine),var(--fa-lobby-shadow))!important;border:1px solid #d0a778!important;border-radius:5px!important;box-shadow:inset 0 0 0 4px #d4ad7930,0 22px 65px #10060bcc!important;backdrop-filter:blur(9px)!important}
+body[data-website-redesign] :is(#mode-select,#login-panel,#forgot-panel,#reset-panel)::before,body[data-website-redesign] :is(#mode-select,#login-panel,#forgot-panel,#reset-panel)::after{display:none!important;content:none!important}
+body[data-website-redesign] .fa-mmo-brand{display:block;margin:0 0 23px;color:var(--fa-lobby-gold);text-align:center;text-shadow:0 3px 5px #100609,0 0 24px #be6f3b66;font:700 clamp(30px,3.1vw,44px)/1 Georgia,serif;letter-spacing:.045em}
+body[data-website-redesign] .fa-mmo-brand span{display:block;margin-top:8px;font:700 10px/1.2 system-ui,sans-serif;letter-spacing:.2em;color:#dec4a2}
+body[data-website-redesign] :is(#mode-select,#login-panel,#forgot-panel,#reset-panel) .btn-play{background:linear-gradient(120deg,#f6dca6,var(--fa-lobby-bronze))!important;color:var(--fa-lobby-ink)!important;border-color:#ffe4ac!important}
+body[data-website-redesign] :is(.website-tools-item,.steam-wishlist,.donate-cta,.website-community-links,.official-site-copy){display:none!important}
+@media(max-width:700px){.fa-mmo-scene{background-position:70% center}body[data-website-redesign] :is(#mode-select,#login-panel,#forgot-panel,#reset-panel){padding:23px!important;max-width:min(420px,calc(100vw - 36px))!important;margin:16px auto!important}body[data-website-redesign] .fa-mmo-brand{font-size:30px;margin-bottom:18px}}
+@media(min-aspect-ratio:3/1){.fa-mmo-scene{background-position:center 48%}.fa-mmo-vignette{background:linear-gradient(90deg,#19080dd9,#19080d33 45%,#19080d66),linear-gradient(0deg,#13070daa,transparent 50%,#14080d77)}}
+@media(prefers-reduced-motion:reduce){.fa-mmo-scene,.fa-mmo-warmth,.fa-mmo-sparks{animation:none!important;will-change:auto}.fa-mmo-scene{transform:none}.fa-mmo-warmth{opacity:.55}}
+body[data-website-redesign] #mode-select #btn-play::after,body[data-website-redesign] :is(#login-panel,#forgot-panel,#reset-panel) .btn-primary::after{background:linear-gradient(130deg,#70232b,#3b1019)!important}
+body[data-website-redesign] :is(#btn-play,#login-panel .btn-primary,#forgot-panel .btn-primary,#reset-panel .btn-primary){background:transparent!important;color:#ffe8bc!important;text-shadow:0 1px 4px #19090d!important}
+body[data-website-redesign] #mode-select .server-select-trigger,body[data-website-redesign] #mode-select .server-select-menu{background:linear-gradient(135deg,#3c171d,#1c0d13)!important;border-color:var(--fa-lobby-border)!important;box-shadow:inset 3px 0 #d0a674,0 6px 14px #10070b!important}
+body[data-website-redesign] .server-select-chevron{background:#34151b!important;border-color:#ac7d5e!important}
+body[data-website-redesign] .server-select-option{background:#291015!important;color:#f5e6ce!important}
+body[data-website-redesign] .server-select-option:hover{background:var(--fa-lobby-hover)!important}
+body[data-website-redesign] .fa-mmo-beta{display:block;margin:0 0 12px;color:#e6c58f;text-align:center;font:800 9px/1.4 system-ui,sans-serif;letter-spacing:.18em}
+
+
+
+body[data-website-redesign] :is(#login-panel,#forgot-panel,#reset-panel) input{background:var(--fa-lobby-input)!important;border-color:var(--fa-lobby-border)!important;color:var(--fa-lobby-ivory)!important}
+body[data-website-redesign] :is(#login-panel,#forgot-panel,#reset-panel) :is(.btn-back,#btn-login-discord){background:linear-gradient(130deg,#512028,#2a1015)!important;border-color:#a87960!important;color:#f6e4ce!important}
+
+/* The account note follows the active language. */
+
+#login-panel .fa-mmo-account-note{margin:0 0 16px;color:#ebd7bd;font:14px/1.5 system-ui,sans-serif}
+html:lang(de) .fa-mmo-account-note span[lang=en],html:not(:lang(de)) .fa-mmo-account-note span[lang=de]{display:none}
+
+#start-screen-backdrop.backdrop-static :is(.fa-mmo-scene,.fa-mmo-warmth,.fa-mmo-sparks){animation:none!important;will-change:auto}
+
+
+/* Keep the local music credits reachable; external upstream promotions are unrelated. */
+body[data-website-redesign] :is(.footer-social-row,.footer-guides-row){display:none!important}
+body[data-website-redesign] .footer-legal-row > a:not([href='/audio/fantasy-arena/credits.html']):not([href='/fantasy-arena/credits.html']){display:none!important}
+html:lang(de) .fa-credits-link span[lang=en],html:not(:lang(de)) .fa-credits-link span[lang=de]{display:none}
+.fa-credits-link{font-weight:700!important}
+.fa-credits-inline{display:block;margin:14px auto 0;text-align:center;color:#efc991;font:600 12px/1.4 system-ui,sans-serif;text-underline-offset:3px}
+.fa-credits-inline:focus-visible{outline:2px solid #f4d39a;outline-offset:4px}
+html:lang(de) .fa-portal-link span[lang=en],html:not(:lang(de)) .fa-portal-link span[lang=de]{display:none}
+.fa-mmo-backdrop ~ .fa-mmo-backdrop,.fa-mmo-brand ~ .fa-mmo-brand,.fa-mmo-beta ~ .fa-mmo-beta,.fa-mmo-account-note ~ .fa-mmo-account-note{display:none!important}
+
+
+/* The inherited downloads belong to the upstream game; no MMO build is offered here. */
+body[data-website-redesign] #nav-btn-download:not([data-fa-download-ready]){display:none!important}
+@media (min-width: 768px) {
+  body[data-website-redesign] #download-view .desktop-download-actions:has(> :nth-child(4)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+#download-view .desktop-download-link[data-fa-android-download] {
+  grid-column: 1 / -1;
+}
+
+/* Optional upstream services are absent from the private browser distribution. */
+html.fa-browser-release :is(#nav-btn-news,#nav-btn-wiki,#charselect-news,.server-realm-line,.server-opt-stats,#btn-login-discord,#auth-or-divider){display:none!important}
+
+/* Distinct geometric legend glyphs; map canvases use their own drawn fallback. */
+html.fa-browser-release .map-atlas-legend-mark{background-image:none!important;color:#e8c584;font:700 14px/14px system-ui,sans-serif;text-align:center}
+html.fa-browser-release .map-atlas-legend-mark.is-dungeon::before{content:'▰'}
+html.fa-browser-release .map-atlas-legend-mark.is-ore::before{content:'◆'}
+html.fa-browser-release .map-atlas-legend-mark.is-herb::before{content:'✿'}
+html.fa-browser-release .map-atlas-legend-mark.is-mail::before{content:'✉'}
+html.fa-browser-release .map-atlas-legend-mark.is-passage::before{content:'⇄'}
+
+/* Continue the login palette into the MMO roster and appearance editor. */
+@media (forced-colors: none) {
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) {
+    --fa-char-surface: linear-gradient(150deg, var(--fa-lobby-wine), var(--fa-lobby-shadow));
+    --fa-char-line: color-mix(in srgb, var(--fa-lobby-border) 64%, var(--fa-lobby-input));
+    --fa-char-selected: linear-gradient(
+      110deg,
+      var(--fa-lobby-hover),
+      var(--fa-lobby-input)
+    );
+    --fa-char-highlight: color-mix(in srgb, var(--fa-lobby-gold) 12%, transparent);
+    --fa-char-muted: color-mix(in srgb, var(--fa-lobby-ivory) 65%, var(--fa-lobby-bronze));
+    --fa-char-edge: inset 0 1px 0 var(--fa-char-highlight);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel)
+    :is(.cs-title, .cs-section-header, .skin-picker-header, .cs-preview-name) {
+    color: var(--fa-lobby-gold);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel .cs-head {
+    background: var(--fa-char-surface);
+    border-bottom: 1px solid var(--fa-char-line);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel)
+    :is(.cs-list-col, .cs-create-col, .cs-detail-col, .cs-news-panel) {
+    background: var(--fa-char-surface);
+    border-color: var(--fa-char-line);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel .cs-list-col {
+    box-shadow: var(--fa-char-edge);
+  }
+
+  @media (min-width: 861px) {
+    body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel .class-details-content {
+      background: var(--fa-char-surface);
+      border: 1px solid var(--fa-char-line);
+      border-radius: var(--radius-md);
+      box-shadow: var(--fa-char-edge);
+      padding: 12px;
+    }
+  }
+
+  body[data-fa-mmo-native] #charselect-panel :is(.cs-realm-btn, .cs-realm-menu),
+  body[data-fa-mmo-native] #charcreate-panel #new-char-name {
+    background: var(--fa-lobby-input);
+    border-color: var(--fa-lobby-border);
+    color: var(--fa-lobby-ivory);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel :is(.cs-realm-name, .cs-news-title) {
+    color: var(--fa-lobby-gold);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel :is(.cs-realm-caption, .cs-realm-caret),
+  body[data-fa-mmo-native] #charcreate-panel #new-char-name::placeholder {
+    color: var(--fa-char-muted);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel .char-row {
+    border-color: var(--fa-char-line);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel .char-row:not(.membership-locked) {
+    background: var(--fa-lobby-input);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel :is(
+    .char-row:not(.membership-locked):hover,
+    .cs-realm-menu .realm-row:hover
+  ) {
+    background: var(--fa-lobby-hover);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel :is(.char-row.sel, .cs-realm-menu .realm-row.sel) {
+    background: var(--fa-char-selected);
+    border-color: var(--fa-lobby-gold);
+    box-shadow: inset 3px 0 var(--fa-lobby-gold);
+  }
+
+  body[data-fa-mmo-native] #charselect-panel .char-row:not(.membership-locked) .char-sub {
+    color: var(--fa-char-muted);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) :is(
+    #btn-charselect-enter,
+    #btn-create-char,
+    .char-row .enter-world-btn,
+    #btn-reroll-save
+  ):not(:disabled) {
+    background: linear-gradient(135deg, var(--fa-lobby-gold), var(--fa-lobby-bronze));
+    border-color: var(--fa-lobby-gold);
+    color: var(--fa-lobby-ink);
+    box-shadow: var(--fa-char-edge);
+    text-shadow: none;
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) :is(
+    #btn-charselect-back,
+    #btn-charcreate-back,
+    #btn-new-character,
+    #btn-reroll-cancel
+  ):not(:disabled) {
+    background: var(--fa-char-surface);
+    border-color: var(--fa-lobby-border);
+    color: var(--fa-lobby-ivory);
+    box-shadow: var(--fa-char-edge);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) :is(
+    #btn-charselect-back,
+    #btn-charcreate-back,
+    #btn-new-character,
+    #btn-reroll-cancel
+  ):hover:not(:disabled) {
+    background: var(--fa-char-selected);
+    border-color: var(--fa-lobby-gold);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) :is(
+    #btn-charselect-enter,
+    #btn-create-char,
+    .char-row .enter-world-btn,
+    #btn-reroll-save
+  ):hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) :is(
+    .char-row,
+    .cs-realm-btn,
+    .cs-list-actions .btn,
+    .char-actions .btn,
+    .cs-form-actions .btn,
+    .cs-reroll-actions .btn,
+    #new-char-name
+  ):focus-visible {
+    --website-outline-color: var(--fa-lobby-gold);
+    outline: 2px solid var(--fa-lobby-gold);
+    outline-offset: 2px;
+  }
+
+  body[data-fa-mmo-native] #charcreate-panel #new-char-name[aria-invalid="true"] {
+    border-color: var(--color-border-invalid);
+  }
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) .whb {
+    --panel-bg: var(--fa-char-surface);
+    --color-card-inset: var(--fa-lobby-input);
+    --color-bg-dark: var(--fa-lobby-input);
+    --color-border-showcase: var(--fa-char-line);
+    --color-border-focus: var(--fa-lobby-gold);
+    --color-text-light: var(--fa-lobby-ivory);
+    --color-text-muted: var(--fa-char-muted);
+    --gold: var(--fa-lobby-gold);
+    --gold-dim: var(--fa-lobby-bronze);
+    --color-primary-glow: color-mix(in srgb, var(--fa-lobby-gold) 15%, transparent);
+  }
+
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel)
+    .whb :is(button, input):focus-visible {
+    --website-outline-color: var(--fa-lobby-gold);
+  }
+  body[data-fa-mmo-native] :is(#charselect-panel, #charcreate-panel) .whb :is(
+    .whb-cat, .whb-opt, .whb-match, .whb-custom, .whb-foot-share
+  ).sel {
+    background: var(--fa-char-selected);
+  }
+}
+/* Each character screen has its own scene behind the same live turntable. */
+body[data-fa-mmo-native][data-start-panel="charcreate-panel"] .fa-mmo-scene,
+body[data-fa-mmo-native][data-start-panel="offline-select"] .fa-mmo-scene {
+  background-image: url('/fantasy-arena/character-armory.webp');
+  background-position: center 57%;
+}
+
+body[data-fa-mmo-native][data-start-panel="charselect-panel"] .fa-mmo-scene {
+  background-image: url('/fantasy-arena/character-gallery.webp');
+  background-position: 44% 58%;
+}
+
+body[data-fa-mmo-native]:is(
+  [data-start-panel="charselect-panel"],
+  [data-start-panel="charcreate-panel"],
+  [data-start-panel="offline-select"]
+) .fa-mmo-warmth {
+  background: radial-gradient(ellipse at 50% 75%, #f49a3e39, transparent 42%);
+}
+
+body[data-fa-mmo-native]:not(.mobile-touch) #hero-view
+  :is(#charselect-panel, #charcreate-panel).cs-wow {
+  border-top-width: var(--fa-lobby-header-height, 82px);
+}
+
+body[data-fa-studio-preview] #charselect-panel :is(#btn-charselect-enter, .enter-world-btn) {
+  display: none;
+}
+
+body[data-fa-mmo-native].mobile-touch #charselect-panel .cs-title {
+  padding-inline-end: 78px;
+}
+
+body[data-fa-mmo-native] #charcreate-panel .fa-character-finish {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+body[data-fa-mmo-native] #charcreate-panel .fa-character-finish .char-input-group {
+  display: grid;
+  gap: 4px;
+  position: static;
+  width: auto;
+  margin: 0;
+  transform: none;
+}
+
+body[data-fa-mmo-native] #charcreate-panel .fa-character-name-label {
+  color: var(--fa-lobby-gold);
+  font: 700 13px/1.3 var(--title-font);
+  letter-spacing: 0.04em;
+}
+
+body[data-fa-mmo-native] #charcreate-panel .fa-character-finish #new-char-name {
+  text-align: start;
+}
+
+body[data-fa-mmo-native] #charcreate-panel .fa-character-finish .auth-error:empty {
+  display: none;
+}
+
+body[data-fa-mmo-native] #charcreate-panel .fa-character-finish .auth-error {
+  position: static;
+  transform: none;
+  margin: 0;
+  text-align: start;
+}
+
+@media (min-width: 861px) {
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .fa-character-finish {
+    position: absolute;
+    right: 26px;
+    bottom: 30px;
+    z-index: 3;
+    width: min(300px, 26vw);
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .mini-class-row {
+    inset-inline: clamp(172px, 13vw, 220px) calc(min(300px, 26vw) + 42px);
+    width: auto;
+    transform: none;
+    gap: clamp(3px, 0.7vw, 12px);
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .mini-class {
+    flex: 0 1 76px;
+    min-width: 0;
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .mini-class-portrait {
+    width: min(62px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .mini-class-label {
+    max-width: 100%;
+    white-space: normal;
+    text-transform: none;
+    font-size: clamp(9px, 0.82vw, 11px);
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .whb {
+    width: min(468px, 40vw);
+    max-height: calc(100% - 280px);
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .whb-cat {
+    min-height: 30px;
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .whb-foot {
+    grid-template-columns: 1fr 1.5fr 1fr;
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow .whb-foot-share {
+    grid-column: auto;
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow
+    .fa-character-finish #btn-create-char {
+    position: static;
+    width: 100%;
+    min-width: 0;
+  }
+
+  body[data-fa-mmo-native]:not(.mobile-touch) #charcreate-panel.cs-wow #charcreate-class-details {
+    top: 62px;
+    bottom: 180px;
+    width: min(360px, 30vw);
+  }
+}
+
+body[data-fa-mmo-native].mobile-touch #charcreate-panel .cs-form-actions {
+  align-items: end;
+}
+
+body[data-fa-mmo-native].mobile-touch #charcreate-panel .fa-character-finish {
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+@media (orientation: landscape) {
+  body[data-fa-mmo-native].mobile-touch:is(
+    [data-start-panel="charselect-panel"],
+    [data-start-panel="charcreate-panel"]
+  ) .homepage-header {
+    min-height: 0;
+    padding: max(6px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right)) 4px 10px;
+  }
+
+  body[data-fa-mmo-native].mobile-touch #charselect-panel {
+    --fa-touch-title-row: max(28px, calc(var(--fa-lobby-header-height, 76px) - 22px));
+  }
+
+  body[data-fa-mmo-native].mobile-touch #charselect-panel .cs-title {
+    min-height: var(--fa-touch-title-row);
+  }
+
+  body[data-fa-mmo-native].mobile-touch #charselect-panel .cs-list-actions {
+    top: calc(var(--fa-touch-title-row) + 8px);
+  }
+}
+
+@media (orientation: landscape) and (max-width: 650px) {
+  body[data-fa-mmo-native].mobile-touch #charselect-panel .cs-head {
+    padding-bottom: 44px;
+  }
+
+  body[data-fa-mmo-native].mobile-touch #charselect-panel .cs-list-actions {
+    top: calc(var(--fa-touch-title-row) + 50px);
+  }
+}

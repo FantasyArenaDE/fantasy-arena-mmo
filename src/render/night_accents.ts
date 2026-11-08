@@ -19,9 +19,10 @@ import * as THREE from 'three';
 import { WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import { hash2 } from '../sim/rng';
 import type { BiomeId } from '../sim/types';
-import { roadDistance, terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
+import { roadDistance, terrainHeight, WATER_LEVEL, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { EMISSIVE_GLOW, GFX } from './gfx';
 import { registerGroundDecorPrewarmDraw } from './ground_decor_prewarm';
+import { buildMirrorLakeMist } from './mirror_lake_mist';
 import {
   FLORA_CAP_POOL,
   FLORA_TINT,
@@ -32,11 +33,15 @@ import {
   type GlowFloraCap,
   glowFloraCaps,
 } from './night_accents_core';
+import { buildStarterDragonflies } from './starter_dragonflies';
+import { forestFireflyReach, STARTER_FOREST_EDGES, woodlandTwilight } from './starter_insects_core';
 
 export interface NightAccentsView {
   group: THREE.Group;
   /** Drive from the frame's accent glow amount (0 = out, 1 = full). */
-  update(glow: number, time: number, dt: number, camX: number, camZ: number): void;
+  update(
+    glow: number, time: number, dt: number, camX: number, camZ: number, sunY?: number, sunX?: number,
+  ): void;
 }
 
 // Flora exclusions: a mushroom on the cobbles or on a town plateau reads as a
@@ -110,6 +115,11 @@ export function buildNightAccents(seed = 0): NightAccentsView {
   const group = new THREE.Group();
   group.name = 'night-accents';
   group.visible = false;
+  const release = import.meta.env.VITE_FA_BROWSER_RELEASE === '1';
+  const dragonflies = release ? buildStarterDragonflies(seed) : null;
+  if (dragonflies) group.add(dragonflies.group);
+  const lakeMist = release ? buildMirrorLakeMist(seed) : null;
+  if (lakeMist) group.add(lakeMist.ribbons);
 
   // ---- glow flora ---------------------------------------------------------
   const capMat = nightAccentGlowMaterial();
@@ -190,9 +200,28 @@ export function buildNightAccents(seed = 0): NightAccentsView {
 
   // ---- fireflies ----------------------------------------------------------
   const flyCount = GFX.standardMaterials ? 70 : 26;
+  const forest = release
+    ? STARTER_FOREST_EDGES.flatMap((edge, i) =>
+        Array.from({ length: GFX.standardMaterials ? 8 : 5 }, (_, j) => {
+          const phase = hash2(i, j, seed ^ 0x4f91);
+          const turn = phase * Math.PI * 2;
+          const radius = 1 + hash2(j, i, seed ^ 0x965c) * 4.8;
+          const x = edge.x + Math.cos(turn) * radius;
+          const z = edge.z + Math.sin(turn) * radius;
+          const ground = terrainHeight(x, z, seed);
+          return {
+            x,
+            z,
+            ground,
+            phase,
+            valid: ground > waterLevelAt(x, z, seed) + 0.2 && roadDistance(x, z) > 2.8,
+          };
+        }).filter((fly) => fly.valid),
+      )
+    : [];
   const rng = mulberry32((seed ^ 0x3f19) >>> 0);
-  const flyPos = new Float32Array(flyCount * 3);
-  const flyColor = new Float32Array(flyCount * 3);
+  const flyPos = new Float32Array((flyCount + forest.length) * 3);
+  const flyColor = new Float32Array((flyCount + forest.length) * 3);
   const flyHomeX = new Float32Array(flyCount);
   const flyHomeZ = new Float32Array(flyCount);
   const flyBaseY = new Float32Array(flyCount);
@@ -246,24 +275,32 @@ export function buildNightAccents(seed = 0): NightAccentsView {
 
   return {
     group,
-    update(glow: number, time: number, dt: number, camX: number, camZ: number): void {
+    update(glow: number, time: number, dt: number, camX: number, camZ: number, sunY = NaN, sunX = 0): void {
       // The CALLER owns the outdoor decision (renderer.ts gates on fogState,
       // which knows about every instanced interior and about being underwater);
       // this layer only asks whether it is lit.
       const lit = glow > 0.001;
-      group.visible = lit;
-      if (!lit) {
-        fliesSeeded = false;
-        return;
-      }
+      const twilight = forest.length ? woodlandTwilight(sunY) : 0;
+      const forestLit =
+        twilight > 0.001 &&
+        STARTER_FOREST_EDGES.some(
+          (edge) => forestFireflyReach((edge.x - camX) ** 2 + (edge.z - camZ) ** 2) > 0,
+        );
+      const dragonfliesVisible = dragonflies?.update(sunY, time, camX, camZ) ?? false;
+      const mistVisible = lakeMist?.update(camX, camZ, time, sunY, sunX) ?? false;
+      group.visible = lit || forestLit || dragonfliesVisible || mistVisible;
+      caps.visible = stalks.visible = lit;
+      flies.visible = lit || forestLit;
+      if (!lit) fliesSeeded = false;
+      if (!flies.visible) return;
       // --- flora: rebuild only on a cell crossing, then just re-grade colour
-      if (Number.isNaN(floraCx) || floraCellChanged(camX, camZ, floraCx, floraCz)) {
+      if (lit && (Number.isNaN(floraCx) || floraCellChanged(camX, camZ, floraCx, floraCz))) {
         const cell = floraCellOf(camX, camZ);
         floraCx = cell.cx;
         floraCz = cell.cz;
         rebuildFlora(camX, camZ);
       }
-      if (floraCount > 0) {
+      if (lit && floraCount > 0) {
         // Emissive-by-brightness: an unlit basic material scaled by the glow is
         // the cheapest way to carry an HDR cap past the bloom threshold on the
         // composer tiers while collapsing to nothing by day.
@@ -277,12 +314,13 @@ export function buildNightAccents(seed = 0): NightAccentsView {
         capMat.color.setScalar(EMISSIVE_GLOW * glow * pulse);
       }
       // --- fireflies: recycle out-of-ring flies, drift and blink the rest
-      if (!fliesSeeded) {
+      if (lit && !fliesSeeded) {
         for (let i = 0; i < flyCount; i++) if (!placeFly(i, camX, camZ)) flyBaseY[i] = -1e6;
         fliesSeeded = true;
       }
       clock += dt;
-      for (let i = 0; i < flyCount; i++) {
+      if (!lit) flyColor.fill(0, 0, flyCount * 3);
+      for (let i = 0; lit && i < flyCount; i++) {
         const dx = flyHomeX[i] - camX;
         const dz = flyHomeZ[i] - camZ;
         if (dx * dx + dz * dz > FIREFLY_RADIUS * FIREFLY_RADIUS) {
@@ -303,6 +341,22 @@ export function buildNightAccents(seed = 0): NightAccentsView {
         flyColor[i * 3] = flyTint.r * blink;
         flyColor[i * 3 + 1] = flyTint.g * blink;
         flyColor[i * 3 + 2] = flyTint.b * blink;
+      }
+      flyGeo.setDrawRange(0, flyCount + (forestLit ? forest.length : 0));
+      if (forestLit) {
+        for (const [i, fly] of forest.entries()) {
+          const offset = (flyCount + i) * 3;
+          const angle = time * (0.48 + fly.phase * 0.38) + fly.phase * Math.PI * 2;
+          const blink = fireflyBlink(time * (0.82 + fly.phase * 0.38), fly.phase) * twilight;
+          const reach = forestFireflyReach((fly.x - camX) ** 2 + (fly.z - camZ) ** 2);
+          const light = blink * reach;
+          flyPos[offset] = fly.x + Math.sin(angle) * 0.66;
+          flyPos[offset + 1] = fly.ground + 0.61 + fly.phase * 0.9 + Math.sin(angle * 1.53) * 0.22;
+          flyPos[offset + 2] = fly.z + Math.cos(angle * 0.81) * 0.66;
+          flyColor[offset] = flyTint.r * light;
+          flyColor[offset + 1] = flyTint.g * light;
+          flyColor[offset + 2] = flyTint.b * light;
+        }
       }
       flyPosAttr.needsUpdate = true;
       flyColorAttr.needsUpdate = true;

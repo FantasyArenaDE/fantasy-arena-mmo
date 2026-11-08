@@ -94,6 +94,11 @@ export const DEV_KIT_ROLES: Readonly<Record<PlayerClass, readonly DevKitRole[]>>
     { spec: 'fire', weights: CASTER, melee: false },
     { spec: 'frost', weights: CASTER, melee: false },
   ],
+  dreamdancer: [
+    { spec: 'nightweaver', weights: CASTER, melee: false },
+    { spec: 'dreamkeeper', weights: HEALER, melee: false, healer: true },
+    { spec: 'veilweaver', weights: CASTER, melee: false },
+  ],
   warlock: [
     { spec: 'affliction', weights: CASTER, melee: false },
     { spec: 'demonology', weights: CASTER, melee: false },
@@ -109,7 +114,7 @@ export const DEV_KIT_ROLES: Readonly<Record<PlayerClass, readonly DevKitRole[]>>
 });
 
 // Every class-and-spec pair, flattened. 27 entries: 9 classes times 3 specs.
-export const DEV_KIT_ROLE_COUNT = 27;
+export const DEV_KIT_ROLE_COUNT = Object.values(DEV_KIT_ROLES).reduce((sum, roles) => sum + roles.length, 0);
 
 export function devKitRole(cls: PlayerClass, spec: string): DevKitRole | null {
   return DEV_KIT_ROLES[cls]?.find((role) => role.spec === spec) ?? null;

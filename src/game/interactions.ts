@@ -6,6 +6,7 @@ import { isShadowNpc, SHADOW_NPC_ID } from '../sim/content/world_quest_shadow';
 import { isLootableBody } from '../sim/corpse_loot_state';
 import { ESCORTS } from '../sim/data';
 import { kitUsableNow } from '../sim/mob/trash_kit/encounter_use';
+import { isBuddyMob } from '../sim/pet/buddy_ai';
 import { isQuestGatedEntityHidden } from '../sim/quest_gated_entity';
 import {
   dist2d,
@@ -111,10 +112,12 @@ export function activePvpOpponentIds(
   }
   // Enemy-owned pets, resolved AFTER every player arm above so the owner set is
   // complete. Iterating the map allocates nothing, which the per-frame hover
-  // caller relies on.
+  // caller relies on. A buddy never joins: it is visible but not interactable
+  // (sim/pet/buddy_ai.ts), and the sim's isHostileTo refuses it.
   if (ids.size > 0 && world.entities) {
     for (const e of world.entities.values()) {
-      if (e.kind === 'mob' && e.ownerId !== null && ids.has(e.ownerId)) ids.add(e.id);
+      if (e.kind === 'mob' && e.ownerId !== null && ids.has(e.ownerId) && !isBuddyMob(e))
+        ids.add(e.id);
     }
   }
   return ids;
@@ -148,7 +151,7 @@ export function isAttackableEntity(
   playerId: number,
   activePvpOpponentSet: ReadonlySet<number> = new Set(),
 ): boolean {
-  if (!e || e.dead || e.id === playerId) return false;
+  if (!e || e.aiVisual || e.dead || e.id === playerId) return false;
   // A mob is attackable when wild-hostile OR a match objective in the
   // opponent set (the enemy Yumi cat carries hostile=false; its team
   // hostility lives in the sim rule, and activePvpOpponentIds mirrors it
@@ -166,7 +169,7 @@ export function hoverCursorKind(
   activePvpOpponentSet: ReadonlySet<number> = new Set(),
   carried?: readonly Pick<InvSlot, 'itemId' | 'count'>[],
 ): HoverCursorKind {
-  if (!e) return 'default';
+  if (!e || e.aiVisual) return 'default';
   // A mudfin hut on "Back to the Shallows" wears the gear while the firebottle is in
   // the bags: a click or the interact key throws it for you (hut_torch.ts), and the
   // gear is the cue that says so before anyone reads the quest text.
@@ -258,7 +261,7 @@ export function handlePickedEntity(
   harvestStateReliable = true,
 ): InteractionOutcome {
   const e = world.entities.get(id);
-  if (!e) return false;
+  if (!e || e.aiVisual) return false;
 
   // Quest-gated mobs (Broodmother eggs) are inert scenery to a player not on the
   // gating quest: not targetable or interactable until they take the quest.

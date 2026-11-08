@@ -16,6 +16,7 @@ import type { RealmBuilderHonour } from './content/realm_builders';
 import type { InkMapTarget, TreasureMapRarity } from './content/treasure_maps';
 import type { DungeonGuideRun } from './dungeon_guide/types';
 import type { KorgathFightState } from './encounters/gravewyrm_sanctum/korgath_state';
+import type { FactionId } from './factions';
 import type { KorzulFightState } from './encounters/gravewyrm_sanctum/korzul_state';
 import type { VelkharFightState } from './encounters/gravewyrm_sanctum/velkhar_state';
 import type {
@@ -314,7 +315,8 @@ export type PlayerClass =
   | 'shaman'
   | 'mage'
   | 'warlock'
-  | 'druid';
+  | 'druid'
+  | 'dreamdancer';
 
 // Sanguine Aura's class-level melee recipient filter. It excludes the pure
 // casters and Hunter, whose primary attack loop is ranged.
@@ -369,6 +371,7 @@ export const ALL_CLASSES: PlayerClass[] = [
   'mage',
   'warlock',
   'druid',
+  'dreamdancer',
 ];
 export type ResourceType = 'rage' | 'mana' | 'energy' | 'focus';
 export const OVERHEAD_EMOTE_IDS = [
@@ -426,6 +429,7 @@ export interface MobChaseRoute {
 }
 
 export type AuraKind =
+  | 'dream_thread'
   | 'dot'
   | 'doctrine'
   | 'slow_fall'
@@ -785,6 +789,8 @@ export function isFormAuraKind(kind: AuraKind): boolean {
 }
 
 export interface Aura {
+  // Runtime-only target for the caster's current Dream Thread.
+  dreamTargetId?: number;
   id: string; // ability id that applied it
   name: string;
   kind: AuraKind;
@@ -4138,6 +4144,8 @@ export type AbilityEffect =
       playersOnly?: boolean;
       centerOnTarget?: boolean;
       friendlyTargetOnly?: boolean;
+      // Restrict the area heal to the caster's group and prioritize the most injured.
+      maxGroupTargets?: number;
     }
   | {
       type: 'groundAoE';
@@ -7236,6 +7244,8 @@ export interface WeeklyQuestProgress {
   week: string;
   count: number;
   state: 'active' | 'completed';
+  /** If set at acceptance, award this faction's standing on completion. */
+  commendationFaction?: FactionId;
   /** The faction id that took the week's commendation (standing), once the
    *  finished charge's one choice is made; absent until then. */
   commended?: string;
@@ -7493,6 +7503,8 @@ export interface GuardianMelee {
  * the sim-side field of the same feature (`climb` for the pair below).
  */
 export interface ClientMirroredEntityFields {
+  /** Server-projected ambient actors render without accepting player interactions. */
+  aiVisual?: boolean;
   /** Mirror of an in-flight climb: the wire carries progress, not the arc.
    *  0..1 through the pull at the snapshot cadence; the visual smooths it. */
   climbing?: boolean;
@@ -7764,6 +7776,8 @@ export interface Entity extends ClientMirroredEntityFields {
   // and clearing your target no longer cancels a channel. The channel still cancels
   // if the locked target dies or turns non-hostile.
   castTargetId: number | null;
+  /** Slagcrown PvP Ruinbolt, reserved at cast start along with its longer cast time. */
+  castSlagcrownPvpRuinbolt?: boolean;
   // Ground-targeted casting: the world point a `targetMode: 'position'` ability is
   // aimed at, captured (server-clamped to range) when the cast begins and read by
   // its area effects when it resolves. null for normal entity/self casts.
@@ -9429,6 +9443,8 @@ export type SimEvent = { pid?: number } & (
       sourceOwnerId?: number;
       targetId: number;
       amount: number;
+      // Nominal admin overkill for combat feedback. Keep amount as actual HP loss.
+      oneHitAmount?: number;
       crit: boolean;
       school: string;
       ability: string | null;
@@ -10748,6 +10764,10 @@ export type SimEvent = { pid?: number } & (
         | 'already_full'
         | 'tool_capped'
         | 'insufficient_materials'
+        // Recharge only: the raw held count would pay the price but the owner
+        // locked those copies (item_lock.ts), so none of them may be spent.
+        // Carries materialItemId/count like insufficient_materials.
+        | 'locked'
         | 'busy'
         // Historical: shared action throttle retired in Craft Cast System Phase 5.
         | 'throttled';

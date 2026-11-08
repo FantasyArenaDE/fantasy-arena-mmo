@@ -125,7 +125,7 @@ export const GUILD_BANK_TREASURY_CAP = 1_000_000_000;
  *  (type equality both ways plus the literal value list), so a rank added on
  *  one side without the other fails a test instead of silently stamping null. */
 export const GUILD_RANKS = ['leader', 'officer', 'member'] as const;
-export type GuildRank = (typeof GUILD_RANKS)[number];
+export type GuildRank = (typeof GUILD_RANKS)[number] | 'bank-items' | 'bank-gold';
 
 /** The session-only membership stamp the server writes onto PlayerMeta (see
  *  Sim.setPlayerGuildMembership): the authorization input the guild bank's
@@ -977,7 +977,8 @@ export function stampGuildMembership(
 function normalizeGuildMembership(m: GuildMembership | null): GuildMembership | null {
   if (!m || typeof m !== 'object') return null;
   if (!Number.isInteger(m.guildId) || m.guildId <= 0) return null;
-  if (!GUILD_RANKS.includes(m.rank)) return null;
+  if (m.rank !== 'bank-items' && m.rank !== 'bank-gold' && !GUILD_RANKS.includes(m.rank))
+    return null;
   return { guildId: m.guildId, rank: m.rank };
 }
 
@@ -988,18 +989,13 @@ function normalizeGuildMembership(m: GuildMembership | null): GuildMembership | 
 // stays inert forever (offline play never has a guild).
 // ---------------------------------------------------------------------------
 
-/** The ranks that may EDIT the guild bank, as a POSITIVE allowlist: the op
- *  gate (requireOfficerBook) refuses everything outside it, and the info read
- *  (guildBankInfoFor) stamps it onto the snapshot as `canEdit` so the client
- *  renders a member's view read-only from the same fact that refuses their
- *  ops. Exactly leader and officer: a rank ever added to GUILD_RANKS (an
- *  initiate tier, say) is DENIED here until this set is deliberately
- *  revisited, because a shared treasury must fail closed, never open. The
- *  VIEW gate is deliberately wider (any stamped member: seeing the pooled
- *  goods and their history is how the guild audits its officers), and
- *  tests/guild_bank.test.ts sweeps every rank through both gates and pins
- *  each passing set. */
-const GUILD_BANK_EDIT_RANKS: ReadonlySet<GuildRank> = new Set(['leader', 'officer']);
+function mayUseGuildBank(rank: GuildRank, access: 'items' | 'gold'): boolean {
+  return (
+    rank === 'leader' ||
+    rank === 'officer' ||
+    rank === (access === 'items' ? 'bank-items' : 'bank-gold')
+  );
+}
 
 /** Resolve the REQUIRED acting pid, refusing a non-integer at runtime. The
  *  facade types pid as required, but Sim.resolve falls back to the primary
@@ -1010,20 +1006,24 @@ function resolveActor(ctx: SimContext, pid: number): ReturnType<SimContext['reso
   return Number.isInteger(pid) ? ctx.resolve(pid) : null;
 }
 
-/** The shared officer-plus authorization step every op runs AFTER the shape
+/** The shared capability check every op runs after validating its shape
  *  check: resolves the acting player's stamped membership and the guild's live
- *  book. A missing stamp and a rank outside GUILD_BANK_EDIT_RANKS each REFUSE
+ *  book. A missing stamp or a missing grant each REFUSE
  *  with a player line; a stamped guild whose book is not loaded returns silently,
  *  because that is a host wiring state (Phase 3 boot-loads every book before
  *  players join), not a condition the player caused or can act on. Never
  *  mutates. */
-function requireOfficerBook(ctx: SimContext, meta: PlayerMeta): GuildBankState | null {
+function requireGuildBank(
+  ctx: SimContext,
+  meta: PlayerMeta,
+  access: 'items' | 'gold',
+): GuildBankState | null {
   const m = meta.guildMembership;
   if (!m) {
     ctx.error(meta.entityId, 'You must be in a guild to use the guild bank.');
     return null;
   }
-  if (!GUILD_BANK_EDIT_RANKS.has(m.rank)) {
+  if (!mayUseGuildBank(m.rank, access)) {
     ctx.error(meta.entityId, 'Only guild officers may use the guild bank.');
     return null;
   }
@@ -1086,7 +1086,7 @@ export function guildBankDepositGold(ctx: SimContext, amount: number, pid: numbe
   }
   // Shape: malformed input (cheat/desync), no player line, the bank.ts idiom.
   if (!Number.isSafeInteger(amount) || amount <= 0) return;
-  const book = requireOfficerBook(ctx, meta);
+  const book = requireGuildBank(ctx, meta, 'gold');
   if (!book) return;
   if (meta.copper < amount) {
     ctx.error(meta.entityId, 'Not enough money.');
@@ -1115,7 +1115,7 @@ export function guildBankWithdrawGold(ctx: SimContext, amount: number, pid: numb
   }
   // Shape: malformed input (cheat/desync), no player line, the bank.ts idiom.
   if (!Number.isSafeInteger(amount) || amount <= 0) return;
-  const book = requireOfficerBook(ctx, meta);
+  const book = requireGuildBank(ctx, meta, 'gold');
   if (!book) return;
   if (book.treasury < amount) {
     ctx.error(meta.entityId, 'The guild treasury does not hold that much.');
@@ -1154,7 +1154,7 @@ export function guildBankDeposit(
     return;
   }
   if (!Number.isInteger(slotIndex) || slotIndex < 0 || slotIndex >= meta.inventory.length) return;
-  const book = requireOfficerBook(ctx, meta);
+  const book = requireGuildBank(ctx, meta, 'items');
   if (!book) return;
   const slot = meta.inventory[slotIndex];
   const refusal = guildBankPipeRefusal(slot);
@@ -1231,7 +1231,7 @@ export function guildBankWithdraw(
   // The primitive half of the shape check; the bounds half needs the book,
   // which the rank gate resolves below.
   if (!Number.isInteger(slotIndex) || slotIndex < 0) return;
-  const book = requireOfficerBook(ctx, meta);
+  const book = requireGuildBank(ctx, meta, 'items');
   if (!book) return;
   if (slotIndex >= book.inventory.length) return;
   // The pipe policy holds on the way OUT too: a tampered or legacy Phase 3 row
@@ -1299,7 +1299,7 @@ export function guildBankBuySlots(ctx: SimContext, pid: number): void {
     ctx.error(meta.entityId, 'You are too far from the banker.');
     return;
   }
-  const book = requireOfficerBook(ctx, meta);
+  const book = requireGuildBank(ctx, meta, 'gold');
   if (!book) return;
   const rung = guildBankRungsBought(book.purchasedSlots);
   const price = GUILD_BANK_RUNG_PRICES[rung] ?? null;
@@ -1378,9 +1378,9 @@ export function guildBankMemberWireView(info: GuildBankInfo | null): GuildBankIn
 /** The proximity + membership gated guild bank snapshot the server's
  *  maybe('guildBank') stream reads (the bankInfoFor pattern): null unless the
  *  player is alive, within reach of a banker NPC, stamped into a guild (ANY
- *  rank: the view is guild-wide, only editing is officer-plus), and their
+ *  rank: the view is guild-wide, editing requires the matching grant), and their
  *  guild's book is loaded; else a boundary-cloned view whose `canEdit` flag
- *  carries the GUILD_BANK_EDIT_RANKS verdict for the client's read-only
+ *  carries the permission verdict for the client's read-only
  *  rendering. The DEAD gate is stricter than the personal bank's on purpose:
  *  the stream must go null on death, leave, kick, and walk-away (each pinned
  *  in tests/guild_bank.test.ts; a demotion to member keeps the stream and
@@ -1403,7 +1403,14 @@ export function guildBankInfoFor(ctx: SimContext, pid: number): GuildBankInfo | 
   if (!m) return null;
   const book = ctx.guildBanks.get(m.guildId);
   if (!book) return null;
-  return bookSnapshot(book, guildBankSlotView, GUILD_BANK_EDIT_RANKS.has(m.rank));
+  const items = mayUseGuildBank(m.rank, 'items');
+  const gold = mayUseGuildBank(m.rank, 'gold');
+  const snapshot = bookSnapshot(book, guildBankSlotView, items && gold);
+  if (items !== gold) {
+    snapshot.canEditItems = items;
+    snapshot.canEditGold = gold;
+  }
+  return snapshot;
 }
 
 /** The one snapshot shape both reads hand back, parameterized ONLY by how a

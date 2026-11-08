@@ -18,6 +18,7 @@ import {
   SKY_ENVIRONMENT_RESPONSE,
   stepEnvironmentBlend,
 } from './environment_transition_core';
+import { dayCloudBiomeWeight, FA_DAY_CLOUD_GLSL, FA_DAY_SKY } from './fa_day_clouds';
 import { GFX, type GfxSettings } from './gfx';
 import {
   PALETTE_SKY_DECLARATIONS,
@@ -27,9 +28,10 @@ import {
 } from './palette_lab';
 import type { SkyResidencyRegion } from './sky_residency_core';
 import { skyTexture } from './textures';
+import { VALLEY_RAINBOW_GLSL } from './valley_rainbow_glsl';
 
-// HDRI sky dome. Cloud cover comes from the sky HDRIs themselves; there is
-// no separate sprite cloud layer.
+// HDRI sky dome. The Fantasy Arena release blends in a moving cloud field
+// in daylight over the open-sky biomes, within the existing dome draw.
 //
 // High tier: the dome fragment shader samples real Poly Haven equirect HDRIs
 // (one per biome) by view direction, cross-fading two maps across the same
@@ -185,6 +187,22 @@ const BIOME_SKY_ENV: Record<SkyKey, string> = {
   gale: '/env/galecrest_day_512.ktx2',
   farshore: '/env/farshore_day_512.ktx2',
 };
+
+// The shipped Vale HDR masters match an unlisted project PNG rather than the
+// historic Poly Haven import specification. For the fork's release, reuse the
+// explicitly fork-permitted Willowfen day sky at each native resolution.
+const RELEASE_SKY_ALIAS: Partial<Record<SkyKey, SkyKey>> = {
+  vale: 'fen', beach: 'fen', marsh: 'haunt', peaks: 'frost',
+  desert: 'amber', volcano: 'ember', cave: 'haunt',
+  jungle: 'fen', garden: 'fen', gale: 'haunt', farshore: 'fen',
+};
+if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+  for (const table of [BIOME_SKY_2K, BIOME_SKY_1K, BIOME_SKY_ENV]) {
+    for (const [key, source] of Object.entries(RELEASE_SKY_ALIAS) as [SkyKey, SkyKey][]) {
+      table[key] = table[source];
+    }
+  }
+}
 
 function shouldUseLiteHdri(): boolean {
   if (typeof location !== 'undefined') {
@@ -391,6 +409,11 @@ const HDRI_SUN_U: Record<SkyKey, number> = {
   gale: 0.497, // own sky (sunless source): rotation kept at the fen's value,
   farshore: 0.497, // own sky (sunless source): rotation kept at the fen's value
 };
+if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+  for (const [key, source] of Object.entries(RELEASE_SKY_ALIAS) as [SkyKey, SkyKey][]) {
+    HDRI_SUN_U[key] = HDRI_SUN_U[source];
+  }
+}
 
 // Per-biome dome grade multiplied into the sky + backdrop sample (HDR, pre
 // tonemap, so channels above 1 are fine). White = untouched. Every realm sky
@@ -768,6 +791,7 @@ export interface SkyView {
   setCycle(sunDir: THREE.Vector3, duskWarm: number, nightDesat: number): void;
   /** current scene fog color: drives the dome's horizon fog band */
   setFog(color: THREE.Color): void;
+  setValleyWeather(weather: THREE.Vector2): void;
   /** set the star-field strength (0 day, 1 deep night) and the current time in
    *  seconds (for star twinkle). The sun/moon discs are sprites, not dome-drawn. */
   setStars(starAmt: number, time: number): void;
@@ -813,6 +837,7 @@ const SKY_VERT = /* glsl */ `
 const skyFrag = (zoneHaze: boolean, paletteSky = false): string => /* glsl */ `${
   zoneHaze ? BIOME_HAZE_DECLARATIONS : ''
 }${paletteSky ? PALETTE_SKY_DECLARATIONS : ''}
+  ${VALLEY_RAINBOW_GLSL}
   uniform sampler2D uSkyA;
   uniform sampler2D uSkyB;
   uniform float uMix;
@@ -839,6 +864,7 @@ const skyFrag = (zoneHaze: boolean, paletteSky = false): string => /* glsl */ `$
   uniform float uLiftA; // 1 = mask the HDRI's photographed horizon hills
   uniform float uLiftB;
   varying vec3 vDir;
+${FA_DAY_SKY ? FA_DAY_CLOUD_GLSL : ''}
 
   vec3 sampleSky(sampler2D map, vec3 dir, float uOff, vec3 tune, float lift) {
     // lift resamples low view angles from just above the photographed ridge
@@ -911,6 +937,7 @@ const skyFrag = (zoneHaze: boolean, paletteSky = false): string => /* glsl */ `$
       c = mix(c, backdrop, uBackdropStrength * mix(uBackdropAmtA, uBackdropAmtB, uMix));
     }
     c *= mix(uTintA, uTintB, uMix); // biome grade
+${FA_DAY_SKY ? '    c = faDaySky(c, dir, uSunDirLive, uTime, mix(uFaCloudBiome.x, uFaCloudBiome.y, uMix));' : ''}
 ${paletteSky ? PALETTE_SKY_GLSL : ''}    // Cycle sky grading, between the biome grade and the dark night multiply:
     // (1) desaturate toward night, so the day HDRI greys out to moonlight
     // instead of reading as a dimmed daytime photograph; (2) pour a warm
@@ -1010,7 +1037,8 @@ ${
     }
 `
     : ''
-}    gl_FragColor = vec4(c, 1.0);
+}    c = valleyWeatherSky(c, dir, uSunDirLive);
+    gl_FragColor = vec4(c, 1.0);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
   }
@@ -1102,6 +1130,7 @@ interface BasicSkyUniforms {
   uSkyA: { value: THREE.Texture };
   uSkyB: { value: THREE.Texture };
   uHasHdri: { value: number };
+  uValleyWeather: { value: THREE.Vector2 };
   uOffA: { value: number };
   uOffB: { value: number };
   uTuneA: { value: THREE.Vector3 };
@@ -1115,6 +1144,8 @@ interface BasicSkyUniforms {
   uStarAmt: { value: number };
   uTime: { value: number };
   uFog: { value: THREE.Color };
+  uFaCloudCam: { value: THREE.Vector2 };
+  uFaCloudBiome: { value: THREE.Vector2 };
 }
 
 function deferBasicSkyFragments(
@@ -1138,6 +1169,7 @@ function deferBasicSkyFragments(
 uniform sampler2D uSkyA;
 uniform sampler2D uSkyB;
 uniform float uHasHdri;
+${VALLEY_RAINBOW_GLSL}
 uniform float uOffA;
 uniform float uOffB;
 uniform vec3 uTuneA;
@@ -1152,6 +1184,7 @@ uniform float uStarAmt;
 uniform float uTime;
 uniform vec3 uFog;
 varying vec3 vWocSkyDir;
+${FA_DAY_SKY ? FA_DAY_CLOUD_GLSL : ''}
 vec3 wocSampleLowSky(sampler2D skyMap, vec3 dir, float uOff, vec3 tune) {
   vec2 uv = vec2(
     atan(dir.z, dir.x) * 0.15915494 + 0.5 + uOff,
@@ -1177,6 +1210,7 @@ vec3 wocSkyBase = uHasHdri > 0.5
     )
   : sampledDiffuseColor.rgb;
 wocSkyBase *= mix(uTintA, uTintB, uMix);
+${FA_DAY_SKY ? 'wocSkyBase = faDaySky(wocSkyBase, wocDir, uSunDirLive, uTime, mix(uFaCloudBiome.x, uFaCloudBiome.y, uMix));' : ''}
 float wocCycleLum = dot(wocSkyBase, vec3(0.2126, 0.7152, 0.0722));
 wocSkyBase = mix(wocSkyBase, vec3(wocCycleLum), uNightDesat);
 diffuseColor.rgb = diffuse * wocSkyBase;`,
@@ -1212,11 +1246,20 @@ if (uStarAmt > 0.001) {
   }
 }
 wocC = mix(uFog, wocC, smoothstep(0.1, 0.36, wocDir.y));
-gl_FragColor.rgb = wocC;
+gl_FragColor.rgb = valleyWeatherSky(wocC, wocDir, uSunDirLive);
 #include <tonemapping_fragment>`,
       );
   };
-  material.customProgramCacheKey = () => 'woc-sky-far-depth-v3';
+  material.customProgramCacheKey = () => (FA_DAY_SKY ? 'fa-day-sky-v2' : 'woc-sky-far-depth-v4');
+}
+
+function dayCloudUniforms(start: BiomeBlend, x: number, z: number) {
+  return {
+    uFaCloudCam: { value: new THREE.Vector2(x, z) },
+    uFaCloudBiome: {
+      value: new THREE.Vector2(dayCloudBiomeWeight(start.from), dayCloudBiomeWeight(start.to)),
+    },
+  };
 }
 
 export function buildSky(
@@ -1239,9 +1282,11 @@ export function buildSky(
     const lowUrlTextures = new Map<string, THREE.Texture>();
     const lowUrlPending = new Map<string, Promise<void>>();
     const basicUniforms: BasicSkyUniforms = {
+      ...dayCloudUniforms(start, initialX, initialZ),
       uSkyA: { value: fallbackTex },
       uSkyB: { value: fallbackTex },
       uHasHdri: { value: 0 },
+      uValleyWeather: { value: new THREE.Vector2() },
       uOffA: { value: sunOffsetU(start.from, sun) },
       uOffB: { value: sunOffsetU(start.to, sun) },
       uTuneA: { value: tuneVec(start.from) },
@@ -1340,6 +1385,7 @@ export function buildSky(
     return {
       dome,
       setCameraPos: (x, z, dt = 0) => {
+        basicUniforms.uFaCloudCam.value.set(x, z);
         const target = biomeBlendAt(x, z);
         if (dt > 0) {
           stepEnvironmentBlend(current, target, dt, SKY_ENVIRONMENT_RESPONSE);
@@ -1349,6 +1395,10 @@ export function buildSky(
           current.t = target.t;
         }
         if (current.from !== boundFrom || current.to !== boundTo) {
+          basicUniforms.uFaCloudBiome.value.set(
+            dayCloudBiomeWeight(current.from),
+            dayCloudBiomeWeight(current.to),
+          );
           basicUniforms.uTintA.value.set(...BIOME_TINT[current.from]);
           basicUniforms.uTintB.value.set(...BIOME_TINT[current.to]);
           boundFrom = current.from;
@@ -1364,6 +1414,9 @@ export function buildSky(
         basicUniforms.uSunDirLive.value.copy(liveSunDir);
         basicUniforms.uDuskWarm.value = duskWarm;
         basicUniforms.uNightDesat.value = nightDesat;
+      },
+      setValleyWeather: (weather) => {
+        basicUniforms.uValleyWeather.value.copy(weather);
       },
       setFog: (c) => {
         basicUniforms.uFog.value.copy(c);
@@ -1399,6 +1452,7 @@ export function buildSky(
   const backdropTex = (b: SkyKey): THREE.Texture =>
     (backdropsReady ? backdropStore[b] : hdriStore[b]) as THREE.Texture;
   const uniforms = {
+    ...dayCloudUniforms(start, initialX, initialZ),
     uSkyA: { value: hdriStore[start.from] as THREE.Texture },
     uSkyB: { value: hdriStore[start.to] as THREE.Texture },
     uMix: { value: start.t },
@@ -1424,6 +1478,7 @@ export function buildSky(
     uFog: { value: new THREE.Color(0x7095bd) },
     uLiftA: { value: BIOME_HORIZON_LIFT[start.from] },
     uLiftB: { value: BIOME_HORIZON_LIFT[start.to] },
+    uValleyWeather: { value: new THREE.Vector2() },
   };
   // Distant-zone atmosphere on the horizon band: same compile-time gate and
   // SHARED uniform objects as the terrain layers (the renderer builds the
@@ -1460,10 +1515,15 @@ export function buildSky(
   return {
     dome,
     setCameraPos(x: number, z: number, dt: number): void {
+      uniforms.uFaCloudCam.value.set(x, z);
       const target = biomeBlendAt(x, z);
       if (!hasSkyHdriAssets([target.from, target.to])) return;
       stepEnvironmentBlend(current, target, dt, SKY_ENVIRONMENT_RESPONSE);
       if (current.from !== boundFrom || current.to !== boundTo) {
+        uniforms.uFaCloudBiome.value.set(
+          dayCloudBiomeWeight(current.from),
+          dayCloudBiomeWeight(current.to),
+        );
         uniforms.uSkyA.value = hdriStore[current.from] as THREE.Texture;
         uniforms.uSkyB.value = hdriStore[current.to] as THREE.Texture;
         uniforms.uOffA.value = sunOffsetU(current.from, sun);
@@ -1492,6 +1552,9 @@ export function buildSky(
       uniforms.uSunDirLive.value.copy(liveSunDir);
       uniforms.uDuskWarm.value = duskWarm;
       uniforms.uNightDesat.value = nightDesat;
+    },
+    setValleyWeather(weather: THREE.Vector2): void {
+      uniforms.uValleyWeather.value.copy(weather);
     },
     setFog(color: THREE.Color): void {
       uniforms.uFog.value.copy(color);

@@ -34,11 +34,16 @@ export function crestIconUrl(id: string): string | null {
 
   if (id.startsWith('family_')) {
     const family = id.slice('family_'.length);
+    // The existing procedural sword crest remains visible on the release.
+    if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1' && family === 'humanoid') return null;
     return FAMILY_CREST_ART_IDS.has(family) ? `/ui/crests/families/${family}.webp` : null;
   }
 
   if (id.startsWith('status_')) {
     const status = id.slice('status_'.length);
+    if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1' && (status === 'npc' || status === 'combat')) {
+      return `/ui/fantasy-arena/status/${status}.svg`;
+    }
     return STATUS_CREST_ART_IDS.has(status) ? `/ui/crests/status/${status}.webp` : null;
   }
 

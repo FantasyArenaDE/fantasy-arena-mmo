@@ -14,7 +14,10 @@ import {
 } from './courier_visual_core';
 import { attachSceneGroupGated } from './gated_scene_attach';
 
-const COURIER_MODEL_URL = '/models/creatures/courier_donkey.glb';
+const COURIER_MODEL_URL =
+  import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? '/models/creatures/fantasy-arena/courier.glb'
+    : '/models/creatures/courier_donkey.glb';
 /** Horse buddy's grounded height in PR #4240: base 0.75 times buddy scale 1.701. */
 export const COURIER_HEIGHT = 1.27575;
 /** About half the donkey's body length: how far a pitched rump would sink. */

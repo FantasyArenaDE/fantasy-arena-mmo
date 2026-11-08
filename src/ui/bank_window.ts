@@ -424,20 +424,10 @@ export class BankWindow {
    *  between the mirror nulling (walk-away, guild loss) and the slow-band
    *  repaint can never route a bag click at the guild facet. */
   get guildTabActive(): boolean {
-    return (
-      this.opened &&
-      this.tab === 'guild' &&
-      // ONLY the contents view routes bag clicks. The log is a reading surface:
-      // a bag click while the player is reading the history must not silently
-      // deposit the item they clicked (the whole point of that routing is that
-      // the guild grid is on screen to drop into).
-      this.guildPane.activeView === 'contents' &&
-      // A READ-ONLY viewer's contents pane is a reading surface too (every
-      // member sees the bank, only officer-plus may deposit): their bag click
-      // must not arm the guild deposit, so it falls to the same speak-path the
-      // Log view uses (bankOpen stays true, both deposit modes stay off).
-      (this.deps.world().guildBankInfo?.canEdit ?? false)
-    );
+    // Only an editable contents pane accepts bag clicks as guild deposits.
+    if (!this.opened || this.tab !== 'guild' || this.guildPane.activeView !== 'contents') return false;
+    const info = this.deps.world().guildBankInfo;
+    return (info?.canEditItems ?? info?.canEdit) === true;
   }
 
   /** True while the window is open on the Vault pane with the vault UNLOCKED:
@@ -934,6 +924,8 @@ export class BankWindow {
         g.nextExpansionPrice,
         g.slots,
         g.canEdit,
+        g.canEditItems,
+        g.canEditGold,
         // ...and only while the guild pane is showing AND a rung-0 price is
         // actually quoted: with a null price the pane renders no open row
         // (phase 09: the client never invents a price), and on another tab
@@ -947,7 +939,7 @@ export class BankWindow {
         // marker this term never refreshes.
         this.tab === 'guild' &&
         guildBankRungsBought(g.purchasedSlots) === 0 &&
-        g.canEdit &&
+        (g.canEditGold ?? g.canEdit) &&
         g.nextExpansionPrice !== null
           ? this.deps.world().copper >= g.nextExpansionPrice
           : null,

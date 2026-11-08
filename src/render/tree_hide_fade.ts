@@ -19,6 +19,7 @@ export interface TreeHidePart {
   mesh: THREE.InstancedMesh;
   index: number;
   visibleMatrix: THREE.Matrix4;
+  bark?: boolean;
 }
 
 export interface TreeHideable {

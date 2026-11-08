@@ -712,8 +712,8 @@ export const BOOL_SETTINGS = {
   // the wire (server/game.ts dynamicFields), and both bars hide themselves
   // when the target (or its own target) is unknown or not auto-attacking.
   showTargetSwingTimer: { def: false },
-  // off by default (the classic reticle alone, unchanged out of the box): the
-  // four "Style of Enemy Highlight" checkboxes in Options > Interface > Combat.
+  // The nameplate cue is on by default. The four "Style of Enemy Highlight"
+  // checkboxes in Options > Interface > Combat remain independent.
   // Each one independently adds a cue for a HOSTILE current target and any mix
   // works together: an arrow pinned to the screen edge while the target is off
   // camera, a larger gold-framed nameplate, a chevron above the target's head,
@@ -721,7 +721,7 @@ export const BOOL_SETTINGS = {
   // Pure display preferences; render/target_highlight_core.ts maps each key to
   // the renderer flag it drives.
   targetHighlightEdgeArrow: { def: false },
-  targetHighlightNameplate: { def: false },
+  targetHighlightNameplate: { def: true },
   targetHighlightOverhead: { def: false },
   targetHighlightReticle: { def: false },
   // on by default: the pet health strip under the player frame (hunter / warlock /

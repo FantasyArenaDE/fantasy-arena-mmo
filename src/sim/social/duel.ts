@@ -11,6 +11,7 @@
 // on Sim and are read through the seam.
 
 import { ownedNecromancyUndead } from '../combat/necromancy';
+import { gmHiddenFrom } from '../gm_presence';
 import type { DuelState } from '../sim';
 import type { SimContext } from '../sim_context';
 import { DT, dist2d, type Entity } from '../types';
@@ -25,6 +26,7 @@ export function duelRequest(ctx: SimContext, targetPid: number, pid?: number): v
   const targetE = ctx.entities.get(targetPid);
   if (!r || !target || !targetE) return;
   if (targetPid === r.meta.entityId) return;
+  if (gmHiddenFrom(ctx.entities, r.e, targetE)) return;
   if (
     ctx.entityInDungeon(r.e, 'nythraxis_boss_arena') ||
     ctx.entityInDungeon(targetE, 'nythraxis_boss_arena')

@@ -160,13 +160,17 @@ let liveRelocalize: (() => void) | null = null;
  * `src/ui/gpu_notice_toast.ts` uses.
  */
 export function initBrowserSupportNotice(doc: Document = document): void {
+  const desktop = isDesktopAppRuntime();
+  const native = isNativeAppShell();
+  const preview = import.meta.env.VITE_FA_DESKTOP_DOWNLOADS === '1' &&
+    !desktop && !native && new URLSearchParams(doc.defaultView?.location.search).get('desktop-download-preview') === '1';
   const show = shouldShowBrowserSupportNotice({
     isSupportedBrowser: isSupportedBrowser(navigator.userAgent || '', readHasBraveApi()),
-    isDesktopApp: isDesktopAppRuntime(),
-    isNativeShell: isNativeAppShell(),
+    isDesktopApp: desktop,
+    isNativeShell: native,
     dismissed: readBrowserSupportNoticeDismissed(),
   });
-  if (!show) return;
+  if (!show && !preview) return;
 
   const teardown = (): void => {
     liveNotice?.remove();
@@ -176,7 +180,7 @@ export function initBrowserSupportNotice(doc: Document = document): void {
   };
 
   const dismiss = (): void => {
-    persistBrowserSupportNoticeDismissed();
+    if (!preview) persistBrowserSupportNoticeDismissed();
     teardown();
   };
 
@@ -188,7 +192,7 @@ export function initBrowserSupportNotice(doc: Document = document): void {
   };
 
   const reveal = (): void => {
-    if (readBrowserSupportNoticeDismissed()) return; // dismissed while the locale loaded
+    if (!preview && readBrowserSupportNoticeDismissed()) return; // dismissed while the locale loaded
     liveNotice = buildBrowserSupportNoticeElement(doc, dismiss);
     doc.body.appendChild(liveNotice);
     liveRelocalize = relocalize;

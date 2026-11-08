@@ -44,6 +44,7 @@ export const MEMBERSHIP_DEFAULT_PROFILE: Readonly<Record<PlayerClass, string>> =
   priest: 'caster',
   shaman: 'caster',
   mage: 'caster',
+  dreamdancer: 'caster',
   warlock: 'caster',
   druid: 'caster',
 };

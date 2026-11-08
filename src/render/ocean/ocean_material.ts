@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { biomeHazeUniforms, hasBiomeHazeField } from '../biome_haze_field';
+import { planktonUniforms } from '../plankton_wake';
 import { applyTextureAnisotropy } from '../texture_anisotropy';
 import type { WaterWaveUniforms } from '../water_simulation';
 import { buildOceanFoamTexels, OCEAN_FOAM_SIZE } from './ocean_foam_core';
@@ -172,6 +173,7 @@ export function createOceanSurfaceMaterial(
       uFoamTex: { value: oceanFoamTexture() },
       ...sky,
       ...shared,
+      ...planktonUniforms,
       uWaveState: wave.uWaveState,
       uWaveEnabled: wave.uWaveEnabled,
       uWaveOrigin: wave.uWaveOrigin,

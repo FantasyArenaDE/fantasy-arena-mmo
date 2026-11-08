@@ -412,6 +412,7 @@ export class MarketWindow {
       info?.pageCount,
       info?.collectionCopper,
       info?.collectionItems,
+      this.tab === 'collect' ? [info?.myListingCount, info?.maxListings, info?.cutPct] : null,
       // The ledger is its own axis, not a shadow of the copper: a sale whose
       // proceeds floor to 0 moves neither the purse nor the goods, and without
       // this the open History tab would never repaint to show its row.
@@ -1275,7 +1276,12 @@ export class MarketWindow {
       row.innerHTML = `<span>${esc(t('itemUi.market.saleProceeds'))}</span><span class="mkt-price ui-money">${this.deps.moneyHtml(view.proceeds)}</span>`;
       body.appendChild(row);
     }
-    for (const { item, count, instance } of view.rows) {
+    const info = this.deps.world().marketInfo;
+    const openSlots = info ? Math.max(0, info.maxListings - info.myListingCount) : 0;
+    const relistable = view.rows.flatMap((row) =>
+      row.relist ? [{ ...row.relist, count: row.count }] : [],
+    );
+    for (const { item, count, instance, relist } of view.rows) {
       // Returned goods keep their copy identity: the name color and the icon
       // rim both read the instance-effective quality (the all-surfaces rule).
       const returned = wornItemCellParts(item, instance);
@@ -1288,8 +1294,53 @@ export class MarketWindow {
           ? ` ${t('itemUi.market.stackCount', { count: formatNumber(count, { maximumFractionDigits: 0 }) })}`
           : '';
       row.innerHTML = `<span class="mkt-collect-item">${this.deps.itemIcon(item, returnedQuality)}${returned.qualityBadgeLabelled}<span class="mkt-collect-name" style="color:${qColor}">${esc(returned.name)}${esc(stack)}</span></span>`;
+      if (relist) {
+        const price = document.createElement('span');
+        price.className = 'mkt-price ui-money';
+        price.textContent = formatLocalizedMoney(relist.price);
+        row.appendChild(price);
+      }
       this.deps.attachTooltip(row, () => this.deps.itemTooltip(item, instance));
       body.appendChild(row);
+    }
+    if (info && openSlots > 0 && relistable.length > 0) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mkt-list-btn ui-btn';
+      button.textContent = t('itemUi.market.relistExpired');
+      button.addEventListener('click', () => {
+        const batch = relistable.slice(0, openSlots);
+        const units = batch.reduce((total, row) => total + row.count, 0);
+        const price = batch.reduce((total, row) => total + row.price, 0);
+        this.deps.confirmDialog(
+          t('itemUi.market.relistExpired'),
+          t('itemUi.market.relistQuote', {
+            listings: formatNumber(batch.length, { maximumFractionDigits: 0 }),
+            units: formatNumber(units, { maximumFractionDigits: 0 }),
+            price: formatLocalizedMoney(price),
+            cut: formatNumber(info.cutPct, { maximumFractionDigits: 1 }),
+          }),
+          t('itemUi.market.relistExpired'),
+          t('itemUi.market.buyConfirmCancel'),
+          () => {
+            const world = this.deps.world();
+            const current = world.marketInfo;
+            if (
+              !current ||
+              current.cutPct !== info.cutPct ||
+              current.myListingCount + batch.length > current.maxListings
+            ) {
+              this.deps.showError(t('itemUi.market.buyChanged'));
+              return;
+            }
+            world.marketRelist(
+              batch.map((row) => row.id),
+              info.cutPct,
+            );
+          },
+        );
+      });
+      body.appendChild(button);
     }
     const btn = document.createElement('button');
     btn.className = 'mkt-list-btn ui-btn ui-btn--gold';

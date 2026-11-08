@@ -26,12 +26,20 @@ export const PARTY_CHIP_LABEL_CLASS = 'party-chip-label';
 export interface PartyChip {
   el: HTMLButtonElement;
   label: HTMLElement;
+  difficulty: HTMLElement;
 }
 
 export interface PartyFrameHeader {
   el: HTMLButtonElement;
   label: HTMLElement;
   count: HTMLElement;
+  difficulty: HTMLElement;
+}
+
+function createDifficultyLabel(doc: Document): HTMLElement {
+  const label = doc.createElement('span');
+  label.className = 'party-frame-difficulty';
+  return label;
 }
 
 /**
@@ -55,9 +63,10 @@ export function createPartyChip(doc: Document, onToggle: () => void): PartyChip 
   btn.insertAdjacentHTML('afterbegin', svgIcon('next'));
   const label = doc.createElement('span');
   label.className = PARTY_CHIP_LABEL_CLASS;
-  btn.appendChild(label);
+  const difficulty = createDifficultyLabel(doc);
+  btn.append(label, difficulty);
   btn.addEventListener('click', onToggle);
-  return { el: btn, label };
+  return { el: btn, label, difficulty };
 }
 
 /** Build the unbacked desktop Party disclosure once; mutable text and state use the painter facet. */
@@ -72,8 +81,9 @@ export function createPartyFrameHeader(doc: Document, onToggle: () => void): Par
   label.className = 'party-frame-header-label';
   const count = doc.createElement('span');
   count.className = 'party-frame-header-count';
-  btn.append(label, count);
+  const difficulty = createDifficultyLabel(doc);
+  btn.append(label, count, difficulty);
   btn.insertAdjacentHTML('beforeend', svgIcon('next'));
   btn.addEventListener('click', onToggle);
-  return { el: btn, label, count };
+  return { el: btn, label, count, difficulty };
 }

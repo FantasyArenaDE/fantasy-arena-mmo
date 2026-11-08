@@ -32,6 +32,27 @@
 // the clock and localStorage at the impure boundary, matching the Api
 // saveSession/clearSession idiom.
 
+const CHARACTER_SELECT_PARAM = 'returnToCharacterSelect';
+
+export function characterSelectReturnUrl(href: string, realm: string): URL {
+  const url = new URL(href);
+  url.searchParams.set(CHARACTER_SELECT_PARAM, realm);
+  return url;
+}
+
+// One-shot, tab-local navigation. Preserve the entry page and the other URL state.
+export function consumeCharacterSelectReturn(
+  href: string,
+  history: Pick<History, 'state' | 'replaceState'>,
+): string | null {
+  const url = new URL(href);
+  const realm = url.searchParams.get(CHARACTER_SELECT_PARAM);
+  if (realm === null) return null;
+  url.searchParams.delete(CHARACTER_SELECT_PARAM);
+  history.replaceState(history.state, '', url);
+  return realm || null;
+}
+
 export const RESUME_KEY = 'woc_active_play';
 
 // Honor the marker only if it was stamped within this window. Re-stamped while

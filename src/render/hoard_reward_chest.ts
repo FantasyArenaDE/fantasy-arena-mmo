@@ -40,11 +40,12 @@ const URL = '/models/props/hoard_reward_chest.glb';
 export const HOARD_REWARD_CHEST_TEMPLATES = ['hoard_reward_chest', 'hoard_reward_chest_open'];
 
 let source: THREE.Group | undefined;
-if (typeof window !== 'undefined')
+const releaseGeometry = import.meta.env.VITE_FA_BROWSER_RELEASE === '1';
+if (typeof window !== 'undefined' && !releaseGeometry)
   registerDeferredPreload(async () => {
     source = (await loadGltf(URL)).scene;
   });
-export const hoardRewardChestPreloadInternalsForTest = { urls: [URL] };
+export const hoardRewardChestPreloadInternalsForTest = { urls: releaseGeometry ? [] : [URL] };
 
 const plane = markSharedGeometry(new THREE.PlaneGeometry(1, 1));
 const disc = markSharedGeometry(new THREE.CircleGeometry(1, 40).rotateX(-Math.PI / 2));
@@ -143,6 +144,19 @@ function fallback(): THREE.Group {
   lid.scale.set(1.6, 0.4, 1.06);
   lid.position.y = 0.84;
   root.add(base, lid);
+  if (releaseGeometry) {
+    const trim = surfaceMat({ color: 0xbb9251, metalness: 0.45, roughness: 0.56 });
+    for (const x of [-0.335, 0.335]) {
+      const band = new THREE.Mesh(box, trim);
+      band.scale.set(0.068, 1.04, 1.03);
+      band.position.set(x, 0.015, 0);
+      lid.add(band);
+    }
+    const lock = new THREE.Mesh(box, trim);
+    lock.scale.set(0.26, 0.29, 0.085);
+    lock.position.set(0, 0.49, 0.51);
+    root.add(lock);
+  }
   return root;
 }
 

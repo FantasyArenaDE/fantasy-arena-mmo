@@ -23,9 +23,10 @@ import {
   onCharacterAssetReady,
   preloadMechAssets,
 } from './assets';
+import { faQuaterniusPilotIsKey } from './fa_quaternius_pilot';
 import {
   modularVisualKey,
-  playerVisualKey,
+  playerPreviewVisualKey,
   VISUALS,
   type WeaponLayoutOverride,
   weaponSkinModelUrl,
@@ -566,7 +567,7 @@ export class CharacterPreview {
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
       this.setVisualKey(
-        playerVisualKey(a.cls, a.appearance),
+        playerPreviewVisualKey(a.cls, a.appearance),
         a.mainhandItemId ?? null,
         null,
         a.offhandItemId ?? null,
@@ -636,7 +637,7 @@ export class CharacterPreview {
       // every head pick, face control, colour and the body size lands IN PLACE on
       // the built body (applyWocLook), so the face builder never rebuilds it.
       this.wocHeadApp = app;
-      this.setVisualKey(playerVisualKey(cls, app), weapon, null, offhand);
+      this.setVisualKey(playerPreviewVisualKey(cls, app), weapon, null, offhand);
       this.applyWocLook();
       // A loadout that drops the head (the creator, the Redesign draft) shows
       // the WOC default kit bare-headed, so the face being built is visible.
@@ -901,9 +902,14 @@ export class CharacterPreview {
     }
     if (head === null) {
       const bone = root.getObjectByName('head');
+      const pilotBone = faQuaterniusPilotIsKey(visual.assetKey)
+        ? root.getObjectByName('Head')
+        : undefined;
       head = bone
         ? { y: bone.getWorldPosition(new THREE.Vector3()).y, h: undefined }
-        : NO_HEAD_MEASURE;
+        : pilotBone
+          ? { y: pilotBone.getWorldPosition(new THREE.Vector3()).y + 0.2, h: 0.42 }
+          : NO_HEAD_MEASURE;
     }
     this.focusHeadFor = visual;
     this.focusHead = head;

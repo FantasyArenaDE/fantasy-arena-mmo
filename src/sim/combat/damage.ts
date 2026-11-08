@@ -1,3 +1,4 @@
+import { applyAdminOneHit } from './admin_one_hit';
 // Post-mitigation damage core, extracted from the Sim monolith (C1).
 //
 // This module owns the post-mitigation damage pipeline: dealDamage's amp/absorb/
@@ -23,6 +24,7 @@
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
+import { adminCombatMode } from '../admin_character_modes';
 import { rollBossBuddyDrops } from '../buddy_drops';
 import { MEMBERSHIP_XP_MULTIPLIER } from '../content/membership';
 import { ABILITIES, DELVES, GROUP_XP_BONUS, ITEMS, MOBS } from '../data';
@@ -244,6 +246,14 @@ export function dealDamage(
   resolvedHpLoss = false,
 ): number {
   if (resolution) resolution.landedHpLoss = 0;
+  // A buddy (pet/buddy_ai.ts) takes no damage from any source: isHostileTo
+  // keeps it out of every enemy scan, and this backstops a non-gated hit.
+  if (isBuddyMob(target)) return 0;
+  const executed = applyAdminOneHit(ctx, source, target, amount, school, ability, kind);
+  if (executed !== null) {
+    if (resolution) resolution.landedHpLoss = executed;
+    return executed;
+  }
   if (resolvedHpLoss) alreadyFinal = true;
   // Provenance for proc accounting (crafted collections): a copy or redirect
   // share must never earn a second charge, but a ward-normalized ORIGINAL hit
@@ -291,6 +301,12 @@ export function dealDamage(
     source.ownerId !== null &&
     target.kind === 'player' &&
     !petCanSeeStealthedTarget(target)
+  )
+    return 0;
+  if (
+    target.kind === 'player' &&
+    (!source || (source.kind === 'mob' && source.ownerId === null)) &&
+    adminCombatMode(ctx, target, 'god')
   )
     return 0;
   if (target.gm || target.devGod || (target.profilerInvulnerable && ctx.devCommands)) {
@@ -371,6 +387,7 @@ export function dealDamage(
   if (source?.oneShot && source.kind === 'player' && target.kind === 'mob' && ctx.devCommands) {
     amount = target.maxHp * 1000 + 1_000_000;
   }
+
 
   // Master Armorer is a live equipment condition, not a stat baked at talent
   // recompute time. It applies to every school while the Arms warrior's current
@@ -1794,13 +1811,11 @@ export function handleDeath(
     clearThreat(e);
     if (e.ownerId !== null) {
       // A cosmetic buddy (src/sim/pet/buddy_ai.ts) has no revive command and
-      // no corpse mechanics of its own. isHostileTo/isEnemyTargetCandidate
-      // (sim.ts, targeting.ts) keep it out of ordinary hostile damage
-      // entirely, so this arm should be unreachable in practice, but a
-      // stray non-hostility-gated damage source (a hits-everyone AoE, a
-      // /dev command) must never leave it as a permanent stray corpse the
-      // way the Infinity corpseTimer below deliberately does for a real,
-      // revivable pet. Despawn outright instead; the owner can re-summon it.
+      // no corpse mechanics of its own. dealDamage refuses every hit on it, so
+      // only a direct handleDeath call (the /dev killtarget command) lands
+      // here, and that must never leave a permanent stray corpse the way the
+      // Infinity corpseTimer below deliberately does for a real, revivable
+      // pet. Despawn outright instead; the owner can re-summon it.
       if (isBuddyMob(e)) {
         ctx.dropEntity(e.id);
         return;

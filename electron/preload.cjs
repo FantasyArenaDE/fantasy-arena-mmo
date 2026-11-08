@@ -171,6 +171,8 @@ contextBridge.exposeInMainWorld('wocDesktop', {
   },
   installUpdate: () => ipcRenderer.invoke('desktop-update-install'),
   checkForUpdates: () => ipcRenderer.invoke('desktop-update-check'),
+  checkWindowsRelease: () => ipcRenderer.invoke('fa-windows-release-check'),
+  openWindowsDownloads: () => ipcRenderer.invoke('fa-windows-release-download'),
   // The shell's GPU verdict, pushed once the GPU process has reported (and again
   // after a crash-recovery reload). Payloads are the whitelisted shape built in
   // electron/gpu_status_events.cjs; the renderer localizes the notice itself.

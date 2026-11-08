@@ -1,3 +1,4 @@
+import { isDreamdancerQuestWeapon } from './content/dreamdancer';
 import { membershipWeaponShape } from './membership_weapon';
 import {
   ALL_CLASSES,
@@ -30,6 +31,7 @@ const CASTER_WEAPON_CLASSES = new Set<PlayerClass>([
   'shaman',
   'paladin',
   'druid',
+  'dreamdancer',
 ]);
 const ROGUE_WEAPON_CLASSES = new Set<PlayerClass>(['rogue', 'hunter']);
 
@@ -424,6 +426,10 @@ export function canEquipItem(cls: PlayerClass, item: ItemDef): boolean {
   // (including the rogue two-hander ban): those gates protect combat identity, and a
   // questTool item has none to protect; locking one out gates a MECHANIC, not power.
   if (item.questTool) return true;
+  if (cls === 'dreamdancer' && item.kind === 'weapon') {
+    return isDreamdancerQuestWeapon(item.id) ||
+      (item.classLocked === true && item.requiredClass?.length === 1 && item.requiredClass[0] === cls);
+  }
   // Class-locked gear (Warfare Season 2 spec sets) honors its class list before
   // any armor-type or weapon rule, so another class can never wear it.
   if (item.classLocked && !(item.requiredClass ?? []).includes(cls)) return false;

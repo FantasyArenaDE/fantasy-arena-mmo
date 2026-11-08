@@ -38,7 +38,10 @@ import {
 /** decorProps key -> model. The sim's hull layouts use the same keys
  *  (src/sim/content/transport_ships.ts). */
 const TRANSPORT_SHIP_MODELS: Readonly<Record<string, string>> = {
-  eastbrookFerry: '/models/props/eastbrook_ferry.glb',
+  eastbrookFerry:
+    import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+      ? '/models/props/fantasy-arena/eastbrook-ferry.glb'
+      : '/models/props/eastbrook_ferry.glb',
 };
 
 const LOD_NAMES = ['LOD0', 'LOD1', 'LOD2', 'LOD3'] as const;

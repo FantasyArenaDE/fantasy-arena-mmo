@@ -43,6 +43,7 @@ import {
 import { GFX } from './gfx';
 import { getGrassGroundBake } from './grass_ground_bake';
 import { type IdleSlotResult, idleSlot } from './idle_queue';
+import { ISLAND_RECT, islandIsolationActive, islandMainlandFogGlsl } from './island_isolation_core';
 import { GRASS_BAKE_PATCH_YARDS, GRASS_PAINT_GAIN } from './meadow_tuning';
 import { renderLayerDisabled } from './render_dev_flags';
 import { CHUNK_SIZE } from './terrain';
@@ -82,6 +83,7 @@ function sharedIndexFor(tileSize: number, spacing: number): THREE.BufferAttribut
 const FAR_BUILD_SLICE_BUDGET_MS = 3;
 const FAR_BUILD_EAGER_SLICE_BUDGET_MS = 12;
 const FAR_BUILD_TIMEOUT_MS = 50;
+const ISLAND_BACKDROP_SPACING = 16;
 
 /** How long an entry curtain may hold for the far grid before giving up and
  *  falling back to the classic eased fog flip (a pathological device must
@@ -259,12 +261,15 @@ export function buildFarTerrain(
   group.name = 'farTerrain';
   const built: BuiltFarTile[] = [];
   let cancelled = false;
+  const gridBox = activeTerrainGridBox(CHUNK_SIZE);
+  const shippedGrid = gridBox === SHIPPED_GRID_BOX;
+  const islandBackdropOnly = !plan.enabled && shippedGrid;
 
   // ?farvista=off takes the WHOLE coarse layer out, which is the one A/B that
   // answers "is that smooth thing on the mountain this layer or the real
-  // terrain" in a single look. Same arm as a tier that never enables the vista,
-  // so the horizon past the detail envelope simply ends.
-  if (!plan.enabled || renderLayerDisabled('farvista')) {
+  // terrain" in a single look. The shipped low tier still draws the small
+  // mainland backdrop for the isolated tutorial island.
+  if ((!plan.enabled && !islandBackdropOnly) || renderLayerDisabled('farvista')) {
     return {
       group,
       update: () => {},
@@ -303,11 +308,12 @@ export function buildFarTerrain(
   // An authored map's vista covers its own chunk-grid box and runs well past
   // it, so its outskirts continue to the horizon instead of stopping where
   // the grid does (terrain_grid_core.ts). The shipped world plans as before.
-  const gridBox = activeTerrainGridBox(CHUNK_SIZE);
-  const shippedGrid = gridBox === SHIPPED_GRID_BOX;
-  const tiles = shippedGrid
-    ? planFarTiles(WORLD_MIN_X, WORLD_MAX_X, WORLD_MIN_Z, WORLD_MAX_Z)
-    : planFarTiles(gridBox.minX, gridBox.maxX, gridBox.minZ, gridBox.maxZ, AUTHORED_FAR_MARGIN);
+  const spacing = islandBackdropOnly ? ISLAND_BACKDROP_SPACING : plan.spacing;
+  const tiles = islandBackdropOnly
+    ? planFarTiles(ISLAND_RECT.minX, ISLAND_RECT.maxX, -480, 480, 0)
+    : shippedGrid
+      ? planFarTiles(WORLD_MIN_X, WORLD_MAX_X, WORLD_MIN_Z, WORLD_MAX_Z)
+      : planFarTiles(gridBox.minX, gridBox.maxX, gridBox.minZ, gridBox.maxZ, AUTHORED_FAR_MARGIN);
   // Standard, not Lambert: the detail terrain lights with the realm's IBL
   // irradiance (scene.environment), and without the same term the far
   // tiles' shaded faces crush toward black where the near terrain stays
@@ -326,13 +332,18 @@ export function buildFarTerrain(
   const farCut = { value: new THREE.Vector3(0, 0, 0) };
   // ...but only over ground the chunk grid actually covers: past an authored
   // map's grid no near chunk will ever draw, so discarding there opened a
-  // void right at the map's edge. The shipped world keeps its discard
-  // everywhere (an unbounded box), byte-identical.
-  const farGrid = {
-    value: shippedGrid
-      ? new THREE.Vector4(-1e9, -1e9, 1e9, 1e9)
-      : new THREE.Vector4(gridBox.minX, gridBox.minZ, gridBox.maxX, gridBox.maxZ),
-  };
+  // void right at the map's edge. Proving Shore similarly streams its own
+  // rectangle only, so across the strait the coarse mesh owns the whole view.
+  const defaultGrid = shippedGrid
+    ? new THREE.Vector4(-1e9, -1e9, 1e9, 1e9)
+    : new THREE.Vector4(gridBox.minX, gridBox.minZ, gridBox.maxX, gridBox.maxZ);
+  const islandGrid = new THREE.Vector4(
+    ISLAND_RECT.minX,
+    ISLAND_RECT.minZ,
+    ISLAND_RECT.maxX,
+    ISLAND_RECT.maxZ,
+  );
+  const farGrid = { value: defaultGrid };
   // Meadow-continuum ground paint: the far tiles multiply the SAME baked
   // blade texture the near splat terrain paints with, at the same true
   // world scale and the same constructed gain, gated by the per-vertex
@@ -340,7 +351,8 @@ export function buildFarTerrain(
   // the averaging, so the tiles' meadow converges on the identical colour
   // the near ground shows, and the handoff at the detail horizon is
   // invisible by construction. ?grassbake=off keeps the legacy flat tint.
-  const grassBake = renderLayerDisabled('grassbake') ? null : getGrassGroundBake();
+  const grassBake =
+    islandBackdropOnly || renderLayerDisabled('grassbake') ? null : getGrassGroundBake();
   // Rock surface detail (see FAR_DETAIL_*): the shared terrain rock normal, the
   // same file detail_normals.ts already preloads for the stone families, so this
   // costs one extra sampler and no extra fetch. That texture's own repeat and
@@ -353,19 +365,18 @@ export function buildFarTerrain(
   // uniform, behind an amount that stays 0 until it lands: sampling a null
   // sampler binds three's white placeholder, which would read as one constant
   // tilt over the entire world instead of as nothing.
-  const detailArm = GFX.standardMaterials && !renderLayerDisabled('fardetail');
+  const detailArm =
+    !islandBackdropOnly && GFX.standardMaterials && !renderLayerDisabled('fardetail');
   const farDetail: { value: THREE.Texture | null } = { value: null };
   const farDetailAmt = { value: 0 };
   // Distant-zone atmosphere: whether the biome haze field exists is decided
   // once, before the material compiles, so a tier without one is byte-identical.
   const zoneHaze = hasBiomeHazeField();
-  // The grid discard is a compile-time variant: name it in the program key so
-  // a shipped-world and an authored-map far material never share a program.
   material.customProgramCacheKey = () =>
-    `${material.onBeforeCompile.toString()}|far-grid:${shippedGrid ? 0 : 1}`;
+    `${material.onBeforeCompile.toString()}|far:${+detailArm}:${+Boolean(grassBake)}:${+zoneHaze}:${+shippedGrid}`;
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uFarCut = farCut;
-    if (!shippedGrid) shader.uniforms.uFarGrid = farGrid;
+    shader.uniforms.uFarGrid = farGrid;
     shader.uniforms.uFarNightFloor = farNightFloor;
     shader.uniforms.uFarNightDim = farNightDim;
     if (detailArm) {
@@ -397,19 +408,16 @@ export function buildFarTerrain(
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
-        `#include <common>\nvarying vec2 vFarXZ;\nuniform vec3 uFarCut;${
-          shippedGrid ? '' : '\nuniform vec4 uFarGrid;'
-        }\nuniform vec3 uFarNightFloor;\nuniform float uFarNightDim;${
+        `#include <common>\nvarying vec2 vFarXZ;\nuniform vec3 uFarCut;\nuniform vec4 uFarGrid;\nuniform vec3 uFarNightFloor;\nuniform float uFarNightDim;${
           detailArm ? '\nuniform sampler2D uFarDetail;\nuniform float uFarDetailAmt;' : ''
         }${grassBake ? '\nvarying float vGrassW;\nuniform sampler2D uGrassBake;' : ''}`,
       )
       .replace(
         'void main() {',
-        // The shipped world compiles the discard it always had (its grid box
-        // is unbounded, so the grid test would be a no-op there anyway).
-        shippedGrid
-          ? 'void main() {\n\tif (distance(vFarXZ, uFarCut.xy) < uFarCut.z) discard;'
-          : 'void main() {\n\tif (distance(vFarXZ, uFarCut.xy) < uFarCut.z && all(greaterThanEqual(vFarXZ, uFarGrid.xy)) && all(lessThanEqual(vFarXZ, uFarGrid.zw))) discard;',
+        `void main() {
+        bool insideDetailGrid = all(greaterThanEqual(vFarXZ, uFarGrid.xy))
+          && all(lessThanEqual(vFarXZ, uFarGrid.zw));
+        if (insideDetailGrid && distance(vFarXZ, uFarCut.xy) < uFarCut.z) discard;`,
       )
       .replace(
         // Everything that shapes ALBEDO, in one patch and in this order: the
@@ -491,9 +499,15 @@ export function buildFarTerrain(
           `${biomeHazeFragmentGlsl('vFarXZ')}\n\t#include <fog_fragment>`,
         );
     }
+    if (shippedGrid) {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        '#include <fog_fragment>',
+        islandMainlandFogGlsl('vFarXZ'),
+      );
+    }
   };
 
-  const sharedIndex = sharedIndexFor(tiles[0].size, plan.spacing);
+  const sharedIndex = sharedIndexFor(tiles[0].size, spacing);
 
   // A tile's geometry data, built in time-budgeted cooperative slices.
   const buildTileData = async (
@@ -503,7 +517,7 @@ export function buildFarTerrain(
     minY: number;
     maxY: number;
   } | null> => {
-    const builder = createFarTileBuilder(tile, plan.spacing, seed);
+    const builder = createFarTileBuilder(tile, spacing, seed);
     for (;;) {
       let budgetMs = FAR_BUILD_EAGER_SLICE_BUDGET_MS;
       if (eagerInitialBuild) {
@@ -637,8 +651,10 @@ export function buildFarTerrain(
   return {
     group,
     update(camX, camZ, detailFar, viewFar, outdoor): void {
-      group.visible = outdoor;
-      if (!outdoor) return;
+      const isolated = shippedGrid && islandIsolationActive(camX, camZ);
+      group.visible = outdoor && (!islandBackdropOnly || isolated);
+      if (!group.visible) return;
+      farGrid.value = isolated ? islandGrid : defaultGrid;
       // The rock detail arrives on a deferred preload, so adopt it on the first
       // frame it exists and then never look again. Zero-cost steady state: one
       // null check per frame, and the amount gates the shader until then.
@@ -658,7 +674,7 @@ export function buildFarTerrain(
       // A vertex's clearance is measured over the cells one spacing out and
       // its normal reads one cell further still, so pad the edit by two
       // spacings to catch every tile whose surface the edit can influence.
-      const pad = plan.spacing * 2;
+      const pad = spacing * 2;
       for (let i = 0; i < tiles.length; i++) {
         if (!tileIntersects(tiles[i], minX - pad, minZ - pad, maxX + pad, maxZ + pad)) continue;
         const isBuilt = built.some((b) => b.index === i);

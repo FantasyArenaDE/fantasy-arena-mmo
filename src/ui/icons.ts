@@ -19,6 +19,8 @@ import {
 } from '../sim/content/zone3';
 import { ABILITIES, ITEMS } from '../sim/data';
 import { crestIconUrl } from './crest_icon_art';
+import { DREAMDANCER_ABILITY_ART_IDS } from './dreamdancer_icon_art';
+import { FA_ATTACK_ART } from './fa_attack_art';
 import { currencyImageUrl } from './currency_art';
 import { DEED_IMAGE_IDS } from './deed_image_ids';
 import { professionImageUrl } from './hud/professions/profession_art';
@@ -2530,6 +2532,13 @@ function r(
 }
 
 const ABILITY_RECIPES: Record<string, IconRecipe> = {
+  dream_thread: r('arcane', 'arcanePink', ['staff'], ['sparkle']),
+  dream_spark: r('shadow', 'shadowPurple', ['bolt'], ['sparkle']),
+  dream_shroud: r('arcane', 'arcanePink', ['shield'], ['glow']),
+  dream_nightmare: r('shadow', 'shadowPurple', ['skull'], ['glow']),
+  dream_deep_nightmare: r('shadow', 'shadowPurple', ['skull'], ['sparkle', 'glow']),
+  dream_comfort: r('arcane', 'arcanePink', ['cross'], ['glow']),
+  dream_veil: r('shadow', 'shadowPurple', ['gem'], ['glow']),
   // The Shardpike bar's three verbs (src/ui/hud/shardpike/). Not real abilities, so the
   // ability FALLBACK would normally paint them, and it derived three visually identical
   // tiles from ids that differ only in their last word: a bar whose entire job is "which
@@ -3757,6 +3766,14 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
 };
 
 const ITEM_RECIPES: Record<string, IconRecipe> = {
+  dreamcatcher_focus: r('arcane', 'arcanePink', ['gem'], ['sparkle']),
+  dreamcatcher_silver_focus: r('arcane', 'silverWhite', ['gem'], ['sparkle']),
+  dreamcatcher_nightglass_focus: r('shadow', 'shadowPurple', ['gem'], ['sparkle', 'glow']),
+  dreamcatcher_dawnveil_focus: r('arcane', 'arcanePink', ['gem', { p: 'eye', ...TR }], ['sparkle', 'glow']),
+  dreamdancer_staff: r('arcane', 'arcanePink', ['staff', { p: 'gem', ...TR }], ['sparkle']),
+  dreamdancer_moonthread_staff: r('arcane', 'silverWhite', ['staff', { p: 'gem', ...TR }], ['sparkle']),
+  dreamdancer_starlace_staff: r('shadow', 'shadowPurple', ['staff', { p: 'gem', ...TR }], ['sparkle', 'glow']),
+  dreamdancer_dawnveil_staff: r('arcane', 'arcanePink', ['staff', { p: 'gem', ...TR }], ['sparkle', 'glow']),
   // Bags (+ the implicit backpack the bag bar shows). Every shipped bag carries painted
   // art (ITEM_IMAGE_IDS / UI_ITEM_IMAGE_IDS below), which iconDataUrl prefers; the
   // pre-phase-05 family below keeps a drawn fallback recipe, newer bags rely on
@@ -4222,6 +4239,7 @@ const CREST_RECIPES: Record<string, IconRecipe> = {
   class_shaman: r('storm', 'sky', ['lightning'], ['glow']),
   class_mage: r('arcane', 'arcanePink', ['staff', { p: 'gem', ...TR }], ['sparkle', 'glow']),
   class_warlock: r('shadow', 'shadowPurple', ['skull'], ['glow']),
+  class_dreamdancer: r('arcane', 'arcanePink', ['gem', { p: 'staff', ...TR }], ['sparkle']),
   class_druid: r('nature', 'leafGreen', ['paw'], ['sparkle']),
   // mob families
   family_beast: r('earth', 'earthBrown', ['paw']),
@@ -4735,6 +4753,7 @@ const WARLOCK_TALENT_IMAGE_IDS = new Set<string>([
   'wlk_r20_curse_mastery',
 ]);
 export const ABILITY_IMAGE_IDS = new Set<string>([
+  ...DREAMDANCER_ABILITY_ART_IDS,
   // Integration 45: final four procedural ability fallbacks receive painted art.
   'courier',
   'lunge',
@@ -5285,10 +5304,48 @@ export const ABILITY_IMAGE_IDS = new Set<string>([
 // reject a stale entry once art lands.
 export const ABILITY_ART_PENDING = new Set<string>(['scratch']);
 
+// Originals created for Fantasy Arena. Other abilities keep their current artwork.
+const FANTASY_ARENA_ABILITY_ART = new Set([
+  ...DREAMDANCER_ABILITY_ART_IDS,
+  'heroic_strike',
+  'charge',
+  'shield_slam',
+  'whirlwind',
+  'mortal_strike',
+  'fireball',
+  'frost_armor',
+  'sinister_strike',
+  'eviscerate',
+  'holy_light',
+  'divine_ascension',
+  'hammer_of_grace',
+  'raptor_strike',
+  'battle_shout',
+  'battle_stance',
+  'garrote',
+  'smite',
+  'lesser_heal',
+  'power_word_fortitude',
+  'lightning_bolt',
+  'rockbiter_weapon',
+  'healing_wave',
+  'shadow_bolt',
+  'demon_skin',
+  'summon_imp',
+  'wrath',
+  'healing_touch',
+  'mark_of_the_wild',
+]);
+
 /** Static URL of an ability's image icon, or null if it uses a recipe. */
 export function abilityImageUrl(id: string): string | null {
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1' && FA_ATTACK_ART.has(id)) {
+    return `/ui/fantasy-arena/skills/${id}.webp`;
+  }
   if (ABILITY_ART_PENDING.has(id)) return null;
   if (!ABILITY_IMAGE_IDS.has(id)) return null;
+  if (FANTASY_ARENA_ABILITY_ART.has(id)) return `/ui/fantasy-arena/skills/${id}.webp`;
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1') return null;
   // The Shardpike verbs first: they are quest-tool actions with no ABILITIES row at all, so
   // every arm below would fall through to a class that does not own them.
   if (id === 'lance_brace' || id === 'lance_thrust' || id === 'lance_release') {
@@ -5447,6 +5504,7 @@ export function hasAuraImageIdentity(id: string): boolean {
 
 /** Static art for an exact aura identity, including ordinary ability-art reuse. */
 export function auraImageUrl(id: string): string | null {
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1') return abilityImageUrl(id);
   const external = EXTERNAL_AURA_IMAGE_URLS.get(id);
   if (external) return external;
   if (AURA_FILE_IMAGE_IDS.has(id)) return `${AURA_ICON_DIR}/${id}.webp`;
@@ -5867,6 +5925,7 @@ export const ITEM_ART_PENDING = new Set<string>([
 
 /** Static URL of an item's (or a UI pseudo-item's) image icon, or null if it uses a recipe. */
 export function itemImageUrl(id: string): string | null {
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1') return null;
   const placeholder = ITEM_ART_PLACEHOLDERS[id];
   if (typeof placeholder === 'string') return `${ITEM_ICON_DIR}/${placeholder}.webp`;
   if (ITEM_ART_PENDING.has(id)) return null;
@@ -6027,6 +6086,11 @@ export function cachedProceduralIconDataUrl(
 }
 
 function staticIconUrl(kind: IconKind, id: string): string | null {
+  // The curated build uses its own class and ability paintings.
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1') {
+    if (kind === 'crest' && id.startsWith('class_')) return crestIconUrl(id);
+    return kind === 'ability' || kind === 'aura' ? abilityImageUrl(id) : null;
+  }
   if (kind === 'item') {
     const currency = currencyImageUrl(id);
     if (currency) return currency;

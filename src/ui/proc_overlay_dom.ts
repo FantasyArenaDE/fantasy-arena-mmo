@@ -18,21 +18,25 @@ export function buildProcOverlay(
   el.setAttribute('aria-valuemax', '5');
   el.setAttribute('aria-valuenow', '0');
   el.setAttribute('aria-hidden', 'true');
+  const ownArt = import.meta.env?.VITE_FA_BROWSER_RELEASE === '1';
+  const fire = ownArt ? '/ui/fantasy-arena/procs/fire-phoenix.svg' : '/ui/procs/fire-phoenix-v2.webp';
+  const chrono = ownArt ? '/ui/fantasy-arena/procs/chrono-phoenix.svg' : '/ui/procs/chronomancy-phoenix-v2.webp';
+  const frost = ownArt ? '/ui/fantasy-arena/procs/frost-phoenix.svg' : '/ui/procs/frost-phoenix-v1.webp';
   // No focus stop or key shortcuts of its own: moving the overlay is the
   // Unlock Interface registry's (the 'procOverlay' frame row), whose corner
   // button and grip carry the arrow-key paths.
   el.innerHTML = `
 <div class="fire-bird" aria-hidden="true">
-  <img class="fire-part fire-embers" src="/ui/procs/fire-phoenix-v2.webp" alt="" draggable="false" />
-  <img class="fire-part fire-left" src="/ui/procs/fire-phoenix-v2.webp" alt="" draggable="false" />
-  <img class="fire-part fire-right" src="/ui/procs/fire-phoenix-v2.webp" alt="" draggable="false" />
-  <img class="fire-part fire-core" src="/ui/procs/fire-phoenix-v2.webp" alt="" draggable="false" />
+  <img class="fire-part fire-embers" src="${fire}" alt="" draggable="false" />
+  <img class="fire-part fire-left" src="${fire}" alt="" draggable="false" />
+  <img class="fire-part fire-right" src="${fire}" alt="" draggable="false" />
+  <img class="fire-part fire-core" src="${fire}" alt="" draggable="false" />
 </div>
 <div class="chrono-bird" aria-hidden="true">
-  <img class="chrono-part chrono-left" src="/ui/procs/chronomancy-phoenix-v2.webp" alt="" draggable="false" />
-  <img class="chrono-part chrono-right" src="/ui/procs/chronomancy-phoenix-v2.webp" alt="" draggable="false" />
-  <img class="chrono-part chrono-core" src="/ui/procs/chronomancy-phoenix-v2.webp" alt="" draggable="false" />
-  <img class="chrono-part chrono-final" src="/ui/procs/chronomancy-phoenix-v2.webp" alt="" draggable="false" />
+  <img class="chrono-part chrono-left" src="${chrono}" alt="" draggable="false" />
+  <img class="chrono-part chrono-right" src="${chrono}" alt="" draggable="false" />
+  <img class="chrono-part chrono-core" src="${chrono}" alt="" draggable="false" />
+  <img class="chrono-part chrono-final" src="${chrono}" alt="" draggable="false" />
 </div>
 <div class="frost-bird" aria-hidden="true">
   <span class="frost-crystal frost-crystal-1"></span>
@@ -40,11 +44,11 @@ export function buildProcOverlay(
   <span class="frost-crystal frost-crystal-3"></span>
   <span class="frost-crystal frost-crystal-4"></span>
   <span class="frost-crystal frost-crystal-5"></span>
-  <img class="frost-part frost-tail" src="/ui/procs/frost-phoenix-v1.webp" alt="" draggable="false" />
-  <img class="frost-part frost-left" src="/ui/procs/frost-phoenix-v1.webp" alt="" draggable="false" />
-  <img class="frost-part frost-right" src="/ui/procs/frost-phoenix-v1.webp" alt="" draggable="false" />
-  <img class="frost-part frost-core" src="/ui/procs/frost-phoenix-v1.webp" alt="" draggable="false" />
-  <img class="frost-part frost-ready" src="/ui/procs/frost-phoenix-v1.webp" alt="" draggable="false" />
+  <img class="frost-part frost-tail" src="${frost}" alt="" draggable="false" />
+  <img class="frost-part frost-left" src="${frost}" alt="" draggable="false" />
+  <img class="frost-part frost-right" src="${frost}" alt="" draggable="false" />
+  <img class="frost-part frost-core" src="${frost}" alt="" draggable="false" />
+  <img class="frost-part frost-ready" src="${frost}" alt="" draggable="false" />
 </div>
 <div class="necromancy-bank" aria-hidden="true">
   <span class="soul-rail"></span>

@@ -31,6 +31,21 @@
 /** Every field a stored/wire appearance may carry. Unknown keys are dropped:
  *  a character row is broadcast to other players, so it must never become a
  *  channel for arbitrary attacker-chosen text. */
+export const FA_FACE_TATTOOS = ['none', 'streaks', 'crest', 'fangs', 'moon', 'rune'] as const;
+export const FA_BODY_TATTOOS = ['none', 'bands', 'sigil', 'laurel', 'sunburst', 'knot'] as const;
+
+export const FA_NOSE_PIERCINGS = ['none', 'septum'] as const;
+export const FA_FACE_SCARS = ['none', 'brow', 'cheek', 'bridge', 'jaw', 'temple'] as const;
+export const FA_FRECKLES = ['none', 'light', 'dense', 'nose', 'sun', 'sparse'] as const;
+
+const FA_STYLE_IDS: Readonly<Partial<Record<string, readonly string[]>>> = {
+  faceTattoo: FA_FACE_TATTOOS,
+  bodyTattoo: FA_BODY_TATTOOS,
+  nosePiercing: FA_NOSE_PIERCINGS,
+  faceScar: FA_FACE_SCARS,
+  freckles: FA_FRECKLES,
+};
+
 export const APPEARANCE_WIRE_KEYS: readonly string[] = [
   'gender',
   'hair',
@@ -78,6 +93,11 @@ export const APPEARANCE_WIRE_KEYS: readonly string[] = [
   'headBeard',
   // the WOC body size (WOC_BODY_SCALE_RANGE in src/render/characters/modular.ts)
   'bodyScale',
+  'faceTattoo',
+  'bodyTattoo',
+  'nosePiercing',
+  'faceScar',
+  'freckles',
 ];
 
 /** The slider names each nested map may carry: ALLOWLISTED, exactly like the
@@ -184,7 +204,7 @@ const STYLE_ID_RE = /^[a-z0-9_]{1,24}$/;
  * (The WOC head builder took the ceiling from 1489; its beard, the chin
  * control and the body size from 2038.)
  */
-export const APPEARANCE_MAX_WIRE_BYTES = 2154;
+export const APPEARANCE_MAX_WIRE_BYTES = 2260;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -249,7 +269,11 @@ export function sanitizeAppearance(value: unknown): Record<string, unknown> | nu
       }
       continue;
     }
-    if (typeof raw === 'boolean') out[key] = raw;
+    const presets = FA_STYLE_IDS[key];
+    if (presets) {
+      if (typeof raw !== 'string' || !presets.includes(raw)) continue;
+      out[key] = raw;
+    } else if (typeof raw === 'boolean') out[key] = raw;
     else if (typeof raw === 'number' && Number.isFinite(raw)) out[key] = raw;
     else if (typeof raw === 'string' && STYLE_ID_RE.test(raw)) out[key] = raw;
     // anything else (nested junk, a string that is not a bare style id, null)

@@ -4,6 +4,7 @@ import type { GatherNodeDef, GatherNodeType } from '../sim/types';
 import { terrainHeight } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { buildReleaseGatherNode } from './fa_release_gather_nodes';
 import {
   type BatchReachState,
   FOG_REACH_HYSTERESIS,
@@ -41,7 +42,8 @@ const NODE_FALLBACK_GEOMETRY: Record<GatherNodeType, () => THREE.BufferGeometry>
 
 const loadedNodeGltf = new Map<GatherNodeType, THREE.Group>();
 
-if (typeof window !== 'undefined') {
+const releaseModels = import.meta.env.VITE_FA_BROWSER_RELEASE === '1';
+if (typeof window !== 'undefined' && !releaseModels) {
   for (const [type, url] of Object.entries(NODE_ASSET_URL) as [GatherNodeType, string][]) {
     registerDeferredPreload(() =>
       loadGltf(url).then((gltf) => {
@@ -109,6 +111,7 @@ interface GatherNodeMeshPart {
 }
 
 function buildNodeTemplate(type: GatherNodeType): THREE.Object3D {
+  if (releaseModels) return buildReleaseGatherNode(type);
   const loaded = loadedNodeGltf.get(type);
   if (loaded) {
     const inst = loaded.clone(true);

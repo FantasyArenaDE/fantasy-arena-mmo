@@ -1,5 +1,6 @@
 import type { AbilityVfxFullSpec, AbilityVfxSpec } from './ability_vfx_core';
 import { ABILITY_VFX_FULL_SPECS } from './ability_vfx_full_specs';
+import { DREAMDANCER_VFX } from './dreamdancer_vfx_specs';
 import { ABILITY_VFX_SPECS } from './ability_vfx_specs';
 import {
   BURNING_PACT_VFX_FULL_SPEC,
@@ -100,6 +101,7 @@ export function abilityVfxSpec(abilityId: string): AbilityVfxSpec | undefined {
 }
 
 export function abilityVfxFullSpec(abilityId: string): AbilityVfxFullSpec | undefined {
+  if (Object.hasOwn(DREAMDANCER_VFX, abilityId)) return DREAMDANCER_VFX[abilityId];
   if (abilityId === 'void_rupture') return VOID_RUPTURE_VFX_FULL_SPEC;
   if (abilityId === 'spirit_bomb') return SPIRIT_BOMB_VFX_FULL_SPEC;
   if (abilityId === 'vampiric_touch') return VAMPIRIC_TOUCH_VFX_FULL_SPEC;

@@ -2,7 +2,7 @@ import { GRAVEBRAND_4PC_UNISON_DAMAGE_MULT } from '../content/ignivar_set_bonuse
 import { isTemporaryNecromancyUndeadTemplateId } from '../content/necromancy';
 import { MOBS } from '../data';
 import { createMob } from '../entity';
-import { petDamageMult } from '../pet/pet_ai';
+import { applyPetOwnerScaling, petDamageMult } from '../pet/pet_ai';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { clearThreat } from '../threat';
@@ -369,6 +369,7 @@ function createUndead(
   pet.wanderTarget = null;
   pet.despawnTimer = duration;
   clearThreat(pet);
+  applyPetOwnerScaling(ctx, pet);
   ctx.addEntity(pet);
   return pet;
 }

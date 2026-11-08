@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const cs_CZ: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Právní informace",
+    "worldPicker": "Vybrat svět",
+    "characterPreview": "Vyzkoušet tvorbu postavy",
+    "desktopDownload": "Stáhnout aplikaci pro počítač",
+    "credits": "Autoři a licence",
+    "sourceProject": "Původní projekt na GitHubu",
+    "supportProject": "Podpořit projekt",
+    "musicCredits": "Autoři hudby",
+    "separateAccount": "Tato zkušební verze vyžaduje samostatný účet MMO."
+  },
   "referralCards": {
     "title": "Pozvi přítele",
     "subtitle": "Zažívejte dobrodružství společně. Získávejte razítka.",
@@ -467,6 +478,77 @@ export const cs_CZ: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Kurýr",
       "close": "Zavřít kurýra",
@@ -1767,6 +1849,7 @@ export const cs_CZ: EnTranslations = {
       "presets": {
         "classic": "Klasická zlatá",
         "fancyGold": "Okázalá zlatá (WIP)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Půlnoc",
         "parchment": "Pergamen",
         "highContrast": "Vysoký kontrast"
@@ -2072,8 +2155,8 @@ export const cs_CZ: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Aktualizace dostupná",
-      "body": "Je dostupná nová verze World of ClaudeCraft. Aktualizuj teď pro nejnovější opravy a vylepšení.",
-      "bodyWithVersion": "Je dostupná verze {version} World of ClaudeCraft. Aktualizuj teď pro nejnovější opravy a vylepšení.",
+      "body": "Je dostupná nová verze Fantasy Arena MMO. Aktualizuj teď pro nejnovější opravy a vylepšení.",
+      "bodyWithVersion": "Je dostupná verze {version} Fantasy Arena MMO. Aktualizuj teď pro nejnovější opravy a vylepšení.",
       "notNow": "Teď ne",
       "update": "Aktualizovat"
     },
@@ -2205,6 +2288,8 @@ export const cs_CZ: EnTranslations = {
         "remove": "Vylučovat",
         "promote": "Povyšovat",
         "bank": "Cechovní banka",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Důstojnický chat",
         "motd": "Nástěnka",
         "events": "Kalendář"
@@ -2214,6 +2299,8 @@ export const cs_CZ: EnTranslations = {
         "remove": "Vylučovat členy s nižší hodností.",
         "promote": "Povyšovat a snižovat členy s nižší hodností, až po jednu hodnost pod svou vlastní.",
         "bank": "Vkládat a vybírat měďáky a předměty z cechovní banky. Prohlížet ji může každý člen.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Číst a psát v důstojnickém chatu.",
         "motd": "Upravovat cechovní nástěnku.",
         "events": "Přidávat a odstraňovat události v cechovním kalendáři."
@@ -3079,7 +3166,7 @@ export const cs_CZ: EnTranslations = {
         "offline": "Offline"
       },
       "diagnostics": {
-        "panelAria": "Diagnostika výkonu World of ClaudeCraft",
+        "panelAria": "Diagnostika výkonu Fantasy Arena MMO",
         "title": "Lékař výkonu ClaudeCraft",
         "subtitle": "Sken specifický pro hru s důkazy a opravami na úrovni kódu.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const cs_CZ: EnTranslations = {
           }
         },
         "report": {
-          "title": "Diagnóza výkonu World of ClaudeCraft",
+          "title": "Diagnóza výkonu Fantasy Arena MMO",
           "statusLine": "Stav: {status} ({score}/100)",
           "capturedLine": "Zaznamenáno: {captured}",
           "topFindingLine": "Hlavní zjištění: {finding}",
@@ -5422,7 +5509,7 @@ export const cs_CZ: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Zavřít",
       "keybind": "Panel Discordu",
@@ -5836,6 +5923,8 @@ export const cs_CZ: EnTranslations = {
       "guildTab": "Cech",
       "guildCapacityAria": "Využito slotů cechovní banky: {used} z {total}",
       "guildEmpty": "Cechovní banka je prázdná.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Cechovní pokladna",
       "guildDepositGold": "Uložit peníze",
       "guildWithdrawGold": "Vybrat peníze",
@@ -6446,6 +6535,7 @@ export const cs_CZ: EnTranslations = {
       "toolEffectRechargeFull": "Efekt {effect} je už plně nabit.",
       "toolEffectRechargeToolCapped": "K dalšímu nabití efektu {effect} potřebuješ lepší nástroj pro {profession}.",
       "toolEffectRechargeMaterials": "Dobití efektu {effect} vyžaduje {material} x{count}.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Probíhá výroba: zbývá {remaining} s z {total} s.",
       "disenchantingProgress": "Probíhá rozzačarování: zbývá {remaining} s z {total} s.",
       "enchantingProgress": "Probíhá okouzlování: zbývá {remaining} s z {total} s.",
@@ -7978,6 +8068,7 @@ export const cs_CZ: EnTranslations = {
         }
       },
       "commendHeading": "Doporučení vyslance",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount} postavení u frakce dle vlastního výběru, jednou týdně.",
       "commendCarriedNote": "{amount} reputace z minulého týdne stále čeká na vyzvednutí. Vyzvedni ji a vyber nové nabití.",
       "commendClaimed": "Doporučení tohoto týdne připadlo frakci {faction}.",
@@ -9202,7 +9293,7 @@ export const cs_CZ: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "MMO v klasickém stylu, které hraješ zdarma v prohlížeči.",
     "skipToContent": "Přejít na hlavní obsah",
@@ -9312,7 +9403,7 @@ export const cs_CZ: EnTranslations = {
     },
     "home": {
       "eyebrow": "Prohlížečové MMO v klasickém stylu",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Prozkoumej svět, plň úkoly a zdolávej dungeony s přáteli.",
       "ctaPlay": "Hrát teď",
       "ctaLearn": "Jak hrát",
@@ -10293,7 +10384,7 @@ export const cs_CZ: EnTranslations = {
     },
     "worldPage": {
       "heading": "Svět",
-      "intro": "World of ClaudeCraft je jedna souvislá země, kterou přecházíš pěšky. Stará cesta vede z jihu na sever startovním údolím, bažinou a štíty a stoupá dál za ně do prohlubně a do sněžné krajiny na horním okraji mapy. Od té cesty se na západ otevírá sloupec vyšších říší a další na východ, a při východním pobřeží Údolí leží ostrov. Není tu rychlé cestování, žádné letecké trasy ani povozy: každá cesta se ujde nebo projede, takže dorazit je součástí dobrodružství.\n\nZemě také měří čas. Cyklus dne a noci běží na skutečných hodinách sdílených všemi na tvém světě, takže obloha přechází od úsvitu přes poledne k soumraku a tmě pro vás všechny naráz, měsíc přichází a odchází svými fázemi a světlo na zemi se s ním mění. Ciferník kolem tvé minimapy je místo, kde odečteš hodinu.",
+      "intro": "Fantasy Arena MMO je jedna souvislá země, kterou přecházíš pěšky. Stará cesta vede z jihu na sever startovním údolím, bažinou a štíty a stoupá dál za ně do prohlubně a do sněžné krajiny na horním okraji mapy. Od té cesty se na západ otevírá sloupec vyšších říší a další na východ, a při východním pobřeží Údolí leží ostrov. Není tu rychlé cestování, žádné letecké trasy ani povozy: každá cesta se ujde nebo projede, takže dorazit je součástí dobrodružství.\n\nZemě také měří čas. Cyklus dne a noci běží na skutečných hodinách sdílených všemi na tvém světě, takže obloha přechází od úsvitu přes poledne k soumraku a tmě pro vás všechny naráz, měsíc přichází a odchází svými fázemi a světlo na zemi se s ním mění. Ciferník kolem tvé minimapy je místo, kde odečteš hodinu.",
       "hub": "Domovská základna",
       "mapHeading": "Cesta a říše za ní",
       "mapSub": "Stopa úkolů vede z jihu na sever středem mapy: údolí, bažina, štíty a dál za ně do prohlubně a sněhu. Ostatní říše se otevírají podél té cesty, ne až za ní, branami na východ a na západ od bažinné cesty, přičemž ostrov Farshore se dosahuje z východního pobřeží Údolí. Ze vzdálených říší tě drží jejich úrovňová pásma, ne ta chůze: pět z nich sdílí nejvyšší pásmo, takže jakmile jsi připraven, můžeš je brát v libovolném pořadí. Farshore je výjimka, nízkoúrovňová krajina, kterou můžeš navštívit brzy.",
@@ -11594,7 +11685,7 @@ export const cs_CZ: EnTranslations = {
       "importedTexture": "Importovaná textura {number}"
     },
     "appTitle": "Editor map",
-    "docTitle": "Editor map - World of ClaudeCraft",
+    "docTitle": "Editor map - Fantasy Arena MMO",
     "untitledMap": "Nepojmenovaná mapa",
     "liveWorld": {
       "name": "Drobné úpravy živého světa",
@@ -13756,7 +13847,7 @@ export const cs_CZ: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Hrát",
-    "playAria": "Hrát World of ClaudeCraft",
+    "playAria": "Hrát Fantasy Arena MMO",
     "playLoading": "Načítání",
     "playStarting": "Spouštění",
     "serverLabel": "Vyber si svět",
@@ -13860,6 +13951,41 @@ export const cs_CZ: EnTranslations = {
         "default": "Klasické",
         "almond": "Mandlové",
         "hooded": "S převislými víčky"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const cs_CZ: EnTranslations = {
     "extensionHelp": "Aby se tu peněženka zobrazila, nech aktivní rozšíření prohlížeče, například Solflare Wallet.",
     "mobileAppHelp": "Zvol Phantom nebo Solflare. Tvoje aplikace peněženky požádá o schválení. Nechej tuto hru otevřenou a po dokončení se do ní vrať.",
     "seekerAppHelp": "Pokračuj s peněženkou Seed Vault. Zkontroluj požadavky na připojení a ověření v Seed Vault, poté se vrať do hry.",
-    "standaloneAppHelp": "Připojení peněženky není zatím v aplikaci z domovské obrazovky dostupné. Otevři World of ClaudeCraft v Safari nebo Chrome pro použití Phantom nebo Solflare.",
+    "standaloneAppHelp": "Připojení peněženky není zatím v aplikaci z domovské obrazovky dostupné. Otevři Fantasy Arena MMO v Safari nebo Chrome pro použití Phantom nebo Solflare.",
     "openAppTitle": "Pokračovat v {wallet}",
     "openAppHelp": "Otevři {wallet} pro kontrolu tohoto požadavku. Nechej tuto záložku hry otevřenou, zatímco je aplikace peněženky aktivní.",
     "openAppButton": "Otevřít {wallet}",
     "manualReturnBrowserHelp": "Po schválení se vrať na tuto záložku hry. Pokud iOS otevře jiný prohlížeč, zavři ho a ručně se vrať do původního prohlížeče.",
-    "manualReturnStandaloneHelp": "Po schválení se vrať do World of ClaudeCraft z domovské obrazovky. Pokud iOS otevře prohlížeč, zavři ho a ručně znovu otevři aplikaci z domovské obrazovky.",
+    "manualReturnStandaloneHelp": "Po schválení se vrať do Fantasy Arena MMO z domovské obrazovky. Pokud iOS otevře prohlížeč, zavři ho a ručně znovu otevři aplikaci z domovské obrazovky.",
     "preparingAppButton": "Připravuji {wallet}...",
     "walletAppUnavailable": "{wallet} nelze připravit. Zavři toto okno a zkus to znovu.",
     "flowConnect": "Vyber peněženku. Ověření bude automaticky pokračovat.",
@@ -14266,12 +14392,12 @@ export const cs_CZ: EnTranslations = {
       "paymentBody": "Zvol peněženku propojenou s tvým účtem a schval transakci v tomto prohlížeči.",
       "stepUpBody": "Vyber peněženku propojenou s účtem a podepiš autorizační zprávu burzy $WOC. Podpis je zdarma a nepřevádí žádné prostředky.",
       "extensionHelp": "Nebyla nalezena žádná kompatibilní rozšíření peněženky. Nainstaluj nebo odemkni Phantom, Solflare nebo jiný Solana prohlížečový wallet a zkus to znovu.",
-      "safety": "World of ClaudeCraft nikdy nepožaduje tvoji obnovovací frázi ani soukromý klíč.",
+      "safety": "Fantasy Arena MMO nikdy nepožaduje tvoji obnovovací frázi ani soukromý klíč.",
       "continueWith": "Pokračovat s {wallet}",
       "reviewTitle": "Zkontroluj ve své peněžence",
       "reviewBody": "Postupuj podle výzvy od {wallet}. Nechej tuto stránku prohlížeče otevřenou.",
       "completeTitle": "Autorizace peněženky dokončena",
-      "completeBody": "Můžeš se vrátit do desktopové aplikace World of ClaudeCraft.",
+      "completeBody": "Můžeš se vrátit do desktopové aplikace Fantasy Arena MMO.",
       "returnButton": "Vrátit se do desktopové aplikace",
       "failed": "Autorizace peněženky selhala nebo vypršela. Vrať se do desktopové aplikace a zkus to znovu.",
       "retry": "Zkusit znovu"
@@ -14369,16 +14495,16 @@ export const cs_CZ: EnTranslations = {
     "levelClass": "Úroveň {level} - {className}",
     "topPercent": "TOP {percent} %",
     "realmSubtitle": "Svět {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Fantasy Arena MMO",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "přivedeno {count}",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Kuj svou legendu: {siteUrl}",
     "arenaStat": "Aréna",
     "shareTierBit": ", držitel $WOC stupně {tier}",
-    "shareText": "Kuji svou legendu ve World of ClaudeCraft: úroveň {level} {className}{tierBit}. Přidej se do mého světa:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareText": "Kuji svou legendu ve Fantasy Arena MMO: úroveň {level} {className}{tierBit}. Přidej se do mého světa:",
+    "nativeShareTitle": "Fantasy Arena MMO",
     "fileNameFallback": "hrac",
     "actionShareX": "Sdílet na X",
     "actionCopyReferral": "Kopírovat doporučovací odkaz",
@@ -14395,6 +14521,7 @@ export const cs_CZ: EnTranslations = {
     "statusShareUnsupported": "Sdílení není na tomto zařízení podporováno."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "Válečník",
     "paladin": "Paladin",
     "hunter": "Lovec",
@@ -14402,6 +14529,7 @@ export const cs_CZ: EnTranslations = {
     "priest": "Kněz",
     "shaman": "Šaman",
     "mage": "Mág",
+    "dreamdancer": "Tanec snů",
     "warlock": "Černokněžník",
     "druid": "Druid",
     "warriorAria": "Třída válečník",
@@ -14411,6 +14539,7 @@ export const cs_CZ: EnTranslations = {
     "priestAria": "Třída kněz",
     "shamanAria": "Třída šaman",
     "mageAria": "Třída mág",
+    "dreamdancerAria": "Tanec snů",
     "warlockAria": "Třída černokněžník",
     "druidAria": "Třída druid"
   },
@@ -15248,13 +15377,13 @@ export const cs_CZ: EnTranslations = {
     "parseService": "WoC parsovací služba"
   },
   "seo": {
-    "title": "World of ClaudeCraft: webové MMO v klasickém stylu",
-    "description": "Hraj World of ClaudeCraft, bezplatné MMO v prohlížeči. Prozkoumávej svět, plň úkoly a procházej dungeony s přáteli. Bez stahování.",
+    "title": "Fantasy Arena MMO: webové MMO v klasickém stylu",
+    "description": "Hraj Fantasy Arena MMO, bezplatné MMO v prohlížeči. Prozkoumávej svět, plň úkoly a procházej dungeony s přáteli. Bez stahování.",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Hra",
     "operatingSystem": "Webový prohlížeč",
-    "officialLabel": "Oficiální web World of ClaudeCraft",
+    "officialLabel": "Oficiální web Fantasy Arena MMO",
     "officialBody": "Oficiální web World of ClaudeCraft. Hraj online, čti wiki a najdi tu odkazy na komunitu."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const cs_CZ: EnTranslations = {
     "notify": {
       "updateReadyTitle": "Aktualizace {version} je připravena",
       "updateReadyTitleNoVersion": "Aktualizace je připravena",
-      "updateReadyBody": "Restartuj World of ClaudeCraft, aby se aktualizace použila.",
+      "updateReadyBody": "Restartuj Fantasy Arena MMO, aby se aktualizace použila.",
       "partyInviteTitle": "Pozvánka do skupiny",
       "partyInviteBody": "{name} tě pozval(a) do skupiny."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "Herní zobrazení přestalo fungovat. Načíst ho znovu?",
       "reload": "Načíst znovu",
       "quit": "Ukončit",
-      "fatalBody": "World of ClaudeCraft narazil na neočekávanou chybu a musí se zavřít."
+      "fatalBody": "Fantasy Arena MMO narazil na neočekávanou chybu a musí se zavřít."
     },
     "hostDiag": {
       "saveTitle": "Uložit systémový report",
@@ -15500,6 +15629,7 @@ export const cs_CZ: EnTranslations = {
       "priest": "Léčitel / DPS na dálku",
       "shaman": "Léčitel / DPS na blízko nebo na dálku",
       "mage": "DPS na dálku",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "DPS na dálku",
       "druid": "Tank / léčitel / DPS na blízko nebo na dálku"
     },
@@ -15524,6 +15654,7 @@ export const cs_CZ: EnTranslations = {
       "priest": "Kněží povolávají Hojivé světlo, aby léčili a chránili spojence, zatímco stínová magie jim umožňuje vysávat život z nepřátel.",
       "shaman": "Šamani ovládají živly, naplňují zbraně silou, zasahují nepřátele blesky a obnovují spojence.",
       "mage": "Mágové ohýbají oheň, mráz a arkánní sílu, aby ničili nepřátele, vyvolávali vodu a zmrazovali hrozby na místě.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "Černokněžníci vyvolávají démony, sesílají kletby a průběžné poškození a vysávají život z nepřátel, aby vydrželi.",
       "druid": "Druidové usměrňují síly přírody, léčí zranění, spoutávají nepřátele a mění se do zvířecích podob pro obranu nebo poškození."
     },
@@ -15540,11 +15671,11 @@ export const cs_CZ: EnTranslations = {
     "iosStandaloneDetail": "Jsi v režimu celé obrazovky z plochy. Drž zařízení na šířku.",
     "iosInstallDetail": "Pro skutečnou celou obrazovku na iPhonu nebo iPadu si tuto stránku nejdřív přidej na plochu.",
     "iosShareStep": "V Safari klepni na Sdílet a potom na Přidat na plochu.",
-    "iosOpenStep": "Otevři World of ClaudeCraft z nové ikony na ploše.",
+    "iosOpenStep": "Otevři Fantasy Arena MMO z nové ikony na ploše.",
     "androidStandaloneDetail": "Jsi v režimu aplikace na celou obrazovku. Drž zařízení na šířku.",
     "androidInstallDetail": "Pro celou obrazovku na Androidu si tuto stránku nejdřív nainstaluj nebo přidej na plochu.",
     "androidInstallStep": "V Chromu klepni na menu a potom na Instalovat aplikaci nebo Přidat na plochu.",
-    "androidOpenStep": "Otevři World of ClaudeCraft z nové ikony.",
+    "androidOpenStep": "Otevři Fantasy Arena MMO z nové ikony.",
     "otherStandaloneDetail": "Drž zařízení na šířku a na celou obrazovku.",
     "otherInstallDetail": "Pro nejlepší mobilní zážitek na celou obrazovku si tuto stránku nainstaluj nebo přidej na plochu."
   },
@@ -15560,8 +15691,8 @@ export const cs_CZ: EnTranslations = {
     "confirm": "Pokračovat"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Svět nedostupný",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Svět nedostupný",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Údržba světa",
     "heading": "Svět je dočasně nedostupný.",
     "body": "Restartujeme herní službu a očekáváme, že se Claudemoon brzy vrátí. Tato stránka bude stav automaticky kontrolovat.",
@@ -15762,6 +15893,7 @@ export const cs_CZ: EnTranslations = {
       "audio": "Zvuk",
       "interface": "Rozhraní",
       "language": "Jazyk",
+      "characterSelect": "Výběr postavy",
       "logout": "Odhlásit",
       "returnToGame": "Zpět do hry",
       "resetToDefaults": "Resetovat na výchozí",
@@ -17376,6 +17508,8 @@ export const cs_CZ: EnTranslations = {
       "collectNote": "Výdělky a vrácené zboží, které pro tebe drží Obchodník.",
       "saleProceeds": "Výnosy z prodeje",
       "collectAll": "Vyzvednout vše",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Historie",
       "historyEmpty": "Zatím žádné prodeje. Předměty, které prodáš na Světovém trhu, se objeví tady.",
       "historyNote": "Tvé nedávné prodeje na Světovém trhu.",
@@ -19265,6 +19399,66 @@ export const cs_CZ: EnTranslations = {
       "revive_pet": {
         "name": "Ošetření",
         "description": "Každou sekundu po dobu 8 s obnoví živému společníkovi 10 % jeho maximálního zdraví. Pokud je mrtvý, oživí ho místo toho s 50 % zdraví."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const cs_CZ: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Prut stříbrného potoka"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "Slaný idol"
@@ -31089,8 +31307,8 @@ export const cs_CZ: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Šat Struskokoruny",
-        "bonus2": "Čas obnovy Struskové kůže je kratší o 30 s. Utržené poškození již nezpožďuje sesílání kouzel.",
-        "bonus4": "Každé druhé Vzplanutí udělá tvůj příští Zkázný šíp do 8 s okamžitým."
+        "bonus2": "Proti nepřátelským hráčům způsobuje Zkázný šíp o 50 % vyšší poškození, ale jeho seslání trvá o 0,7 s déle. Utržené poškození již nezpožďuje sesílání kouzel.",
+        "bonus4": "Každé druhé Vzplanutí udělá tvůj příští Zkázný šíp do 8 s okamžitým. Tento Zkázný šíp zdarma nespotřebuje Zkázu."
       },
       "vanguard_warrior_arms": {
         "name": "Bojová výstroj Čepelostopy",

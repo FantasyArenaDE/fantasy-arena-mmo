@@ -55,7 +55,11 @@ import {
   vertexColourMeshGeometry,
 } from './vertex_colour_glb_parts';
 
-const MARKER_URL = '/models/props/harbor_route_marker.glb';
+export const FA_HARBOR_MARKER_URL = '/models/props/fantasy-arena/harbor-marker.glb';
+export function harborRouteMarkerSource(release: boolean): string {
+  return release ? FA_HARBOR_MARKER_URL : '/models/props/harbor_route_marker.glb';
+}
+const MARKER_URL = harborRouteMarkerSource(import.meta.env?.VITE_FA_BROWSER_RELEASE === '1');
 const PLATE_FONT_STACK = '"Cinzel", "Palatino Linotype", Palatino, Georgia, serif';
 const PLATE_PAINT_TOP = '#f1e5c3';
 const PLATE_PAINT_BOTTOM = '#e4d3a6';

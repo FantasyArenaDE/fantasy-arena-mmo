@@ -1,3 +1,4 @@
+import { chromeIconUrl } from './chrome_icon_art';
 import { frameSettingRelated } from './frame_menu_core';
 import type { FramePresetControlsDeps } from './frame_presets_controls';
 import { interfaceResetKeys } from './interface_reset_keys';
@@ -672,7 +673,7 @@ export class OptionsWindow {
     // main menu is the root, so it renders only the close button.
     const back =
       this.view === 'main'
-        ? '<img class="ui-win-art" src="/ui/chrome/crown.webp" alt="" aria-hidden="true">'
+        ? `<img class="ui-win-art" src="${chromeIconUrl('crown')}" alt="" aria-hidden="true">`
         : `<button type="button" class="x-btn ui-x-btn back-btn" data-back aria-label="${esc(t('hud.options.back'))}" title="${esc(t('hud.options.back'))}">${svgIcon('prev')}</button>`;
     return `<div class="panel-title ui-win-head">${back}<span id="options-title" class="ui-win-title">${esc(title)}</span><button type="button" class="x-btn ui-x-btn" data-close aria-label="${esc(t('hud.options.returnToGame'))}">${svgIcon('close')}</button></div>`;
   }
@@ -682,9 +683,8 @@ export class OptionsWindow {
     const scroll = this.viewShell(t('hud.options.gameMenu'));
     const entries = buildOptionsMenu({
       bugReportAvailable: this.deps.bugReport() !== null,
-      // Frame editing is desktop-only: the same gate as the Frames tab's row,
-      // and the same union that raises the touch HUD (mobile_controls
-      // setActive), which is what Hud.toggleInterfaceUnlock refuses on.
+      characterSelectAvailable: !!this.deps.options()?.characterSelect,
+      // Same desktop-only frame editing gate as the Frames tab.
       interfaceUnlockAvailable: !(useTouchInterface() || isNativeAppShell()),
       interfaceUnlocked: this.deps.isInterfaceUnlocked(),
     });
@@ -703,8 +703,7 @@ export class OptionsWindow {
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
   }
 
-  /** Route a main-menu press. The sub-views, the wiki hop, logout, unstuck and
-   *  close all mutate window state, so the list painter hands them back here. */
+  /** Route a main-menu press handed back by the list painter. */
   private routeMenuAction(a: OptionsMenuRoutedAction): void {
     if (a.kind === 'goto') {
       this.view = a.view;
@@ -712,6 +711,8 @@ export class OptionsWindow {
       this.render();
     } else if (a.kind === 'wiki') {
       this.deps.openWiki();
+    } else if (a.kind === 'characterSelect') {
+      this.deps.options()?.characterSelect?.();
     } else if (a.kind === 'logout') {
       this.deps.options()?.logout();
     } else if (a.kind === 'unstuck') {
@@ -2562,6 +2563,12 @@ export class OptionsWindow {
     // Wide, multi-column layout for the key-binding view only; each sibling
     // sub-view keeps its own board-specific width.
     el.classList.add('kb-wide');
+    // Every rebind, cancel, conflict prompt and toggle repaints this panel in
+    // place, which swaps in a fresh scroller at the top. Carry the old
+    // scroller's offset over so clicking a key low in the list keeps the row in
+    // view. Navigation goes through render(), whose layout.finish() then sets
+    // the view's own remembered offset, so this never leaks between views.
+    const keptScrollTop = el.querySelector('.ui-win-body')?.scrollTop ?? 0;
     const scroll = this.viewShell(t('hud.options.keyBindings'));
     const rail = document.createElement('div');
     rail.className = 'kb-options-rail';
@@ -2725,6 +2732,7 @@ export class OptionsWindow {
     footer.append(reset, back);
     el.appendChild(footer);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
+    scroll.scrollTop = keptScrollTop;
   }
 
   private beginCapture(actionId: string, index: number, fallbackLabel: string): void {

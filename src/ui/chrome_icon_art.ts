@@ -62,5 +62,8 @@ export function hasChromeIconArt(name: string): name is UiIconName {
 
 /** Static URL of a chrome icon's painted art, or null when the name ships no art. */
 export function chromeIconUrl(name: string): string | null {
-  return hasChromeIconArt(name) ? `${CHROME_ICON_DIR}/${name}.webp` : null;
+  if (!hasChromeIconArt(name)) return null;
+  return import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? `/ui/fantasy-arena/chrome/${name}.svg`
+    : `${CHROME_ICON_DIR}/${name}.webp`;
 }

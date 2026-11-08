@@ -1,3 +1,4 @@
+import { DREAMDANCER_ROWS } from './dreamdancer';
 import type { PlayerClass } from '../types';
 import {
   DRUID_CHOICE_ROWS,
@@ -37,6 +38,7 @@ export interface ClassChoiceRows {
 export type ChoiceRowAllocation = Partial<Record<ChoiceRowLevel, string>>;
 
 export const CHOICE_ROWS: Record<PlayerClass, ClassChoiceRows> & Record<string, ClassChoiceRows> = {
+  dreamdancer: { rows: DREAMDANCER_ROWS },
   warrior: { rows: WARRIOR_ROWS },
   paladin: PALADIN_CHOICE_ROWS,
   hunter: HUNTER_CHOICE_ROWS,

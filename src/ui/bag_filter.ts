@@ -135,7 +135,11 @@ const QUALITY_RANK: Record<string, number> = {
 
 // Shared with the bank filter (bank_filter.ts) so both windows sort quality identically.
 export function qualityRank(item: ItemDef): number {
-  return QUALITY_RANK[item.quality ?? 'common'] ?? QUALITY_RANK.common;
+  return qualityKeyRank(item.quality ?? 'common');
+}
+
+export function qualityKeyRank(key: string): number {
+  return Object.hasOwn(QUALITY_RANK, key) ? QUALITY_RANK[key] : QUALITY_RANK.common;
 }
 
 // Where a slot with no resolvable def sorts in a quality view: below poor, so

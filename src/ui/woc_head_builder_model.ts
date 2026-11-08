@@ -87,7 +87,10 @@ export type WocBuilderCategory =
   | 'facialHair'
   | 'hairColor'
   | 'browColor'
-  | 'piercings';
+  | 'piercings'
+  | 'makeup'
+  | 'tattoos'
+  | 'faceMarks';
 
 export const WOC_BUILDER_CATEGORIES: readonly WocBuilderCategory[] = [
   'bodyType',
@@ -196,6 +199,20 @@ export const WOC_HAIR_COLORS: readonly WocSwatch[] = [
   sw('hairColor', 'silver', 210, 0.06, 0.72),
   sw('hairColor', 'white', 40, 0.1, 0.92),
 ];
+
+const releaseHairColors: readonly WocSwatch[] = [
+  ...WOC_HAIR_COLORS,
+  sw('eye', 'blue', 224, 0.65, 0.41),
+  sw('eye', 'paleBlue', 198, 0.58, 0.72),
+  sw('eye', 'teal', 168, 0.65, 0.35),
+  sw('eye', 'green', 123, 0.42, 0.32),
+  sw('eye', 'violet', 274, 0.62, 0.49),
+  { id: 'rose', labelKey: 'auth.shadeRose', hue: 337, sat: 0.52, light: 0.62 },
+];
+
+const hairPalette = import.meta.env?.VITE_FA_BROWSER_RELEASE === '1'
+  ? releaseHairColors
+  : WOC_HAIR_COLORS;
 
 /** The swatch a stored colour matches, or null for a custom colour. */
 export function matchSwatch(
@@ -375,6 +392,8 @@ export interface WocBuilderOption {
   /** body types only: the decorative letter tile's key (the label carries the
    *  meaning, so the painter hides the tile from assistive tech) */
   readonly glyphKey?: string;
+  /** A representative shade for a makeup option. */
+  readonly color?: number;
 }
 
 /** What a slider drives: a face morph, or the body size. */
@@ -388,7 +407,20 @@ export type WocSliderReadout = 'signed' | 'percent' | 'offset';
 
 /** What an options section writes: a head slot, the body pick, or the
  *  piercing preset. */
-export type WocOptionTarget = WocHeadSlot | 'bodyType' | 'piercing';
+export type WocOptionTarget =
+  | WocHeadSlot
+  | 'bodyType'
+  | 'piercing'
+  | 'facePreset'
+  | 'lipstick'
+  | 'blush'
+  | 'eyeshadow'
+  | 'faceTattoo'
+  | 'bodyTattoo'
+  | 'nosePiercing'
+  | 'earringMaterial'
+  | 'faceScar'
+  | 'freckles';
 
 /** One block inside a category's panel. */
 export type WocBuilderSection =
@@ -501,7 +533,7 @@ function slotSection(
   };
 }
 
-function morphSlider(a: WocFaceAppearance, k: WocHeadMorph): WocSliderSection {
+export function morphSlider(a: WocFaceAppearance, k: WocHeadMorph): WocSliderSection {
   const r = WOC_HEAD_MORPH_RANGE[k];
   return {
     kind: 'slider',
@@ -554,6 +586,8 @@ function swatchSection(
 /** The sections a page's panel shows for an appearance. */
 export function categorySections(page: WocBuilderPage, a: WocFaceAppearance): WocBuilderSection[] {
   switch (page) {
+    case 'faceMarks':
+      return [];
     case 'bodyType':
       return [
         {
@@ -594,9 +628,9 @@ export function categorySections(page: WocBuilderPage, a: WocFaceAppearance): Wo
     case 'facialHair':
       return [slotSection(a, 'beard', false)];
     case 'hairColor':
-      return [swatchSection('hair', WOC_HAIR_COLORS, a)];
+      return [swatchSection('hair', hairPalette, a)];
     case 'browColor':
-      return [swatchSection('brow', WOC_HAIR_COLORS, a, { matchHair: browsMatchHair(a) })];
+      return [swatchSection('brow', hairPalette, a, { matchHair: browsMatchHair(a) })];
     case 'piercings':
       return [
         {
@@ -612,6 +646,9 @@ export function categorySections(page: WocBuilderPage, a: WocFaceAppearance): Wo
       ];
     case 'share':
       return [{ kind: 'share', code: faceCode(a) }];
+    case 'makeup':
+    case 'tattoos':
+      return []; // Drawn by the release catalogue only.
   }
 }
 
@@ -709,7 +746,8 @@ export function pickOption(
 ): WocFaceAppearance {
   if (target === 'bodyType') return setBodyType(a, id === 'female' ? 'female' : 'male');
   if (target === 'piercing') return readFace({ ...a, headPiercing: id });
-  return readFace({ ...a, [SLOT_FIELD[target]]: id });
+  if (!Object.hasOwn(SLOT_FIELD, target)) return a;
+  return readFace({ ...a, [SLOT_FIELD[target as WocHeadSlot]]: id });
 }
 
 /** Apply a colour to one target. A hair colour change carries matching brows
@@ -851,8 +889,11 @@ export function openCategory(_s: WocBuilderMenuState, page: WocBuilderPage): Woc
 
 /** Roving-focus movement through the menu (arrow keys, Home/End), through the
  *  shared roving helper every tablist and radio group in src/ui uses. */
-export function stepCategory(cat: WocBuilderCategory, key: string): WocBuilderCategory | null {
-  const list = WOC_BUILDER_CATEGORIES;
+export function stepCategory(
+  cat: WocBuilderCategory,
+  key: string,
+  list: readonly WocBuilderCategory[] = WOC_BUILDER_CATEGORIES,
+): WocBuilderCategory | null {
   const next = rovingTarget(key, list.indexOf(cat), list.length, 'both');
   return next === null ? null : list[next];
 }

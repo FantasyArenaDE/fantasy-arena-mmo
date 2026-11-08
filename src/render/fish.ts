@@ -11,6 +11,7 @@ import { terrainHeight, waterLevel, waterLevelAt } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { GFX } from './gfx';
+import { buildStarterWildlife } from './starter_wildlife';
 
 // Ambient leaping fish — a RENDER-ONLY decoration, no sim/IWorld/server state.
 //
@@ -40,7 +41,9 @@ import { GFX } from './gfx';
 const FISH_ASSET_URL = '/models/creatures/leaping_fish.glb';
 let loadedFishGltf: THREE.Group | null = null;
 
-if (typeof window !== 'undefined') {
+// The release build retains the existing procedural fish and its leap path.
+// The old optional authored body has no recorded redistribution grant.
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   registerDeferredPreload(() =>
     loadGltf(FISH_ASSET_URL).then((gltf) => {
       loadedFishGltf = gltf.scene;
@@ -76,7 +79,7 @@ export type FishCompileGate = (root: THREE.Object3D) => Promise<unknown>;
 export interface FishView {
   group: THREE.Group;
   /** per-frame: advance leaps and recycle idle fish near the player */
-  update(px: number, pz: number, dt: number): void;
+  update(px: number, pz: number, dt: number, openAir?: boolean): void;
   /** Install (or clear) the renderer's live compile gate. Install it before the
    *  first `update()`; without one the GLB body swaps in as soon as the preload
    *  has resolved (previous behaviour, and what headless hosts and tests get). */
@@ -169,6 +172,10 @@ export function buildFish(
         emissiveIntensity: 0.18,
       })
     : new THREE.MeshLambertMaterial({ color: 0x95a9b6 });
+  const wildlife = import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+      ? buildStarterWildlife(seed, bodyGeo, bodyMat, onSplash)
+    : null;
+  if (wildlife) group.add(wildlife.group);
 
   const depthAt = (x: number, z: number): number =>
     waterLevelAt(x, z, seed) - terrainHeight(x, z, seed);
@@ -271,8 +278,9 @@ export function buildFish(
     group,
     setCompileGate(gate: FishCompileGate | null): void {
       compileGate = gate;
+      wildlife?.setCompileGate(gate);
     },
-    update(px: number, pz: number, dt: number): void {
+    update(px: number, pz: number, dt: number, openAir = true): void {
       const gltf = loadedFishGltf;
       if (gltf && glbState === 'waiting') beginGlbSwap(gltf);
       if (prewarm && glbState !== 'linking') {
@@ -286,6 +294,7 @@ export function buildFish(
         return;
       }
       group.visible = true;
+      wildlife?.update(px, pz, dt, openAir);
 
       for (const f of fish) {
         if (f.phase === 'rest') {

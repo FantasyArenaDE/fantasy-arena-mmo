@@ -1,3 +1,4 @@
+import { faJaguarSpiritUrl } from './fa_release_jaguar_spirit';
 // The Wildheart Basin's creature looks (docs/design/dungeon-rework/
 // wildheart_basin.md section 4). The rest are PLACEHOLDERS: shipped rigs
 // re-tinted for the jungle so every new creature of the reworked basin is
@@ -376,9 +377,11 @@ const SPORE_TOAD_CLIPS: ClipMap = {
  *  swelling through the bar, and finishes the reel as a play-out; the death
  *  bloats it and bursts its puffballs into the Spore Burst's cloud. */
 export const WILDHEART_SPORE_TOAD_LOOK: VisualDef = {
-  url: TOAD_MODEL.url,
+  url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? 'models/creatures/fantasy-arena/spore-toad.glb'
+    : TOAD_MODEL.url,
   height: trashLookHeight(TOAD_MODEL, TOAD_SIM_SCALE),
-  hover: trashLookHover(TOAD_MODEL, TOAD_SIM_SCALE),
+  hover: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? -0.01 / TOAD_SIM_SCALE : trashLookHover(TOAD_MODEL, TOAD_SIM_SCALE),
   clips: {
     ...SPORE_TOAD_CLIPS,
     cast: 'Tongue',
@@ -395,7 +398,7 @@ export const WILDHEART_SPORE_TOAD_LOOK: VisualDef = {
   attackTimeScale: 1.1,
   // The puffballs burst about 0.6 s after it falls, as its spore cloud rises.
   deathTimeScale: TOAD_DEATH_RATE,
-  authoredAtlas: true,
+  authoredAtlas: import.meta.env.VITE_FA_BROWSER_RELEASE !== '1',
   clickRadius: 2.2,
 };
 
@@ -710,12 +713,14 @@ export function wildheartPlaceholderLooks(
   }
   // The Toad Hex's toad: the Spore Toad's own body shrunk to a player's knee.
   out.form_toad = {
-    url: TOAD_MODEL.url,
+    url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? 'models/creatures/fantasy-arena/spore-toad.glb'
+    : TOAD_MODEL.url,
     height: TOAD_FORM_HEIGHT,
     clips: SPORE_TOAD_CLIPS,
     walkRef: TOAD_MODEL.walkRef * (TOAD_FORM_HEIGHT / (TOAD_MODEL.idleTop - TOAD_MODEL.idleMin)),
     runRef: TOAD_MODEL.runRef * (TOAD_FORM_HEIGHT / (TOAD_MODEL.idleTop - TOAD_MODEL.idleMin)),
-    authoredAtlas: true,
+    authoredAtlas: import.meta.env.VITE_FA_BROWSER_RELEASE !== '1',
   };
   // Zulgar trades his shipped body for his art-guide one.
   out.mob_wildheart_high_priest = WILDHEART_ZULGAR_LOOK;
@@ -725,7 +730,7 @@ export function wildheartPlaceholderLooks(
   const spiritHeight = (visuals.form_cat?.height ?? 1.9) * 0.9;
   const spiritScale = spiritHeight / JAGUAR_MODEL.idleBoundsHeight;
   out.wildheart_spirit_jaguar = {
-    url: JAGUAR_MODEL.spiritUrl,
+    url: faJaguarSpiritUrl(JAGUAR_MODEL.spiritUrl, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
     height: spiritHeight,
     clips: GREAT_JAGUAR_CLIPS,
     castPlayOutHoldsAttacks: true,
@@ -733,7 +738,7 @@ export function wildheartPlaceholderLooks(
     runRef: JAGUAR_MODEL.runRef * spiritScale,
     attackTimeScale: 1,
     // Its jade wash is the cat's own texture recoloured (the GLB's own map).
-    authoredAtlas: true,
+    authoredAtlas: import.meta.env.VITE_FA_BROWSER_RELEASE !== '1',
     clickRadius: 1.4,
   };
   out.wildheart_totem_binder = WILDHEART_TOTEM_BINDER_LOOK;

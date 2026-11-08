@@ -13,6 +13,7 @@ import { BossLoopTrack, DEFAULT_BOSS_TRACK_URL } from './boss_music_loop';
 import { bossPcmPrefetchAllowed } from './boss_music_residency';
 import { CRUCIBLE_STREAM_URLS, type CrucibleFloor } from './crucible_music';
 import { dungeonMusicZoneForDungeon } from './dungeon_music_zones';
+import { fantasyArenaMusicUrl } from './fantasy_arena_music';
 import { minigameLayerFor } from './minigame_music_layer';
 import type { MusicMixState } from './music_mix_policy';
 import { isMusicMixAudible, musicMixMasterTarget } from './music_mix_policy';
@@ -4478,10 +4479,9 @@ export class MusicDirector {
     return { url, el: null, gain, target: 0, silentAt: 0 };
   }
 
-  /** Create and wire the looping, progressively-downloaded media element. */
   private ensureElement(stream: StreamTrack): void {
     if (stream.el || !this.ctx || typeof Audio !== 'function') return;
-    const el = new Audio(stream.url);
+    const el = new Audio(fantasyArenaMusicUrl(stream.url));
     el.loop = true;
     el.preload = 'auto';
     try {

@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const fr_CA: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "Mentions légales",
+    "worldPicker": "Choisir un monde",
+    "characterPreview": "Essayer la création de personnage",
+    "desktopDownload": "Télécharger l’application de bureau",
+    "credits": "Crédits et licences",
+    "sourceProject": "Projet d’origine sur GitHub",
+    "supportProject": "Soutenir le projet",
+    "musicCredits": "Crédits musicaux",
+    "separateAccount": "Cette version de test nécessite un compte MMO distinct."
+  },
   "referralCards": {
     "title": "Parrainer un ami",
     "subtitle": "Partez à l'aventure ensemble. Gagnez vos tampons.",
@@ -467,6 +478,77 @@ export const fr_CA: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "Messager",
       "close": "Fermer le messager",
@@ -1767,6 +1849,7 @@ export const fr_CA: EnTranslations = {
       "presets": {
         "classic": "Or classique",
         "fancyGold": "Or chic (WIP)",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "Minuit",
         "parchment": "Parchemin",
         "highContrast": "Contraste élevé"
@@ -2072,8 +2155,8 @@ export const fr_CA: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Mise à jour disponible",
-      "body": "Une nouvelle version de World of ClaudeCraft est disponible. Mettez à jour maintenant pour les derniers correctifs et améliorations.",
-      "bodyWithVersion": "La version {version} de World of ClaudeCraft est disponible. Mettez à jour maintenant pour les derniers correctifs et améliorations.",
+      "body": "Une nouvelle version de Fantasy Arena MMO est disponible. Mettez à jour maintenant pour les derniers correctifs et améliorations.",
+      "bodyWithVersion": "La version {version} de Fantasy Arena MMO est disponible. Mettez à jour maintenant pour les derniers correctifs et améliorations.",
       "notNow": "Pas maintenant",
       "update": "Mettre à jour"
     },
@@ -2205,6 +2288,8 @@ export const fr_CA: EnTranslations = {
         "remove": "Exclure",
         "promote": "Promouvoir",
         "bank": "Banque de guilde",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "Discussion des officiers",
         "motd": "Tableau d'affichage",
         "events": "Calendrier"
@@ -2214,6 +2299,8 @@ export const fr_CA: EnTranslations = {
         "remove": "Exclure les membres d'un rang inférieur.",
         "promote": "Promouvoir et rétrograder les membres d'un rang inférieur, jusqu'à un rang en dessous du leur.",
         "bank": "Déposer et retirer des pièces de cuivre et des objets dans la banque de guilde. Tous les membres peuvent la consulter.",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "Lire et parler dans la discussion des officiers.",
         "motd": "Modifier le tableau d'affichage de la guilde.",
         "events": "Ajouter et supprimer des événements du calendrier de la guilde."
@@ -3079,7 +3166,7 @@ export const fr_CA: EnTranslations = {
         "offline": "Hors ligne"
       },
       "diagnostics": {
-        "panelAria": "Diagnostics de performance de World of ClaudeCraft",
+        "panelAria": "Diagnostics de performance de Fantasy Arena MMO",
         "title": "Docteur des performances ClaudeCraft",
         "subtitle": "Un scan spécifique au jeu avec preuves et corrections au niveau du code.",
         "aria": {
@@ -3228,7 +3315,7 @@ export const fr_CA: EnTranslations = {
           }
         },
         "report": {
-          "title": "Diagnostic de performance de World of ClaudeCraft",
+          "title": "Diagnostic de performance de Fantasy Arena MMO",
           "statusLine": "État : {status} ({score}/100)",
           "capturedLine": "Capturé : {captured}",
           "topFindingLine": "Constatation principale : {finding}",
@@ -5422,7 +5509,7 @@ export const fr_CA: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "Fermer",
       "keybind": "Panneau Discord",
@@ -5836,6 +5923,8 @@ export const fr_CA: EnTranslations = {
       "guildTab": "Guilde",
       "guildCapacityAria": "Emplacements de banque de guilde utilisés : {used} sur {total}",
       "guildEmpty": "La banque de guilde est vide.",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "Trésorerie de la guilde",
       "guildDepositGold": "Déposer de l'argent",
       "guildWithdrawGold": "Retirer de l'argent",
@@ -6446,6 +6535,7 @@ export const fr_CA: EnTranslations = {
       "toolEffectRechargeFull": "{effect} : charges déjà au maximum.",
       "toolEffectRechargeToolCapped": "Portez un meilleur outil de {profession} pour charger davantage {effect}.",
       "toolEffectRechargeMaterials": "Recharger {effect} nécessite {material} x{count}.",
+      "toolEffectRechargeLocked": "Recharging {effect} needs {material} x{count}, but your copies are locked. Unlock them in your bags.",
       "craftingProgress": "Vous êtes en train de fabriquer : {remaining} s sur {total} s restantes.",
       "disenchantingProgress": "Vous êtes en train de désenchanter : {remaining} s sur {total} s restantes.",
       "enchantingProgress": "Vous êtes en train d'enchanter : {remaining} s sur {total} s restantes.",
@@ -7978,6 +8068,7 @@ export const fr_CA: EnTranslations = {
         }
       },
       "commendHeading": "Recommandation de l'émissaire",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount} de réputation avec la faction de votre choix, une fois par semaine.",
       "commendCarriedNote": "{amount} de réputation de la semaine dernière encore non récupérée. Récupérez-la pour choisir une nouvelle charge.",
       "commendClaimed": "La recommandation de cette semaine est allée à la {faction}.",
@@ -9202,7 +9293,7 @@ export const fr_CA: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "Un MMO de style classique auquel vous jouez gratuitement dans votre navigateur.",
     "skipToContent": "Aller au contenu principal",
@@ -9312,7 +9403,7 @@ export const fr_CA: EnTranslations = {
     },
     "home": {
       "eyebrow": "MMO de style classique sur navigateur",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "Explorez le monde, accomplissez des quêtes et affrontez des donjons entre amis.",
       "ctaPlay": "Jouer maintenant",
       "ctaLearn": "Comment jouer",
@@ -10293,7 +10384,7 @@ export const fr_CA: EnTranslations = {
     },
     "worldPage": {
       "heading": "Le monde",
-      "intro": "World of ClaudeCraft est une terre continue que vous traversez à pied. La vieille route va du sud au nord à travers la vallée de départ, le marais et les pics, et elle continue de grimper au-delà, jusqu'au vallon suivant et au pays de neige en haut de la carte. Une colonne de royaumes plus élevés s'ouvre à l'ouest de cette route et une autre à l'est, et une île se trouve au large de la côte est du Val. Il n'y a ni voyage rapide, ni routes aériennes, ni diligences : chaque trajet se fait à pied ou en monture, l'arrivée fait donc partie de l'aventure.\n\nLa terre garde aussi le temps. Un cycle jour-nuit tourne sur une horloge réelle partagée par tous ceux de votre monde, si bien que le ciel passe de l'aube à midi puis au crépuscule et à la nuit pour vous tous en même temps, la lune va et vient au fil de ses phases, et la lumière au sol change avec elle. Le cadran autour de votre minicarte est là où vous lisez l'heure.",
+      "intro": "Fantasy Arena MMO est une terre continue que vous traversez à pied. La vieille route va du sud au nord à travers la vallée de départ, le marais et les pics, et elle continue de grimper au-delà, jusqu'au vallon suivant et au pays de neige en haut de la carte. Une colonne de royaumes plus élevés s'ouvre à l'ouest de cette route et une autre à l'est, et une île se trouve au large de la côte est du Val. Il n'y a ni voyage rapide, ni routes aériennes, ni diligences : chaque trajet se fait à pied ou en monture, l'arrivée fait donc partie de l'aventure.\n\nLa terre garde aussi le temps. Un cycle jour-nuit tourne sur une horloge réelle partagée par tous ceux de votre monde, si bien que le ciel passe de l'aube à midi puis au crépuscule et à la nuit pour vous tous en même temps, la lune va et vient au fil de ses phases, et la lumière au sol change avec elle. Le cadran autour de votre minicarte est là où vous lisez l'heure.",
       "hub": "Camp de base",
       "mapHeading": "La route et les royaumes au-delà",
       "mapSub": "La piste des quêtes va du sud au nord par le milieu de la carte : la vallée, le marais, les pics, et au-delà jusqu'au vallon et à la neige. Les autres royaumes s'ouvrent le long de cette route plutôt qu'après elle, par des portes à l'est et à l'ouest de la route du marais, l'île de Farshore se rejoignant depuis la côte est du Val. Ce qui vous tient à l'écart des royaumes lointains, ce sont leurs plages de niveau, pas la marche : cinq d'entre eux partagent la plage la plus haute, donc une fois prêt vous pouvez les prendre dans l'ordre qui vous plaît. Farshore fait exception : un pays de bas niveau que vous pouvez visiter tôt.",
@@ -11594,7 +11685,7 @@ export const fr_CA: EnTranslations = {
       "importedTexture": "Texture importée {number}"
     },
     "appTitle": "Éditeur de cartes",
-    "docTitle": "Éditeur de cartes - World of ClaudeCraft",
+    "docTitle": "Éditeur de cartes - Fantasy Arena MMO",
     "untitledMap": "Carte sans titre",
     "liveWorld": {
       "name": "Retouches du monde en direct",
@@ -13756,7 +13847,7 @@ export const fr_CA: EnTranslations = {
     "serverOnline": "En ligne",
     "serverOffline": "Hors ligne",
     "play": "Jouer",
-    "playAria": "Jouer à World of ClaudeCraft",
+    "playAria": "Jouer à Fantasy Arena MMO",
     "playLoading": "Chargement",
     "playStarting": "Démarrage",
     "serverLabel": "Choisissez votre monde",
@@ -13860,6 +13951,41 @@ export const fr_CA: EnTranslations = {
         "default": "Classique",
         "almond": "Amande",
         "hooded": "Paupières tombantes"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const fr_CA: EnTranslations = {
     "extensionHelp": "Pour voir un portefeuille ici, gardez active une extension de portefeuille de navigateur telle que Solflare Wallet.",
     "mobileAppHelp": "Choisissez Phantom ou Solflare. Votre application de portefeuille demandera une approbation. Gardez ce jeu ouvert et revenez-y une fois terminé.",
     "seekerAppHelp": "Continuez avec Seed Vault Wallet. Examinez les demandes de connexion et de vérification dans Seed Vault, puis revenez au jeu.",
-    "standaloneAppHelp": "Les connexions de portefeuille ne sont pas encore disponibles dans l'application de l'écran d'accueil. Ouvrez World of ClaudeCraft dans Safari ou Chrome pour utiliser Phantom ou Solflare.",
+    "standaloneAppHelp": "Les connexions de portefeuille ne sont pas encore disponibles dans l'application de l'écran d'accueil. Ouvrez Fantasy Arena MMO dans Safari ou Chrome pour utiliser Phantom ou Solflare.",
     "openAppTitle": "Continuer dans {wallet}",
     "openAppHelp": "Ouvrez {wallet} pour examiner cette demande. Gardez cet onglet de jeu ouvert pendant que l'application de portefeuille est active.",
     "openAppButton": "Ouvrir {wallet}",
     "manualReturnBrowserHelp": "Après approbation, revenez à cet onglet de jeu. Si iOS ouvre un autre navigateur, fermez-le et revenez manuellement au navigateur d'origine.",
-    "manualReturnStandaloneHelp": "Après approbation, revenez à World of ClaudeCraft depuis votre écran d'accueil. Si iOS ouvre un navigateur, fermez-le et rouvrez manuellement l'application de l'écran d'accueil.",
+    "manualReturnStandaloneHelp": "Après approbation, revenez à Fantasy Arena MMO depuis votre écran d'accueil. Si iOS ouvre un navigateur, fermez-le et rouvrez manuellement l'application de l'écran d'accueil.",
     "preparingAppButton": "Préparation de {wallet}...",
     "walletAppUnavailable": "{wallet} n'a pas pu être préparé. Fermez cette fenêtre et réessayez.",
     "flowConnect": "Choisissez un portefeuille. La vérification continue automatiquement.",
@@ -14266,12 +14392,12 @@ export const fr_CA: EnTranslations = {
       "paymentBody": "Choisissez le portefeuille lié à votre compte et approuvez la transaction dans ce navigateur.",
       "stepUpBody": "Choisissez le portefeuille lié à votre compte et signez le message d’autorisation de la Bourse $WOC. La signature est gratuite et ne déplace aucun fonds.",
       "extensionHelp": "Aucune extension de portefeuille compatible n'a été trouvée. Installez ou déverrouillez Phantom, Solflare ou un autre portefeuille Solana pour navigateur, puis réessayez.",
-      "safety": "World of ClaudeCraft ne vous demande jamais votre phrase de récupération ni votre clé privée.",
+      "safety": "Fantasy Arena MMO ne vous demande jamais votre phrase de récupération ni votre clé privée.",
       "continueWith": "Continuer avec {wallet}",
       "reviewTitle": "Vérifier dans votre portefeuille",
       "reviewBody": "Suivez l'invite de {wallet}. Gardez cette page de navigateur ouverte.",
       "completeTitle": "Autorisation du portefeuille effectuée",
-      "completeBody": "Vous pouvez retourner dans l'application de bureau World of ClaudeCraft.",
+      "completeBody": "Vous pouvez retourner dans l'application de bureau Fantasy Arena MMO.",
       "returnButton": "Retourner dans l'application de bureau",
       "failed": "L'autorisation du portefeuille a échoué ou a expiré. Retournez dans l'application de bureau et réessayez.",
       "retry": "Réessayer"
@@ -14370,14 +14496,14 @@ export const fr_CA: EnTranslations = {
     "topPercent": "TOP {percent} %",
     "realmSubtitle": "Monde {realm}",
     "defaultRealm": "Monde de ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "{count} recrutés",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Forgez votre légende: {siteUrl}",
     "arenaStat": "Arène",
     "shareTierBit": ", détenteur $WOC de rang {tier}",
-    "shareText": "Je forge ma légende dans World of ClaudeCraft : niveau {level} {className}{tierBit}. Rejoignez mon monde :",
+    "shareText": "Je forge ma légende dans Fantasy Arena MMO : niveau {level} {className}{tierBit}. Rejoignez mon monde :",
     "nativeShareTitle": "Monde de ClaudeCraft",
     "fileNameFallback": "joueur",
     "actionShareX": "Partager sur X",
@@ -14395,6 +14521,7 @@ export const fr_CA: EnTranslations = {
     "statusShareUnsupported": "Le partage n'est pas pris en charge sur cet appareil."
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "Guerrier",
     "paladin": "Paladin",
     "hunter": "Chasseur",
@@ -14402,6 +14529,7 @@ export const fr_CA: EnTranslations = {
     "priest": "Prêtre",
     "shaman": "Chaman",
     "mage": "Mage",
+    "dreamdancer": "Danse des rêves",
     "warlock": "Démoniste",
     "druid": "Druide",
     "warriorAria": "Classe Guerrier",
@@ -14411,6 +14539,7 @@ export const fr_CA: EnTranslations = {
     "priestAria": "Classe Prêtre",
     "shamanAria": "Classe Chaman",
     "mageAria": "Classe Mage",
+    "dreamdancerAria": "Danse des rêves",
     "warlockAria": "Classe Démoniste",
     "druidAria": "Classe Druide"
   },
@@ -15248,13 +15377,13 @@ export const fr_CA: EnTranslations = {
     "parseService": "Service de parses WoC"
   },
   "seo": {
-    "title": "World of ClaudeCraft: MMO Web de style classique",
-    "description": "Jouez à World of ClaudeCraft, un MMO gratuit sur navigateur. Explorez, accomplissez des quêtes et parcourez des donjons entre amis. Aucun téléchargement nécessaire.",
+    "title": "Fantasy Arena MMO: MMO Web de style classique",
+    "description": "Jouez à Fantasy Arena MMO, un MMO gratuit sur navigateur. Explorez, accomplissez des quêtes et parcourez des donjons entre amis. Aucun téléchargement nécessaire.",
     "genre": "MMORPG",
     "playMode": "Multijoueur",
     "applicationCategory": "Jeu",
     "operatingSystem": "Navigateur Web",
-    "officialLabel": "Site officiel de World of ClaudeCraft",
+    "officialLabel": "Site officiel de Fantasy Arena MMO",
     "officialBody": "Le site officiel de World of ClaudeCraft. Jouez en ligne, lisez le wiki et retrouvez ici les liens de la communauté."
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const fr_CA: EnTranslations = {
     "notify": {
       "updateReadyTitle": "La mise à jour {version} est prête",
       "updateReadyTitleNoVersion": "La mise à jour est prête",
-      "updateReadyBody": "Redémarrez World of ClaudeCraft pour appliquer la mise à jour.",
+      "updateReadyBody": "Redémarrez Fantasy Arena MMO pour appliquer la mise à jour.",
       "partyInviteTitle": "Invitation de groupe",
       "partyInviteBody": "{name} vous invite à rejoindre son groupe."
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "L'affichage du jeu a cessé de fonctionner. Le recharger ?",
       "reload": "Recharger",
       "quit": "Quitter",
-      "fatalBody": "World of ClaudeCraft a rencontré une erreur inattendue et doit se fermer."
+      "fatalBody": "Fantasy Arena MMO a rencontré une erreur inattendue et doit se fermer."
     },
     "hostDiag": {
       "saveTitle": "Enregistrer le rapport système",
@@ -15500,6 +15629,7 @@ export const fr_CA: EnTranslations = {
       "priest": "Soigneur / DPS à distance",
       "shaman": "Soigneur / DPS mêlée ou distance",
       "mage": "DPS à distance",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "DPS à distance",
       "druid": "Tank / Soigneur / DPS mêlée ou distance"
     },
@@ -15524,6 +15654,7 @@ export const fr_CA: EnTranslations = {
       "priest": "Les prêtres invoquent la Lumière guérisseuse pour soigner et protéger leurs alliés, tandis que la magie de l'Ombre leur permet de drainer la vie de leurs ennemis.",
       "shaman": "Les chamans commandent les éléments, imprègnent leurs armes, frappent avec la foudre et restaurent leurs alliés.",
       "mage": "Les mages manient le Feu, le Givre et la force des Arcanes pour détruire leurs ennemis, conjurer de l'eau et figer les menaces sur place.",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "Les démonistes invoquent des démons, jettent des malédictions et des dégâts prolongés, puis drainent la vie de leurs ennemis pour tenir bon.",
       "druid": "Les druides canalisent la nature, guérissent, entravent les ennemis et prennent des formes animales pour défendre ou attaquer."
     },
@@ -15540,11 +15671,11 @@ export const fr_CA: EnTranslations = {
     "iosStandaloneDetail": "Vous êtes en mode plein écran depuis l'écran d'accueil. Gardez l'appareil en paysage.",
     "iosInstallDetail": "Pour le vrai plein écran sur iPhone ou iPad, ajoutez d'abord cette page à l'écran d'accueil.",
     "iosShareStep": "Dans Safari, touchez Partager, puis Ajouter à l'écran d'accueil.",
-    "iosOpenStep": "Ouvrez World of ClaudeCraft depuis la nouvelle icône de l'écran d'accueil.",
+    "iosOpenStep": "Ouvrez Fantasy Arena MMO depuis la nouvelle icône de l'écran d'accueil.",
     "androidStandaloneDetail": "Vous êtes en mode application plein écran. Gardez l'appareil en paysage.",
     "androidInstallDetail": "Pour le plein écran sur Android, installez cette page ou ajoutez-la à l'écran d'accueil.",
     "androidInstallStep": "Dans Chrome, touchez le menu, puis Installer l'application ou Ajouter à l'écran d'accueil.",
-    "androidOpenStep": "Ouvrez World of ClaudeCraft depuis la nouvelle icône.",
+    "androidOpenStep": "Ouvrez Fantasy Arena MMO depuis la nouvelle icône.",
     "otherStandaloneDetail": "Gardez votre appareil en plein écran paysage.",
     "otherInstallDetail": "Installez ou ajoutez cette page à votre écran d'accueil pour la meilleure expérience mobile plein écran."
   },
@@ -15560,8 +15691,8 @@ export const fr_CA: EnTranslations = {
     "confirm": "Continuer"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Monde indisponible",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - Monde indisponible",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "Maintenance du monde",
     "heading": "Le monde est temporairement indisponible.",
     "body": "Nous redémarrons le service de jeu et Claudemoon devrait revenir sous peu. Cette page continuera de vérifier automatiquement.",
@@ -15762,6 +15893,7 @@ export const fr_CA: EnTranslations = {
       "audio": "Audio",
       "interface": "Interface",
       "language": "Langue",
+      "characterSelect": "Sélection du personnage",
       "logout": "Déconnexion",
       "returnToGame": "Retour au jeu",
       "resetToDefaults": "Réinitialiser",
@@ -17376,6 +17508,8 @@ export const fr_CA: EnTranslations = {
       "collectNote": "Recettes et biens retournés que le Marchand garde pour vous.",
       "saleProceeds": "Recettes de vente",
       "collectAll": "Tout récupérer",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "Historique",
       "historyEmpty": "Aucune vente pour l'instant. Les objets que vous vendez sur le Marché mondial apparaissent ici.",
       "historyNote": "Vos ventes récentes sur le Marché mondial.",
@@ -19265,6 +19399,66 @@ export const fr_CA: EnTranslations = {
       "revive_pet": {
         "name": "Rafistoler",
         "description": "Rend 10 % des points de vie maximum de votre compagnon vivant chaque seconde pendant 8 s. S'il est mort, le ranime avec 50 % de ses points de vie."
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const fr_CA: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "Canne du ruisseau d'argent"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "Idole saumâtre"
@@ -31089,8 +31307,8 @@ export const fr_CA: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "Tenue Couronne-de-scories",
-        "bonus2": "Le temps de recharge de Peau de braise est réduit de 30 s. Les dégâts subis ne retardent plus vos incantations.",
-        "bonus4": "Un Conflagration sur deux rend votre prochain Trait de ruine instantané dans les 8 s qui suivent."
+        "bonus2": "Contre les joueurs ennemis, Trait de ruine inflige 50 % de dégâts en plus mais met 0,7 s de plus à s'incanter. Les dégâts subis ne retardent plus vos incantations.",
+        "bonus4": "Un Conflagration sur deux rend votre prochain Trait de ruine instantané dans les 8 s qui suivent. Ce Trait de ruine gratuit ne consomme pas Désolation."
       },
       "vanguard_warrior_arms": {
         "name": "Équipement de guerre Sillage-de-lame",

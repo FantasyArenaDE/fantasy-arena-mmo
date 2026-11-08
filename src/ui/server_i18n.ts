@@ -2333,7 +2333,10 @@ export function tServer(
 ): string {
   const table = DICT[lang] ?? DICT.en;
   const tmpl = table[key] ?? DICT.en[key] ?? key;
-  return interpolate(tmpl, params);
+  const releaseTemplate = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' && key === 'world.entered'
+    ? tmpl.replace('World of ClaudeCraft', 'Fantasy Arena MMO')
+    : tmpl;
+  return interpolate(releaseTemplate, params);
 }
 
 /** Parse the server's English compact money ("5g 20s 3c", any subset of the

@@ -37,6 +37,9 @@ export function targetPortraitSourceId(templateId: string, isMobEntity: boolean)
 }
 
 export function targetPortraitUrl(templateId: string, isMobEntity: boolean): string | null {
+  if (import.meta.env?.VITE_FA_BROWSER_RELEASE === '1' && isMobEntity && templateId === 'training_effigy') {
+    return '/ui/fantasy-arena/portraits/training-effigy.svg';
+  }
   if (isMobEntity && templateId.startsWith('buddy_')) {
     const key = templateId.slice('buddy_'.length);
     if (Object.hasOwn(BUDDY_PORTRAIT_URLS, key)) return BUDDY_PORTRAIT_URLS[key as BuddyKey];

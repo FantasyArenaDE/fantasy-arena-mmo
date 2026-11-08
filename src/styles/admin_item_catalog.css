@@ -1,0 +1,46 @@
+@layer components {
+  #admin-self-window .admin-item-catalog {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+    min-width: 0;
+  }
+
+  #admin-self-window .admin-item-catalog label {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #admin-self-window .admin-item-catalog input,
+  #admin-self-window .admin-item-catalog select {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    color: #fff0d9;
+    background: #28151a;
+    border: 1px solid #a77b42;
+    border-radius: 5px;
+    padding: 7px;
+  }
+
+  #admin-self-window .admin-item-catalog select {
+    width: 100%;
+  }
+
+  #admin-self-window .admin-item-catalog p {
+    margin: 0;
+    color: #decbb8;
+  }
+
+  #admin-self-window .admin-item-grant {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #admin-self-window .admin-item-grant input {
+    width: 96px;
+  }
+}

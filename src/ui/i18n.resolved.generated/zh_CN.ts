@@ -11,6 +11,17 @@
 import type { EnTranslations } from '../i18n.catalog';
 
 export const zh_CN: EnTranslations = {
+  "fantasyArena": {
+    "imprint": "法律声明",
+    "worldPicker": "选择世界",
+    "characterPreview": "试用角色创建器",
+    "desktopDownload": "下载桌面客户端",
+    "credits": "制作人员与许可证",
+    "sourceProject": "GitHub 上的原始项目",
+    "supportProject": "支持项目",
+    "musicCredits": "音乐鸣谢",
+    "separateAccount": "此测试版本需要独立的 MMO 账号。"
+  },
   "referralCards": {
     "title": "推荐好友",
     "subtitle": "携手冒险，收集印章。",
@@ -467,6 +478,77 @@ export const zh_CN: EnTranslations = {
     }
   },
   "hudChrome": {
+    "adminCharacter": {
+      "savePending": "The item is already in your bags. Saving is still pending. Do not grant it again.",
+      "itemSearch": "Find an item",
+      "itemSearchHelp": "Search item names or item IDs. Grants go into your own bags.",
+      "itemResults": "Matching items",
+      "itemQuantity": "Quantity",
+      "itemMatches": "Showing {shown} of {count} matching items.",
+      "itemNoResults": "No matching items. Try another name or item ID.",
+      "giveItem": "Add to my bags",
+      "itemGranted": "{count} × {item} added to own bags",
+      "invalidItem": "This item is no longer available. Refresh the search.",
+      "bagFull": "Your bags do not have enough room for that quantity.",
+      "adventurers": "AI adventurers",
+      "adventurersOn": "On",
+      "adventurersOff": "Off",
+      "adventurersCount": "Active bots: {count}",
+      "adventurersUnknown": "Status unavailable.",
+      "adventurersRefresh": "Refresh status",
+      "openMap": "Open map",
+      "openBags": "Open my bags",
+      "mapTeleport": "Map teleport",
+      "position": "Position: X {x} · Y {y} · Z {z}",
+      "bagSlots": "My bags: {used} of {capacity} slots used",
+      "logHelp": "Your last 20 successful admin actions in this play session.",
+      "reloadLog": "Refresh log",
+      "logNotLoaded": "Refresh to load your recent actions.",
+      "logEmpty": "No successful admin actions in this session yet.",
+      "mapWorldSummary": "World map. Admin teleport: Ctrl + left-click a destination.",
+      "mapZoneSummary": "{zone}. Admin teleport: Ctrl + left-click a destination.",
+      "mapArrived": "Teleported to the map destination.",
+      "mapBlocked": "Cannot teleport there right now. Choose a safe spot and try again.",
+      "title": "Admin panel",
+      "local": "LOCAL",
+      "close": "Close admin panel",
+      "sections": "Admin sections",
+      "self": "My character",
+      "players": "Player list",
+      "world": "World",
+      "inventory": "Inventory",
+      "log": "Log",
+      "level": "Level",
+      "lower": "Decrease level",
+      "raise": "Increase level",
+      "gold": "Gold",
+      "grant": "Grant",
+      "flight": "Free flight",
+      "takeoff": "Take off",
+      "land": "Land here",
+      "flightSpeed": "Flight speed",
+      "flightHelp": "Space rises and Ctrl descends. Landing places you on the ground at your reached location.",
+      "runSpeed": "Run speed",
+      "heal": "Heal",
+      "resource": "Restore resource",
+      "cooldowns": "Reset cooldowns",
+      "god": "God Mode",
+      "oneHit": "OneHit",
+      "placeholder": "Reserved for a later update.",
+      "reload": "Refresh players",
+      "rosterHelp": "Up to 200 active players in this realm. Select a name to open teleport actions.",
+      "noPlayers": "No other visible players online.",
+      "visit": "Go to player",
+      "summon": "Bring player here",
+      "confirmSummon": "Bring the selected player to your location?",
+      "waiting": "Waiting for the realm…",
+      "ok": "Confirmed by the realm.",
+      "blocked": "Unavailable for the current character or location.",
+      "forbidden": "Admin access required.",
+      "busy": "Please wait a moment and try again.",
+      "saveFailed": "The realm could not confirm completion. Check your character before trying again.",
+      "noReply": "The realm did not confirm the action. Check your character before trying again."
+    },
     "courier": {
       "title": "信使",
       "close": "关闭信使",
@@ -1767,6 +1849,7 @@ export const zh_CN: EnTranslations = {
       "presets": {
         "classic": "经典金色",
         "fancyGold": "华丽金色",
+        "fantasyArena": "Fantasy Arena",
         "midnight": "午夜",
         "parchment": "羊皮纸",
         "highContrast": "高对比度"
@@ -2072,8 +2155,8 @@ export const zh_CN: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "有可用更新",
-      "body": "World of ClaudeCraft 有新版本可用。立即更新以获取最新修复和改进。",
-      "bodyWithVersion": "World of ClaudeCraft {version} 版本已可用。立即更新以获取最新修复和改进。",
+      "body": "Fantasy Arena MMO 有新版本可用。立即更新以获取最新修复和改进。",
+      "bodyWithVersion": "Fantasy Arena MMO {version} 版本已可用。立即更新以获取最新修复和改进。",
       "notNow": "暂不",
       "update": "更新"
     },
@@ -2205,6 +2288,8 @@ export const zh_CN: EnTranslations = {
         "remove": "移除",
         "promote": "晋升",
         "bank": "公会银行",
+        "bankItems": "Bank items",
+        "bankGold": "Treasury",
         "officerChat": "官员聊天",
         "motd": "公告栏",
         "events": "日历"
@@ -2214,6 +2299,8 @@ export const zh_CN: EnTranslations = {
         "remove": "移除低于自己阶级的成员。",
         "promote": "晋升和降级低于自己阶级的成员，最高只能升到比自己低一级。",
         "bank": "在公会银行存入和取出铜币与物品。所有成员都可以查看。",
+        "bankItems": "Deposit and withdraw items.",
+        "bankGold": "Move guild gold and buy bank slots.",
         "officerChat": "阅读并使用官员聊天。",
         "motd": "编辑公会公告栏。",
         "events": "添加和移除公会日历事件。"
@@ -3079,7 +3166,7 @@ export const zh_CN: EnTranslations = {
         "offline": "离线"
       },
       "diagnostics": {
-        "panelAria": "World of ClaudeCraft 性能诊断",
+        "panelAria": "Fantasy Arena MMO 性能诊断",
         "title": "ClaudeCraft 性能医生",
         "subtitle": "针对游戏的扫描，提供证据和代码级修复建议。",
         "aria": {
@@ -3228,7 +3315,7 @@ export const zh_CN: EnTranslations = {
           }
         },
         "report": {
-          "title": "World of ClaudeCraft 性能诊断",
+          "title": "Fantasy Arena MMO 性能诊断",
           "statusLine": "状态：{status}（{score}/100）",
           "capturedLine": "采集时间：{captured}",
           "topFindingLine": "首要问题：{finding}",
@@ -5422,7 +5509,7 @@ export const zh_CN: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Fantasy Arena MMO",
       "open": "Discord",
       "close": "关闭",
       "keybind": "Discord 面板",
@@ -5836,6 +5923,8 @@ export const zh_CN: EnTranslations = {
       "guildTab": "公会",
       "guildCapacityAria": "公会银行格已用：{used}/{total}",
       "guildEmpty": "公会银行是空的。",
+      "guildSortSlot": "Bank slot",
+      "guildSortType": "Item type",
       "guildTreasury": "公会金库",
       "guildDepositGold": "存入金钱",
       "guildWithdrawGold": "取出金钱",
@@ -6446,6 +6535,7 @@ export const zh_CN: EnTranslations = {
       "toolEffectRechargeFull": "{effect}已充满能量。",
       "toolEffectRechargeToolCapped": "携带更好的{profession}工具才能继续为{effect}充能。",
       "toolEffectRechargeMaterials": "为{effect}充能需要{material}x{count}。",
+      "toolEffectRechargeLocked": "为{effect}充能需要{material}x{count}，但你的材料已锁定。请在背包中解锁。",
       "craftingProgress": "正在制作：还剩{remaining}秒，共{total}秒。",
       "disenchantingProgress": "正在分解：还剩{remaining}秒，共{total}秒。",
       "enchantingProgress": "正在附魔：还剩{remaining}秒，共{total}秒。",
@@ -7978,6 +8068,7 @@ export const zh_CN: EnTranslations = {
         }
       },
       "commendHeading": "使者的嘉奖",
+      "commendChooseLater": "Choose after completion",
       "commendNote": "{amount}点声望，赠予你选择的一个阵营，每周一次。",
       "commendCarriedNote": "上周的{amount}点声望尚未领取。领取后即可选择新的委托。",
       "commendClaimed": "本周的嘉奖已授予{faction}。",
@@ -9202,7 +9293,7 @@ export const zh_CN: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Fantasy Arena MMO",
     "brandShort": "ClaudeCraft",
     "tagline": "一款可在浏览器中免费畅玩的经典风格 MMO。",
     "skipToContent": "跳至正文",
@@ -9312,7 +9403,7 @@ export const zh_CN: EnTranslations = {
     },
     "home": {
       "eyebrow": "经典风格浏览器 MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "subtitle": "探索世界、接受任务，与好友一起挑战地下城。",
       "ctaPlay": "立即游玩",
       "ctaLearn": "游戏入门",
@@ -10293,7 +10384,7 @@ export const zh_CN: EnTranslations = {
     },
     "worldPage": {
       "heading": "世界",
-      "intro": "World of ClaudeCraft 是一片你要靠双脚走遍的连续大陆。古道自南向北穿过起始山谷、沼泽和山峰，并越过它们继续攀升，通向其后的洼地以及地图顶端的雪境。自那条路向西展开一列更高等级的国度，向东另有一列，谷地东岸外还有一座岛屿。这里没有快速旅行，没有飞行路线，也没有马车：每一段路程都靠步行或骑乘完成，所以抵达本身就是冒险的一部分。\n\n这片大地也记录着时间。昼夜循环依照一只你所在世界人人共享的真实时钟运转，因此天空会为你们所有人同时从黎明经正午走向黄昏与夜色，月亮循着盈亏来去，地面上的光影也随之变化。小地图周围的表盘，就是你读取时辰的地方。",
+      "intro": "Fantasy Arena MMO 是一片你要靠双脚走遍的连续大陆。古道自南向北穿过起始山谷、沼泽和山峰，并越过它们继续攀升，通向其后的洼地以及地图顶端的雪境。自那条路向西展开一列更高等级的国度，向东另有一列，谷地东岸外还有一座岛屿。这里没有快速旅行，没有飞行路线，也没有马车：每一段路程都靠步行或骑乘完成，所以抵达本身就是冒险的一部分。\n\n这片大地也记录着时间。昼夜循环依照一只你所在世界人人共享的真实时钟运转，因此天空会为你们所有人同时从黎明经正午走向黄昏与夜色，月亮循着盈亏来去，地面上的光影也随之变化。小地图周围的表盘，就是你读取时辰的地方。",
       "hub": "大本营",
       "mapHeading": "这条路与路那头的国度",
       "mapSub": "任务路线自南向北纵贯地图中部：山谷、沼泽、山峰，再越过它们通向洼地与雪境。其余国度是沿着这条路展开，而非在它之后，经由沼泽路东西两侧的传送门抵达，远岸岛则从谷地东岸前往。把你挡在远方国度之外的是它们的等级区间，而不是路途：其中五处共享最高的区间，因此一旦你准备就绪，便可按任意顺序逐一挑战。远岸岛是例外，那是一片你可以早早造访的低等级土地。",
@@ -11594,7 +11685,7 @@ export const zh_CN: EnTranslations = {
       "importedTexture": "导入的纹理 {number}"
     },
     "appTitle": "地图编辑器",
-    "docTitle": "地图编辑器 - World of ClaudeCraft",
+    "docTitle": "地图编辑器 - Fantasy Arena MMO",
     "untitledMap": "未命名地图",
     "liveWorld": {
       "name": "游戏世界微调",
@@ -13756,7 +13847,7 @@ export const zh_CN: EnTranslations = {
     "serverOnline": "在线",
     "serverOffline": "离线",
     "play": "开始游戏",
-    "playAria": "开始游玩 World of ClaudeCraft",
+    "playAria": "开始游玩 Fantasy Arena MMO",
     "playLoading": "加载中",
     "playStarting": "正在启动",
     "serverLabel": "选择你的世界",
@@ -13860,6 +13951,41 @@ export const zh_CN: EnTranslations = {
         "default": "经典",
         "almond": "杏眼",
         "hooded": "内双眼"
+      }
+    },
+    "faLooks": {
+      "browColor": "Brow Color",
+      "beard": "Beard",
+      "makeup": "Makeup",
+      "tattoos": "Tattoos",
+      "facePreset": "Face Preset",
+      "doubleBuns": "Double Buns",
+      "faceTattoo": "Face Tattoo",
+      "bodyTattoo": "Neck Tattoo",
+      "earJewelry": "Earrings",
+      "noseJewelry": "Nose Ring",
+      "faceMarks": "Details",
+      "scar": "Scars",
+      "freckles": "Freckles",
+      "scarStyle": {
+        "brow": "Brow Scar",
+        "cheek": "Cheek Scar"
+      },
+      "freckleStyle": {
+        "light": "Light",
+        "dense": "Dense"
+      },
+      "preset": {
+        "soft": "Soft",
+        "classic": "Classic",
+        "defined": "Defined"
+      },
+      "tattoo": {
+        "none": "None",
+        "streaks": "Streaks",
+        "crest": "Crest",
+        "bands": "Bands",
+        "sigil": "Sigil"
       }
     },
     "wocBuilder": {
@@ -14245,12 +14371,12 @@ export const zh_CN: EnTranslations = {
     "extensionHelp": "若要在此处看到钱包，请保持 Solflare Wallet 等浏览器钱包扩展处于启用状态。",
     "mobileAppHelp": "选择 Phantom 或 Solflare。钱包应用会请求批准。请保持游戏打开，完成后返回游戏。",
     "seekerAppHelp": "使用 Seed Vault Wallet 继续。在 Seed Vault 中查看连接和验证请求，然后返回游戏。",
-    "standaloneAppHelp": "主屏幕应用暂不支持连接钱包。若要使用 Phantom 或 Solflare，请在 Safari 或 Chrome 中打开 World of ClaudeCraft。",
+    "standaloneAppHelp": "主屏幕应用暂不支持连接钱包。若要使用 Phantom 或 Solflare，请在 Safari 或 Chrome 中打开 Fantasy Arena MMO。",
     "openAppTitle": "在 {wallet} 中继续",
     "openAppHelp": "打开 {wallet} 查看此请求。钱包应用处于活动状态时，请保持此游戏标签页打开。",
     "openAppButton": "打开 {wallet}",
     "manualReturnBrowserHelp": "批准后请返回此游戏标签页。如果 iOS 打开了其他浏览器，请将其关闭并手动返回原浏览器。",
-    "manualReturnStandaloneHelp": "批准后请从主屏幕返回 World of ClaudeCraft。如果 iOS 打开了浏览器，请将其关闭并重新打开主屏幕应用。",
+    "manualReturnStandaloneHelp": "批准后请从主屏幕返回 Fantasy Arena MMO。如果 iOS 打开了浏览器，请将其关闭并重新打开主屏幕应用。",
     "preparingAppButton": "正在准备 {wallet}...",
     "walletAppUnavailable": "无法准备 {wallet}。请关闭此窗口并重试。",
     "flowConnect": "选择一个钱包。验证会自动继续。",
@@ -14266,12 +14392,12 @@ export const zh_CN: EnTranslations = {
       "paymentBody": "选择已关联到账号的钱包，并在此浏览器中批准交易。",
       "stepUpBody": "选择已关联到账号的钱包，并签署 $WOC 交易所的授权消息。签名免费，不会转移任何资金。",
       "extensionHelp": "未找到兼容的钱包扩展。请安装或解锁 Phantom、Solflare 或其他 Solana 浏览器钱包，然后重试。",
-      "safety": "World of ClaudeCraft 绝不会索要助记词或私钥。",
+      "safety": "Fantasy Arena MMO 绝不会索要助记词或私钥。",
       "continueWith": "使用 {wallet} 继续",
       "reviewTitle": "在钱包中查看",
       "reviewBody": "按照 {wallet} 中的提示操作。请保持此浏览器页面打开。",
       "completeTitle": "钱包授权完成",
-      "completeBody": "现在可以返回 World of ClaudeCraft 桌面应用。",
+      "completeBody": "现在可以返回 Fantasy Arena MMO 桌面应用。",
       "returnButton": "返回桌面应用",
       "failed": "钱包授权失败或已过期。请返回桌面应用并重试。",
       "retry": "重试"
@@ -14370,14 +14496,14 @@ export const zh_CN: EnTranslations = {
     "topPercent": "前 {percent}%",
     "realmSubtitle": "{realm} 世界",
     "defaultRealm": "ClaudeCraft 世界",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "brandWordmark": "FANTASY ARENA MMO",
     "recruited": "已招募 {count} 人",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "铸就你的传说：{siteUrl}",
     "arenaStat": "竞技场",
     "shareTierBit": "，{tier}级 $WOC 持有者",
-    "shareText": "我正在 World of ClaudeCraft 中铸就传说：{level}级 {className}{tierBit}。加入我的世界：",
+    "shareText": "我正在 Fantasy Arena MMO 中铸就传说：{level}级 {className}{tierBit}。加入我的世界：",
     "nativeShareTitle": "ClaudeCraft 世界",
     "fileNameFallback": "玩家",
     "actionShareX": "分享到 X",
@@ -14395,6 +14521,7 @@ export const zh_CN: EnTranslations = {
     "statusShareUnsupported": "此设备不支持分享。"
   },
   "classes": {
+    "newBadge": "New",
     "warrior": "战士",
     "paladin": "圣骑士",
     "hunter": "猎人",
@@ -14402,6 +14529,7 @@ export const zh_CN: EnTranslations = {
     "priest": "牧师",
     "shaman": "萨满祭司",
     "mage": "法师",
+    "dreamdancer": "梦舞者",
     "warlock": "术士",
     "druid": "德鲁伊",
     "warriorAria": "战士职业",
@@ -14411,6 +14539,7 @@ export const zh_CN: EnTranslations = {
     "priestAria": "牧师职业",
     "shamanAria": "萨满祭司职业",
     "mageAria": "法师职业",
+    "dreamdancerAria": "梦舞者",
     "warlockAria": "术士职业",
     "druidAria": "德鲁伊职业"
   },
@@ -15248,13 +15377,13 @@ export const zh_CN: EnTranslations = {
     "parseService": "WoC 战斗日志"
   },
   "seo": {
-    "title": "World of ClaudeCraft：经典风格网页 MMO",
-    "description": "畅玩 World of ClaudeCraft，一款免费的浏览器 MMO。探索世界、完成任务，与好友一起挑战地下城。无需下载。",
+    "title": "Fantasy Arena MMO：经典风格网页 MMO",
+    "description": "畅玩 Fantasy Arena MMO，一款免费的浏览器 MMO。探索世界、完成任务，与好友一起挑战地下城。无需下载。",
     "genre": "MMORPG",
     "playMode": "多人游戏",
     "applicationCategory": "游戏",
     "operatingSystem": "网页浏览器",
-    "officialLabel": "World of ClaudeCraft 官方网站",
+    "officialLabel": "Fantasy Arena MMO 官方网站",
     "officialBody": "World of ClaudeCraft 官方网站。在线游玩、阅读 wiki，并在此找到社区链接。"
   },
   "a11y": {
@@ -15364,16 +15493,16 @@ export const zh_CN: EnTranslations = {
     "notify": {
       "updateReadyTitle": "更新 {version} 已就绪",
       "updateReadyTitleNoVersion": "更新已就绪",
-      "updateReadyBody": "重启 World of ClaudeCraft 以应用更新。",
+      "updateReadyBody": "重启 Fantasy Arena MMO 以应用更新。",
       "partyInviteTitle": "组队邀请",
       "partyInviteBody": "{name} 邀请你加入队伍。"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Fantasy Arena MMO",
       "body": "游戏画面已停止响应。要重新加载吗？",
       "reload": "重新加载",
       "quit": "退出",
-      "fatalBody": "World of ClaudeCraft 遇到意外错误，需要关闭。"
+      "fatalBody": "Fantasy Arena MMO 遇到意外错误，需要关闭。"
     },
     "hostDiag": {
       "saveTitle": "保存系统报告",
@@ -15500,6 +15629,7 @@ export const zh_CN: EnTranslations = {
       "priest": "治疗 / 远程 DPS",
       "shaman": "治疗 / 近战或远程 DPS",
       "mage": "远程 DPS",
+      "dreamdancer": "Healer / Ranged DPS",
       "warlock": "远程 DPS",
       "druid": "坦克 / 治疗 / 近战或远程 DPS"
     },
@@ -15524,6 +15654,7 @@ export const zh_CN: EnTranslations = {
       "priest": "牧师召唤愈疗之光来治疗并保护盟友，也能用暗影魔法汲取敌人的生命。",
       "shaman": "萨满掌控元素，强化武器，以闪电震击敌人，并恢复盟友。",
       "mage": "法师操纵火焰、冰霜与奥术之力来毁灭敌人，召唤清水，并冻结威胁。",
+      "dreamdancer": "A caster who weaves dream strands into nightmares and protective wards.",
       "warlock": "术士召唤恶魔，施放诅咒和持续伤害魔法，并从敌人身上吸取生命来维持自身。",
       "druid": "德鲁伊引导自然之力，治疗伤口，缠绕敌人，并变形成动物来防御或输出。"
     },
@@ -15540,11 +15671,11 @@ export const zh_CN: EnTranslations = {
     "iosStandaloneDetail": "你正在从主屏幕以全屏模式运行。请保持横屏。",
     "iosInstallDetail": "若要在 iPhone 或 iPad 上获得真正全屏，请先将此页面添加到主屏幕。",
     "iosShareStep": "在 Safari 中点击分享，然后选择添加到主屏幕。",
-    "iosOpenStep": "从新的主屏幕图标打开 World of ClaudeCraft。",
+    "iosOpenStep": "从新的主屏幕图标打开 Fantasy Arena MMO。",
     "androidStandaloneDetail": "你正在全屏应用模式中。请保持横屏。",
     "androidInstallDetail": "若要在 Android 上全屏，请先安装此页面或将其添加到主屏幕。",
     "androidInstallStep": "在 Chrome 中点击菜单，然后选择安装应用或添加到主屏幕。",
-    "androidOpenStep": "从新图标打开 World of ClaudeCraft。",
+    "androidOpenStep": "从新图标打开 Fantasy Arena MMO。",
     "otherStandaloneDetail": "请保持设备处于横屏全屏。",
     "otherInstallDetail": "安装此页面或将其添加到主屏幕，以获得最佳移动端全屏体验。"
   },
@@ -15560,8 +15691,8 @@ export const zh_CN: EnTranslations = {
     "confirm": "继续"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - 服务器不可用",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Fantasy Arena MMO - 服务器不可用",
+    "logoAlt": "Fantasy Arena MMO",
     "eyebrow": "服务器维护",
     "heading": "服务器暂时不可用。",
     "body": "我们正在重启游戏服务，Claudemoon 应会很快恢复。此页面会自动继续检查。",
@@ -15762,6 +15893,7 @@ export const zh_CN: EnTranslations = {
       "audio": "音频",
       "interface": "界面",
       "language": "语言",
+      "characterSelect": "角色选择",
       "logout": "退出登录",
       "returnToGame": "返回游戏",
       "resetToDefaults": "恢复默认",
@@ -17376,6 +17508,8 @@ export const zh_CN: EnTranslations = {
       "collectNote": "商人为你保管的收益和退回货物。",
       "saleProceeds": "销售收益",
       "collectAll": "全部领取",
+      "relistExpired": "Relist expired goods",
+      "relistQuote": "{listings} listings, {units} items. Total at previous prices: {price}. Sale fee: {cut}%.",
       "history": "历史记录",
       "historyEmpty": "暂无销售记录。你在世界市场出售的物品会显示在这里。",
       "historyNote": "你在世界市场的近期销售记录。",
@@ -19265,6 +19399,66 @@ export const zh_CN: EnTranslations = {
       "revive_pet": {
         "name": "修补",
         "description": "修补你的宠物。若其存活，在12秒内每3秒恢复一次生命值；若其死亡，则以35%生命值将其复活。"
+      },
+      "dream_thread": {
+        "name": "Dream Thread",
+        "description": "Binds one target for 15 sec. Dream Spark hits or effective Dream Comfort heals build up to three strands on the bound target. Changing targets loses all strands. In 2v2, Nightweaver and Veilweaver damage finishers keep the target bound and reduce its healing received by 40% for 6 sec."
+      },
+      "dream_spark": {
+        "name": "Dream Spark",
+        "description": "Deals {damage} Shadow damage. A damaging hit on the bound target adds one strand."
+      },
+      "dream_shroud": {
+        "name": "Dream Shroud",
+        "description": "Shields an ally. Consumes three strands to double the base shield strength."
+      },
+      "dream_nightmare": {
+        "name": "Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy."
+      },
+      "dream_deep_nightmare": {
+        "name": "Deep Nightmare",
+        "description": "Consumes three strands to deal {damage} Shadow damage to your bound enemy. In 2v2, if your Moonrend is active when you cast, Deep Nightmare also deals Shadow damage over 4.5 sec."
+      },
+      "dream_comfort": {
+        "name": "Dream Comfort",
+        "description": "Heals an ally. Effective healing on the bound ally adds one strand."
+      },
+      "dream_veil": {
+        "name": "Dream Veil",
+        "description": "Consumes three strands to create a 5-sec field at your bound enemy. Each pulse damages and slows enemies in the field. In 2v2, the bound enemy also takes an immediate hit."
+      },
+      "dream_chorus": {
+        "name": "Dream Chorus",
+        "description": "Restores {damage} health to up to five of the most injured group members within 16 yards of the chosen ally. Effective healing on your bound ally and another group member adds one strand and refunds half the Mana cost. The refund is full if at least three are healed, including the bound ally."
+      },
+      "dream_miststep": {
+        "name": "Miststep",
+        "description": "Weaves mist in a 6-yard radius for {duration} sec. Each pulse deals {damage} Shadow damage to enemies in the mist."
+      },
+      "dream_moonrend": {
+        "name": "Moonrend",
+        "description": "Deals {damage} Shadow damage over {duration} sec. In 2v2, applying it to your bound enemy adds one strand."
+      },
+      "dream_silence": {
+        "name": "Hush Thread",
+        "description": "Interrupts the target’s cast and locks that school of magic for 3 sec."
+      },
+      "dream_glide": {
+        "name": "Dream Glide",
+        "description": "Breaks roots and increases your movement speed by 35% for {duration} sec."
+      },
+      "dream_reverie": {
+        "name": "Reverie",
+        "description": "Restores 14% of your maximum mana."
+      },
+      "dream_refuge": {
+        "name": "Moon Refuge",
+        "description": "Reduces damage you take by 25% for {duration} sec. Dreamkeepers reduce damage by 40% and can activate it while casting without triggering the global cooldown."
+      },
+      "dream_unravel": {
+        "name": "Unravel",
+        "description": "Removes one harmful magical effect from an ally."
       }
     },
     "items": {
@@ -24856,6 +25050,30 @@ export const zh_CN: EnTranslations = {
       },
       "silverstream_fishing_rod": {
         "name": "银溪钓竿"
+      },
+      "dreamcatcher_focus": {
+        "name": "Dreamcatcher"
+      },
+      "dreamdancer_staff": {
+        "name": "Dreamweave Staff"
+      },
+      "dreamdancer_moonthread_staff": {
+        "name": "Moonthread Staff"
+      },
+      "dreamcatcher_silver_focus": {
+        "name": "Silver Dreamcatcher"
+      },
+      "dreamdancer_starlace_staff": {
+        "name": "Starlace Staff"
+      },
+      "dreamcatcher_nightglass_focus": {
+        "name": "Nightglass Dreamcatcher"
+      },
+      "dreamdancer_dawnveil_staff": {
+        "name": "Dawnveil Dreamstaff"
+      },
+      "dreamcatcher_dawnveil_focus": {
+        "name": "Dawnveil Dreamcatcher"
       },
       "briny_idol": {
         "name": "咸海神像"
@@ -31089,8 +31307,8 @@ export const zh_CN: EnTranslations = {
       },
       "vanguard_warlock_destruction": {
         "name": "先锋套装：渣冠法衣",
-        "bonus2": "烬皮的冷却时间缩短30秒。受到伤害不再延迟你的施法。",
-        "bonus4": "每第二次烧燃会使你8秒内的下一次毁灭箭变为瞬发。"
+        "bonus2": "对敌对玩家施放时，毁灭箭造成的伤害提高50%，但施法时间延长0.7秒。受到伤害不再延迟你的施法。",
+        "bonus4": "每第二次烧燃会使你8秒内的下一次毁灭箭变为瞬发。这次免费的毁灭箭不会消耗毁灭性。"
       },
       "vanguard_warrior_arms": {
         "name": "先锋套装：刃潮战甲",

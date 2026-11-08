@@ -11,12 +11,20 @@
 // pool of persistent looping sources for ambience and sustained spell casts.
 
 import { apiUrl } from '../client_origin';
+import { type LoadPriority, LoadQueue } from '../render/assets/load_queue_core';
 import type { PointSoundSource } from '../render/audio_sink';
 import { GFX } from '../render/gfx';
 import { ABILITIES } from '../sim/data';
 import type { BiomeId } from '../sim/types';
 import { isAbilityMomentRecorded } from './ability_sfx_coverage';
 import { resumeWhenAllowed } from './audio_unlock';
+import { releaseAchievementAudioUrl } from './fa_release_achievement_audio';
+import { releaseEncounterAudioUrl } from './fa_release_encounter_audio';
+import { releaseFoleyUrl } from './fa_release_foley';
+import { releasePlayerAudioUrl } from './fa_release_player_audio';
+import { releasePvpCueBuffer } from './fa_release_pvp_audio';
+import { releaseQuestAudioUrl } from './fa_release_quest_audio';
+import { releaseWarriorAudioUrl } from './fa_release_warrior_audio';
 import { isMeleeAudioId, meleeAudioSample } from './fury_audio_core';
 import { mountAudioKey } from './mount_audio_key';
 import {
@@ -181,6 +189,7 @@ function retainDecodedBuffer(
 }
 
 export interface PlayOpts {
+  ambient?: boolean; // Reused samples can follow the environment volume.
   gain?: number; // 0..1 multiplier (default 1)
   rate?: number; // playback-rate multiplier (default 1); Â±6% jitter added
   cooldown?: number; // min seconds between plays of this key (default 0.03)
@@ -281,6 +290,10 @@ class Sfx {
   // sfx_residency_core.ts.
   private residency: SfxResidencyLedger | null = null;
   private loading = new Map<string, Promise<AudioBuffer | null>>();
+  // A shared per-client bound avoids saturating the public connection when
+  // hundreds of startup effects are warmed at once. Demand can promote an
+  // already queued preload and one slot is reserved for it by LoadQueue.
+  private readonly releaseAudioQueue = new LoadQueue(6, (start) => start());
   private failedLoads = new Set<string>();
   private pendingOneShots = new Set<string>();
   private lastVariant = new Map<string, number>(); // last played index per key (no-repeat-biased random)
@@ -379,7 +392,7 @@ class Sfx {
         l.upZ.value = 0;
       } else if (l.setOrientation) l.setOrientation(0, 0, -1, 0, 1, 0);
       this.installProceduralBuffers();
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
         this.clipsReady = loadRuntimeSfxPack(
           apiUrl(SFX_RUNTIME_PACK_URL),
           SFX_CATALOG_HASH,
@@ -457,17 +470,40 @@ class Sfx {
     this.lastVariant.set(key, variantIndex);
   }
 
-  private loadBuffer(key: string, variantIndex = 0): Promise<AudioBuffer | null> {
+  private loadBuffer(
+    key: string,
+    variantIndex = 0,
+    priority: LoadPriority = 'demand',
+  ): Promise<AudioBuffer | null> {
     const ctx = this.ctx;
     const cacheKey = assetCacheKey(key, variantIndex);
     const cached = this.buffers.get(cacheKey);
     if (cached) return Promise.resolve(cached);
     if (this.failedLoads.has(cacheKey)) return Promise.resolve(null);
     const inFlight = this.loading.get(cacheKey);
-    if (inFlight) return inFlight;
+    if (inFlight) {
+      if (priority === 'demand' && import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+        this.releaseAudioQueue.promote(cacheKey);
+      }
+      return inFlight;
+    }
     if (!ctx) return Promise.resolve(null);
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+      const cue = releasePvpCueBuffer(ctx, key);
+      if (cue) {
+        this.buffers.set(cacheKey, cue);
+        this.trackResidency(key, cacheKey, cue);
+        return Promise.resolve(cue);
+      }
+    }
     const request = (async () => {
+      let slot: boolean | null = null;
       try {
+        if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+          slot = await new Promise<boolean>((resolve) =>
+            this.releaseAudioQueue.push(resolve, priority, cacheKey),
+          );
+        }
         if (this.clipsReady) await this.clipsReady;
         const entry = this.entry(key);
         const variant = entry?.variants[variantIndex];
@@ -475,7 +511,17 @@ class Sfx {
           this.failedLoads.add(cacheKey);
           return null;
         }
-        const res = await fetch(variant.url);
+        const url =
+          import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+            ? releaseEncounterAudioUrl(
+                releaseAchievementAudioUrl(
+                  releaseQuestAudioUrl(
+                    releaseFoleyUrl(releaseWarriorAudioUrl(releasePlayerAudioUrl(variant.url))),
+                  ),
+                ),
+              )
+            : variant.url;
+        const res = await fetch(url);
         if (!res.ok) {
           this.failedLoads.add(cacheKey);
           return null;
@@ -493,6 +539,7 @@ class Sfx {
         return null;
       } finally {
         this.loading.delete(cacheKey);
+        if (slot !== null) this.releaseAudioQueue.release(slot);
       }
     })();
     this.loading.set(cacheKey, request);
@@ -523,7 +570,9 @@ class Sfx {
     await Promise.all(
       Object.keys(this.clips).flatMap((key) =>
         this.entry(key)?.preload === 'startup'
-          ? (this.entry(key)?.variants ?? []).map((_variant, index) => this.loadBuffer(key, index))
+          ? (this.entry(key)?.variants ?? []).map((_variant, index) =>
+              this.loadBuffer(key, index, 'background'),
+            )
           : [],
       ),
     );
@@ -690,7 +739,7 @@ class Sfx {
    *  the first time it is actually needed. */
   preload(key: string): void {
     const count = Math.max(1, this.entry(key)?.variants.length ?? 1);
-    for (let index = 0; index < count; index++) void this.loadBuffer(key, index);
+    for (let index = 0; index < count; index++) void this.loadBuffer(key, index, 'background');
   }
 
   /** Squared distance from the listener. Callers can pre-cull, but playAt also
@@ -713,7 +762,7 @@ class Sfx {
    *  see src/ui/mob_idle_sfx.ts) needs this instead of firing blind. */
   playAt(key: string, x: number, y: number, z: number, opts?: PlayOpts): boolean {
     const ctx = this.ctx,
-      master = this.busFor(key);
+      master = opts?.ambient ? this.ambientBus : this.busFor(key);
     if (!ctx || !master) return false;
     if (this.tooFar(x, z)) return false;
     const variantIndex = this.nextVariantIndex(key);

@@ -73,6 +73,7 @@ import {
   atlasTextureByUrl,
   attachDeferredFaceDecals,
   ensureSkinTexture,
+  faReleaseBeardSource,
   farSourceMaterials,
   heldPropHolders,
   modularFarBake,
@@ -111,6 +112,9 @@ import {
 import { EffigyRig } from './effigy_rig';
 import { EyeGlow, selfLitMeshes } from './eye_glow';
 import { EyeWardMarker } from './eye_ward_marker';
+import { faQuaterniusPilotHair, faQuaterniusReleaseFit } from './fa_quaternius_pilot';
+import { updateFaReleaseChestSurface } from './fa_release_class_look';
+import { FaReleaseLookDressing } from './fa_release_look_dressing';
 import {
   bodyDrawn,
   farMeshShown,
@@ -591,7 +595,7 @@ export class CharacterVisual {
   /** The def's world-unit height (VisualDef.height): the pick capsule's, and
    *  the frame every poseWrap child is placed in (the wrap carries the scale). */
   private readonly baseHeight: number;
-  /** A WOC player's chosen body size (setBodyScale), 1 on every other rig. */
+  /** A player's chosen body size (setBodyScale), 1 on every other rig. */
   private bodyScale = 1;
   /** The DRAWN body's world-unit height before e.scale (the renderer applies
    *  that on the group): the def height times the body size, so the nameplate
@@ -637,6 +641,9 @@ export class CharacterVisual {
    *  The last appearance reference handed in short-circuits the per-frame diff. */
   private wocHead: WocHeadDressing | null = null;
   private wocHeadApp: WocHeadAppearanceInput = undefined;
+  private faHairApp: WocHeadAppearanceInput = undefined;
+  private faHairApplied = false;
+  private faReleaseLook: FaReleaseLookDressing | null = null;
   private wocHeadRedress = false;
   /** A WOC body built directly (a preview, a portrait) draws nothing until its head is
    *  live: the base file ends at the neck, so the body alone would be a headless figure
@@ -668,14 +675,21 @@ export class CharacterVisual {
    *  shoulder, gloves, chest, waist and feet slots) and its helm-visibility
    *  bit: a visibility flip per named part, nothing rebuilt (woc_parts_core.ts
    *  owns the rule, including the per-slot fallback for an unmapped item). A
-   *  no-op on any other rig and on a repeat of the last-applied set, so the
-   *  renderer calls it every frame. Returns whether anything changed. */
+   *  no-op on a repeat of the last-applied set, so the renderer calls it every
+   *  frame. The CC0 class kit instead retints its torso when its chest material
+   *  changes. Returns whether anything changed. */
   setWocEquipment(
     equipped: Readonly<Partial<Record<EquipSlot, string>>> | null | undefined,
     helmHidden: boolean,
   ): boolean {
+    if (this.disposed) return false;
+    if (this.def.faReleaseClass) {
+      if (!updateFaReleaseChestSurface(this.model, equipped?.chest)) return false;
+      this.applySkinMaterials(this.skinIndex);
+      return true;
+    }
     const manifest = this.def.wocCharacter;
-    if (!manifest || this.disposed) return false;
+    if (!manifest) return false;
     let changed = !this.wocDressed || this.wocDefaultDressed || helmHidden !== this.wocHelmHidden;
     for (let i = 0; i < WOC_DRESSABLE_EQUIP_SLOTS.length; i++) {
       const id = equipped?.[WOC_DRESSABLE_EQUIP_SLOTS[i]] ?? null;
@@ -731,6 +745,7 @@ export class CharacterVisual {
   /** Roster previews have no equipped-item snapshot; keep the manifest kit. A world
    *  NPC is dressed the same way at birth, its head slot empty (characters/index.ts). */
   setWocDefaultEquipment(helmHidden: boolean): boolean {
+    if (this.def.faReleaseClass) return this.setWocEquipment(null, helmHidden);
     const manifest = this.def.wocCharacter;
     if (!manifest || this.disposed) return false;
     if (this.wocDefaultDressed && this.wocHelmHidden === helmHidden) {
@@ -764,6 +779,13 @@ export class CharacterVisual {
    *  whose head files still stream is drawn meanwhile (WocHeadHold: 'look' when the
    *  body is handed a different character). Returns whether the drawn head changed. */
   setWocHeadLook(app: WocHeadAppearanceInput, hold: WocHeadHold = 'slot'): boolean {
+    if (this.faReleaseLook && !this.disposed) return this.faReleaseLook.apply(app);
+    if (!this.wocHead && this.model && !this.disposed) {
+      if (this.faHairApplied && app === this.faHairApp) return false;
+      this.faHairApplied = true;
+      this.faHairApp = app;
+      return faQuaterniusPilotHair(this.key, this.model, app);
+    }
     if (!this.wocHead || this.disposed || app === this.wocHeadApp) return false;
     this.wocHeadApp = app;
     const changed = this.wocHead.setAppearance(app, hold);
@@ -1605,6 +1627,18 @@ export class CharacterVisual {
         // by syncFarVisibility once the far mesh below exists
         this.wocHeadAwaited = true;
       }
+      const releaseFit = key.startsWith('player_') ? faQuaterniusReleaseFit(key) : undefined;
+      if (releaseFit) {
+        this.faReleaseLook = new FaReleaseLookDressing(
+          this.model,
+          releaseFit,
+          faReleaseBeardSource(),
+          () => {
+            this.rebuildCasters();
+            this.applyVisualMaterials();
+          },
+        );
+      }
       if (this.def.dials?.length) this.dials = new BoneDials(this.model, this.def.dials);
       if (this.def.meshToggles?.length)
         this.meshToggles = new GestureMeshToggles(this.model, this.def.meshToggles);
@@ -1704,7 +1738,8 @@ export class CharacterVisual {
       // its first dressing would only throw away. What it mounts is the key's shadow
       // stand-in, the one thing it casts in the proxy band before that bake exists.
       const idleGeo = prep.idleGeo;
-      if (idleGeo && !this.look && !prep.def.bodyless) {
+      // The fixed bake contains both hair meshes and baked base colours.
+      if (idleGeo && !this.look && !prep.def.bodyless && !this.faReleaseLook) {
         timeBuildSpan('view-part:far-bake', () =>
           this.buildFarMeshes(
             idleGeo,
@@ -1720,7 +1755,7 @@ export class CharacterVisual {
             prep.shadowGeo,
           ),
         );
-      } else if (prep.def.wocCharacter && prep.shadowGeo) {
+      } else if ((prep.def.wocCharacter || this.faReleaseLook) && prep.shadowGeo) {
         this.mountShadowStandIn(prep.shadowGeo);
       }
 
@@ -1836,6 +1871,7 @@ export class CharacterVisual {
       registerContextRestoreReset('character-visual', this, (owner) => owner.forgetContext());
     } catch (err) {
       releaseModularVariant(this.model);
+      this.faReleaseLook?.dispose();
       this.wocHead?.dispose();
       // ...and the streamed armor files assembleModel (or the dressing) attached.
       this.wocArmor?.dispose();
@@ -3936,7 +3972,7 @@ export class CharacterVisual {
    *  its rider. A no-op on every other rig (a Combat Mech, a form, a mob) and
    *  on a repeat, so the renderer calls it every frame. True when it changed. */
   setBodyScale(scale: number): boolean {
-    if (!this.def.wocCharacter || this.disposed) return false;
+    if ((!this.def.wocCharacter && !this.faReleaseLook) || this.disposed) return false;
     const next = clampWocBodyScale(scale);
     if (next === this.bodyScale) return false;
     this.bodyScale = next;
@@ -4399,6 +4435,7 @@ export class CharacterVisual {
     // the WOC head's tint wrap over the re-derived sources, before the snapshot: the
     // body's skin layer is off under a class under-armor atlas (no skin on it)
     this.wocHead?.retint(this.wocBodyAtlas(), true);
+    this.faReleaseLook?.rebindMaterials();
     releaseTintedMaterials(prevRigClaims);
     // The per-effect clone maps (ghost/soul-rend/shadowform/moonkin/
     // metamorph/rune-tint/aura-glow) key by SOURCE material, and this sweep
@@ -5304,6 +5341,7 @@ export class CharacterVisual {
     this.spiritVeil.release();
     this.disposeWeaponSkinMaterials();
     this.disposeEffectMaterials();
+    this.faReleaseLook?.dispose();
     // Release the shared tinted-material leases (never disposing directly:
     // another visual may still mount the same clones; the shared cache
     // disposes an entry only once nothing claims it). Cleared so a double

@@ -1,3 +1,4 @@
+import type { AdminCharacterAction, AdminCharacterReply } from '../admin_character_wire';
 import type { CourierDispatchRequest, CourierInfo } from '../sim/courier';
 import type { MaterialComposition } from '../sim/material_sources';
 import type { MaterialStackSelection } from '../sim/material_stack_selection';
@@ -5,6 +6,7 @@ import type { ReferralCardsAction, ReferralCardsSnapshot } from '../sim/referral
 import type { AccountBankInfo } from '../world_api/bank';
 import { AccountBankRequests, accountBankTransferPayload } from './account_bank_wire';
 import { resolveInitialActionBarLayout } from './action_bar_restore';
+import { AdminCharacterRequests } from './admin_character_requests';
 import { CharacterRequests } from './character_requests';
 import { applyCharacterRoster, type CharacterMembership } from './character_roster';
 import { applyCourierSelfWire } from './courier_wire';
@@ -61,6 +63,7 @@ import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
 import { isPersistentEngineAura } from '../sim/persistent_aura';
+import { buddyUnselectableBy } from '../sim/pet/buddy_ai';
 import { isPrimaryOwnedPetEntity } from '../sim/pet/pet_selection';
 import { getArchetypeTitle, getHobbyCraft } from '../sim/professions/archetype';
 import type { RespecPaymentTier } from '../sim/professions/focus';
@@ -297,8 +300,9 @@ import { applyFerryWire, clientFerryView } from './transport_wire';
 import { vaultWithdrawPayload } from './vault_snapshot_wire';
 import { optimisticWeaponSkinChange } from './weapon_skin_optimistic';
 import { whoRosterFromFrame } from './who_frame_wire';
-import { buildWebSocketAuthMessage, buildWebSocketUrl } from './world_auth_message';
+import { buildWebSocketAuthMessage } from './world_auth_message';
 import { WorldInteractionRequests } from './world_interaction_requests';
+import { openWorldSocket } from './world_socket';
 
 export { buildWebSocketAuthMessage, buildWebSocketUrl } from './world_auth_message';
 
@@ -357,6 +361,7 @@ export class Api {
   // confirms via getAccount()). Never persisted; it is a per-session hint only.
   emailMissing: boolean | undefined = undefined;
   realm: string | null = null;
+  realmLabel: string | null = null;
   characterMembership: CharacterMembership = { active: false, expiresAt: null };
   characterLimit = 10;
   // base origin for realm-scoped calls (characters, search, ws). '' = the page
@@ -1130,6 +1135,24 @@ const INCOMPATIBLE_WORLD_VERSION_ERROR = ONLINE_WORLD_INCOMPATIBLE_MESSAGE;
 const DESPAWN_GRACE_MIN_DIST_SQ = 70 * 70;
 
 export class ClientWorld extends ReconWireState implements IWorld {
+  private readonly adminCharacter = new AdminCharacterRequests();
+
+  canUseAdminCharacter(): boolean {
+    return this.adminCharacter.allowed && !this.spectating && this.canSendCommand();
+  }
+
+  adminOneHitActive(): boolean {
+    return this.canUseAdminCharacter() && this.adminCharacter.oneHitActive();
+  }
+
+  canUseAdminMapTeleport(): boolean {
+    return this.canUseAdminCharacter() && this.adminCharacter.mapTeleportAllowed;
+  }
+
+  requestAdminCharacter(action: AdminCharacterAction): Promise<AdminCharacterReply | null> {
+    if (!this.canUseAdminCharacter()) return Promise.resolve(null);
+    return this.adminCharacter.request(action, (payload) => this.ws.send(payload));
+  }
   // --- IWorldEntityRoster: roster + player reads, mirrored from snapshots. The
   // `player` getter lives below the ctor (it reads `entities`/`playerId`). `known`
   // is IWorldCombat-owned but rides here as a self-wire mirror field with the rest
@@ -1686,7 +1709,14 @@ export class ClientWorld extends ReconWireState implements IWorld {
   private dungeonEntrySeq: number | null = null;
   private pendingDungeonEntryFacing: number | null = null;
 
-  constructor(token: string, characterId: number, cls: PlayerClass, base = '', clientSeed = '') {
+  constructor(
+    token: string,
+    characterId: number,
+    cls: PlayerClass,
+    base = '',
+    clientSeed = '',
+    private readonly realmLabel: string | null = null,
+  ) {
     super();
     this.characterId = characterId;
     this.token = token;
@@ -1804,19 +1834,15 @@ export class ClientWorld extends ReconWireState implements IWorld {
   }
 
   private openSocket(): void {
-    // when a realm was picked, connect to that realm's origin; otherwise the
-    // page's own host
-    const wsUrl = this.base
-      ? `${this.base.replace(/^http/, 'ws')}/ws`
-      : buildWebSocketUrl(location.protocol, location.host);
-    this.ws = new WebSocket(wsUrl);
-    this.ws.onopen = () => {
-      this.ws.send(
-        JSON.stringify(buildWebSocketAuthMessage(this.token, this.characterId, this.clientSeed)),
-      );
-    };
-    this.ws.onmessage = (ev) => this.onMessage(String(ev.data));
-    this.ws.onclose = () => this.socketClosed();
+    this.ws = openWorldSocket(
+      this.base,
+      JSON.stringify(buildWebSocketAuthMessage(this.token, this.characterId, this.clientSeed)),
+      {
+        isCurrent: (socket) => !this.sessionEnded && this.ws === socket,
+        onMessage: (raw) => this.onMessage(raw),
+        onClose: () => this.socketClosed(),
+      },
+    );
   }
 
   // A dropped socket schedules a reconnect with exponential backoff: the
@@ -1828,6 +1854,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
   // 'error' frame, handled in onMessage, which sets sessionEnded).
   private socketClosed(): void {
     this.connected = false;
+    this.adminCharacter.reset();
     // A reconnect may land on an older binary. Drop optional behavior before
     // any new transport can accept input; the next capable snapshot re-arms it.
     this.petSpecialCommandsSupported = false;
@@ -1872,12 +1899,14 @@ export class ClientWorld extends ReconWireState implements IWorld {
   }
 
   private endSession(): void {
+    this.adminCharacter.reset();
     this.vehicleSession = null;
     // Flush a pending layout save BEFORE teardown, while the socket is still open
     // and `connected` is still true: close() calls this before ws.close() and
     // sendLogout() calls it before the logout frame, so the final edit is not
     // lost to a deliberate logout within the debounce window.
     this.actionBarUploader.flush();
+    this.connected = false;
     this.sessionEnded = true;
     this.worldInteractionRequests?.reset();
     // RIFT_REGIONS (src/sim/colliders.ts) is a module-level registry keyed by
@@ -1904,7 +1933,6 @@ export class ClientWorld extends ReconWireState implements IWorld {
   }
   close(): void {
     this.endSession();
-    this.ws.onclose = null;
     this.ws.close();
   }
   // Signal a deliberate logout to the server so it skips linkdead grace and
@@ -2208,6 +2236,10 @@ export class ClientWorld extends ReconWireState implements IWorld {
     // A commandOutcome/corpseHarvestInfo reply routes to its owner; anything
     // else falls through unchanged.
     if (this.requests().onMessage(msg)) return;
+    if (msg.t === 'adminCharacter') {
+      this.adminCharacter.receive(msg as AdminCharacterReply);
+      return;
+    }
     if (msg.t === 'hello') {
       this.referralCardsState = null;
       this.movementWireVersion = msg.movementWire === 2 ? 2 : 1;
@@ -2216,8 +2248,12 @@ export class ClientWorld extends ReconWireState implements IWorld {
       this.playerId = msg.pid;
       this.ownPlayerId = msg.pid;
       this.cfg.seed = msg.seed;
-      if (typeof msg.realm === 'string') this.realm = msg.realm;
+      // The directory label is for presentation. The server still owns realm identity.
+      if (typeof msg.realm === 'string') this.realm = this.realmLabel ?? msg.realm;
       this.accountAdmin = msg.admin === true;
+      this.adminCharacter.allowed = msg.adminCharacter === true;
+      if (!this.adminCharacter.allowed) this.adminCharacter.clearActiveModes();
+      this.adminCharacter.mapTeleportAllowed = msg.adminMapTeleport === true;
       if (Array.isArray(msg.softWords)) {
         this.profanityWords = msg.softWords.filter(
           (w: unknown): w is string => typeof w === 'string',
@@ -2625,6 +2661,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
       }
       if (hasIdentity) {
         e.kind = w.k;
+        e.aiVisual = w.aiVisual === 1;
         e.templateId = w.tid;
         e.name = w.nm;
         e.level = w.lv;
@@ -2805,6 +2842,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
       e.overheadEmoteUntil = e.overheadEmoteId ? Number.POSITIVE_INFINITY : 0;
       if (typeof w.emoSeq === 'number') e.overheadEmoteSeq = w.emoSeq;
       e.dead = nowDead;
+      if (w.id === this.playerId && nowDead) this.adminCharacter.clearActiveModes();
       e.ghost = !!w.gh; // released spirit: rendered translucent, runs faster
       e.lootable = !!w.loot;
       // Synthetic sentinel, not a real countdown (same idiom as the paladin
@@ -3425,6 +3463,7 @@ export class ClientWorld extends ReconWireState implements IWorld {
 
   // --- IWorldTargeting: target selection + tab cycling ---
   targetEntity(id: number | null): void {
+    if (id !== null && this.entities.get(id)?.aiVisual) return;
     // Optimistic local write plus a pending echo record. The command uses the
     // input seq stream so self.ack can distinguish stale snapshots from the
     // server's verdict. Spectate sends no command, so it arms no hold.
@@ -3436,7 +3475,9 @@ export class ClientWorld extends ReconWireState implements IWorld {
         if (seq !== null) this.pendingTargetEcho = armTargetEcho(null, seq);
       } else {
         const e = this.entities.get(id);
-        if (e && (!e.dead || deadTargetSelectable(e, this.playerId))) {
+        // Someone else's buddy is never selectable (the sim refuses it too).
+        const selectable = e && !buddyUnselectableBy(e, this.playerId);
+        if (selectable && (!e.dead || deadTargetSelectable(e, this.playerId))) {
           p.targetId = id;
           if (seq !== null) this.pendingTargetEcho = armTargetEcho(id, seq);
         }
@@ -4548,6 +4589,9 @@ export class ClientWorld extends ReconWireState implements IWorld {
   }
   marketCollect(): void {
     this.cmd({ cmd: 'market_collect' });
+  }
+  marketRelist(ids: readonly number[], cutPct: number): void {
+    this.cmd({ cmd: 'market_relist', ids, cutPct });
   }
   marketOrderPlace(itemId: string, count: number, unitPrice: number): void {
     this.cmd({ cmd: 'market_order_place', item: itemId, count, price: unitPrice });

@@ -61,9 +61,8 @@ export const ART_DEFERRED_CLASS = 'art-deferred';
  * stylesheet by tests/landing_first.test.ts.
  */
 export const LANDING_ART_URLS: readonly string[] = [
-  '/website-hero-eastbrook-v1.webp',
-  '/website-fractured-portal-v5.webp',
-  '/worldofclaudecraft-logo.webp',
+  '/fantasy-arena/portal-background.webp',
+  '/fantasy-arena/wordmark.svg',
 ];
 /** How long the art may take to decode before it is shown anyway. */
 const ART_REVEAL_TIMEOUT_MS = 4000;

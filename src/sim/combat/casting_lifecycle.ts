@@ -1,4 +1,6 @@
+import { commitDreamThread, dreamThreadCanCast } from './dream_thread';
 import { BENISON_4PC_WHISPER_HEAL_BONUS } from '../content/ignivar_set_bonuses';
+import { VANGUARD_DESTRUCTION_4PC_PROC_ID } from '../content/vanguard_set_bonuses_b';
 import { courierSummon } from '../courier';
 import { gliderActionsLocked } from '../glider_action_lock';
 import { shadowActionsLocked } from '../shadow_action_lock';
@@ -136,8 +138,10 @@ import {
   consumeDesolationForCast,
   destructionCastTimeMult,
   hasBurningPact,
+  isSlagcrownPvpRuinbolt,
   reserveRuinousBrandCopy,
   ruinAmount,
+  slagcrownRuinboltPvpCastTime,
   spendRuin,
 } from './destruction';
 import { extendOwnedDot } from './dot_mutation';
@@ -678,6 +682,8 @@ export function updateCasting(ctx: SimContext, p: Entity, meta: PlayerMeta): voi
 
   if (p.castRemaining <= CAST_COMPLETE_EPS) {
     const castId = p.castingAbility;
+    const slagcrownPvpRuinbolt = p.castSlagcrownPvpRuinbolt;
+    delete p.castSlagcrownPvpRuinbolt;
     p.castingAbility = null;
     p.castRemaining = 0;
     // Defensive fishing end: the session cap is unreachable in
@@ -774,7 +780,12 @@ export function updateCasting(ctx: SimContext, p: Entity, meta: PlayerMeta): voi
       const resolved = res.def.empowerStages
         ? { ...res, empowerLevel: res.def.empowerStages }
         : res;
-      applyAbility(ctx, p, meta, resolved);
+      applyAbility(
+        ctx,
+        p,
+        meta,
+        slagcrownPvpRuinbolt ? { ...resolved, slagcrownPvpRuinbolt } : resolved,
+      );
     }
     clearRadiantResonanceReservation(p);
     // the aim point is consumed by the resolved area effects; drop it so a later
@@ -902,6 +913,7 @@ export function cancelCast(ctx: SimContext, p: Entity): void {
   stopChannelVisual(ctx, p);
   clearAfflictionConsumeThreads(ctx, p);
   emitRainOfFireStop(ctx, p);
+  delete p.castSlagcrownPvpRuinbolt;
   p.castingAbility = null;
   p.castRemaining = 0;
   p.channeling = false;
@@ -1758,6 +1770,10 @@ export function castAbility(
       return;
     }
   }
+  if (meta.cls === 'dreamdancer' && !dreamThreadCanCast(ctx, p, target, ability.id, ctx.playerMods(meta).spec)) {
+    ctx.error(p.id, 'That ability is not ready yet.');
+    return;
+  }
   if (ability.id === 'conflagrate' && !hasBurningPact(p, target)) {
     ctx.error(p.id, 'Conflagrate requires Burning Pact on the target.');
     return;
@@ -1855,8 +1871,14 @@ export function castAbility(
   ) {
     consumedInstantAura = consumeNextCastInstantAura(ctx, p, ability.id);
   }
-  const instantBaseCastTime =
-    consumedInstantAura !== null ? 0 : res.castTime * shamanCastTimeMultiplier(p, ability.id);
+  // Slagcrown 2pc (Warfare Season 2): a Ruinbolt aimed at an enemy player casts
+  // 0.7 sec slower, added to the BASE so Desolation's multiplier below still cuts
+  // it; an instant stays instant.
+  const slagcrownPvpRuinbolt = isSlagcrownPvpRuinbolt(ctx, p, ability.id, target);
+  const instantBaseCastTime = slagcrownRuinboltPvpCastTime(
+    slagcrownPvpRuinbolt,
+    consumedInstantAura !== null ? 0 : res.castTime * shamanCastTimeMultiplier(p, ability.id),
+  );
   // Brineward 2pc (Warfare Season 2) reads the resolved friendly target's
   // health; a pass-through for every other ability and caster.
   const castTime = brinewardMendingCastTime(
@@ -2088,6 +2110,7 @@ export function castAbility(
     const surgeCastMult = ability.id === ARCANE_SURGE_ID ? aetherSurgeCastMult(p) : 1;
     const stretchedCastTime = (castTime * tonguesMult(p) * surgeCastMult) / spellHasteMult(p);
     reserveRadiantResonance(p, ability.id);
+    if (slagcrownPvpRuinbolt) p.castSlagcrownPvpRuinbolt = true;
     p.castingAbility = ability.id;
     p.castTotal = stretchedCastTime;
     p.castRemaining = stretchedCastTime;
@@ -2103,9 +2126,15 @@ export function castAbility(
   // (Flickerstep is on-GCD but slips past the busy guard); it must not eat
   // the follow-up queued behind that cast.
   if (!blinkThrough) dropStaleHeldPressOnCommit(p, ability);
-  const instantResolved = ability.empowerStages
+  const empoweredResolved = ability.empowerStages
     ? { ...res, empowerLevel: ability.empowerStages }
     : res;
+  // The Slagcrown 4pc's instant Ruinbolt leaves Desolation alone.
+  const slagcrownFreeRuinbolt = consumedInstantAura?.id === VANGUARD_DESTRUCTION_4PC_PROC_ID;
+  const instantResolved =
+    slagcrownPvpRuinbolt || slagcrownFreeRuinbolt
+      ? { ...empoweredResolved, slagcrownPvpRuinbolt, slagcrownFreeRuinbolt }
+      : empoweredResolved;
   const stormcastReservation =
     consumedInstantAura?.id === STORMCAST_ID
       ? {
@@ -3045,6 +3074,8 @@ function applyAbility(
       return;
     }
   }
+
+  if (meta.cls === 'dreamdancer') res = commitDreamThread(ctx, p, res);
 
   // helpful spells never miss
   if (

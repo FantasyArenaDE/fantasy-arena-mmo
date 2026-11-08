@@ -9,8 +9,10 @@ import {
 } from '../sim/data';
 import type { BiomeId } from '../sim/types';
 import { terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
+import { buildAmbientWind } from './ambient_wind';
 import { GFX } from './gfx';
 import { moteKeepOutFade } from './motes_keepout_core';
+import { buildWindblownLeaves } from './windblown_leaves';
 
 // ---------------------------------------------------------------------------
 // Ambient motes — a render-only field of drifting airborne specks (pollen in
@@ -23,7 +25,7 @@ import { moteKeepOutFade } from './motes_keepout_core';
 
 export interface MotesView {
   group: THREE.Group;
-  update(px: number, pz: number, dt: number): void;
+  update(px: number, pz: number, dt: number, windTime?: number, yaw?: number): void;
 }
 
 // per-biome speck colour — warm gold pollen, sickly green marsh spores, pale
@@ -100,6 +102,10 @@ function moteSprite(): THREE.Texture {
 export function buildMotes(seed: number): MotesView {
   const group = new THREE.Group();
   group.name = 'motes';
+  const wind = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? buildAmbientWind(seed) : null;
+  if (wind) group.add(wind.traces);
+  const leaves = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? buildWindblownLeaves(seed) : null;
+  if (leaves) group.add(leaves.leaves);
 
   // count scales with tier — cheap THREE.Points, so high/ultra can afford a
   // dense shimmer while low stays sparse
@@ -198,11 +204,14 @@ export function buildMotes(seed: number): MotesView {
 
   return {
     group,
-    update(px: number, pz: number, dt: number): void {
+    update(px: number, pz: number, dt: number, windTime = NaN, yaw = 0): void {
+      const windVisible = wind?.update(px, pz, windTime, yaw) ?? false;
+      const leavesVisible = leaves?.update(px, pz, windTime) ?? false;
       // The shipped world's ambience only: an authored map opts in
       // (TerrainStyle.motes), so a maker's city carries no stray gold specks.
       if (!isBuiltinWorldActive() && getActiveWorldContent().terrainStyle?.motes !== true) {
-        group.visible = false;
+        group.visible = windVisible || leavesVisible;
+        points.visible = false;
         return;
       }
       if (px > DUNGEON_X_THRESHOLD) {
@@ -211,6 +220,7 @@ export function buildMotes(seed: number): MotesView {
         return;
       }
       group.visible = true;
+      points.visible = true;
       if (!seeded) {
         for (let i = 0; i < count; i++) {
           if (!place(i, px, pz)) park(i); // park unusable motes far below

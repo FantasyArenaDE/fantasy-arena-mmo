@@ -5208,6 +5208,17 @@
     box-shadow: none;
     color: inherit;
   }
+  /* A quiet backing for the action rails. Insets leave layout, focus rings
+     and the individual socket's proc, cooldown and range treatments intact. */
+  @media (forced-colors: none) {
+    .fa-burgundy-ui body:not(.mobile-touch) :is(#actionbar, #actionbar2, #actionbar3) {
+      background: var(--panel-bg-soft);
+      border-radius: var(--radius-xs);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, var(--border) 65%, transparent),
+        inset 0 -1px 0 var(--color-keyline);
+    }
+  }
   /* The optional rows stack above the primary action bar. Tighter bottom padding
      keeps the group compact. Both are off by default; Interface options add
      body.show-actionbar2 and body.show-actionbar3. The third-row option depends
@@ -12181,6 +12192,17 @@
     font-variant-numeric: tabular-nums;
     opacity: 0.85;
   }
+  .party-frame-difficulty {
+    color: var(--color-text-light);
+    border: 1px solid var(--gold-dim);
+    border-radius: 3px;
+    padding-inline: 4px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .party-frame-difficulty:empty {
+    display: none;
+  }
   #party-frames.party-header-collapsed #party-frame-header .ui-icon {
     transform: none;
   }
@@ -16375,7 +16397,7 @@
     z-index: 100000;
     /* The SAME ornate arrow the mouse uses (--cursor-arrow / CURSOR_HAND), so the
      pad's pointer and the mouse's are one cursor rather than two designs. */
-    background: url("/ui/cursors/arrow.png") no-repeat center / contain;
+    background: url("/fantasy-arena/cursors/arrow.png") no-repeat center / contain;
     filter: drop-shadow(var(--art-shadow-sm));
   }
 
@@ -16409,11 +16431,11 @@
     top: 0;
     width: 28px;
     height: 28px;
-    margin: -2px 0 0 -7px;
+    margin: -3px 0 0 -5px;
     display: none;
     pointer-events: none;
     z-index: 100001;
-    background: url("/ui/cursors/arrow.png") no-repeat center / contain;
+    background: url("/fantasy-arena/cursors/arrow.png") no-repeat center / contain;
     filter: drop-shadow(var(--art-shadow-sm));
   }
 

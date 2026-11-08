@@ -110,6 +110,7 @@ export interface MarketCollectRow {
   /** The returned copy's payload (issue 1165): an expired instanced listing waits
    *  here with its enchant/signature intact, and the tooltip shows it. */
   instance?: ItemInstancePayload;
+  relist?: { id: number; price: number };
 }
 
 /**
@@ -296,7 +297,17 @@ export function buildMarketCollect(info: MarketInfo): MarketCollectBody {
   for (const slot of info.collectionItems) {
     const item = ITEMS[slot.itemId];
     if (!item) continue;
-    rows.push({ item, count: slot.count, ...(slot.instance ? { instance: slot.instance } : {}) });
+    const { relistId, relistPrice } = slot;
+    const relist = relistId && relistPrice && item.kind !== 'quest' && !item.soulbound &&
+      !item.noMarketList && !isTransferLockedInstance(slot.instance)
+      ? { id: relistId, price: relistPrice }
+      : undefined;
+    rows.push({
+      item,
+      count: slot.count,
+      ...(slot.instance ? { instance: slot.instance } : {}),
+      ...(relist ? { relist } : {}),
+    });
   }
   return { state: 'items', proceeds: info.collectionCopper, rows };
 }

@@ -1,0 +1,48 @@
+name: Fantasy Arena Windows source preflight
+
+on:
+  push:
+    branches:
+      - signpath/windows-client-prep
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-source-preflight:
+    runs-on: windows-2025
+    timeout-minutes: 25
+    steps:
+      - name: Check out the reviewed sources
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: '26.5.0'
+          package-manager-cache: false
+      - name: Install pinned dependencies
+        shell: pwsh
+        run: |
+          npm install --global pnpm@10.34.5
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm install --frozen-lockfile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Compile the desktop renderer from this checkout
+        run: node signpath/build-renderer.mjs
+      - name: Build the Electron dependency bundles
+        run: node scripts/electron-vendor.mjs
+      - name: Verify preflight outputs
+        shell: pwsh
+        run: |
+          $files = @(
+            'dist-signpath-renderer/.vite/manifest.json',
+            'electron/vendor/electron_log_main.cjs',
+            'electron/vendor/electron_updater.cjs'
+          )
+          foreach ($file in $files) {
+            if (!(Test-Path -LiteralPath $file -PathType Leaf)) { throw "Missing build output $file" }
+            Get-FileHash -Algorithm SHA256 -LiteralPath $file
+          }

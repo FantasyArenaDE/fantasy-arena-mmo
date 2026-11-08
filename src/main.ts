@@ -1,7 +1,8 @@
+import { focusInvalidCharacterName, initFaCharacterChrome } from './ui/fa_character_chrome';
 import { applyFrameGeometrySetting } from './game/frame_geometry_settings';
 import { createSubscriptionStoreHooks, storeSnapshotForHud } from './net/subscription_sdk';
 import { captureReferralSlug } from './referral_signup';
-import { formatAbilityImbueDamage } from './ui/ability_imbue_text';
+import { abilityDisplayDescription, abilityEffectText } from './ui/ability_description';
 import { liftBootSplashWhenReady } from './ui/boot_splash';
 import { bindChatComposerFocusState, resetChatComposer } from './ui/chat_composer_focus_controller';
 import { dispatchCollectionAction } from './ui/collection_actions_core';
@@ -17,6 +18,7 @@ import { captureFirstTouch, registerAttributionPayload } from './attribution';
 import { installClientUpdate, searchClientUpdates } from './client_update_search';
 import { markEntryTightMode } from './device_memory_hint';
 import { startDiscordLogin } from './discord_login_start';
+import { createAdminSelfPreview } from './game/admin_self_preview';
 import {
   syncAppViewport as syncAppViewportShared,
   syncSettledAppViewport,
@@ -106,6 +108,7 @@ import {
   stopActiveEntryDiagnostics,
   suspendActiveEntryDiagnostics,
 } from './game/entry_diagnostics';
+import { FANTASY_ARENA_ADVENTURE_TRACK } from './game/fantasy_arena_music';
 import { ferryPrewarmTargetFor } from './game/ferry_prewarm';
 import { armFrameAndSkip } from './game/frame_cadence_wiring';
 import { createGameRenderer, validateGameRenderer } from './game/game_renderer';
@@ -338,7 +341,9 @@ import { installOtaUpdateGate } from './net/ota_update_gate';
 import { realmPopulation } from './net/realm_population';
 import { RECONNECT_CONFLICT_ERROR } from './net/reconnect_policy';
 import {
+  characterSelectReturnUrl,
   clearPlayMarker,
+  consumeCharacterSelectReturn,
   freshMarker,
   markResumeAttempt,
   readPlayMarker,
@@ -505,6 +510,7 @@ import { CharselectRedesignEditor } from './ui/charselect_redesign';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
 import { classIconUrl } from './ui/class_icon_art';
+import { decorateNewestClass } from './ui/class_picker_newest';
 import { claudiumBalanceAddress, currentWocDiscountBps } from './ui/claudium_view';
 import { isDevGuiCommand } from './ui/dev_command_view';
 import { devTierByIndex, devTierDisplayName } from './ui/dev_tier';
@@ -556,6 +562,7 @@ import { gatherToolNoNodeKey } from './ui/hud/professions/gathering_view';
 import {
   ensureLocaleLoaded,
   formatNumber,
+  getI18nRevision,
   getLanguage,
   isLocaleResident,
   isSupportedLanguage,
@@ -737,18 +744,6 @@ const RESOURCE_KEYS = {
 
 function classDisplayDescription(className: PlayerClass): string {
   return tEntity({ kind: 'class', id: className, field: 'description' });
-}
-
-function formatClassDetailNumber(value: number): string {
-  return formatNumber(value, { maximumFractionDigits: 1 });
-}
-
-function classDetailAmountRange(min: number, max: number): string {
-  if (min === max) return formatClassDetailNumber(min);
-  return t('abilityUi.tooltip.damageRange', {
-    min: formatClassDetailNumber(min),
-    max: formatClassDetailNumber(max),
-  });
 }
 
 function readHomepageMusicMuted(): boolean {
@@ -1403,10 +1398,9 @@ async function startGame(
     // chrome (owner walked back an always-on rollout): this class is the CSS
     // gate, toggled live with the rest of the theme so switching presets in
     // the options window re-frames open windows immediately.
-    document.documentElement.classList.toggle(
-      'fancy-gold-ui',
-      themeStore.get().preset === 'fancyGold',
-    );
+    const { preset } = themeStore.get();
+    document.documentElement.classList.toggle('fancy-gold-ui', preset === 'fancyGold');
+    document.documentElement.classList.toggle('fa-burgundy-ui', preset === 'fantasyArena');
     mapMarkerPaletteLifecycle?.notify();
   }
   applyTheme();
@@ -1523,6 +1517,18 @@ async function startGame(
       devCommandsEnabled: import.meta.env.DEV,
       constrainedMemory: GFX.constrainedMemory,
     });
+    if (import.meta.env.DEV && import.meta.env.VITE_FA_ADMIN_PREVIEW === '1' && offlineSim) {
+      hud.attachAdminSelfPanel(createAdminSelfPreview(offlineSim));
+    } else if (online?.canUseAdminCharacter()) {
+      hud.attachAdminSelfPanel({
+        canAccess: () => online.canUseAdminCharacter(),
+        canTeleportOnMap: () => online.canUseAdminMapTeleport(),
+        realm: () => online.realm,
+        player: () => online.player,
+        copper: () => online.copper,
+        request: (action) => online.requestAdminCharacter(action),
+      });
+    }
     setThornhollowPrewarmHooks({
       startPreview: () => battlegroundAssetPrewarm.startPreview(),
       pausePreview: () => battlegroundAssetPrewarm.pausePreview(),
@@ -2863,18 +2869,18 @@ async function startGame(
     },
   });
 
-  // the options menu drives logout + key-capture + settings, all of which need
-  // refs that only exist now (input/renderer) or are page-level (reload)
+  // Leave immediately on the server and disarm mobile world auto-resume.
+  const leaveWorld = (returnRealm?: string) => {
+    online?.sendLogout();
+    clearPlayMarker();
+    if (returnRealm) location.replace(characterSelectReturnUrl(location.href, returnRealm));
+    else location.reload();
+  };
+  const activeRealm = online ? api.realm : null;
   hud.attachOptions({
     gliderPitchHold: (value) => input.setGliderPitchHold(value),
-    logout: () => {
-      // Signal the server to leave immediately, skipping the linkdead grace, so
-      // the character is not held in-world after a deliberate logout.
-      online?.sendLogout();
-      // A deliberate logout is not a resumable drop: forget the active session.
-      clearPlayMarker();
-      location.reload();
-    },
+    logout: leaveWorld,
+    characterSelect: activeRealm ? () => leaveWorld(activeRealm) : undefined,
     captureKey: (cb) => input.captureNextKey(cb),
     settings,
     groundAimTargetAttackable: (targetId) =>
@@ -3249,7 +3255,7 @@ async function startGame(
         desktopAuthorize: desktopWalletBrowserHandoffAvailable() ? wocDesktopAuthorize : null,
       },
     }).catch((err) => console.warn('[woc] exchange attach failed', err));
-    if (!NATIVE_APP) {
+    if (!NATIVE_APP && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
       hud.attachClaudium(claudiumHooks);
       if (
         shouldShowStorePromo({
@@ -5069,6 +5075,7 @@ async function startOffline(
   world?: WorldContent,
   seedOverride?: number,
 ): Promise<void> {
+  if (!localOfflineAvailable) return;
   stopShaderWarmup();
   if (!(await prepareWorldEntry())) return;
   resetLoadProfile();
@@ -5283,6 +5290,7 @@ function decorateClassChips(): void {
       li.appendChild(img);
       li.appendChild(label);
       li.classList.add('has-portrait');
+      decorateNewestClass(li, cls);
     });
 }
 
@@ -5585,7 +5593,7 @@ function syncPreviewAfterPanelLayout(): void {
   });
 }
 
-const currentlyRenderedClass: Record<string, PlayerClass | null> = {
+const currentlyRenderedClass: Record<string, { name: PlayerClass; paintKey: string } | null> = {
   'offline-class-details': null,
   'charcreate-class-details': null,
 };
@@ -5627,7 +5635,9 @@ function show(el: string): void {
   // advance only then.
   if (el === '#charselect-panel') {
     startShaderWarmup();
-    void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
+      void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    }
   }
 
   // Reset currently rendered classes to force re-render/animation when opening a panel
@@ -5657,13 +5667,11 @@ function loginError(text: string): void {
 
 const LAST_REALM_KEY = 'woc_last_realm';
 
-// After login the classic MMO drops you onto a Realm List screen (then character select for
-// the chosen realm). We remember the last realm and jump straight to its
-// characters, with a "Change Realm" button back to this list.
-async function enterRealmFlow(): Promise<void> {
+// Resume a remembered realm or show the list before character selection.
+async function enterRealmFlow(preferredRealm?: string): Promise<void> {
   const dir = await api.realms();
   $('#realm-list-user').textContent = api.username ? `${api.username}` : '';
-  const remembered = localStorage.getItem(LAST_REALM_KEY);
+  const remembered = preferredRealm ?? localStorage.getItem(LAST_REALM_KEY);
   const auto = dir.realms.find((r) => r.name === remembered);
   if (auto) {
     selectRealm(auto);
@@ -6087,10 +6095,7 @@ function setupSecuritySection(): void {
 }
 
 function showRealmList(dir?: import('./net/online').RealmDirectory): void {
-  // Reaching the realm list means the boot resume could not auto-select a realm
-  // (no remembered realm). Drop any pending resume intent here so a later manual
-  // realm pick does not surprise-enter the world on a decision made at boot; the
-  // player continues through normal realm + character select.
+  // A manual realm pick must not enter the world on a stale boot-resume intent.
   pendingResume = null;
   show('#realm-panel');
   const listEl = $('#realm-list');
@@ -6099,7 +6104,6 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
       listEl.innerHTML = `<div class="realm-loading">${esc(t('realm.noRealms'))}</div>`;
       return;
     }
-    // recommend the lowest-population online realm (classic MMOs nudge new players there)
     const realmTypeKeys = {
       Normal: 'realmTypes.normal',
       PvP: 'realmTypes.pvp',
@@ -6116,7 +6120,7 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
         const typeKey = realmTypeKeys[r.type as keyof typeof realmTypeKeys];
         const typeLabel = typeKey ? t(typeKey) : r.type;
         return `<div class="realm-row" data-name="${esc(r.name)}" data-url="${esc(r.url)}">
-        <div><div class="realm-name">${esc(r.name)}${charTag}<span class="rn-rec" data-rec hidden>${esc(t('realm.recommended'))}</span></div>
+        <div><div class="realm-name">${esc(r.displayName ?? r.name)}${charTag}<span class="rn-rec" data-rec hidden>${esc(t('realm.recommended'))}</span></div>
           <div class="realm-sub" data-sub>${esc(t('realm.checkingStatus'))}</div></div>
         <div class="realm-meta">
           <div class="realm-type">${esc(typeLabel)}</div>
@@ -6132,7 +6136,6 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
         if (entry) selectRealm(entry);
       });
     });
-    // live status per realm
     let bestPlayers = Infinity,
       bestName = '';
     void Promise.all(
@@ -6146,8 +6149,7 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
         const popEl = row.querySelector('[data-pop]') as HTMLElement;
         popEl.textContent = t(pop.labelKey);
         popEl.className = `realm-pop ${pop.cls}`;
-        // The band label alone ("Low") doesn't say what it means, explain the
-        // threshold on hover (title) and to assistive tech (aria-label).
+        // Expose the population threshold to both pointer and assistive tech.
         const popTip = t(pop.tipKey);
         popEl.title = popTip;
         popEl.setAttribute('aria-label', popTip);
@@ -6177,6 +6179,7 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
 function selectRealm(entry: import('./net/online').RealmEntry): void {
   api.setRealm(entry.url);
   api.realm = entry.name;
+  api.realmLabel = entry.displayName ?? entry.name;
   localStorage.setItem(LAST_REALM_KEY, entry.name);
   show('#charselect-panel');
   void refreshCharacters();
@@ -6225,7 +6228,7 @@ function renderRealmDropdown(): void {
       .map((r) => {
         const sel = r.name === api.realm ? ' sel' : '';
         return `<div class="realm-row cs-realm-row${sel}" role="option" aria-selected="${r.name === api.realm}" data-name="${esc(r.name)}" data-url="${esc(r.url)}">
-        <div class="realm-name">${esc(r.name)}</div>
+        <div class="realm-name">${esc(r.displayName ?? r.name)}</div>
         <div class="realm-pop offline" data-pop>-</div>
       </div>`;
       })
@@ -6264,8 +6267,9 @@ function selectRealmInline(entry: import('./net/online').RealmEntry): void {
   if (entry.name === api.realm) return;
   api.setRealm(entry.url);
   api.realm = entry.name;
+  api.realmLabel = entry.displayName ?? entry.name;
   localStorage.setItem(LAST_REALM_KEY, entry.name);
-  $('#charselect-realm').textContent = entry.name;
+  $('#charselect-realm').textContent = entry.displayName ?? entry.name;
   void refreshCharacters();
 }
 
@@ -6358,7 +6362,7 @@ function openDeleteCharacterDialog(character: CharacterSummary): void {
 }
 
 async function refreshCharacters(): Promise<void> {
-  if (api.realm) $('#charselect-realm').textContent = api.realm;
+  if (api.realm) $('#charselect-realm').textContent = api.realmLabel ?? api.realm;
   updateSortButtonLabel();
   const listEl = $('#char-list');
   listEl.innerHTML = `<li class="char-list-message">${esc(t('character.loading'))}</li>`;
@@ -6376,7 +6380,7 @@ async function refreshCharacters(): Promise<void> {
     // character shows the mech body without a class-body flash (setAppearance
     // falls back gracefully if this has not resolved yet).
     if (chars.some((c) => c.skinCatalog === 'mech')) void preloadMechAssets();
-    if (api.realm) $('#charselect-realm').textContent = api.realm;
+    if (api.realm) $('#charselect-realm').textContent = api.realmLabel ?? api.realm;
     listEl.innerHTML = '';
     resetComposedRows();
     // Boot resume: a WebView reload during play sent us here with a persisted
@@ -6650,7 +6654,7 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   resetLoadProfile();
   loadPhaseStart('entry');
   loadPhaseStart('realm-connect');
-  const world = new ClientWorld(api.token, c.id, c.class, api.base, getClientSeed());
+  const world = new ClientWorld(api.token, c.id, c.class, api.base, getClientSeed(), api.realmLabel);
   // Wire shareable player cards for this online session: publishing uploads the
   // composited PNG to this realm and returns an absolute public page URL, and
   // the referral provider feeds the card footer. Both are cleared on disconnect.
@@ -6809,85 +6813,46 @@ initCharselectWocMarket({
   api,
 });
 
-function renderClassDetails(
-  panelId: string,
-  className: PlayerClass,
-  preview?: PreviewAppearance,
-): void {
+function renderClassDetails(panelId: string, className: PlayerClass, localeOnly = false): void {
   const panel = document.getElementById(panelId);
   if (!panel) return;
 
-  // Drive the 3D preview BEFORE the panel-redundancy early-return: two characters
-  // of the same class can still differ in gear, skin, or cosmetic body, so the
-  // preview must update even when the class details panel does not. A char-select
-  // caller passes the character's real appearance (setAppearance); the create and
-  // offline pickers pass none and rebuild the class body only when the class changes.
-  if (characterPreview) {
-    if (preview) characterPreview.setAppearance(preview);
-    else if (currentlyRenderedClass[panelId] !== className) previewClassBody(className);
+  const previous = currentlyRenderedClass[panelId];
+  const paintKey = `${getI18nRevision()}:${className}`;
+  if (!localeOnly) {
+    if (characterPreview && previous?.name !== className) previewClassBody(className);
+    syncAppearanceUi(panelId, className);
   }
+  if (previous?.paintKey === paintKey) return;
+  currentlyRenderedClass[panelId] = { name: className, paintKey };
 
-  // Show the part/colour pickers for a composed body, hide them for a fixed
-  // class rig. Runs BEFORE the redundancy return so the first render of a
-  // panel mounts them (the class has not "changed" at that point).
-  if (!preview) syncAppearanceUi(panelId, className);
-
-  // Redundant render check (class details panel content only)
-  if (currentlyRenderedClass[panelId] === className) return;
-  currentlyRenderedClass[panelId] = className;
-
-  // Clear any active transitions for this panel to prevent stacked out-of-order renders
-  if (
-    activeClassDetailsTimeouts[panelId] !== undefined &&
-    activeClassDetailsTimeouts[panelId] !== null
-  ) {
-    window.clearTimeout(activeClassDetailsTimeouts[panelId]);
-    activeClassDetailsTimeouts[panelId] = null;
-  }
+  // Cancel a queued fade so it cannot replace newer text after a locale change.
+  const pending = activeClassDetailsTimeouts[panelId];
+  if (pending != null) window.clearTimeout(pending);
+  activeClassDetailsTimeouts[panelId] = null;
 
   const classDef = CLASSES[className];
   const details = CLASS_DETAILS[className];
   if (!classDef || !details) return;
 
-  const existingContent = panel.querySelector('.class-details-content');
-  const existingName = panel.querySelector('.class-details-name')?.textContent;
+  const existingContent = panel.querySelector<HTMLElement>('.class-details-content');
+  if (existingContent && panel.dataset.classDetailsPaint === paintKey) {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      void existingContent.offsetHeight;
+    }
+    existingContent.classList.remove('fade-out');
+    for (const fill of existingContent.querySelectorAll<HTMLElement>('.details-stat-bar-fill')) {
+      fill.style.width = fill.dataset.targetWidth ?? '0%';
+    }
+    return;
+  }
+
   const classLabel = classDisplayName(className);
   const roleLabel = t(details.roleKey);
   const armorLabel = t(details.armorKey);
   const weaponsLabel = t(details.weaponsKey);
   const resourceKey = RESOURCE_KEYS[classDef.resourceType] ?? 'classDetails.resources.mana';
   const resourceLabel = t(resourceKey);
-
-  if (existingContent && existingName === classLabel) {
-    if (
-      activeClassDetailsTimeouts[panelId] !== undefined &&
-      activeClassDetailsTimeouts[panelId] !== null
-    ) {
-      window.clearTimeout(activeClassDetailsTimeouts[panelId]);
-      activeClassDetailsTimeouts[panelId] = null;
-    }
-    const contentWrapper = existingContent as HTMLElement;
-    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isReducedMotion) {
-      contentWrapper.classList.remove('fade-out');
-      const fills = contentWrapper.querySelectorAll(
-        '.details-stat-bar-fill',
-      ) as NodeListOf<HTMLElement>;
-      fills.forEach((fill) => {
-        fill.style.width = fill.getAttribute('data-target-width') || '0%';
-      });
-    } else {
-      void contentWrapper.offsetHeight;
-      contentWrapper.classList.remove('fade-out');
-      const fills = contentWrapper.querySelectorAll(
-        '.details-stat-bar-fill',
-      ) as NodeListOf<HTMLElement>;
-      fills.forEach((fill) => {
-        fill.style.width = fill.getAttribute('data-target-width') || '0%';
-      });
-    }
-    return;
-  }
 
   const classColorHex = `#${classDef.color.toString(16).padStart(6, '0')}`;
 
@@ -6929,70 +6894,20 @@ function renderClassDetails(
       if (!a) return '';
       const iconUrl = iconDataUrl('ability', spellId, 32);
 
-      // Format ability description dynamically by resolving rank 1 placeholders
-      let dmgText = '';
-      const primaryEffect = a.effects.find(
-        (eff) =>
-          eff.type === 'directDamage' ||
-          eff.type === 'heal' ||
-          eff.type === 'weaponDamage' ||
-          eff.type === 'weaponStrike' ||
-          eff.type === 'aoeDamage' ||
-          eff.type === 'aoeRoot' ||
-          eff.type === 'finisherDamage' ||
-          eff.type === 'drainTick',
-      );
-      if (primaryEffect) {
-        if (
-          primaryEffect.type === 'directDamage' ||
-          primaryEffect.type === 'heal' ||
-          primaryEffect.type === 'aoeDamage' ||
-          primaryEffect.type === 'aoeRoot' ||
-          primaryEffect.type === 'drainTick'
-        ) {
-          dmgText = classDetailAmountRange(primaryEffect.min, primaryEffect.max);
-        } else if (primaryEffect.type === 'weaponDamage' || primaryEffect.type === 'weaponStrike') {
-          dmgText = formatClassDetailNumber(primaryEffect.bonus);
-        } else if (primaryEffect.type === 'finisherDamage') {
-          dmgText = t('abilityUi.tooltip.finisherDamage', {
-            base: formatClassDetailNumber(primaryEffect.base),
-            perCombo: formatClassDetailNumber(primaryEffect.perCombo),
-          });
-        }
-      } else {
-        const secondaryEffect = a.effects.find(
-          (eff) =>
-            eff.type === 'dot' ||
-            eff.type === 'hot' ||
-            eff.type === 'absorb' ||
-            eff.type === 'imbue',
-        );
-        if (secondaryEffect) {
-          if (secondaryEffect.type === 'dot' && secondaryEffect.perCombo !== undefined) {
-            // A combo-point bleed finisher (rupture, rip): `total` alone is the
-            // damage at zero combo points, a state the caster can never reach.
-            // Render base plus per-combo-point, the same composition the
-            // finisherDamage arm above and the shared abilityEffectText formatter use.
-            dmgText = t('abilityUi.tooltip.finisherDamage', {
-              base: formatClassDetailNumber(secondaryEffect.total),
-              perCombo: formatClassDetailNumber(secondaryEffect.perCombo),
-            });
-          } else if (secondaryEffect.type === 'dot' || secondaryEffect.type === 'hot') {
-            dmgText = formatClassDetailNumber(secondaryEffect.total);
-          } else if (secondaryEffect.type === 'absorb') {
-            dmgText = formatClassDetailNumber(secondaryEffect.amount);
-          } else if (secondaryEffect.type === 'imbue') {
-            dmgText = formatAbilityImbueDamage(secondaryEffect);
-          }
-        }
-      }
+      // Read the rank-one numbers through the same localized formatter as in-game tooltips.
+      const baseAbility = {
+        def: a,
+        rank: 1,
+        cost: a.cost,
+        castTime: a.castTime,
+        cooldown: a.cooldown,
+        effects: a.effects,
+        threatFlat: a.threat?.flat ?? 0,
+        threatMult: a.threat?.mult ?? 1,
+        charges: a.maxCharges,
+      };
       const abilityName = tEntity({ kind: 'ability', id: a.id, field: 'name' });
-      const resolvedDesc = tEntity({
-        kind: 'ability',
-        id: a.id,
-        field: 'description',
-        values: { damage: dmgText },
-      });
+      const resolvedDesc = abilityDisplayDescription(baseAbility, abilityEffectText(baseAbility));
 
       return `
       <li class="details-spell-item">
@@ -7010,6 +6925,7 @@ function renderClassDetails(
   panel.classList.add('visible');
 
   const performUpdate = () => {
+    panel.dataset.classDetailsPaint = paintKey;
     panel.innerHTML = `
       <div class="class-details-content fade-out">
         <div class="class-details-header">
@@ -7085,7 +7001,7 @@ function renderClassDetails(
   };
 
   const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (isReducedMotion) {
+  if (localeOnly || isReducedMotion) {
     performUpdate();
   } else if (existingContent) {
     existingContent.classList.add('fade-out');
@@ -7220,6 +7136,20 @@ function translatePage(): void {
   updateSeoMetadata(lang);
 }
 
+function relocalizeClassDetailsPanels(): void {
+  // The active language id is already set at boot, before its text resolves.
+  // Refresh the cards after that table lands, including cards on hidden panels.
+  for (const [panelId, parentId] of Object.entries({
+    'charcreate-class-details': 'charcreate-panel',
+    'offline-class-details': 'offline-select',
+  })) {
+    const selected = document.querySelector<HTMLElement>(`#${parentId} .mini-class.sel`);
+    const name =
+      currentlyRenderedClass[panelId]?.name ?? (selected?.dataset.class as PlayerClass | undefined);
+    if (name) renderClassDetails(panelId, name, true);
+  }
+}
+
 function refreshLocalizedDynamicShell(): void {
   updateWalletButton();
   // Relabel the appearance customizers BEFORE the per-panel arms below: each
@@ -7227,6 +7157,7 @@ function refreshLocalizedDynamicShell(): void {
   // switch made from char-select would otherwise leave the create panel's baked
   // labels in the old language until a class chip was clicked.
   relocalizeAppearancePanels();
+  relocalizeClassDetailsPanels();
   const activePanel = document.body.dataset.startPanel;
   if (activePanel === 'realm-panel') {
     showRealmList();
@@ -7241,21 +7172,7 @@ function refreshLocalizedDynamicShell(): void {
     authModeApply?.(m === 'register' ? 'register' : 'login');
     return;
   }
-  if (activePanel === 'charcreate-panel') {
-    const sel = document.querySelector('#charcreate-panel .mini-class.sel') as HTMLElement | null;
-    if (sel) {
-      currentlyRenderedClass['charcreate-class-details'] = null;
-      renderClassDetails('charcreate-class-details', sel.dataset.class as PlayerClass);
-    }
-    return;
-  }
-  const offlineSelected = document.querySelector(
-    '#offline-select .mini-class.sel',
-  ) as HTMLElement | null;
-  if (activePanel === 'offline-select' && offlineSelected) {
-    currentlyRenderedClass['offline-class-details'] = null;
-    renderClassDetails('offline-class-details', offlineSelected.dataset.class as PlayerClass);
-  }
+
 }
 
 // Single source of truth for switching the active locale at runtime. Used by BOTH the
@@ -7452,6 +7369,9 @@ function hideWalletCharacterScreenRow(): void {
 // Lazily load the heavy wallet module the first time it's needed, then cache it.
 let walletMod: typeof import('./net/wallet') | null = null;
 function loadWallet(): Promise<typeof import('./net/wallet')> {
+  if (import.meta.env.VITE_WALLET_DISABLED === '1') {
+    return Promise.reject(new Error('Wallet is disabled for this client.'));
+  }
   return walletMod
     ? Promise.resolve(walletMod)
     : import('./net/wallet').then((m) => {
@@ -7991,7 +7911,9 @@ function flashWalletError(message: string): void {
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
 // Discord UI is available on web and native unless explicitly disabled at build time.
-const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+const DISCORD_BUILD_ENABLED =
+  import.meta.env.VITE_FA_BROWSER_RELEASE !== '1' &&
+  String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
@@ -8098,6 +8020,10 @@ window.addEventListener('message', (e: MessageEvent) => {
 async function refreshGithubLinkStatus(): Promise<void> {
   const group = document.getElementById('cs-github-group');
   if (!group) return;
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+    group.hidden = true;
+    return;
+  }
   if (!api.token) {
     group.hidden = true;
     return;
@@ -8948,6 +8874,7 @@ function wireStartScreens(): Promise<void> {
       // The create panel mounted its appearance customizer during boot, before
       // this chunk resolved, so its baked labels are still English.
       relocalizeAppearancePanels();
+      relocalizeClassDetailsPanels();
     } finally {
       if (gated && startScreen) startScreen.style.visibility = '';
     }
@@ -8976,10 +8903,13 @@ function wireStartScreens(): Promise<void> {
   // Offline mode runs an unauthenticated local Sim with no server authority:
   // a dev/local-testing convenience only. Disabled in production builds,
   // unchanged (enabled) under `npm run dev`.
-  const offlineAvailable = isOfflineModeAvailable(import.meta.env.DEV);
+  const offlineAvailable = localOfflineAvailable;
+  const appearancePreview = import.meta.env.VITE_FA_BROWSER_RELEASE === '1' &&
+    new URLSearchParams(location.search).get('charaktereditor') === '1' &&
+    document.getElementById('offline-select') !== null;
 
-  const goToLoggedInPlay = () => {
-    void enterRealmFlow().catch((err) => {
+  const goToLoggedInPlay = (preferredRealm?: string) => {
+    void enterRealmFlow(preferredRealm).catch((err) => {
       // Entering play failed before character select: drop any boot resume
       // intent (it must not fire on a later unrelated roster refresh), and on
       // an auth failure clear the marker with the session it belonged to.
@@ -9034,6 +8964,7 @@ function wireStartScreens(): Promise<void> {
   };
 
   const handleOfflineStart = (cls: PlayerClass) => {
+    if (appearancePreview || !offlineAvailable) return;
     const rawName = offlineNameInput.value.trim();
     if (!rawName) {
       offlineError.textContent = t('errors.characterNameRequired');
@@ -9062,7 +8993,7 @@ function wireStartScreens(): Promise<void> {
     // Defensive: inert no-op in production even if some caller reaches this
     // (e.g. a stale E2E script driving the hidden #btn-offline trigger),
     // since the dropdown option and trigger are also not wired below.
-    if (!offlineAvailable) return;
+    if (!offlineAvailable && !appearancePreview) return;
     show('#offline-select');
 
     // Select warrior by default and render details
@@ -9080,6 +9011,20 @@ function wireStartScreens(): Promise<void> {
       btnStartOffline.removeAttribute('disabled');
       refreshOfflineSkins('warrior');
     }
+    if (appearancePreview) {
+      const heading = document.querySelector<HTMLElement>('#offline-select .auth-title');
+      if (heading) {
+        heading.dataset.i18n = 'auth.customize';
+        heading.textContent = t('auth.customize');
+      }
+      for (const element of document.querySelectorAll<HTMLElement>(
+        '#offline-select label[for="char-name"], #offline-select .char-input-group, #btn-start-offline',
+      )) {
+        element.hidden = true;
+        element.inert = true;
+        element.style.setProperty('display', 'none', 'important');
+      }
+    }
   };
 
   onlineBtn.addEventListener('click', handleOnlineSelect);
@@ -9095,6 +9040,16 @@ function wireStartScreens(): Promise<void> {
   if (offlineBtn) {
     if (offlineAvailable) {
       offlineBtn.addEventListener('click', handleOfflineSelect);
+      if (import.meta.env.VITE_FA_ADMIN_PREVIEW === '1') {
+        offlineBtn.classList.remove('play-compat-trigger');
+        offlineBtn.classList.add('btn', 'btn-secondary');
+        offlineBtn.removeAttribute('aria-hidden');
+        offlineBtn.removeAttribute('tabindex');
+        offlineBtn.textContent = 'Lokale Admin-Vorschau';
+        if (new URLSearchParams(location.search).has('admin-preview')) {
+          queueMicrotask(() => offlineBtn.click());
+        }
+      }
       offlineBtn.addEventListener('keydown', (e) =>
         handleKeyboardActivation(e as KeyboardEvent, handleOfflineSelect),
       );
@@ -9119,7 +9074,7 @@ function wireStartScreens(): Promise<void> {
     // Production builds hide the Offline dropdown option outright, so it can
     // neither be selected by mouse/keyboard nor land in serverOptions below.
     if (!offlineAvailable) {
-      $('#server-opt-offline')?.setAttribute('hidden', '');
+      $('#server-opt-offline')?.remove();
     }
     const serverOptions = Array.from(
       serverMenu.querySelectorAll<HTMLElement>('.server-select-option:not([hidden])'),
@@ -9365,6 +9320,11 @@ function wireStartScreens(): Promise<void> {
 
   const offlineBackBtn = $('#btn-offline-back');
   const handleOfflineBack = () => {
+    if (appearancePreview) {
+      const url = new URL(location.href);
+      url.searchParams.delete('charaktereditor');
+      history.replaceState(history.state, '', url);
+    }
     show('#mode-select');
     offlineError.textContent = '';
     offlineNameInput.value = '';
@@ -9880,16 +9840,12 @@ function wireStartScreens(): Promise<void> {
 
     if (!name) {
       charselectError.textContent = t('errors.characterNameRequired');
-      newCharNameInput.classList.add('user-invalid-fallback');
-      newCharNameInput.setAttribute('aria-invalid', 'true');
-      newCharNameInput.focus();
+      focusInvalidCharacterName(newCharNameInput);
       return;
     }
     if (!validateCharacterName(name)) {
       charselectError.textContent = t('errors.characterNameInvalid');
-      newCharNameInput.classList.add('user-invalid-fallback');
-      newCharNameInput.setAttribute('aria-invalid', 'true');
-      newCharNameInput.focus();
+      focusInvalidCharacterName(newCharNameInput);
       return;
     }
     if (!clsEl) {
@@ -10360,8 +10316,7 @@ function wireStartScreens(): Promise<void> {
       );
     }
   }
-  // Restore a persisted session: show the Account tab immediately, then confirm
-  // the stored token is still valid against the server (clearing it if not).
+  const returnRealm = consumeCharacterSelectReturn(location.href, history);
   if (RESET_TOKEN && document.getElementById('reset-panel')) {
     // Arrived via the emailed password-reset link: show the set-a-new-password
     // form instead of the normal session restore (index.html only).
@@ -10370,17 +10325,18 @@ function wireStartScreens(): Promise<void> {
   } else if (parkedDiscordChoice) {
     enterLoggedOutChrome();
     showDiscordChoice(parkedDiscordChoice);
+  } else if (appearancePreview) {
+    if (api.restoreSession()) enterLoggedInChrome();
+    else enterLoggedOutChrome();
+    handleOfflineSelect();
   } else if (api.restoreSession()) {
     enterLoggedInChrome();
     void revalidateAccountSession().then(() => {
-      // WebView-reload resume: if the session survived revalidation and a fresh
-      // active-play marker is present, re-enter the world directly instead of
-      // leaving the player parked on the home/character-select chrome. The
-      // Discord-onboarding arm below already enters play, so skip it there, and
-      // the desktop-login handoff page must mint its code, never load the game.
+      // Discord onboarding and the desktop-login handoff own their boot routes.
       if (discordOnboarding) return;
       if (isDesktopLoginPage()) return;
       if (!api.token) return; // revalidation cleared a stale session
+      if (returnRealm) return goToLoggedInPlay(returnRealm);
       const marker = readPlayMarker();
       const resume = freshMarker(marker, Date.now());
       if (resume === null) {
@@ -10512,6 +10468,7 @@ function wireStartScreens(): Promise<void> {
   // Mobile menu toggle setup
   const mobileMenuToggle = $('#mobile-menu-toggle');
   const homepageHeader = $('.homepage-header');
+  initFaCharacterChrome(homepageHeader);
   if (mobileMenuToggle && homepageHeader) {
     const headerMenu = document.getElementById('header-menu-container') as HTMLElement | null;
     let lastNativeMenuToggleAt = 0;
@@ -10665,7 +10622,7 @@ function wireStartScreens(): Promise<void> {
 // playing through the loading screen and fades out once the game is on screen.
 function initHomepageMusic(): void {
   if (homepageMusic) return;
-  const el = new Audio('/audio/main-theme.mp3');
+  const el = new Audio(FANTASY_ARENA_ADVENTURE_TRACK);
   el.loop = true;
   el.muted = homepageMusicMuted;
   el.preload = 'auto';
@@ -10722,16 +10679,19 @@ function fadeOutHomepageMusic(durationMs = 1600): void {
 // Editor play-test handoff: if the map editor stored a custom world and sent us
 // here, boot straight into that offline world and skip the start screen. Any
 // malformed/absent request falls through to the normal home flow.
-const editorPlaytest = takeEditorPlaytestRequest();
-const bossTestDrive = import.meta.env.DEV ? parseBossTestDrive(location.search) : null;
+const localOfflineAvailable = isOfflineModeAvailable(import.meta.env.DEV) && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1';
+const editorPlaytest = localOfflineAvailable ? takeEditorPlaytestRequest() : null;
+const bossTestDrive = localOfflineAvailable ? parseBossTestDrive(location.search) : null;
 const startupParams = new URLSearchParams(location.search);
 const diagnosticsAutoOffline =
-  import.meta.env.DEV &&
+  localOfflineAvailable &&
   startupParams.get('diagnostics') === '1' &&
   startupParams.get('diagnosticsAuto') === '1';
 // Studio entry (studio_boot.ts): a published ?map=<slug> world, or null on the
 // normal flow.
-const studioEntry = resolveStudioEntry(startupParams, editorPlaytest !== null);
+const studioEntry = localOfflineAvailable
+  ? resolveStudioEntry(startupParams, editorPlaytest !== null)
+  : null;
 if (editorPlaytest) {
   startSitePresence('home');
   void liftBootSplashWhenReady({ landing: false, fadeMs: loadingCurtainFadeDelayMs() });

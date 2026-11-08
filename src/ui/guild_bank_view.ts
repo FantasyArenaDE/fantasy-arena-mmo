@@ -180,6 +180,7 @@ export type GuildBankViewModel =
       // contents, which members do audit, stay fully rendered).
       buy: GuildBankBuySlotsModel | null;
       hasDormant: boolean; // any dormant slot present (drives the legend line)
+      canEditItems?: boolean;
       readOnly: boolean;
     };
 
@@ -195,11 +196,13 @@ export function buildGuildBankView(
   purseCopper: number,
 ): GuildBankViewModel {
   if (!info) return { kind: 'hidden' };
-  const readOnly = !info.canEdit;
+  const canEditItems = (info.canEditItems ?? info.canEdit) === true;
+  const canEditGold = (info.canEditGold ?? info.canEdit) === true;
+  const readOnly = !canEditItems && !canEditGold;
   const treasury: GuildBankTreasuryModel = {
     copper: info.treasury,
-    canDepositGold: !readOnly && info.treasury < GUILD_BANK_TREASURY_CAP,
-    canWithdrawGold: !readOnly && info.treasury > 0,
+    canDepositGold: canEditGold && info.treasury < GUILD_BANK_TREASURY_CAP,
+    canWithdrawGold: canEditGold && info.treasury > 0,
   };
   if (guildBankRungsBought(info.purchasedSlots) === 0) {
     // No rung bought yet: the bank is unopened (0 item slots). Rung 0's price
@@ -215,7 +218,7 @@ export function buildGuildBankView(
       kind: 'unopened',
       treasury,
       open:
-        readOnly || price === null
+        !canEditGold || price === null
           ? null
           : {
               purchasedSlots: info.purchasedSlots,
@@ -254,7 +257,7 @@ export function buildGuildBankView(
     slots,
     emptyCells: Math.max(0, total - used),
     empty: used === 0,
-    buy: readOnly
+    buy: !canEditGold
       ? null
       : {
           purchasedSlots: info.purchasedSlots,
@@ -264,6 +267,7 @@ export function buildGuildBankView(
           affordable: info.nextExpansionPrice !== null && info.treasury >= info.nextExpansionPrice,
         },
     hasDormant: slots.some((s) => s.dormant),
+    ...(canEditItems !== canEditGold ? { canEditItems } : {}),
     readOnly,
   };
 }

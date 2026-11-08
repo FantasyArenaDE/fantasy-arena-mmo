@@ -2829,6 +2829,30 @@
   .mini-class[data-class="druid"] {
     --class-color: #ff8c1a;
   }
+  .mini-class[data-class="dreamdancer"] {
+    --class-color: #9ec8ef;
+  }
+  .mini-class[data-newest-class="true"] {
+    position: relative;
+    border-color: #c7aa67;
+  }
+  .mini-class[data-newest-class="true"] .mini-class-portrait {
+    box-shadow: 0 0 0 1px #bba161, 0 0 12px #e8c97855;
+  }
+  .mini-class-new-badge {
+    position: absolute;
+    inset-block-start: -6px;
+    inset-inline-end: 0;
+    z-index: 1;
+    padding: 2px 6px;
+    border: 1px solid #e3c981;
+    border-radius: 4px;
+    color: #251d12;
+    background: #f3d997;
+    font: 700 10px/1.1 var(--font-heading);
+    letter-spacing: .04em;
+    pointer-events: none;
+  }
 
   .mini-class {
     text-align: center;
@@ -3065,6 +3089,15 @@
       background: transparent;
       box-shadow: none;
     }
+    #offline-select.cs-wow .mini-class-row:has([data-newest-class]) {
+      gap: clamp(5px, 1vw, 14px);
+    }
+    #offline-select.cs-wow .mini-class-row:has([data-newest-class]) .mini-class {
+      width: clamp(62px, 8.4vw, 118px);
+    }
+    #offline-select.cs-wow .mini-class-new-badge {
+      inset-inline-end: max(0px, calc(50% - 45px));
+    }
     #offline-select.cs-wow .mini-class .mini-class-portrait,
     body:not(.mobile-touch) #charcreate-panel.cs-wow .mini-class .mini-class-portrait {
       width: 62px;
@@ -3109,6 +3142,7 @@
     body:not(.mobile-touch) #charcreate-panel.cs-wow .mini-class .mini-class-label {
       font-size: 12px;
       color: var(--class-color);
+      text-align: center;
       text-shadow: 0 1px 3px #000;
     }
     #offline-select.cs-wow .mini-class.sel .mini-class-label,
@@ -6172,6 +6206,9 @@
   .mini-class-label {
     flex: 1 1 auto;
     min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   /* Char-select left roster also sits in a framed container (like create) */
@@ -6248,12 +6285,8 @@
     }
     #offline-select .mini-class .mini-class-label {
       flex: 0 0 auto;
-      max-width: 100%;
       font-size: 10px;
       letter-spacing: 0.4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     /* Unwrap both columns and the create form (the desktop takeover already
        proves each tolerates display:contents) so the layout's flex column can

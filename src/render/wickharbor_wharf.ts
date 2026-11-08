@@ -12,6 +12,8 @@
 // the resetter is registered in assets/graphics_profile.ts. Nothing here runs per frame.
 
 import { WICKHARBOR_WHARF_ORIGIN } from '../sim/content/wickharbor_wharf';
+import { WORLD_SEED } from '../sim/world_seed';
+import { buildFantasyArenaWickharborWharf } from './fa_wickharbor_wharf';
 import { registerDeferredPreload } from './assets/preload';
 import { tieredVertexColourModel } from './tiered_vertex_colour_model';
 import { wickharborWharfParts } from './wickharbor_wharf_core';
@@ -26,16 +28,24 @@ const wharf = tieredVertexColourModel({
   origin: WICKHARBOR_WHARF_ORIGIN,
 });
 
-export const prepareWickharborWharfAssets = wharf.prepare;
+export function prepareWickharborWharfAssets(): Promise<void> {
+  return import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? Promise.resolve() : wharf.prepare();
+}
 
-if (typeof window !== 'undefined') registerDeferredPreload(prepareWickharborWharfAssets);
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
+  registerDeferredPreload(prepareWickharborWharfAssets);
+}
 
 /** Drop the prepared templates (graphics-profile rebuilds convert materials anew; the parsed
  *  source survives). Registered in assets/graphics_profile.ts. */
 export const resetWickharborWharfCaches = wharf.reset;
 
 /** The wharf, built once into the props root (built-in world only). */
-export const buildWickharborWharf = wharf.build;
+export function buildWickharborWharf(seed: number = WORLD_SEED): ReturnType<typeof wharf.build> {
+  return import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? buildFantasyArenaWickharborWharf(seed)
+    : wharf.build();
+}
 
 /** The wharf's distinct (geometry, material) programs at the live tier, for the props
  *  material prewarm (props.ts). Empty until buildProps has built the wharf. */

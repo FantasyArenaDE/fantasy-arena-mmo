@@ -6,7 +6,7 @@
 // hydrates: while the character GLBs are still preloading the chip shows the
 // class crest as a placeholder and upgrades to the real portrait once ready.
 
-import { type BodyPick, modularVisualKey, playerVisualKey } from '../render/characters/manifest';
+import { type BodyPick, modularVisualKey, playerPreviewVisualKey } from '../render/characters/manifest';
 import type { ModularLook } from '../render/characters/modular';
 import {
   cachedPortraitByKey,
@@ -146,7 +146,7 @@ export function portraitChipHtml(opts: PortraitChipOpts): string {
     catalog = 'class',
   } = opts;
   const mech = catalog === 'mech';
-  const visualKey = mech ? 'player_mech' : playerVisualKey(cls, opts.appearance);
+  const visualKey = mech ? 'player_mech' : playerPreviewVisualKey(cls, opts.appearance);
   // A class body in its player's OWN head (a WOC body with a custom head) keys
   // its portrait on that head; a default head keys like no head at all, so a
   // stock chip is unchanged.
@@ -223,7 +223,7 @@ export function hydratePortraits(
     const skin = Number(chip.dataset.skin ?? 0) || 0;
     const visualKey =
       chip.dataset.visualKey ??
-      (chip.dataset.catalog === 'mech' ? 'player_mech' : playerVisualKey(cls, null));
+      (chip.dataset.catalog === 'mech' ? 'player_mech' : playerPreviewVisualKey(cls, null));
     if (onlyVisualKey && (visualKey !== onlyVisualKey || skin !== onlySkin)) return;
     const framing = (chip.dataset.framing as PortraitFraming | undefined) ?? 'headshot';
     // A head-keyed chip re-asks with the appearance its builder filed: the data

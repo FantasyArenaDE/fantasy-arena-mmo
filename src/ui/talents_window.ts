@@ -1,3 +1,4 @@
+import { chromeIconUrl } from './chrome_icon_art';
 // Thin DOM painter for the canonical Talents V2 choice-row window.
 //
 // Talent state comes only from currentAllocation(), the IWorld snapshot. Spec
@@ -159,7 +160,7 @@ export class TalentsWindow {
       `${svgIcon('close')}</button>`;
     if (!talentsFor(cls)) {
       root.innerHTML =
-        `<div class="panel-title ui-win-head"><img class="ui-win-art" src="/ui/chrome/talents.webp" alt="" draggable="false"><span class="ui-win-title">${esc(t('game.talents.title'))}<span class="tal-class-name ui-win-sub">${esc(classDisplayName(cls))}</span></span>${close}</div>` +
+        `<div class="panel-title ui-win-head"><img class="ui-win-art" src="${chromeIconUrl('talents')}" alt="" draggable="false"><span class="ui-win-title">${esc(t('game.talents.title'))}<span class="tal-class-name ui-win-sub">${esc(classDisplayName(cls))}</span></span>${close}</div>` +
         `<div class="tal-empty tal-coming-soon" data-talents-coming-soon>` +
         `<b>${esc(t('game.talents.comingSoonTitle'))}</b>` +
         `<span>${esc(t('game.talents.comingSoonBody'))}</span></div>`;
@@ -170,7 +171,7 @@ export class TalentsWindow {
     const allocation = this.deps.currentAllocation();
     const view = buildTalentsView(allocation, cls, this.deps.playerLevel());
     root.innerHTML =
-      `<div class="panel-title ui-win-head"><img class="ui-win-art" src="/ui/chrome/talents.webp" alt="" draggable="false"><span class="ui-win-title">${esc(t('game.talents.title'))}<span class="tal-class-name ui-win-sub">${esc(classDisplayName(cls))}</span></span>${close}</div>` +
+      `<div class="panel-title ui-win-head"><img class="ui-win-art" src="${chromeIconUrl('talents')}" alt="" draggable="false"><span class="ui-win-title">${esc(t('game.talents.title'))}<span class="tal-class-name ui-win-sub">${esc(classDisplayName(cls))}</span></span>${close}</div>` +
       // WAI-ARIA tabs, built from the shared tab_strip_view core (default
       // button tag; the Choices tab carries its picked-count badge via
       // extraHtml, the same markup contract social_window follows).

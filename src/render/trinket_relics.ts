@@ -70,7 +70,9 @@ const MODEL_URL = '/models/vfx/trinket_relics.glb';
 
 let loadedRelics: THREE.Group | null = null;
 
-if (typeof window !== 'undefined') {
+// The release uses this module's existing orb, lantern and hammer stand-ins;
+// the optional authored GLB has no exact entry in the redistribution register.
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   // Deferred, never eager (tests/defer_launcher_preloads.test.ts): world
   // content, awaited by assetsReady() before the renderer builds its pools.
   registerDeferredPreload(() =>
@@ -175,14 +177,17 @@ function tagVfx(root: THREE.Object3D): void {
   });
 }
 
-function colouredIcosahedron(radius: number, detail: number, hex: number): THREE.BufferGeometry {
-  const geometry = new THREE.IcosahedronGeometry(radius, detail);
+function colourGeometry(geometry: THREE.BufferGeometry, hex: number): THREE.BufferGeometry {
   const count = geometry.getAttribute('position').count;
   const colors = new Float32Array(count * 3);
   const c = new THREE.Color(hex);
   for (let i = 0; i < count; i++) c.toArray(colors, i * 3);
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   return geometry;
+}
+
+function colouredIcosahedron(radius: number, detail: number, hex: number): THREE.BufferGeometry {
+  return colourGeometry(new THREE.IcosahedronGeometry(radius, detail), hex);
 }
 
 /** A terrain-draped disc whose vertex alpha carries LANTERN_LIGHT_PROFILE. */
@@ -318,8 +323,8 @@ export class TrinketRelics {
     }
     for (let i = 0; i < HAMMER_SLOTS; i++) {
       const pivot = new THREE.Group();
-      if (hammerTemplate) {
-        const model = hammerTemplate.clone(true);
+      if (hammerTemplate || import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+        const model = hammerTemplate ? hammerTemplate.clone(true) : this.fallbackHammer();
         // The model's hot face points at -X; turn it onto the swing's +Z.
         model.rotation.y = Math.PI / 2;
         model.scale.setScalar(HAMMER_SCALE);
@@ -378,6 +383,28 @@ export class TrinketRelics {
     flame.position.y = 0.24;
     const group = new THREE.Group();
     group.add(flame);
+    return group;
+  }
+
+  private fallbackHammer(): THREE.Object3D {
+    const group = new THREE.Group();
+    group.name = 'release-fallback-hammer';
+    const shaft = new THREE.Mesh(
+      colourGeometry(new THREE.CylinderGeometry(0.04, 0.05, 0.58, 8), 0x754827),
+      this.bodyMat,
+    );
+    shaft.position.y = 0.29;
+    const head = new THREE.Mesh(
+      colourGeometry(new THREE.BoxGeometry(0.42, 0.22, 0.2), 0x595550),
+      this.bodyMat,
+    );
+    head.position.y = 0.58;
+    const hotFace = new THREE.Mesh(
+      colourGeometry(new THREE.BoxGeometry(0.025, 0.16, 0.16), 0xffa23b),
+      this.glowMat,
+    );
+    hotFace.position.set(-0.22, 0.58, 0);
+    group.add(shaft, head, hotFace);
     return group;
   }
 

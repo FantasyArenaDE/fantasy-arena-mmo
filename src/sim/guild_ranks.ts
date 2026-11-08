@@ -1,3 +1,5 @@
+import type { GuildRank } from './guild_bank';
+
 // Guild ranks: the per-guild rank LADDER (named titles, each carrying a
 // permission set) that generalizes the fixed Guild Master / Officer / Member
 // tiers (docs/prd/guild-custom-ranks.md). Host-agnostic on purpose: the server
@@ -29,7 +31,8 @@ export const GUILD_RANK_PERMISSIONS = [
   'invite',
   'remove',
   'promote',
-  'bank',
+  'bankItems',
+  'bankGold',
   'officerChat',
   'motd',
   'events',
@@ -68,7 +71,8 @@ export interface GuildRankDef {
 export const DEFAULT_OFFICER_PERMISSIONS: readonly GuildRankPermission[] = [
   'invite',
   'remove',
-  'bank',
+  'bankItems',
+  'bankGold',
   'officerChat',
   'motd',
   'events',
@@ -110,6 +114,10 @@ export function sanitizeGuildRankName(raw: unknown): string | null {
 function sanitizePerms(raw: unknown): GuildRankPermission[] | null {
   if (!Array.isArray(raw)) return null;
   const held = new Set(raw.filter((p): p is string => typeof p === 'string'));
+  if (held.has('bank')) {
+    held.add('bankItems');
+    held.add('bankGold');
+  }
   return GUILD_RANK_PERMISSIONS.filter((p) => held.has(p));
 }
 
@@ -238,18 +246,17 @@ export function guildStepDownRankId(ladder: readonly GuildRankDef[]): GuildRankI
   return ladder[1]?.id ?? GUILD_RANK_MEMBER_ID;
 }
 
-/** The built-in tier the live sim's guild bank stamp understands (src/sim/
- *  guild_bank.ts GUILD_RANKS, whose edit gate is a positive allowlist of
- *  leader and officer): the Guild Master stamps 'leader', a rank holding the
- *  'bank' permission stamps 'officer', every other rank stamps 'member' (the
- *  read-only vault view). The sim never learns rank names, only authority. */
-export function guildBankStampRank(
-  ladder: readonly GuildRankDef[],
-  id: GuildRankId,
-): 'leader' | 'officer' | 'member' {
+/** Resolve the guild bank's session authority once when stamping membership. */
+export function guildBankStampRank(ladder: readonly GuildRankDef[], id: GuildRankId): GuildRank {
   const index = guildRankIndex(ladder, id);
   if (index === 0) return 'leader';
-  return ladder[index]?.perms.includes('bank') ? 'officer' : 'member';
+  const perms = ladder[index]?.perms;
+  const items = perms?.includes('bankItems');
+  const gold = perms?.includes('bankGold');
+  if (items && gold) return 'officer';
+  if (items) return 'bank-items';
+  if (gold) return 'bank-gold';
+  return 'member';
 }
 
 /** The ids present in `before` but gone from `after`: the ranks a ladder save

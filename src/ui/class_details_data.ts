@@ -21,6 +21,10 @@ export interface ClassDetails {
 }
 
 export const CLASS_DETAILS: Record<PlayerClass, ClassDetails> = {
+  dreamdancer: {
+    roleKey: 'classDetails.roles.dreamdancer', roleType: 'hybrid',
+    armorKey: 'classDetails.armor.cloth', weaponsKey: 'classDetails.weapons.staves',
+  },
   warrior: {
     roleKey: 'classDetails.roles.warrior',
     roleType: 'hybrid',
@@ -81,6 +85,7 @@ export const CLASS_DETAILS: Record<PlayerClass, ClassDetails> = {
 // Each entry MUST be a real ability that the class can learn, enforced by
 // tests/charselect_class_details.test.ts so this never drifts from the sim.
 export const SIGNATURE_ABILITIES: Record<PlayerClass, string[]> = {
+  dreamdancer: ['dream_thread', 'dream_spark', 'dream_shroud'],
   warrior: ['charge', 'heroic_strike', 'execute'],
   paladin: ['holy_light', 'hammer_of_grace', 'divine_ascension'],
   hunter: ['pack_command', 'measured_shot', 'raptor_strike'],
@@ -107,6 +112,11 @@ export interface SpecCardInfo {
   examples: string[];
 }
 export const SPEC_CARD_INFO: Record<PlayerClass, Record<string, SpecCardInfo>> = {
+  dreamdancer: {
+    nightweaver: { complexity: 'medium', examples: ['dream_thread', 'dream_spark', 'dream_moonrend', 'dream_deep_nightmare'] },
+    dreamkeeper: { complexity: 'medium', examples: ['dream_thread', 'dream_comfort', 'dream_chorus', 'dream_shroud'] },
+    veilweaver: { complexity: 'medium', examples: ['dream_thread', 'dream_spark', 'dream_miststep', 'dream_veil'] },
+  },
   warrior: {
     arms: {
       complexity: 'medium',

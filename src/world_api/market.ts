@@ -44,6 +44,11 @@ export interface MarketListingView {
   materialSources?: MaterialComposition;
 }
 
+export interface MarketReturnedItem extends InvSlot {
+  relistId?: number;
+  relistPrice?: number;
+}
+
 export interface MarketInfo {
   // The viewer's own visible listings followed by ONE page of other sellers' listings
   // matching the active query. All matching own rows wire for reclaim normally; collapse
@@ -71,7 +76,7 @@ export interface MarketInfo {
   page: number; // current browse page (of other sellers' listings), 0-based
   pageCount: number; // total browse pages of other sellers' listings (>= 1)
   collectionCopper: number; // proceeds waiting to be collected
-  collectionItems: InvSlot[]; // returned/expired items waiting to be collected
+  collectionItems: MarketReturnedItem[]; // returned/expired items waiting to be collected
   /** The seller's sale history (the History tab): one row per sale, oldest first,
    *  kept after the gold is collected and bounded by the ledger cap. */
   collectionSales: MarketSaleRecord[];
@@ -149,6 +154,7 @@ export interface IWorldMarket {
   marketSweep(itemId: string, count: number, maxCopper: number): void;
   marketCancel(listingId: number): void;
   marketCollect(): void;
+  marketRelist(ids: readonly number[], cutPct: number): void;
   /** Place a buy order for `count` units of `itemId` at `unitPrice` each: the sim
    *  fills what the book already offers at or under that price, escrows the
    *  rest, and the order stays open until delivered into or withdrawn. */

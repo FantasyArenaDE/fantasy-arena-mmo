@@ -14,6 +14,8 @@ export interface BootInputs {
   search: string;
   nativeApp: boolean;
   desktopApp: boolean;
+  /** Browser-selected initial language when no explicit preference exists. */
+  browserLocale?: string;
   /** A localStorage value, or null when unset or storage is unavailable. */
   stored: (key: string) => string | null;
   /** A sessionStorage value, or null when unset or storage is unavailable. */
@@ -50,6 +52,7 @@ export const GAME_NOW_QUERY_KEYS: readonly string[] = [
   'map',
   'editorPlaytest',
   'boss',
+  'charaktereditor',
 ];
 
 export function bootModeFor(input: BootInputs): BootMode {
@@ -61,7 +64,7 @@ export function bootModeFor(input: BootInputs): BootMode {
   }
   // The HTML is English; any other language is applied by the client
   // (src/ui/i18n.ts reads ?lang first, then the stored locale).
-  const lang = query.get('lang') ?? input.stored('locale');
+  const lang = query.get('lang') ?? input.stored('locale') ?? input.browserLocale ?? null;
   if (lang !== null && lang !== 'en') return 'game';
   if (GAME_NOW_STORED_KEYS.some((key) => input.stored(key) !== null)) return 'game';
   if (GAME_NOW_SESSION_KEYS.some((key) => input.session(key) !== null)) return 'game';

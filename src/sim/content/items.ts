@@ -4,7 +4,7 @@ import { CLUE_SCROLL_STACK_MAX } from './clue_hunts';
 // Archetype groups for class-locked rewards (REWARD_ARCHETYPE hands warrior
 // rewards to paladins/shamans etc., so the lock must admit the whole group).
 const WAR: PlayerClass[] = ['warrior', 'paladin', 'shaman'];
-const MAG: PlayerClass[] = ['mage', 'priest', 'warlock', 'druid'];
+const MAG: PlayerClass[] = ['mage', 'priest', 'warlock', 'druid', 'dreamdancer'];
 const ROG: PlayerClass[] = ['rogue', 'hunter'];
 // Feral druid weapons. A bespoke, druid-only lock: it is NOT one of the three
 // weapon-proficiency groups, so weaponArchetypeForItem returns null and
@@ -20,6 +20,7 @@ export const CASTER_ALL: PlayerClass[] = [
   'shaman',
   'paladin',
   'druid',
+  'dreamdancer',
 ];
 // Quivers: the hunter's held-offhand stat sticks. A bespoke, hunter-only lock
 // like FERAL above, and deliberately NOT the ROG group: rogues already reach the
@@ -34,6 +35,7 @@ const CASTER_WEAPON_CLASSES: PlayerClass[] = [
   'shaman',
   'paladin',
   'druid',
+  'dreamdancer',
 ];
 
 // ---------------------------------------------------------------------------
@@ -50,6 +52,44 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     quality: 'common',
     weapon: { min: 2, max: 5, speed: 2.0 },
     sellValue: 10,
+  },
+  dreamcatcher_focus: {
+    id: 'dreamcatcher_focus', name: 'Dreamcatcher', kind: 'held_offhand', slot: 'offhand',
+    quality: 'common', sellValue: 0, requiredClass: ['dreamdancer'],
+  },
+  dreamdancer_staff: {
+    id: 'dreamdancer_staff',
+    name: 'Dreamweave Staff',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'common',
+    weapon: { min: 3, max: 6, speed: 2.9 },
+    stats: { int: 1 },
+    sellValue: 0,
+    requiredClass: ['dreamdancer'],
+    classLocked: true,
+  },
+  dreamdancer_moonthread_staff: {
+    id: 'dreamdancer_moonthread_staff', name: 'Moonthread Staff', kind: 'weapon', slot: 'mainhand',
+    quality: 'uncommon', requiredLevel: 7, requiredClass: ['dreamdancer'], classLocked: true,
+    weapon: { min: 7, max: 12, speed: 2.9 }, stats: { int: 2, spi: 1 },
+    sellValue: 180, buyValue: 1800,
+  },
+  dreamcatcher_silver_focus: {
+    id: 'dreamcatcher_silver_focus', name: 'Silver Dreamcatcher', kind: 'held_offhand', slot: 'offhand',
+    quality: 'uncommon', requiredLevel: 7, requiredClass: ['dreamdancer'], classLocked: true,
+    stats: { int: 1, spi: 1 }, sellValue: 90, buyValue: 900,
+  },
+  dreamdancer_starlace_staff: {
+    id: 'dreamdancer_starlace_staff', name: 'Starlace Staff', kind: 'weapon', slot: 'mainhand',
+    quality: 'rare', requiredLevel: 17, requiredClass: ['dreamdancer'], classLocked: true,
+    weapon: { min: 17, max: 29, speed: 2.9 }, stats: { int: 5, spi: 3, sta: 1 },
+    sellValue: 850, buyValue: 8500,
+  },
+  dreamcatcher_nightglass_focus: {
+    id: 'dreamcatcher_nightglass_focus', name: 'Nightglass Dreamcatcher', kind: 'held_offhand', slot: 'offhand',
+    quality: 'rare', requiredLevel: 17, requiredClass: ['dreamdancer'], classLocked: true,
+    stats: { int: 2, spi: 2, sta: 1 }, sellValue: 550, buyValue: 5500,
   },
   gnarled_staff: {
     id: 'gnarled_staff',

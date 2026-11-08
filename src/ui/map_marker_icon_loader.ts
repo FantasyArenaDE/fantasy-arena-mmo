@@ -455,6 +455,9 @@ export function createMapMarkerArt(
   };
 
   const ensure = (id: MapMarkerArtId): void => {
+    // The private release excludes these rights-reserved paintings. The map
+    // painters already draw semantic geometry when no raster is available.
+    if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') return;
     if (images.has(id)) return;
     const image = createImage();
     if (!image) {

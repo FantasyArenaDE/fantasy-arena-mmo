@@ -21,6 +21,7 @@
 // resolve within the wrapper (only member rows live there); appendChild/insertBefore
 // move a node without dropping its keyboard focus or its listeners.
 
+import type { DungeonDifficulty } from '../sim/types';
 import { formatNumber, t } from './i18n';
 import type { PainterHostWriters } from './painter_host';
 import {
@@ -137,6 +138,7 @@ export class PartyFramesPainter {
   private chip: PartyChip | null = null;
   private header: PartyFrameHeader | null = null;
   private headerCollapsed = false;
+  private difficulty: DungeonDifficulty | null = null;
   private memberCount = 0;
   private selfShown = false;
   private mobile = false;
@@ -196,9 +198,16 @@ export class PartyFramesPainter {
    * through the elided writers (class + attr + text), so a steady state (unchanged
    * inputs, the dominant case) writes nothing.
    */
-  setCollapse(inParty: boolean, mobile: boolean, collapsed: boolean, chatOpen: boolean): void {
+  setCollapse(
+    inParty: boolean,
+    mobile: boolean,
+    collapsed: boolean,
+    chatOpen: boolean,
+    difficulty: DungeonDifficulty | null = null,
+  ): void {
     this.mobile = mobile;
     this.headerCollapsed = collapsed;
+    this.difficulty = inParty ? difficulty : null;
     const state = partyChipState({ inParty, mobile, collapsed, chatOpen });
     // Desktop's own header also hides the rows when collapsed; the chat
     // overlay only hides them on mobile (partyChipState leaves desktop alone).
@@ -213,6 +222,7 @@ export class PartyFramesPainter {
         this.container.insertBefore(chip.el, this.container.firstChild);
       }
       this.writers.setText(chip.label, this.deps.chipLabel());
+      this.paintDifficulty(chip.difficulty);
       this.writers.setAttr(chip.el, ARIA_EXPANDED, state.framesExpanded ? ARIA_TRUE : ARIA_FALSE);
     } else if (this.chip) {
       // Left the party or switched to desktop: drop the chip entirely.
@@ -244,6 +254,16 @@ export class PartyFramesPainter {
     return partyFrameHeaderState(this.memberCount, this.headerCollapsed, this.selfShown);
   }
 
+  private paintDifficulty(el: HTMLElement): void {
+    const difficulty = this.difficulty;
+    this.writers.setText(
+      el,
+      difficulty
+        ? t(difficulty === 'heroic' ? 'hudChrome.finder.heroic' : 'hudChrome.finder.normal')
+        : '',
+    );
+  }
+
   private paintHeader(): void {
     const state = this.headerState();
     const visible = state.visible && !this.mobile;
@@ -254,6 +274,7 @@ export class PartyFramesPainter {
       }
       this.writers.setText(header.label, t('hudChrome.partyFrames.header'));
       this.writers.setText(header.count, formatNumber(state.count));
+      this.paintDifficulty(header.difficulty);
       this.writers.setAttr(header.el, ARIA_EXPANDED, state.collapsed ? ARIA_FALSE : ARIA_TRUE);
     } else {
       this.header?.el.remove();
@@ -410,11 +431,9 @@ export class PartyFramesPainter {
     // setCollapse for it, exactly like the pooled group labels above).
     if (this.chip && this.chipShown) {
       this.writers.setText(this.chip.label, this.deps.chipLabel());
+      this.paintDifficulty(this.chip.difficulty);
     }
-    if (this.header?.el.parentNode === this.container) {
-      this.writers.setText(this.header.label, t('hudChrome.partyFrames.header'));
-      this.writers.setText(this.header.count, formatNumber(this.headerState().count));
-    }
+    if (this.header?.el.parentNode === this.container) this.paintHeader();
   }
 
   /** Empty the frames (no party): detach every row and both disclosure controls.

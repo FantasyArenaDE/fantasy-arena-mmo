@@ -35,6 +35,7 @@ import {
 import { terrainHeight } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { buildFantasyArenaSunkenBastion } from './fa_sunken_bastion_entrance';
 import { currentDayNightPhase } from './day_night_clock';
 import { floorVfxRenderOrder } from './floor_vfx_layer';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
@@ -68,7 +69,7 @@ const RUINS_URL = '/models/props/sunken_bastion_entrance_ruins.glb';
 const GROWTH_URL = '/models/props/sunken_bastion_entrance_growth.glb';
 const URLS = [MAIN_URL, RUINS_URL, GROWTH_URL] as const;
 const sources = new Map<string, THREE.Group>();
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   for (const url of URLS) {
     registerDeferredPreload(() =>
       loadGltf(url).then((gltf) => {
@@ -759,13 +760,16 @@ export function buildSunkenBastionEntrance(seed: number): SunkenBastionEntranceV
   const gate = new THREE.Group();
   gate.name = 'sunkenBastionEntranceBody';
   gate.position.set(door.x, base, door.z);
-  const main = sources.get(MAIN_URL);
-  const gatehouse = main ? seat(main, true) : fallbackGate();
+  const replacement = import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? buildFantasyArenaSunkenBastion(door, base, seed)
+    : null;
+  const main = replacement ? undefined : sources.get(MAIN_URL);
+  const gatehouse = replacement?.gatehouse ?? (main ? seat(main, true) : fallbackGate());
   gate.add(gatehouse);
-  const ruinsSource = sources.get(RUINS_URL);
-  const ruins = ruinsSource ? seat(ruinsSource, true) : null;
+  const ruinsSource = replacement ? undefined : sources.get(RUINS_URL);
+  const ruins = replacement?.ruins ?? (ruinsSource ? seat(ruinsSource, true) : null);
   if (ruins) gate.add(ruins);
-  const growthSource = sources.get(GROWTH_URL);
+  const growthSource = replacement ? undefined : sources.get(GROWTH_URL);
   const growth = growthSource ? seat(growthSource, false) : null;
   if (growth) gate.add(growth);
   const passage = passageWindow();

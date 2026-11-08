@@ -16,6 +16,7 @@
 // render/ui/game/net, no Math.random/Date.now), so it runs unchanged in Node, the
 // browser, and the headless RL env (enforced by tests/architecture.test.ts).
 
+import { gmHiddenFrom } from '../gm_presence';
 import { cancelPendingDifficultyChange } from '../instances/difficulty_selection';
 import { expeditionFamilyClaims } from '../instances/dungeon_expeditions';
 import { revokeMasterLooterAuthority } from '../loot/loot_roll';
@@ -31,7 +32,6 @@ import { type Aura, DEFAULT_PARTY_LOOT_STRATEGIES } from '../types';
 // PARTY_MAX is also read by the render side to size the pools of telegraphs a
 // whole party can wear at once (wildheart_basin/basin_trash_fx_core.ts).
 export const PARTY_MAX = 5;
-const RAID_MIN = 5;
 // The largest roster any group can hold, enforced at every join site below
 // (partyInvite, partyAccept, and the Dungeon Finder formation seam). The one cap
 // with a reader outside this file: it is also the honest ceiling on how many
@@ -133,6 +133,8 @@ export class PartyMachine {
     const target = this.ctx.players.get(targetPid);
     if (!r || !target) return;
     if (targetPid === r.meta.entityId) return;
+    const targetEntity = this.ctx.entities.get(targetPid);
+    if (targetEntity && gmHiddenFrom(this.ctx.entities, r.e, targetEntity)) return;
     const myParty = this.partyOf(r.meta.entityId);
     if (myParty && myParty.leader !== r.meta.entityId) {
       this.ctx.error(r.meta.entityId, 'Only the party leader may invite.');
@@ -313,7 +315,7 @@ export class PartyMachine {
     if (!r) return;
     const party = this.partyOf(r.meta.entityId);
     if (!party) {
-      this.ctx.error(r.meta.entityId, 'You need a full party of five before converting to raid.');
+      this.ctx.error(r.meta.entityId, 'You are not the party leader.');
       return;
     }
     if (party.leader !== r.meta.entityId) {
@@ -322,10 +324,6 @@ export class PartyMachine {
     }
     if (party.raid) {
       this.ctx.error(r.meta.entityId, 'Your group is already a raid.');
-      return;
-    }
-    if (party.members.length < RAID_MIN) {
-      this.ctx.error(r.meta.entityId, 'You need a full party of five before converting to raid.');
       return;
     }
     party.raid = true;

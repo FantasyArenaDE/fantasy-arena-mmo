@@ -34,7 +34,7 @@ export type QuestWorldCommand =
   | { cmd: 'world_quest_shadow'; action: 'pickpocket' | 'leave'; targetId?: number }
   | { cmd: 'world_quest_start'; quest: string; difficulty: ActivityChoice }
   | { cmd: 'world_quest_reroll'; quest: string }
-  | { cmd: 'world_quest_weekly_choose'; quest: string }
+  | { cmd: 'world_quest_weekly_choose'; quest: string; faction?: FactionId }
   | { cmd: 'world_quest_weekly_commend'; faction: string }
   | { cmd: 'clue_hunt_abandon' }
   | { cmd: 'guild_buy_cosmetic'; offer: string }
@@ -226,8 +226,12 @@ export class QuestWorldWireState {
     return true;
   }
 
-  chooseWeeklyQuest(questId: string): void {
-    this.sendQuestWorldCommand({ cmd: 'world_quest_weekly_choose', quest: questId });
+  chooseWeeklyQuest(questId: string, factionId?: FactionId): void {
+    this.sendQuestWorldCommand({
+      cmd: 'world_quest_weekly_choose',
+      quest: questId,
+      ...(factionId ? { faction: factionId } : {}),
+    });
   }
 
   commendWeeklyQuest(factionId: FactionId): void {

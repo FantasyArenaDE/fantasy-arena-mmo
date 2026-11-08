@@ -417,6 +417,11 @@ export function buildWaterSurfaceTileIndex(
 export const WATER_SEABED_CLAMP_YARDS = 6;
 /** Width of the surf band measured ALONG THE GROUND from the waterline. */
 export const WATER_FOAM_WIDTH_YARDS = 4.5;
+// The coherent shore wash shared by the ocean shader and surface spray.
+export const SHORE_LAP_CYCLES = 88;
+export const SHORE_LAP_DEPTH = 1.1;
+export const SHORE_LAP_X = 0.071;
+export const SHORE_LAP_Z = 0.053;
 
 // Half-width of the central difference used for the seabed gradient, in yards.
 // The zone plane bakes at ~2 yard vertex spacing, so sampling wider than that

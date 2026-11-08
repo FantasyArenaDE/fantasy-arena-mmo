@@ -29,6 +29,7 @@ import { hash2 } from '../sim/rng';
 import { terrainHeight } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { buildReleaseHollowMouth } from './fa_release_hollow_mouth';
 import { cloneMaterialWithHooks } from './material_clone_hooks';
 import {
   advanceOccluderFade,
@@ -70,7 +71,8 @@ const GATE_URLS = {
 } as const;
 type GateKey = keyof typeof GATE_URLS;
 const gateScenes: Partial<Record<GateKey, THREE.Group>> = {};
-for (const key of Object.keys(GATE_URLS) as GateKey[]) {
+const releaseGeometry = import.meta.env.VITE_FA_BROWSER_RELEASE === '1';
+for (const key of releaseGeometry ? [] : (Object.keys(GATE_URLS) as GateKey[])) {
   registerDeferredPreload(() =>
     loadGltf(GATE_URLS[key]).then((gltf) => {
       gateScenes[key] = gltf.scene;
@@ -99,9 +101,9 @@ export function buildHollowGates(seed: number): HollowGatesView {
   if (!portal) return { group, update: () => {} };
 
   const place = (key: GateKey, x: number, z: number, facing: number): void => {
-    const scene = gateScenes[key];
+    const scene = releaseGeometry ? buildReleaseHollowMouth(key) : gateScenes[key];
     if (!scene) return;
-    const gate = scene.clone(true);
+    const gate = releaseGeometry ? scene : scene.clone(true);
     // re-base: xz-centered, feet at min-y, normalized to GATE_HEIGHT
     const box = new THREE.Box3().setFromObject(gate);
     const size = new THREE.Vector3();
@@ -125,7 +127,16 @@ export function buildHollowGates(seed: number): HollowGatesView {
     gate.position.set(0, 0, 0);
     const outer = new THREE.Group();
     outer.add(inner);
-    inner.position.set(-cx * s, -box.min.y * s, -cz * s);
+    // Release geometry is built in the sim portal frame, not a source-art AABB frame.
+    inner.position.set(
+      releaseGeometry ? 0 : -cx * s,
+      -box.min.y * s,
+      releaseGeometry ? 0 : -cz * s,
+    );
+    const footprintShift = new THREE.Vector3();
+    if (releaseGeometry) {
+      footprintShift.set(cx * s, 0, cz * s).applyAxisAngle(new THREE.Vector3(0, 1, 0), facing);
+    }
     inner.scale.setScalar(s);
     // Seat at the footprint MINIMUM (center + a ring under the mound's
     // base), not the center sample: the calm pad levels the bench, but the
@@ -158,8 +169,8 @@ export function buildHollowGates(seed: number): HollowGatesView {
     });
     group.add(outer);
     occluders.push({
-      x,
-      z,
+      x: x + footprintShift.x,
+      z: z + footprintShift.z,
       hw: halfW,
       hd: halfD,
       rot: facing,

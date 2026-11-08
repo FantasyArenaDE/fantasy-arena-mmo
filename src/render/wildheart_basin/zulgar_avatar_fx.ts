@@ -29,6 +29,7 @@ import {
 import type { Entity, SimEvent } from '../../sim/types';
 import type { IWorld } from '../../world_api';
 import { loadGltf } from '../assets/loader';
+import { faJaguarSpiritUrl } from '../characters/fa_release_jaguar_spirit';
 import { ZULGAR_HIDE_GESTURE, ZULGAR_SHOW_GESTURE } from '../characters/wildheart_creature_looks';
 import { attachSceneGroupGated } from '../gated_scene_attach';
 import { setRenderCategory } from '../renderer_diagnostics';
@@ -93,7 +94,7 @@ export class ZulgarAvatarFx {
     setRenderCategory(this.root, 'ui3d');
     // The gate owns the root's visibility (it reveals it once linked); the body
     // inside is what this module shows and hides.
-    this.ready = loadGltf(JAGUAR_MODEL.spiritUrl)
+    this.ready = loadGltf(faJaguarSpiritUrl(JAGUAR_MODEL.spiritUrl, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'))
       .then(async (gltf) => {
         if (this.disposed) return;
         this.build(gltf.scene, gltf.animations);

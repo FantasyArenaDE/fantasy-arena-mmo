@@ -463,7 +463,7 @@ export interface RaidView {
  *  plus whether the leader may un-convert a small raid. */
 export function raidView(party: PartyInfo | null, myPid: number): RaidView {
   if (!party?.raid) {
-    const canConvert = !!party && party.leader === myPid && party.members.length >= 5;
+    const canConvert = !!party && party.leader === myPid && party.members.length >= 2;
     return { raid: false, canConvert, canUnconvert: false, groups: null };
   }
   const leader = party.leader === myPid;

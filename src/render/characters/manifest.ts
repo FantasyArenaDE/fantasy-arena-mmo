@@ -208,6 +208,52 @@ import type { BoneDialDef } from './bone_dials';
 import type { ChargeGlowSpec } from './charge_glow_core';
 import type { ClipTrackDrops } from './clip_track_drops';
 import type { EyeGlowSpec } from './eye_glow_core';
+import {
+  FA_HUMAN_B_KEY,
+  FA_HUMAN_B_VISUAL,
+  faHumanBPilotEnabled,
+  faHumanBPilotMatches,
+} from './fa_human_b_pilot';
+import {
+  FA_QUATERNIUS_FEMALE_KEY,
+  FA_QUATERNIUS_FEMALE_VISUAL,
+  FA_QUATERNIUS_MAGE_FEMALE_KEY,
+  FA_QUATERNIUS_MAGE_FEMALE_VISUAL,
+  FA_QUATERNIUS_MAGE_MALE_KEY,
+  FA_QUATERNIUS_MAGE_MALE_VISUAL,
+  FA_QUATERNIUS_PRIEST_MALE_KEY,
+  FA_QUATERNIUS_PRIEST_MALE_VISUAL,
+  FA_QUATERNIUS_PRIEST_FEMALE_KEY,
+  FA_QUATERNIUS_PRIEST_FEMALE_VISUAL,
+  FA_QUATERNIUS_TRADER_KEY,
+  FA_QUATERNIUS_TRADER_VISUAL,
+  FA_QUATERNIUS_MALE_KEY,
+  FA_QUATERNIUS_MALE_VISUAL,
+  faQuaterniusPilotEnabled,
+  faCc0SliceEnabled,
+  faQuaterniusPilotKey,
+  faQuaterniusRegisterReleaseKey,
+} from './fa_quaternius_pilot';
+import type { FaReleaseClassLook } from './fa_release_class_look';
+import { FA_RELEASE_HUMAN_WEAPONS, faReleaseHumanNpcProps, faReleaseHumansEnabled, faReleaseHumanVisual } from './fa_release_humans';
+import { faReleaseBoarVisual } from './fa_release_boar';
+import { faReleaseWaterElemental } from './fa_release_water_elemental';
+import { faReleaseKoboldVisual } from './fa_release_kobold';
+import { faReleaseOgreVisual } from './fa_release_ogre';
+import { faReleaseDragonEgg, faReleaseDragonkin } from './fa_release_dragonkin';
+import { faReleaseCrab } from './fa_release_crab';
+import { faReleaseCrow } from './fa_release_crow';
+import { faReleaseCantor, faReleaseLaverock } from './fa_release_cantors';
+import { faReleaseCryptRole } from './fa_release_crypt_roles';
+import { faReleaseCryptAssets } from './fa_release_crypt_assets';
+import { faReleaseGrubjaw } from './fa_release_grubjaw';
+import {
+  faReleaseSkeletonArms,
+  faReleaseSkeletonEnabled,
+  faReleaseSkeletonMinion,
+} from './fa_release_skeletons';
+import { faReleaseStagEnabled, faReleaseStagVisual } from './fa_release_stag';
+import { faReleaseWolfEnabled, faReleaseWolfVisual } from './fa_release_wolf';
 import type { MeshToggleDef } from './gesture_mesh_toggles';
 import type { GlowPulseSet } from './glow_pulse_core';
 import { NPC_PROP_SET_IDS, type NpcLook, type NpcPropSet, npcLookFor } from './npc_looks';
@@ -498,7 +544,10 @@ export interface AttachDef {
   url: string;
   bone: string;
   position?: [number, number, number];
+  rotationX?: number;
   rotationY?: number;
+  /** Unit conversion for a prop authored at a different scale than its parent bone. */
+  boneScale?: number;
   /** Copy grip from a built-in accessory node on the character rig (e.g. Spellbook_open). */
   gripRef?: string;
   /** A pure swap-slot BASE that never renders anywhere: it exists only so an
@@ -517,6 +566,8 @@ export interface AttachDef {
 }
 
 export interface VisualDef {
+  /** The curated CC0 player body’s fixed class costume. */
+  faReleaseClass?: FaReleaseClassLook;
   url: string;
   /** Optional extra GLBs that provide animation clips for static rig files. */
   animUrls?: string[];
@@ -2714,32 +2765,35 @@ const WOC_CRYPT_PROP_SIZE = 0.76;
 // flourish: a respawn, Reassemble, a summon) pulls the heap back onto its feet and
 // ends on Idle, and a boss's summoned minions rise on it too. Cast is a raised-hands
 // conjuring loop for the cast bars.
-const WOC_SKELETON_MINION: VisualDef = {
-  url: `${CREATURES}/woc_skeleton_minion.glb`,
-  height: 2.5,
-  clips: {
-    idle: 'Idle',
-    walk: 'Walk',
-    run: 'Run',
-    attack: ['Attack'],
-    hit: ['React'],
-    death: 'Death',
-    flourish: 'Awaken',
-    cast: 'Cast',
-    // a summoned minion rises the same way (sim/mob/summon_rise.ts, summon_rise_fx.ts)
-    entrance: 'Awaken',
+const WOC_SKELETON_MINION: VisualDef = faReleaseSkeletonMinion(
+  {
+    url: `${CREATURES}/woc_skeleton_minion.glb`,
+    height: 2.5,
+    clips: {
+      idle: 'Idle',
+      walk: 'Walk',
+      run: 'Run',
+      attack: ['Attack'],
+      hit: ['React'],
+      death: 'Death',
+      flourish: 'Awaken',
+      cast: 'Cast',
+      // a summoned minion rises the same way (sim/mob/summon_rise.ts, summon_rise_fx.ts)
+      entrance: 'Awaken',
+    },
+    entranceGesture: SUMMON_RISE_CUE,
+    // its first swing never cuts the rise short
+    oneShotsHoldAttacks: ['Awaken'],
+    walkRef: 2.0,
+    runRef: 6.0,
+    authoredAtlas: true,
+    tint: 'entity',
+    tintStrength: 0.25,
   },
-  entranceGesture: SUMMON_RISE_CUE,
-  // its first swing never cuts the rise short
-  oneShotsHoldAttacks: ['Awaken'],
-  walkRef: 2.0,
-  runRef: 6.0,
-  authoredAtlas: true,
-  tint: 'entity',
-  tintStrength: 0.25,
-};
+  faReleaseSkeletonEnabled(),
+);
 
-export const VISUALS: Record<string, VisualDef> = {
+export const VISUALS: Record<string, VisualDef> = faReleaseCryptAssets({
   // -- player classes ------------------------------------------------------
   // The WOC warrior: the artist's modular character handoff on its own 34-joint
   // `WOC_Armored_Rig`: the male base and animation library, dressed from the
@@ -3378,17 +3432,20 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   // Shaman Shadewolf retains the original wolf, tint and ghost-material overlay.
   // Height: as mob_wolf (same file, same on-screen size).
-  form_ghost_wolf: {
-    url: `${CREATURES}/wolf_basic.glb`,
-    height: 1.47,
-    clips: WOLF_BAKED,
-    tint: 0xd08b45,
-    tintStrength: 0.35,
-  },
+  form_ghost_wolf: faReleaseWolfVisual(
+    {
+      url: `${CREATURES}/wolf_basic.glb`,
+      height: 1.47,
+      clips: WOLF_BAKED,
+      tint: 0xd08b45,
+      tintStrength: 0.35,
+    },
+    faReleaseWolfEnabled(),
+  ),
   // Druid Travel Form: a daft chicken-cow hybrid (custom GLB). No tint: its
   // authored cow-spots/comb/beak colours carry the look.
   form_travel: {
-    url: `${CREATURES}/chicken_cow.glb`,
+    url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? `${CREATURES}/fantasy-arena/travel-birdcow.glb` : `${CREATURES}/chicken_cow.glb`,
     height: 2.3,
     clips: CHICKEN_COW,
   },
@@ -3755,31 +3812,34 @@ export const VISUALS: Record<string, VisualDef> = {
   },
 
   // -- mob families --------------------------------------------------------
-  mob_wolf: {
-    // Custom Tripo wolf on the rebuilt wolf rig (scripts/assets/wolf_rig/, see
-    // WOLF_BAKED). Baked basecolor texture; keeps a light entity tint so this
-    // doubles as the beast-family fallback and each beast keeps its own colour.
-    // Height 1.47 draws it exactly as large as the old rig's 1.6 did: the game
-    // sizes a creature by its posed idle, and the old idle measured taller than the
-    // wolf (a sliver of the left hind heel was weighted to the tail and hung below
-    // the paws), which also stood the old wolves off the ground. tests/wolf_rig.test.ts
-    // pins the size (WOLF_ON_SCREEN_SCALE in scripts/assets/wolf_rig/contract.mjs).
-    url: `${CREATURES}/wolf_basic.glb`,
-    authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
-    height: 1.47,
-    clips: WOLF_BAKED,
-    tint: 'entity',
-    tintStrength: 0.35,
-  },
+  mob_wolf: faReleaseWolfVisual(
+    {
+      // Custom Tripo wolf on the rebuilt wolf rig (scripts/assets/wolf_rig/, see
+      // WOLF_BAKED). Baked basecolor texture; keeps a light entity tint so this
+      // doubles as the beast-family fallback and each beast keeps its own colour.
+      // Height 1.47 draws it exactly as large as the old rig's 1.6 did: the game
+      // sizes a creature by its posed idle, and the old idle measured taller than the
+      // wolf (a sliver of the left hind heel was weighted to the tail and hung below
+      // the paws), which also stood the old wolves off the ground. tests/wolf_rig.test.ts
+      // pins the size (WOLF_ON_SCREEN_SCALE in scripts/assets/wolf_rig/contract.mjs).
+      url: `${CREATURES}/wolf_basic.glb`,
+      authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
+      height: 1.47,
+      clips: WOLF_BAKED,
+      tint: 'entity',
+      tintStrength: 0.35,
+    },
+    faReleaseWolfEnabled(),
+  ),
   // The Gleamfolk pixie villager (Veiled Hollow): Tripo biped from the user's
   // game-style concept, auto-rigged, clips renamed to the game vocabulary at
   // bake time. A light entity tint gives individual villagers variety.
   mob_mushroom_pixie: {
-    url: `${CREATURES}/mushroom_pixie.glb`,
+    url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? `${CREATURES}/fantasy-arena/mushroom-folk.glb` : `${CREATURES}/mushroom_pixie.glb`,
     height: HUMANOID_H, // villagers stand player-height, cap and all
     // The Tripo rig rests facing +x; yaw swings the model onto the game's
     // +z-forward convention so walking and combat face the right way.
-    yaw: -Math.PI / 2,
+    yaw: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? 0 : -Math.PI / 2,
     clips: {
       idle: 'Idle',
       walk: 'Walk',
@@ -3793,24 +3853,30 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.2,
   },
-  greyjaw: {
-    // Custom Tripo wolf on the rebuilt wolf rig (scripts/assets/wolf_rig/, his own
-    // skeleton fitted to his body, see WOLF_BAKED). Baked texture, no tint. Height
-    // 2.05 draws him exactly as large as the old rig's 2.2 did (pinned like
-    // mob_wolf's); his template scale 1.25 then makes the rare stand well over the
-    // pack wolf in-world.
-    url: `${CREATURES}/greyjaw.glb`,
-    authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
-    height: 2.05,
-    clips: WOLF_BAKED,
-  },
-  mob_boar: {
-    url: `${CREATURES}/wild_boar.glb`,
-    height: 1.45,
-    clips: WILD_BOAR,
-    tint: 'entity',
-    tintStrength: 0.4,
-  },
+  greyjaw: faReleaseWolfVisual(
+    {
+      // Custom Tripo wolf on the rebuilt wolf rig (scripts/assets/wolf_rig/, his own
+      // skeleton fitted to his body, see WOLF_BAKED). Baked texture, no tint. Height
+      // 2.05 draws him exactly as large as the old rig's 2.2 did (pinned like
+      // mob_wolf's); his template scale 1.25 then makes the rare stand well over the
+      // pack wolf in-world.
+      url: `${CREATURES}/greyjaw.glb`,
+      authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
+      height: 2.05,
+      clips: WOLF_BAKED,
+    },
+    faReleaseWolfEnabled(),
+  ),
+  mob_boar: faReleaseBoarVisual(
+    {
+      url: `${CREATURES}/wild_boar.glb`,
+      height: 1.45,
+      clips: WILD_BOAR,
+      tint: 'entity',
+      tintStrength: 0.4,
+    },
+    import.meta.env.VITE_FA_BROWSER_RELEASE === '1',
+  ),
   // Quaternius animal rig (shares clip names with wolf) — fox/deer/critters that
   // would otherwise fall back to mob_wolf via FAMILY_KEYS['beast'].
   mob_fox: {
@@ -3877,48 +3943,68 @@ export const VISUALS: Record<string, VisualDef> = {
       hit: ['Armature|Block5|baselayer'],
     },
   },
-  mob_stag: {
-    url: `${CREATURES}/stag.glb`,
-    height: 1.9,
-    // Attack_Kick, not 'Attack': the rig ships no clip by that name, so every
-    // second swing in the rotation resolved to nothing and played no animation
-    // at all (the repainted siblings below always had it right).
-    // Own bespoke charge attack (scripts/build_stag_anims.mjs, issue #2889):
-    // spread the animal() factory result and override only attack, so the
-    // repainted siblings (veiled_stag/gleamstag/veiled_doe/aurelhorn, separate
-    // GLB files on the same rig) keep the standing Headbutt/Kick pair.
-    clips: { ...animal(['Attack_Headbutt', 'Attack_Kick']), attack: ['Stag_Attack_Charge'] },
-    animUrls: [`${CREATURES}/stag_ability_anims.glb`],
-    tint: 'entity',
-    tintStrength: 0.35,
-  },
+  mob_stag: faReleaseStagVisual(
+    {
+      url: `${CREATURES}/stag.glb`,
+      height: 1.9,
+      // Attack_Kick, not 'Attack': the rig ships no clip by that name, so every
+      // second swing in the rotation resolved to nothing and played no animation
+      // at all (the repainted siblings below always had it right).
+      // Own bespoke charge attack (scripts/build_stag_anims.mjs, issue #2889):
+      // spread the animal() factory result and override only attack, so the
+      // repainted siblings (veiled_stag/gleamstag/veiled_doe/aurelhorn, separate
+      // GLB files on the same rig) keep the standing Headbutt/Kick pair.
+      clips: { ...animal(['Attack_Headbutt', 'Attack_Kick']), attack: ['Stag_Attack_Charge'] },
+      animUrls: [`${CREATURES}/stag_ability_anims.glb`],
+      tint: 'entity',
+      tintStrength: 0.35,
+    },
+    'base',
+    faReleaseStagEnabled(),
+  ),
   // the Veiled Hollow stags: the shipped stag rig repainted to the approved
   // concepts (tmp/make_hollow_stags.mjs): dusk coats baked into the materials
   // and the antlers split onto their own emissive amethyst material, so no
   // entity tint (a wash would muddy the baked palette and the antler glow)
-  mob_veiled_stag: {
-    url: `${CREATURES}/veiled_stag.glb`,
-    height: 1.9,
-    clips: animal(['Attack_Headbutt', 'Attack_Kick']),
-  },
-  mob_gleamstag: {
-    url: `${CREATURES}/gleamstag.glb`,
-    height: 1.9,
-    clips: animal(['Attack_Headbutt', 'Attack_Kick']),
-  },
+  mob_veiled_stag: faReleaseStagVisual(
+    {
+      url: `${CREATURES}/veiled_stag.glb`,
+      height: 1.9,
+      clips: animal(['Attack_Headbutt', 'Attack_Kick']),
+    },
+    'veiled',
+    faReleaseStagEnabled(),
+  ),
+  mob_gleamstag: faReleaseStagVisual(
+    {
+      url: `${CREATURES}/gleamstag.glb`,
+      height: 1.9,
+      clips: animal(['Attack_Headbutt', 'Attack_Kick']),
+    },
+    'gleam',
+    faReleaseStagEnabled(),
+  ),
   // the does: the same rig with the antler mesh removed and a softer coat
-  mob_veiled_doe: {
-    url: `${CREATURES}/veiled_doe.glb`,
-    height: 1.6,
-    clips: animal(['Attack_Headbutt', 'Attack_Kick']),
-  },
+  mob_veiled_doe: faReleaseStagVisual(
+    {
+      url: `${CREATURES}/veiled_doe.glb`,
+      height: 1.6,
+      clips: animal(['Attack_Headbutt', 'Attack_Kick']),
+    },
+    'doe',
+    faReleaseStagEnabled(),
+  ),
   // Aurelhorn keeps the bull's bulk (height) but joins the herd's species:
   // the same repainted stag rig in the patriarch's gold
-  mob_aurelhorn: {
-    url: `${CREATURES}/aurelhorn.glb`,
-    height: 2.1,
-    clips: animal(['Attack_Headbutt', 'Attack_Kick']),
-  },
+  mob_aurelhorn: faReleaseStagVisual(
+    {
+      url: `${CREATURES}/aurelhorn.glb`,
+      height: 2.1,
+      clips: animal(['Attack_Headbutt', 'Attack_Kick']),
+    },
+    'aurelhorn',
+    faReleaseStagEnabled(),
+  ),
   // Training dummy: the immortal practice target (zone3.ts training_dummy,
   // hpBase 999999, no drops). Custom Tripo humanoid auto-rigged onto the
   // biped skeleton, KAYKIT_CLIP_PLAN vocabulary. The dummy never casts or
@@ -4011,19 +4097,23 @@ export const VISUALS: Record<string, VisualDef> = {
   // his template scale 2.275: walk 4.36 (wander 2.63 -> 0.60x, exactly at the
   // clamp floor, which is why the build slows his Walk clip) and run 10.94
   // (chase 7.5 -> 0.69x). Both inside the matcher's clamps, so the feet plant.
-  mob_grubjaw: {
-    url: `${CREATURES}/grubjaw.glb`,
-    height: 2.9,
-    clips: GRUBJAW,
-    walkRef: 4.36,
-    runRef: 10.94,
-    // Barely-there wash. mob_troll tints 0.12 toward its template's BRIGHT
-    // green, which is what makes a stock Mirefen Troll pop; Grubjaw's own
-    // template colour is a dark 0x145a32, so the same strength only muddied
-    // his authored olive hide and read as near-black beside them.
-    tint: 'entity',
-    tintStrength: 0.04,
-  },
+  mob_grubjaw: faReleaseGrubjaw(
+    {
+      url: `${CREATURES}/grubjaw.glb`,
+      height: 2.9,
+      clips: GRUBJAW,
+      walkRef: 4.36,
+      runRef: 10.94,
+      // Barely-there wash. mob_troll tints 0.12 toward its template's BRIGHT
+      // green, which is what makes a stock Mirefen Troll pop; Grubjaw's own
+      // template colour is a dark 0x145a32, so the same strength only muddied
+      // his authored olive hide and read as near-black beside them.
+      tint: 'entity',
+      tintStrength: 0.04,
+    },
+    TROLL_BIPED14,
+    import.meta.env.VITE_FA_BROWSER_RELEASE === '1',
+  ),
   // The authored kobold body (the Kolbolds v02 artist drop, combined by
   // tmp/kobold_build.mjs). Zone 1's Deeprock Diggers and their Tunnelking ONLY:
   // the `burrower` family default deliberately stays mob_kobold (goblin.glb),
@@ -4050,7 +4140,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // the planted foot trails the body 2.8x; measured, the run pushes to its 1.6
   // clamp and the walk lands near an exact foot match. Re-measure on any new
   // drop: v01's cycles gave 1.31/2.22, and its Walk was 1.00s against v02's 1.13s.
-  mob_kobold_digger: {
+  mob_kobold_digger: faReleaseKoboldVisual({
     url: `${CREATURES}/kobold.glb`,
     authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
     height: 2.1,
@@ -4067,7 +4157,7 @@ export const VISUALS: Record<string, VisualDef> = {
     // muddies it.
     tint: 'entity',
     tintStrength: 0.12,
-  },
+  }, 'digger', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Grix the Tunnelking: his own body at last. He was the clearest case of the
   // gap this batch closes, a rare ELITE rendering identically to the level-4
   // Deeprock Diggers he summons, with only the rare/elite nameplate frame to
@@ -4088,7 +4178,7 @@ export const VISUALS: Record<string, VisualDef> = {
   //
   // walkRef/runRef MEASURED (tmp/grix_gait_measure.mjs) at his template scale of
   // 1.0: natural 1.23 and 2.31 yd/s against a 7 yd/s chase.
-  mob_grix: {
+  mob_grix: faReleaseKoboldVisual({
     url: `${CREATURES}/grix.glb`,
     authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
     height: 2.1,
@@ -4106,7 +4196,7 @@ export const VISUALS: Record<string, VisualDef> = {
     // ~0.35s after the hit and the whole swing to 0.5s, inside his 2.0s
     // swing cadence (the mob_gravewing tuning pattern).
     attackTimeScale: 3,
-  },
+  }, 'grix', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   mob_troll: {
     url: `${CREATURES}/orc.glb`,
     height: 2.4,
@@ -4129,7 +4219,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // ask against the family's 7.0 chase, so the build retimes it 1.21x in
   // place (a 0.60s heavy sprint cadence), natural 5.84, and the chase runs
   // at ~1.2x with clamp headroom instead of at the 1.6 edge.
-  mob_ogre: {
+  mob_ogre: faReleaseOgreVisual({
     url: `${CREATURES}/ogre.glb`,
     authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
     height: 2.8,
@@ -4141,7 +4231,7 @@ export const VISUALS: Record<string, VisualDef> = {
     // would only muddy it. Entity tint still separates the family's mobs.
     tint: 'entity',
     tintStrength: 0.12,
-  },
+  }, 'ogre', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Warlord Drogmar, the ogre family's quest boss. His own body rather than the
   // family's mob_ogre fallback: he is a named kill objective fought up close, so
   // the atlas ships at full 1024 (no maxTex clamp in specs/drogmar.json) where
@@ -4153,7 +4243,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // than retimed to the family's numbers, which is what makes the foot match
   // exact: his moveSpeed 7 chase lands at timeScale 1.41, inside the 1.6 run
   // clamp with headroom to spare.
-  mob_drogmar: {
+  mob_drogmar: faReleaseOgreVisual({
     url: `${CREATURES}/drogmar.glb`,
     authoredAtlas: true, // baked Tripo/contributor atlas: low-tier floor rides the map
     height: 2.8,
@@ -4165,7 +4255,7 @@ export const VISUALS: Record<string, VisualDef> = {
     // from the Crushers he leads.
     tint: 'entity',
     tintStrength: 0.12,
-  },
+  }, 'drogmar', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Five Wildheart troll silhouettes use the same complete biped vocabulary,
   // but preserve their woven cloth, bone paint, feathers, and jungle palette.
   mob_wildheart_stalker: {
@@ -4343,13 +4433,16 @@ export const VISUALS: Record<string, VisualDef> = {
     walkRef: 6.9,
     runRef: 18,
   },
-  mob_water_elemental: {
-    url: `${CREATURES}/water_elemental.glb`,
-    height: 2.65,
-    hover: 0.12,
-    clips: WATER_ELEMENTAL,
-    attackTimeScale: 1.1,
-  },
+  mob_water_elemental: faReleaseWaterElemental(
+    {
+      url: `${CREATURES}/water_elemental.glb`,
+      height: 2.65,
+      hover: 0.12,
+      clips: WATER_ELEMENTAL,
+      attackTimeScale: 1.1,
+    },
+    import.meta.env.VITE_FA_BROWSER_RELEASE === '1',
+  ),
   mob_gravewing: {
     url: `${CREATURES}/gravewing.glb`,
     height: 2.4,
@@ -4395,7 +4488,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // scale-dependent, which is why the matriarch has her own def below rather
   // than sharing the broodlord's: at scale 2.85 her stride covers 33% more
   // ground per cycle, and reusing the lord's refs over-strode her by 25%.
-  mob_dragonkin_broodlord: {
+  mob_dragonkin_broodlord: faReleaseDragonkin({
     url: `${CREATURES}/dragonkin_elite.glb`,
     authoredAtlas: true, // baked Tripo atlas: low-tier floor rides the map
     height: 2.6,
@@ -4407,12 +4500,12 @@ export const VISUALS: Record<string, VisualDef> = {
     // 'entity' tint: the broodlords wash dark scale-brown (template color).
     tint: 'entity',
     tintStrength: 0.12,
-  },
+  }, 'elite', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Cindraleth: the same GLB and clips as her broodlords, own refs for her
   // scale 2.85 body (walk 5.37, run 10.04 -> her 9.0 chase plays at 0.90x).
   // Her template color (0xf0b040) tints this shared body gold, so she reads
   // as the gilded mother of the same brood.
-  mob_dragonkin_matriarch: {
+  mob_dragonkin_matriarch: faReleaseDragonkin({
     url: `${CREATURES}/dragonkin_elite.glb`,
     authoredAtlas: true, // baked Tripo atlas: low-tier floor rides the map
     height: 2.6,
@@ -4421,8 +4514,8 @@ export const VISUALS: Record<string, VisualDef> = {
     runRef: 10.04,
     tint: 'entity',
     tintStrength: 0.12,
-  },
-  mob_dragonkin_broodguard: {
+  }, 'elite', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
+  mob_dragonkin_broodguard: faReleaseDragonkin({
     url: `${CREATURES}/dragonkin_mob.glb`,
     authoredAtlas: true, // baked Tripo atlas: low-tier floor rides the map
     height: 2.2,
@@ -4433,8 +4526,8 @@ export const VISUALS: Record<string, VisualDef> = {
     runRef: 5.59,
     tint: 'entity',
     tintStrength: 0.1,
-  },
-  mob_dragonkin_whelp: {
+  }, 'guard', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
+  mob_dragonkin_whelp: faReleaseDragonkin({
     url: `${CREATURES}/dragonkin_baby.glb`,
     authoredAtlas: true, // baked Tripo atlas: low-tier floor rides the map
     height: 1.05,
@@ -4449,10 +4542,10 @@ export const VISUALS: Record<string, VisualDef> = {
     runRef: 1.87,
     tint: 'entity',
     tintStrength: 0.1,
-  },
+  }, 'baby', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // The egg is a clipless two-shell prop mob: alive shows Egg_Closed, death
   // swaps to Egg_Open (the cracked shell IS the corpse; see corpseMeshSwap).
-  mob_dragon_egg: {
+  mob_dragon_egg: faReleaseDragonEgg({
     url: `${CREATURES}/dragon_egg.glb`,
     // Blender-default roughness 0.5 export: the body clamp kept it glossy, a grey
     // specular sheen over the painted shell. matte restores the flat paint.
@@ -4463,7 +4556,7 @@ export const VISUALS: Record<string, VisualDef> = {
     corpseMeshSwap: { hide: 'Egg_Closed', show: 'Egg_Open' },
     tint: 'entity',
     tintStrength: 0.08,
-  },
+  }, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Bog Thrall (The Drowned Litany): unused floating ghost rig, a stronger
   // fit for an undead swarm add than the generic skel_minion skeleton
   // (docs/prd/drowned-litany-asset-generation-plan.md).
@@ -4642,14 +4735,14 @@ export const VISUALS: Record<string, VisualDef> = {
   // Baked palettes, so no entity tint. Front faces +x off the generator;
   // yaw turns it to the +z game convention.
   mob_glimmerwisp: {
-    url: `${CREATURES}/glimmerwisp.glb`,
+    url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? `${CREATURES}/fantasy-arena/glimmerwisp.glb` : `${CREATURES}/glimmerwisp.glb`,
     height: 1.6,
     hover: 0.4,
     clips: FLOATING,
     yaw: -Math.PI / 2,
   },
   mob_duskwisp: {
-    url: `${CREATURES}/duskwisp.glb`,
+    url: import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? `${CREATURES}/fantasy-arena/duskwisp.glb` : `${CREATURES}/duskwisp.glb`,
     height: 1.6,
     hover: 0.4,
     clips: FLOATING,
@@ -4668,7 +4761,7 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.45,
   },
   // the Hollow's wandering bosses: two more rigs no other zone uses
-  mob_crab: {
+  mob_crab: faReleaseCrab({
     url: `${CREATURES}/crabenemy.glb`,
     height: 1.7,
     clips: CRAB_ENEMY_BITE,
@@ -4681,7 +4774,7 @@ export const VISUALS: Record<string, VisualDef> = {
     ],
     tint: 'entity',
     tintStrength: 0.35,
-  },
+  }, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   mob_bull: {
     url: `${CREATURES}/bull.glb`,
     height: 2.1,
@@ -4802,22 +4895,30 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.25,
   },
-  skel_warrior: {
-    url: `${ENEMIES}/skeleton_warrior.glb`,
-    animUrls: [`${ENEMIES}/skeleton_warrior_hit_variety_anims.glb`],
-    height: 2.5,
-    clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    tint: 'entity',
-    tintStrength: 0.25,
-  },
-  skel_rogue: {
-    url: `${ENEMIES}/skeleton_rogue.glb`,
-    animUrls: [`${ENEMIES}/skeleton_rogue_hit_variety_anims.glb`],
-    height: 2.5,
-    clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    tint: 'entity',
-    tintStrength: 0.25,
-  },
+  skel_warrior: faReleaseSkeletonArms(
+    {
+      url: `${ENEMIES}/skeleton_warrior.glb`,
+      animUrls: [`${ENEMIES}/skeleton_warrior_hit_variety_anims.glb`],
+      height: 2.5,
+      clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+      tint: 'entity',
+      tintStrength: 0.25,
+    },
+    'warrior',
+    faReleaseSkeletonEnabled(),
+  ),
+  skel_rogue: faReleaseSkeletonArms(
+    {
+      url: `${ENEMIES}/skeleton_rogue.glb`,
+      animUrls: [`${ENEMIES}/skeleton_rogue_hit_variety_anims.glb`],
+      height: 2.5,
+      clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+      tint: 'entity',
+      tintStrength: 0.25,
+    },
+    'rogue',
+    faReleaseSkeletonEnabled(),
+  ),
   skel_mage: {
     url: `${ENEMIES}/skeleton_mage.glb`,
     animUrls: [`${ENEMIES}/skeleton_mage_hit_variety_anims.glb`],
@@ -5097,7 +5198,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // lands at 0.7 of 0.8. BellRing is a 1.0 s loop (the haul bottoming at 0.9, in
   // step with ropePull) with his fists on his own axis, the spade stood in the
   // earth beside him.
-  crypt_skel_sexton: {
+  crypt_skel_sexton: faReleaseCryptRole({
     url: `${CREATURES}/woc_crypt_sexton_marrow.glb`,
     // The idle's posed height and lowest point half a second in (the spade's blade
     // is in the earth), at 3.5 yd a unit.
@@ -5134,7 +5235,7 @@ export const VISUALS: Record<string, VisualDef> = {
     authoredAtlas: true,
     selfIllumination: 0.1,
     clickRadius: 2.2,
-  },
+  }, 'sexton', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Cantor Ilvane (the art guide's model): a tall skeletal choir mistress in a
   // violet cassock under a black cloak, a crown of silver organ pipes caging her
   // face, the hymnal hung open at her belt and a finger-bone baton in her right
@@ -5214,7 +5315,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // `height` is the idle's posed height half a second in, smoke tip to mitre
   // (5.85 authored yards), grown by MORTHEN_GROWTH so he stands as tall as the
   // body he replaced.
-  crypt_morthen_lich: {
+  crypt_morthen_lich: faReleaseCryptRole({
     url: `${CREATURES}/woc_crypt_morthen.glb`,
     height: 5.85 * MORTHEN_GROWTH,
     hover: MORTHEN_HOVER * MORTHEN_GROWTH,
@@ -5228,7 +5329,7 @@ export const VISUALS: Record<string, VisualDef> = {
     authoredAtlas: true,
     selfIllumination: 0.08,
     clickRadius: 2.2,
-  },
+  }, 'morthen', import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // The Lady of the Bonechill (the art guide's model), the ghost of a bride buried
   // in the ravine's ice: a crown of ice, long hair, a bouquet of frozen roses at her
   // waist, a gown and veil hung with icicles, floating half a yard over the ice
@@ -5352,7 +5453,7 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   // The Carrion Crow is always on the wing: `hover` lifts it and its Death clip
   // drops the body onto the floor.
-  mob_crypt_crow: {
+  mob_crypt_crow: faReleaseCrow({
     url: `${CREATURES}/crypt_crow.glb`,
     height: 1.7,
     hover: 2.2,
@@ -5366,7 +5467,7 @@ export const VISUALS: Record<string, VisualDef> = {
       cast: 'Cast',
     },
     selfIllumination: 0.15,
-  },
+  }, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // The Ossuary Drake (the art guide's model): a colossal skeletal dragon on four
   // legs, an S-neck to a horned skull, soul fire caged in its ribs, its bat wings a
   // separate pair raised over its back, centred on its chest so the jaws that pour
@@ -6657,7 +6758,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // Sing loop). His original-rig animation bank provides foot-matched Walk
   // and Run cycles: measured planted-foot speeds at the drawn size keep the
   // 3.2 yd/s follow and 7 yd/s catch-up inside modest cadence ceilings.
-  npc_laverock: {
+  npc_laverock: faReleaseLaverock({
     url: `${CREATURES}/temple_laverock.glb`,
     animUrls: [`${CREATURES}/temple_laverock_locomotion.glb`],
     height: 3.75,
@@ -6682,7 +6783,7 @@ export const VISUALS: Record<string, VisualDef> = {
     authoredAtlas: true,
     selfIllumination: 0.06,
     clickRadius: 0.9,
-  },
+  }, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   npc_villager_robed: {
     url: `${PLAYERS}/mage.glb`,
     animUrls: [`${PLAYERS}/mage_hit_variety_anims.glb`],
@@ -6878,7 +6979,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // realistically proportioned and clashed with the chunky KayKit-style rigs;
   // this one matches the game's proportions, so the standard humanoid height
   // applies (the old def ran at 3.4 only to compensate for the thin mesh).
-  mob_reedbound_acolyte: {
+  mob_reedbound_acolyte: faReleaseCantor({
     url: `${CREATURES}/stone_cantor.glb`,
     height: HUMANOID_H,
     clips: RAID_CASTER,
@@ -6890,7 +6991,7 @@ export const VISUALS: Record<string, VisualDef> = {
     attackTimeScale: 1.7,
     tint: 'entity',
     tintStrength: 0.2,
-  },
+  }, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'),
   // Spider Egg-Sac (Sinkhole Baptistry finale trigger, The Drowned Litany):
   // Meshy-generated static prop, no rig/clips (it never moves; it dies to a
   // single hit). The visual/animation pipeline no-ops gracefully when a clip
@@ -7492,7 +7593,7 @@ export const VISUALS: Record<string, VisualDef> = {
     selfIllumination: NYTHRAXIS_BONE_SPIKE_SELF_ILLUMINATION,
     clickRadius: NYTHRAXIS_BONE_SPIKE_CLICK_RADIUS,
   },
-};
+}, import.meta.env.VITE_FA_BROWSER_RELEASE === '1');
 
 // ---------------------------------------------------------------------------
 // Modular player bodies, one `player_<class>_modular` def per class, derived
@@ -8100,6 +8201,37 @@ VISUALS.player_priest_female = wocFemale(VISUALS.player_priest, WOC_PRIEST_FEMAL
 SKINS.player_priest_female = [null, null, null, null, null, null];
 VISUALS.player_warlock_female = wocFemale(VISUALS.player_warlock, WOC_WARLOCK_FEMALE_MANIFEST);
 SKINS.player_warlock_female = [null, null, null, null, null, null];
+const dreamdancerClips = (base: VisualDef) => ({
+  ...base.clips,
+  castByAbility: {
+    dream_spark: 'Woc_Cast_Directed',
+    dream_comfort: 'Woc_Cast_Omni',
+    dream_chorus: 'Woc_Cast_Omni',
+  },
+  attackByAbility: {
+    dream_thread: 'Woc_Cast_Shoot',
+    dream_spark: 'Woc_Cast_Shoot',
+    dream_shroud: 'Woc_Cast_Omni_Release',
+    dream_nightmare: 'Woc_Cast_Shoot',
+    dream_deep_nightmare: 'Woc_Cast_Omni_Release',
+    dream_comfort: 'Woc_Cast_Omni_Release',
+    dream_veil: 'Woc_Cast_Omni_Release',
+    dream_chorus: 'Woc_Cast_Omni_Release',
+    dream_miststep: 'Woc_Cast_Omni_Release',
+    dream_moonrend: 'Woc_Cast_Shoot',
+    dream_silence: 'Woc_Cast_Shoot',
+    dream_glide: 'Woc_Cast_Omni_Release',
+    dream_reverie: 'Woc_Cast_Omni_Release',
+    dream_refuge: 'Woc_Cast_Omni_Release',
+    dream_unravel: 'Woc_Cast_Shoot',
+  },
+});
+VISUALS.player_dreamdancer = { ...VISUALS.player_mage, clips: dreamdancerClips(VISUALS.player_mage) };
+VISUALS.player_dreamdancer_female = {
+  ...VISUALS.player_mage_female, clips: dreamdancerClips(VISUALS.player_mage_female),
+};
+SKINS.player_dreamdancer = SKINS.player_mage;
+SKINS.player_dreamdancer_female = SKINS.player_mage_female;
 VISUALS.player_druid_female = wocFemale(VISUALS.player_druid, WOC_DRUID_FEMALE_MANIFEST);
 SKINS.player_druid_female = [null, null, null, null, null, null];
 VISUALS.player_shaman_female = wocFemale(VISUALS.player_shaman, WOC_SHAMAN_FEMALE_MANIFEST);
@@ -8265,7 +8397,7 @@ const NPC_HELD_PROPS = Object.fromEntries(
 /** The hands of an NPC that carries `propSet`: its fixed props in place of the
  *  class def's own weapons, with no swap slot (an NPC equips nothing). */
 export function npcHeldProps(propSet: NpcPropSet): WeaponLayoutOverride {
-  return NPC_HELD_PROPS[propSet];
+  return faReleaseHumansEnabled() ? faReleaseHumanNpcProps(propSet) : NPC_HELD_PROPS[propSet];
 }
 
 // ---------------------------------------------------------------------------
@@ -8670,13 +8802,44 @@ const NPC_KEYS: Record<string, string> = {
  *  and the Armory try-on all resolve through. */
 export type BodyPick = { readonly gender?: unknown } | null | undefined;
 
+// The curated build replaces every WOC-bodied definition as one coordinated
+// change, including class-backed NPCs and special mobs. No old URL is remapped.
+if (faReleaseHumansEnabled()) {
+  for (const [key, def] of Object.entries(VISUALS)) {
+    const fit = def.wocCharacter?.fit;
+    if (!fit) continue;
+    VISUALS[key] = faReleaseHumanVisual(fit, key);
+    faQuaterniusRegisterReleaseKey(key, fit);
+  }
+}
+
 export function playerVisualKey(cls: string, appearance: BodyPick): string {
   const base = `player_${cls}`;
   if (!VISUALS[base]) return 'player_warrior';
-  if (appearance?.gender === 'female' && VISUALS[`${base}_female`]?.wocCharacter) {
+  if (appearance?.gender === 'female' && (VISUALS[`${base}_female`]?.wocCharacter || (faReleaseHumansEnabled() && VISUALS[`${base}_female`]))) {
     return `${base}_female`;
   }
   return base;
+}
+
+// Only player surfaces opt into this local trial. NPCs retain playerVisualKey.
+if (faHumanBPilotEnabled()) VISUALS[FA_HUMAN_B_KEY] = FA_HUMAN_B_VISUAL;
+if (faQuaterniusPilotEnabled() || faCc0SliceEnabled()) {
+  VISUALS[FA_QUATERNIUS_MALE_KEY] = FA_QUATERNIUS_MALE_VISUAL;
+  VISUALS[FA_QUATERNIUS_FEMALE_KEY] = FA_QUATERNIUS_FEMALE_VISUAL;
+  VISUALS[FA_QUATERNIUS_MAGE_MALE_KEY] = FA_QUATERNIUS_MAGE_MALE_VISUAL;
+  VISUALS[FA_QUATERNIUS_MAGE_FEMALE_KEY] = FA_QUATERNIUS_MAGE_FEMALE_VISUAL;
+}
+if (faCc0SliceEnabled()) {
+  VISUALS[FA_QUATERNIUS_PRIEST_MALE_KEY] = FA_QUATERNIUS_PRIEST_MALE_VISUAL;
+  VISUALS[FA_QUATERNIUS_PRIEST_FEMALE_KEY] = FA_QUATERNIUS_PRIEST_FEMALE_VISUAL;
+  VISUALS[FA_QUATERNIUS_TRADER_KEY] = FA_QUATERNIUS_TRADER_VISUAL;
+}
+
+export function playerPreviewVisualKey(cls: string, appearance: BodyPick): string {
+  return faHumanBPilotMatches(cls, appearance)
+    ? FA_HUMAN_B_KEY
+    : (faQuaterniusPilotKey(cls, appearance) ?? playerVisualKey(cls, appearance));
 }
 
 // The renderer asks for every NPC view's key every frame (its base-visual diff),
@@ -8711,7 +8874,9 @@ export function npcPortraitSourceFor(
   if (!look) return null;
   let source = npcPortraitSources.get(look);
   if (!source) {
-    source = { visualKey: npcBodyKey(look), head: look.app };
+    const visualKey = faCc0SliceEnabled() && kind === 'npc' && templateId === 'trader_wilkes'
+      ? FA_QUATERNIUS_TRADER_KEY : npcBodyKey(look);
+    source = { visualKey, head: look.app };
     npcPortraitSources.set(look, source);
   }
   return source;
@@ -8745,7 +8910,7 @@ const MOB_FALLBACK_KEY = 'mob_bandit';
 export function visualKeyFor(e: Entity): string {
   if (e.kind === 'player') {
     if (isMechWearer(e)) return 'player_mech';
-    return playerVisualKey(e.templateId, e.modularAppearance);
+    return playerPreviewVisualKey(e.templateId, e.modularAppearance);
   }
   if (e.kind === 'mob') return mobVisualKey(e.templateId);
   // A Studio-authored rig pick (the Entity tool's "Character model") is an
@@ -8756,7 +8921,12 @@ export function visualKeyFor(e: Entity): string {
   // (npc_looks.ts), the very def a player of that class draws. One with no
   // authored look (none ships: tests/npc_looks.test.ts) falls back to a stock rig.
   const look = npcLookFor(e.templateId, e.kind);
-  if (look) return npcBodyKey(look);
+  if (look) {
+    if (faCc0SliceEnabled() && e.kind === 'npc' && e.templateId === 'trader_wilkes') {
+      return FA_QUATERNIUS_TRADER_KEY;
+    }
+    return npcBodyKey(look);
+  }
   if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
   return NPC_KEYS[e.templateId] ?? 'npc_villager';
 }
@@ -8810,6 +8980,17 @@ export function mechHeldWeaponOverride(cls: PlayerClass): WeaponLayoutOverride |
 export function manifestUrls(): string[] {
   const urls = new Set<string>();
   for (const def of Object.values(VISUALS)) {
+    // The optional pilot's hand models must be ready even after a later equip.
+    if (
+      def === FA_HUMAN_B_VISUAL ||
+      def === FA_QUATERNIUS_MALE_VISUAL ||
+      def === FA_QUATERNIUS_FEMALE_VISUAL ||
+      def === FA_QUATERNIUS_MAGE_MALE_VISUAL ||
+      def === FA_QUATERNIUS_MAGE_FEMALE_VISUAL ||
+      def === FA_QUATERNIUS_PRIEST_MALE_VISUAL ||
+      def === FA_QUATERNIUS_PRIEST_FEMALE_VISUAL
+    )
+      for (const a of def.attach ?? []) urls.add(a.url);
     // A WOC body streams its base and library, never the weapons it holds: a held prop
     // attaches synchronously at build, so those stay in the boot gate in their own right
     // (the warlock's wand is held by no other boot def).
@@ -8823,7 +9004,11 @@ export function manifestUrls(): string[] {
   // named here for the boot gate. One is also an Armory weapon-skin model (the
   // brasscrown walking staff), which assets.ts streams on demand like every skin:
   // the first NPC that holds it builds fail-soft once it lands, as before.
-  for (const attach of Object.values(NPC_PROP_ATTACH)) for (const a of attach) urls.add(a.url);
+  if (faReleaseHumansEnabled()) {
+    for (const url of FA_RELEASE_HUMAN_WEAPONS) urls.add(url);
+  } else {
+    for (const attach of Object.values(NPC_PROP_ATTACH)) for (const a of attach) urls.add(a.url);
+  }
   // Equipped-weapon models a player may swap to at runtime (any nearby player's
   // gear), so they are resolved-and-ready when setWeapon attaches them.
   for (const url of itemWeaponModelUrls()) urls.add(url);

@@ -69,7 +69,13 @@ import {
   type Vec3,
 } from '../types';
 import { petAssistKeepsTarget, petAssistTargetId } from './pet_assist';
-import { isTameableFamily, petHeelSpeed, petOwnerScaling } from './pet_scaling';
+import { applyPetPvpTaunt, canPetTauntPlayer } from './pet_pvp_taunt';
+import {
+  isTameableFamily,
+  petHeelSpeed,
+  petOwnerScaling,
+  warlockPetOwnerHpShare,
+} from './pet_scaling';
 import { petCanForceTaunt } from './pet_taunt_gate';
 import { tryUseWarlockPetSkill } from './warlock_pet_skills';
 
@@ -197,14 +203,22 @@ export function updatePet(ctx: SimContext, pet: Entity): void {
     } else {
       pet.facing = steadyAngleTo(pet.pos, target.pos, pet.facing);
       if (
-        target.kind === 'mob' &&
         petCanForceTaunt(pet.templateId) &&
         pet.petTauntTimer <= 0 &&
-        (pet.petAutoTaunt || pet.petManualTauntPending)
+        (pet.petAutoTaunt || pet.petManualTauntPending) &&
+        (target.kind === 'mob' || canPetTauntPlayer(ctx, pet, target))
       ) {
-        if (ctx.applyTaunt(pet, target)) {
+        // A hostile player has no threat table: the taunt switches their
+        // selected target onto the pet instead (pet_pvp_taunt.ts).
+        const taunted =
+          target.kind === 'mob' ? ctx.applyTaunt(pet, target) : applyPetPvpTaunt(ctx, pet, target);
+        if (taunted) {
           pet.petManualTauntPending = false;
           pet.petTauntTimer = PET_GROWL_INTERVAL;
+        } else if (target.kind === 'player') {
+          // Already on the pet: a manual taunt has nothing to do, so it clears
+          // without a cooldown; the autocast simply waits.
+          pet.petManualTauntPending = false;
         }
       }
       // Water Elemental: auto-cast Water Jet on cooldown when the owner armed its
@@ -440,9 +454,12 @@ export function petFollow(
  * (applyNonPlayerStatAura) write maxHp too and rebuilding the pool from the template
  * would silently eat their contribution.
  *
- * Hunter-only on purpose. A warlock demon and the mage Water Elemental are authored
- * as pets with their own tuned pools; a tamed beast is a wild mob template that was
- * never balanced to be a companion, which is the gap this closes.
+ * Hunters inherit health, armor, attack power and haste: a tamed beast is a wild mob
+ * template that was never balanced to be a companion, which is the gap this closes.
+ * Warlock pets (demons and the Necromancy undead) inherit HEALTH only, at a larger
+ * share (pet_scaling.ts warlockPetOwnerHpShare): their damage and armor are authored
+ * for the pet role, but a flat template pool let one big spell kill them. The mage
+ * Water Elemental keeps its own tuned pool.
  *
  * KNOWN LIMITATION, pre-existing and deliberately not addressed here: a PERCENT
  * stamina aura (buff_sta_pct / buff_stats_pct) removes itself by taking a cut of the
@@ -458,6 +475,10 @@ export function petFollow(
 export function applyPetOwnerScaling(ctx: SimContext, pet: Entity): void {
   if (pet.ownerId === null) return;
   const meta = ctx.players.get(pet.ownerId);
+  if (meta?.cls === 'warlock') {
+    applyWarlockPetOwnerHp(ctx, pet);
+    return;
+  }
   if (meta?.cls !== 'hunter') return;
   const owner = ctx.entities.get(pet.ownerId);
   if (!owner) return;
@@ -475,13 +496,32 @@ export function applyPetOwnerScaling(ctx: SimContext, pet: Entity): void {
   pet.attackPower = share.attackPower;
   pet.meleeHaste = share.meleeHaste;
   pet.stats.armor = Math.round(template.armorPerLevel * (pet.level - 1)) + share.armor;
-  const gained = share.hp - pet.petOwnerHpBonus;
+  setPetOwnerHpBonus(pet, share.hp);
+}
+
+/** The warlock half of applyPetOwnerScaling: a health share only, 60% of the
+ *  owner's max health for a threat-holding pet (the same melee_tank rule that
+ *  turns auto-taunt on), 50% for every other demon or undead, none for the
+ *  Pyre Colossus. */
+function applyWarlockPetOwnerHp(ctx: SimContext, pet: Entity): void {
+  const owner = pet.ownerId === null ? undefined : ctx.entities.get(pet.ownerId);
+  if (!owner) return;
+  const template = MOBS[pet.templateId];
+  if (!template || (template.family !== 'demon' && template.family !== 'undead')) return;
+  const isTank = template.petRole === 'melee_tank' && petCanForceTaunt(pet.templateId);
+  const share = warlockPetOwnerHpShare(pet.templateId, isTank);
+  setPetOwnerHpBonus(pet, Math.max(0, Math.round(owner.maxHp * share)));
+}
+
+/** Swap the owner's health share as a DELTA (see applyPetOwnerScaling for why). */
+function setPetOwnerHpBonus(pet: Entity, hp: number): void {
+  const gained = hp - pet.petOwnerHpBonus;
   if (gained === 0) return;
-  pet.petOwnerHpBonus = share.hp;
+  const healthFraction = pet.hp / Math.max(1, pet.maxHp);
+  pet.petOwnerHpBonus = hp;
   pet.maxHp = Math.max(1, pet.maxHp + gained);
-  // Growing hands the pet the new headroom outright; shrinking clamps it into the
-  // smaller pool. Either way a dead pet stays dead rather than being revived here.
-  pet.hp = pet.dead ? 0 : Math.max(1, Math.min(pet.maxHp, pet.hp + Math.max(0, gained)));
+  // Preserve injury through reversible owner gear or aura changes.
+  pet.hp = pet.dead ? 0 : Math.max(1, Math.min(pet.maxHp, Math.round(pet.maxHp * healthFraction)));
 }
 
 export function petDamageMult(ctx: SimContext, pet: Entity): number {

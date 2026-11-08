@@ -27,6 +27,13 @@ import type {
 import type { GroundAimPointXZ } from '../world_api/combat';
 import { abilityNeedsLineOfSight } from './ability_line_of_sight';
 import { offlineActionBarRestore } from './action_bar_restore';
+import {
+  adminCombatMode, adminFlightAnchor,
+  adminRunMultiplier,
+  expireAdminModes,
+  hasAdminFlight,
+  stepAdminFlight,
+} from './admin_character_modes';
 import { auraSaveFragment, restorePersistedAuras } from './aura_persist';
 import { playerStartPos, type SpawnSlots, setPlaytestGod } from './authored_world_hooks';
 import { autoEquipsInstanceGrant, isAutoEquipGearKind, maybeAutoEquip } from './auto_equip';
@@ -57,6 +64,7 @@ import {
 import type { TreasureMapProgress } from './content/treasure_maps';
 import * as courierMod from './courier';
 import type { FactionId } from './factions';
+import { gliderActionsLocked } from './glider_action_lock';
 import {
   type PendingDifficultyChange,
   setDungeonDifficulty as setDungeonDifficultyImpl,
@@ -834,7 +842,7 @@ import * as worldQuestMod from './world_quests';
 export { computeQuestState } from './quests/quest_commands';
 
 import { updateNpcRoute } from './npc_routes';
-import { advanceExclusiveMovement } from './player_movement_modes';
+import { advanceExclusiveMovement, notePlayerMoveIntent } from './player_movement_modes';
 import { completeCurrentQuestsForDev, completeQuestForDev } from './quests/dev_quest_commands';
 import * as arenaMod from './social/arena';
 import * as bgMod from './social/battleground';
@@ -1928,6 +1936,14 @@ export class Sim {
   // (fiesta-aware moveSpeedMult, delve-aware resolveMove, cancelCast/standUp/
   // dealDamage). Built once in the ctor; draws no rng and mutates nothing.
   private playerMotionDeps!: PlayerMotionDeps;
+  private localPreviewMotion?: {
+    runMultiplier(): number;
+    step(player: Entity, input: MoveInput): boolean;
+  };
+
+  setLocalPreviewMotion(motion: NonNullable<Sim['localPreviewMotion']>): void {
+    if (this.devCommands) this.localPreviewMotion = motion;
+  }
   // Party/raid state machine (A1): owns parties/partyByPid/partyInvites/nextPartyId
   // and the invite/accept/convert/move/leave/kick/disband logic, moved off Sim
   // behind SimContext. Built in the ctor after `ctx`. Sim keeps thin delegates
@@ -2234,7 +2250,10 @@ export class Sim {
   // read or overwrite each other's active rift regions.
   readonly riftCollisionToken = allocRiftCollisionToken();
 
-  constructor(cfg: SimConfig) {
+  constructor(
+    cfg: SimConfig,
+    private readonly presentation: { worldBossSchedule?: false } = {},
+  ) {
     this.devCommands = cfg.devCommands ?? false;
     this.worldPvpDisabled = cfg.worldPvpDisabled ?? false;
     this.hillProbe = hillProbeFor(cfg.seed);
@@ -3883,7 +3902,7 @@ export class Sim {
         e.resource,
         e.savedMana,
       ),
-      pos: riftExit?.pos ?? gatesMod.ferrySavePosition(e), // never the sea: a ride saves the destination pier
+      pos: adminFlightAnchor(e) ?? riftExit?.pos ?? gatesMod.ferrySavePosition(e),
       facing: riftExit?.facing ?? e.facing,
       // Death state: a released spirit resumes its corpse run on relog, and a
       // dead-but-unreleased corpse auto-releases on load (see addPlayer).
@@ -4862,6 +4881,15 @@ export class Sim {
   // Deterministic outward spiral to the nearest spot that is on dry-enough
   // ground and not inside a building/prop. Keeps NPCs out of houses and lakes.
   findSafePos(x: number, z: number, minHeight: number, bodyRadius = 0.6): { x: number; z: number } {
+    return this.tryFindSafePos(x, z, minHeight, bodyRadius) ?? { x, z };
+  }
+
+  tryFindSafePos(
+    x: number,
+    z: number,
+    minHeight: number,
+    bodyRadius = 0.6,
+  ): { x: number; z: number } | null {
     const seed = this.cfg.seed;
     const ok = (px: number, pz: number): boolean => {
       if (groundHeight(px, pz, seed) < minHeight) return false;
@@ -4892,7 +4920,7 @@ export class Sim {
       const pz = z + Math.cos(a) * r;
       if (ok(px, pz)) return { x: px, z: pz };
     }
-    return { x, z };
+    return null;
   }
 
   emit(ev: SimEvent): void {
@@ -5959,7 +5987,7 @@ export class Sim {
     resetMobScanCounters(this._mobScanCounters);
     this.updatePendingMobRespawns();
     lap?.('respawns');
-    this.updateWorldBosses();
+    if (this.presentation.worldBossSchedule !== false) this.updateWorldBosses();
     lap?.('worldBosses');
     gatesMod.updateWorldGates(this.ctx); // ferry timetable + seasonal decor gate, pre-movement
     tickGroundAoEs(this.ctx);
@@ -5977,6 +6005,7 @@ export class Sim {
     for (const meta of this.players.values()) {
       const p = this.entities.get(meta.entityId);
       if (!p) continue;
+      expireAdminModes(this.ctx, p);
       membershipMod.updateMembership(this.ctx, meta, p);
       courierMod.updateCourier(this.ctx, meta, p);
       lap?.('p.courier');
@@ -5990,9 +6019,11 @@ export class Sim {
         worldQuestMod.updateWorldQuests(this.ctx, meta, p);
         vehicleMod.ensureActiveVehicleStations(this.ctx, meta);
         lap?.('p.move');
-        updateDoorTriggersImpl(this.ctx, p);
-        this.updateRiftTriggers(p);
-        updatePortalTriggers(this.ctx, p);
+        if (!adminFlightAnchor(p)) {
+          updateDoorTriggersImpl(this.ctx, p);
+          this.updateRiftTriggers(p);
+          updatePortalTriggers(this.ctx, p);
+        }
         updateSwimFatigue(this.ctx, p);
         lap?.('p.doors');
         this.updateCasting(p, meta);
@@ -6327,7 +6358,9 @@ export class Sim {
     if (meta && this.playerMods(meta).global.paladinDivineSteed > 0 && e.paladinDevotion) {
       extra += 0.15 * (e.paladinDevotion.value / MAX_DEVOTION);
     }
-    return moveSpeedMultImpl(e, extra);
+    const preview = this.localPreviewMotion;
+    const multiplier = preview && e.id === this.playerId ? preview.runMultiplier() : 1;
+    return moveSpeedMultImpl(e, extra) * multiplier * adminRunMultiplier(this.ctx, e);
   }
 
   private fleeMoveSpeed(e: Entity): number {
@@ -6555,6 +6588,20 @@ export class Sim {
   }
 
   private updatePlayerMovement(p: Entity, meta: PlayerMeta): void {
+    if (
+      hasAdminFlight(p) &&
+      stepAdminFlight(
+        this.ctx,
+        p,
+        meta.moveInput,
+        this.cfg.seed,
+        (x, z) => this.resolveMove(p.pos.x, p.pos.z, x, z, BODY_RADIUS, p),
+        !!meta.vehicle || !!meta.mountRace || gliderActionsLocked(meta.worldQuestLog),
+      )
+    ) {
+      notePlayerMoveIntent(this.ctx, p, meta);
+      return;
+    }
     if (advanceExclusiveMovement(this.ctx, p, meta, this.playerMotionDeps)) return;
     if (this.updateChargeMovement(p)) return;
     if (this.updateFollowMovement(p, meta)) return;
@@ -6564,6 +6611,8 @@ export class Sim {
     // player_motion.ts (MV1), which also eases the body off terrain walls at the
     // end (the standoff); playerMotionDeps binds the live Sim callbacks
     // (moveSpeedMult, resolveMove, cancelCast/standUp/dealDamage), preserving rng order.
+    const preview = this.localPreviewMotion;
+    if (preview && p.id === this.playerId && preview.step(p, meta.moveInput)) return;
     stepPlayerMotion(this.playerMotionDeps, p, meta.moveInput);
     unstuckMod.noteBattlegroundWallPressure(this.ctx, meta, p);
   }
@@ -8757,8 +8806,8 @@ export class Sim {
   startWorldQuestActivity(id: string, choice: questActivity.ActivityChoice, pid?: number): void {
     questActivity.startWorldQuestActivity(this.ctx, id, choice, pid);
   }
-  chooseWeeklyQuest(questId: string, pid?: number): void {
-    weeklyQuestMod.chooseWeeklyQuest(this.ctx, questId, pid);
+  chooseWeeklyQuest(questId: string, factionId?: FactionId, pid?: number): void {
+    weeklyQuestMod.chooseWeeklyQuest(this.ctx, questId, factionId, pid);
   }
 
   commendWeeklyQuest(factionId: string, pid?: number): void {
@@ -8895,6 +8944,8 @@ export class Sim {
     return null;
   }
 
+  adminOneHitActive(): boolean { return adminCombatMode(this.ctx, this.player, 'oneHit'); }
+
   isHostileTo(attacker: Entity, target: Entity): boolean {
     if (gmHiddenFrom(this.entities, attacker, target)) return false; // /visible off
     if (target.kind === 'mob') {
@@ -8964,7 +9015,7 @@ export class Sim {
   }
 
   private isFriendlyTo(caster: Entity, target: Entity): boolean {
-    if (gmHiddenFrom(this.entities, caster, target)) return false; // /visible off
+    if (gmHiddenFrom(this.entities, caster, target) || isBuddyMob(target)) return false;
     if (target.kind === 'player') return !this.isHostileTo(caster, target);
     // A Protect Yumi cat is heal/shield-targetable only by its own team.
     if (target.kind === 'mob' && yumiMod.isYumiCat(target))
@@ -9700,7 +9751,10 @@ export class Sim {
     return rows.slice(0, ARENA_LADDER_SIZE);
   }
 
-  arenaInfoFor(pid: number): import('../world_api').ArenaInfo | null {
+  arenaInfoFor(
+    pid: number,
+    sharedLadders?: Pick<import('../world_api').ArenaInfo['ladders'], '1v1' | '2v2'>,
+  ): import('../world_api').ArenaInfo | null {
     const meta = this.players.get(pid);
     if (!meta) return null;
     const match = this.arenaMatches.get(pid);
@@ -9718,9 +9772,7 @@ export class Sim {
           matchInfo = {
             format: match.format,
             state: match.state,
-            // Yumi bouts hold a MAZE slot (a different pool whose numbers
-            // collide with pit slots), so parity would be meaningless there:
-            // they report the documented default instead.
+            // Yumi's maze slots use the default, not the arena pit map.
             map: match.yumi ? 'coliseum' : arenaMapForSlot(match.slot).id,
             oppName: enemies.map((e) => e.name).join(' & '),
             oppClass: primary.cls,
@@ -9745,16 +9797,15 @@ export class Sim {
       yumi3: this.arenaStanding(meta, '2v2'),
       yumi5: this.arenaStanding(meta, '2v2'),
     };
-    const ladders: Record<ArenaFormat, import('../world_api').ArenaLadderEntry[]> = {
-      '1v1': this.arenaLadder('1v1'),
-      '2v2': this.arenaLadder('2v2'),
+    const ladders: import('../world_api').ArenaInfo['ladders'] = {
+      '1v1': sharedLadders?.['1v1'] ?? this.arenaLadder('1v1'),
+      '2v2': sharedLadders?.['2v2'] ?? this.arenaLadder('2v2'),
       fiesta: [],
       yumi3: [],
       yumi5: [],
     };
     const format = match?.format ?? queuedFmt;
-    const readoutFormat = format ?? '1v1';
-    const standing = standings[readoutFormat];
+    const standing = standings[format ?? '1v1'];
     const playerCount = (q: ArenaQueueUnit[]) => q.reduce((n, u) => n + u.pids.length, 0);
     const queueSize =
       format === 'fiesta'
@@ -9778,7 +9829,7 @@ export class Sim {
       queued: queuedFmt !== null,
       queueSize,
       match: matchInfo,
-      ladder: ladders[readoutFormat],
+      ladder: ladders[format ?? '1v1'],
       ladders,
     };
   }
@@ -10082,15 +10133,12 @@ export class Sim {
   marketBuy(listingId: number, count?: number, pid?: number): void {
     this.market.marketBuy(listingId, count, pid);
   }
-
   marketSweepQuote(itemId: string, count: number, pid?: number): void {
     this.market.marketSweepQuote(itemId, count, pid);
   }
-
   marketSweep(itemId: string, count: number, maxCopper: number, pid?: number): MarketListing[] {
     return this.market.marketSweep(itemId, count, maxCopper, pid);
   }
-
   marketCancel(listingId: number, pid?: number): void {
     this.market.marketCancel(listingId, pid);
   }
@@ -10120,6 +10168,9 @@ export class Sim {
 
   marketCollect(pid?: number): void {
     this.market.marketCollect(pid);
+  }
+  marketRelist(ids: readonly number[], cutPct: number, pid?: number): void {
+    this.market.marketRelist(ids, cutPct, pid);
   }
 
   marketInfoFor(pid: number): import('../world_api').MarketInfo | null {
@@ -10327,6 +10378,7 @@ export class Sim {
   activeDungeonDifficulty(pid?: number): DungeonDifficulty | null {
     const r = this.resolve(pid),
       claimId = r ? this.instanceClaimIdAt(r.e.pos) : null;
+    if (claimId === null) return null;
     return this.instances.find((instance) => instance.exitId === claimId)?.difficulty ?? null;
   }
 
@@ -10361,9 +10413,8 @@ export class Sim {
   }
 
   private dungeonDifficultyForPid(pid: number): DungeonDifficulty {
-    // In a party the PARTY state is the only authority (leader-set): falling
-    // through to a member's personal stamp would let a stale solo preference
-    // bypass the leader-only rule at the dungeon door.
+    // Party selection is leader-owned. A member's solo preference cannot
+    // override the group at the dungeon door.
     const party = this.partyOf(pid);
     if (party) return party.dungeonDifficulty ?? 'normal';
     return this.players.get(pid)?.dungeonDifficulty ?? 'normal';

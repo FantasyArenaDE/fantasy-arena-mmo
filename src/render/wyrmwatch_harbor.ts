@@ -32,6 +32,7 @@ import {
 import { terrainHeight, WATER_LEVEL } from '../sim/world';
 import { type LoadedGltf, loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { buildFantasyArenaWyrmwatchHarbor } from './fa_wyrmwatch_harbor';
 import { GFX } from './gfx';
 import {
   addToBucket,
@@ -60,6 +61,7 @@ let loaded: LoadedGltf | null = null;
 let loadTask: Promise<void> | null = null;
 
 export function prepareWyrmwatchHarborAssets(): Promise<void> {
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') return Promise.resolve();
   if (loaded) return Promise.resolve();
   if (loadTask) return loadTask;
   loadTask = loadGltf(HARBOR_URL)
@@ -74,7 +76,7 @@ export function prepareWyrmwatchHarborAssets(): Promise<void> {
   return loadTask;
 }
 
-if (typeof window !== 'undefined') registerDeferredPreload(prepareWyrmwatchHarborAssets);
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') registerDeferredPreload(prepareWyrmwatchHarborAssets);
 
 type HarborPart = VertexColourPart;
 
@@ -215,6 +217,17 @@ export function buildWyrmwatchHarborPath(template: HarborTemplate, seed: number)
 export function buildWyrmwatchHarbor(seed: number): THREE.Group {
   const group = new THREE.Group();
   group.name = 'wyrmwatchHarbor';
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+    const own = buildFantasyArenaWyrmwatchHarbor(seed);
+    group.add(own);
+    lastParts = [];
+    own.traverse((node) => {
+      if (node instanceof THREE.Mesh && !Array.isArray(node.material)) {
+        lastParts.push({ geometry: node.geometry, material: node.material });
+      }
+    });
+    return group;
+  }
   if (!loaded) {
     console.warn(`wyrmwatch harbor skipped: ${HARBOR_URL} was not preloaded`);
     clearHarborHouseShell();
@@ -245,7 +258,7 @@ export function buildWyrmwatchHarbor(seed: number): THREE.Group {
  *  them to the props root and the fire-light budget, like a campfire's). Empty until the
  *  harbor model is loaded. */
 export function wyrmwatchHarborHouseLights(): THREE.PointLight[] {
-  return loaded ? buildHarborHouseLights(WATER_LEVEL + HARBOR_HOUSE_FLOOR_ABOVE_WATER) : [];
+  return loaded || import.meta.env.VITE_FA_BROWSER_RELEASE === '1' ? buildHarborHouseLights(WATER_LEVEL + HARBOR_HOUSE_FLOOR_ABOVE_WATER) : [];
 }
 
 /** The harbor's distinct (geometry, material) programs at the live tier, for the props

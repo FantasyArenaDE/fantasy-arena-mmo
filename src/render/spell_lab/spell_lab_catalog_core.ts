@@ -110,6 +110,7 @@ export const CLASS_ACCENT_HEX: Readonly<Record<PlayerClass, string>> = {
   priest: '#f0ebe0',
   shaman: '#0070dd',
   mage: '#3fc7eb',
+  dreamdancer: '#9ec8ef',
   warlock: '#8788ee',
   druid: '#ff7c0a',
 };

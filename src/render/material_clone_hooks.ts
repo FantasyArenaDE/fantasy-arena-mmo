@@ -23,6 +23,7 @@ import type * as THREE from 'three';
 import { reapplyTownSmartToClone } from './assets/town_smart_material';
 import { reattachBiomeHazeToClone } from './biome_haze_field';
 import { reapplyArmorDyeToClone } from './characters/armor_dye';
+import { reapplyFaReleaseSkinMarks } from './characters/fa_release_skin_marks';
 import { reapplyEnvSheenToClone } from './characters/env_sheen';
 import { reattachGloamClimbToClone } from './characters/gloam_climb';
 import { reapplyWocHeadTintToClone } from './characters/woc_head_tint';
@@ -86,6 +87,7 @@ export function reattachClonedMaterialHooks(source: THREE.Material, clone: THREE
   // The clone shares the source's tint uniforms (a player's chosen colours keep
   // showing, and keep updating, under a buff glow or a form tint).
   reapplyWocHeadTintToClone(source, clone);
+  reapplyFaReleaseSkinMarks(source, clone);
 }
 
 /** clone() plus reattachClonedMaterialHooks: the program-preserving clone. */

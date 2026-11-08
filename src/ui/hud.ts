@@ -38,7 +38,7 @@ import {
   type PreviewFramingName,
 } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
-import { npcPortraitSourceFor, playerVisualKey } from '../render/characters/manifest';
+import { npcPortraitSourceFor, playerPreviewVisualKey } from '../render/characters/manifest';
 import { helmSlotAvailableForEntity } from '../render/characters/player_look_core';
 import {
   composedPortraitKey,
@@ -197,6 +197,8 @@ import { treasureMapTooltipLine } from './treasure_map_tooltip_view';
 
 export type { BannerVariant } from './banner_queue';
 
+import type { AdminSelfPreview } from '../game/admin_self_preview';
+import { type AdminCharacterConnection, mountAdminSelfPanel } from './admin_self_panel';
 import { blockLandingLogKey } from './block_landing_feedback_core';
 import { BootcampOverlay } from './bootcamp';
 import { buddyDisplayName, buddyEventLogArgs } from './buddy_event_lines';
@@ -1034,6 +1036,7 @@ let lpAdvancedLast = -1;
 // perf_overlay_settings.ts alongside the panel that consumes it.
 export interface OptionsHooks {
   logout(): void;
+  characterSelect?(): void;
   gliderPitchHold?(value: -1 | 0 | 1): void;
   captureKey(cb: ((code: string | null) => void) | null): void;
   settings: Settings;
@@ -1058,8 +1061,7 @@ export interface OptionsHooks {
   deedBroadcasts?: AccountToggleSeam;
   discordQueuePings?: AccountToggleSeam;
   perfOverlay: PerfOverlayHooks;
-  // UI theming seam — main.ts owns the ThemeStore + live CSS-variable apply.
-  theme: ThemeHooks;
+  theme: ThemeHooks; // main.ts owns the ThemeStore and live CSS variables.
   // Gamepad button-layout seam (the concrete GamepadBindings satisfies it
   // structurally), so the Controller options panel can read & rebind buttons
   // without the HUD importing the manager.
@@ -1156,7 +1158,7 @@ const PLAYER_PORTRAIT_KEY = 'player';
 const PLAYER_PORTRAIT_LOOKUPS = {
   lookFor: (e: Entity) => modularLookFor(e),
   visualKeyFor: (e: Entity) => modularKeyFor(e),
-  classVisualKeyFor: (e: Entity) => playerVisualKey(e.templateId, e.modularAppearance),
+  classVisualKeyFor: (e: Entity) => playerPreviewVisualKey(e.templateId, e.modularAppearance),
 };
 // The modal one-shots that stay above every banded window AND the mobile
 // window backdrop (z 85): the confirm/input prompt plus the confirm-dialog
@@ -1969,6 +1971,7 @@ export class Hud {
   // group (creator is leader), on being promoted, or on succeeding a leader who left.
   private wasLeaderOfParty = false;
   private lastArenaStatusSig = '';
+  private arenaPreparationSeconds: number | null = null;
   private arenaMatchSeen = false; // closes the queue panel once a bout starts
   private bgMatchSeen = false; // closes the Thornhollow Fields queue window once a match seats
   private readonly fiesta: FiestaController;
@@ -3003,7 +3006,13 @@ export class Hud {
     });
     // drag to pan (only meaningful while zoomed in; at zoom 1 the whole zone fits)
     mapCanvas.addEventListener('pointerdown', (ev) => {
-      if (mapPinch.isPinching() || !this.mapView || this.mapZoom <= 1) return;
+      if (
+        mapPinch.isPinching() ||
+        !this.mapView ||
+        this.mapZoom <= 1 ||
+        this.mapMarkerInteraction.adminTeleport.claims(ev)
+      )
+        return;
       const base = this.mapCenter ?? {
         x: this.sim.player.pos.x,
         z: this.sim.player.pos.z,
@@ -3114,6 +3123,15 @@ export class Hud {
       this.toggleMapLevel();
     });
     mapCanvas.addEventListener('click', (ev) => {
+      if (
+        this.mapMarkerInteraction.adminTeleport.click(mapCanvas, ev, (ok) =>
+          this.log(
+            t(ok ? 'hudChrome.adminCharacter.mapArrived' : 'hudChrome.adminCharacter.mapBlocked'),
+            HUD_LOG.NOTICE,
+          ),
+        )
+      )
+        return;
       if (
         this.mapLevel === 'continent' &&
         showMapTipAt(ev.clientX, ev.clientY, this.isMobileLayout())
@@ -3618,6 +3636,9 @@ export class Hud {
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA),
         // consistent with the toggle/X close path.
         this.socialWindow.close();
+        break;
+      case 'admin-self-window':
+        this.adminSelfPreview?.close();
         break;
       case 'dev-command-window':
         this.devCommandWindow.close();
@@ -8356,7 +8377,7 @@ export class Hud {
   }
 
   private dailyRewardsEnabled(): boolean {
-    return this.features.dailyRewardsEnabled;
+    return import.meta.env.VITE_FA_BROWSER_RELEASE !== '1' && this.features.dailyRewardsEnabled;
   }
 
   private syncDailyRewardsSurfaceLabels(): void {
@@ -8448,6 +8469,7 @@ export class Hud {
 
   update(paint = true): void {
     const sim = this.sim;
+    this.adminSelfPreview?.sync();
     const p = sim.player;
     const now = performance.now();
     const fxTier = this.fxTier();
@@ -10252,7 +10274,9 @@ export class Hud {
     }
     const label =
       m.state === 'countdown'
-        ? t('hud.arena.statusCountdown')
+        ? this.arenaPreparationSeconds === null
+          ? t('hud.arena.statusCountdown')
+          : t('hud.system.arenaCountdown', { seconds: formatNumber(this.arenaPreparationSeconds) })
         : m.state === 'over'
           ? t('hud.arena.statusReturning', {
               seconds: formatNumber(m.returnIn ?? 0, {
@@ -10491,8 +10515,14 @@ export class Hud {
       });
       this.continentRegions = result.regions;
       this.mapMarkerInteraction.setContinentPorts(result.ports);
+      this.mapMarkerInteraction.adminTeleport.continent(result.image);
       canvas.style.cursor = this.mapHoverZone ? 'pointer' : 'default';
-      this.setText(summaryEl, t('hudChrome.continentMap.summary'));
+      this.setText(
+        summaryEl,
+        this.mapMarkerInteraction.adminTeleport.available
+          ? t('hudChrome.adminCharacter.mapWorldSummary')
+          : t('hudChrome.continentMap.summary'),
+      );
       this.setText(
         markerSummaryEl,
         this.mapMarkerInteraction.semantics.updatePorts(
@@ -10541,10 +10571,16 @@ export class Hud {
     });
     this.mapView = result.view;
     this.mapMarkerInteraction.setOverworld(result);
+    this.mapMarkerInteraction.adminTeleport.zone(result.region, S);
     if (!this.mapDrag)
       canvas.style.cursor = result.cursor === 'grab' ? 'var(--cursor-grab, grab)' : result.cursor;
     const zoneLabel = zoneDisplayName(zone.id);
-    this.setText(summaryEl, t('hud.core.mapSummary', { zone: zoneLabel }));
+    this.setText(
+      summaryEl,
+      this.mapMarkerInteraction.adminTeleport.available
+        ? t('hudChrome.adminCharacter.mapZoneSummary', { zone: zoneLabel })
+        : t('hud.core.mapSummary', { zone: zoneLabel }),
+    );
     this.setText(
       markerSummaryEl,
       this.mapMarkerInteraction.semantics.updateOverworld(result, zoneLabel, S),
@@ -11017,6 +11053,11 @@ export class Hud {
             }
             break;
           }
+          const shownDamage = ev.oneHitAmount ?? ev.amount;
+          const shownDamageText =
+            ev.oneHitAmount === undefined
+              ? ev.amount
+              : formatNumber(shownDamage, { maximumFractionDigits: 0 });
           // A landed hit: the mapper resolves damage-done (player dealt to other) vs
           // damage-taken (player took) vs null (a hit between two non-player entities, which
           // floats nothing). A shield block is ALSO a landed hit (still dealing real,
@@ -11043,7 +11084,8 @@ export class Hud {
             this.fctPainter.spawn(
               {
                 ...hitShape,
-                text: wardHitText(tgt) ?? `${ev.amount}${ev.crit ? '!' : ''}`,
+                text: (ev.oneHitAmount === undefined ? wardHitText(tgt) : undefined) ??
+                  `${shownDamageText}${ev.crit ? '!' : ''}`,
                 target: tgt,
               },
               now,
@@ -11052,7 +11094,7 @@ export class Hud {
               t(ev.crit ? 'hud.combat.damageDoneCrit' : 'hud.combat.damageDone', {
                 ability: combatAbilityName(ev.ability),
                 target: entityDisplayName(tgt),
-                amount: ev.amount,
+                amount: shownDamageText,
               }),
               ev.ability ? HUD_LOG.ABILITY_HIT : HUD_LOG.MELEE_HIT,
             );
@@ -11061,11 +11103,11 @@ export class Hud {
             // Fiesta: every blow you land kicks the camera (bigger on a crit).
             if (this.inFiesta()) this.renderer.addShake(ev.crit ? 0.3 : 0.12);
           } else if (hitShape && hitShape.kind === 'damage-taken') {
-            this.fctPainter.spawn({ ...hitShape, text: `-${ev.amount}`, target: tgt }, now);
+            this.fctPainter.spawn({ ...hitShape, text: `-${shownDamageText}`, target: tgt }, now);
             this.combatLog(
               t(ev.crit ? 'hud.combat.damageTakenCrit' : 'hud.combat.damageTaken', {
                 source: src ? entityDisplayName(src) : '?',
-                amount: ev.amount,
+                amount: shownDamageText,
               }),
               HUD_LOG.DAMAGE_TAKEN,
             );
@@ -11082,7 +11124,7 @@ export class Hud {
               {
                 ...hitShape,
                 text: t('hud.combat.floatingBlock', {
-                  amount: blockFctAmountText(ev.amount, ev.crit, false),
+                  amount: blockFctAmountText(shownDamage, ev.crit, false),
                 }),
                 target: tgt,
               },
@@ -11094,7 +11136,7 @@ export class Hud {
                 t(logKey, {
                   ability: combatAbilityName(ev.ability),
                   target: entityDisplayName(tgt),
-                  amount: ev.amount,
+                  amount: shownDamageText,
                 }),
                 HUD_LOG.BLOCK_DEALT,
               );
@@ -11106,7 +11148,7 @@ export class Hud {
               {
                 ...hitShape,
                 text: t('hud.combat.floatingBlock', {
-                  amount: blockFctAmountText(ev.amount, ev.crit, true),
+                  amount: blockFctAmountText(shownDamage, ev.crit, true),
                 }),
                 target: tgt,
               },
@@ -11117,7 +11159,7 @@ export class Hud {
               this.combatLog(
                 t(logKey, {
                   source: src ? entityDisplayName(src) : '?',
-                  amount: ev.amount,
+                  amount: shownDamageText,
                 }),
                 HUD_LOG.BLOCK_TAKEN,
               );
@@ -12489,20 +12531,15 @@ export class Hud {
           break;
         case 'bgFound': {
           const team = ev.team === 0 ? t('hudChrome.bg.crimson') : t('hudChrome.bg.azure');
-          this.showBanner(t('hudChrome.bg.foundBanner', { team }));
-          audio.duelChallenge();
+          this.showBanner(t('hudChrome.bg.foundBanner', { team }), true, undefined, 'pvp');
           break;
         }
         case 'bgCountdown':
-          this.showBanner(
-            t('hudChrome.bg.countdownBanner', {
-              seconds: formatNumber(ev.seconds, { maximumFractionDigits: 0 }),
-            }),
-          );
-          audio.duelCountdownTick();
+          // The scoreboard carries the full countdown. Keep the match banner readable.
+          if (ev.seconds >= 1 && ev.seconds <= 3) audio.duelCountdownTick();
           break;
         case 'bgStart':
-          this.showBanner(t('hudChrome.bg.startBanner'));
+          this.showBanner(t('hudChrome.bg.startBanner'), true, undefined, 'pvp');
           audio.duelStart();
           break;
         case 'bgFlag': {
@@ -12609,10 +12646,11 @@ export class Hud {
           this.bgProposalPopup.show();
           break;
         case 'arenaFound': {
+          this.arenaPreparationSeconds = null;
           const name =
             ev.enemies.length > 1 ? ev.enemies.map((e) => e.name).join(' & ') : ev.oppName;
           const cls = CLASSES[ev.oppClass] ? classDisplayName(ev.oppClass) : ev.oppClass;
-          this.showBanner(t('hud.system.arenaFoundBanner', { name }));
+          this.showBanner(t('hud.system.arenaFoundBanner', { name }), true, undefined, 'pvp');
           this.log(
             t('hud.system.arenaFoundLog', {
               name,
@@ -12625,19 +12663,23 @@ export class Hud {
           break;
         }
         case 'arenaCountdown': {
-          // Same durable-record arm as duelCountdown above.
-          const text = t('hud.system.arenaCountdown', {
-            seconds: formatNumber(ev.seconds, { maximumFractionDigits: 0 }),
-          });
-          if (this.showBanner(text) !== 'show') this.log(text, HUD_LOG.CONTEST);
-          audio.duelCountdownTick();
+          this.arenaPreparationSeconds = ev.seconds;
+          if (ev.seconds >= 1 && ev.seconds <= 3) {
+            // Final call also covers Protect Yumi, which owns the top-center strip.
+            const text = t('hud.system.arenaCountdown', { seconds: formatNumber(ev.seconds) });
+            if (this.showBanner(text, true, undefined, 'pvp') !== 'show')
+              this.log(text, HUD_LOG.CONTEST);
+            audio.duelCountdownTick();
+          }
           break;
         }
         case 'arenaStart':
-          this.showBanner(t('hud.system.arenaStart'));
+          this.arenaPreparationSeconds = null;
+          this.showBanner(t('hud.system.arenaStart'), true, undefined, 'pvp');
           audio.duelStart();
           break;
         case 'arenaEnd': {
+          this.arenaPreparationSeconds = null;
           if (ev.format === 'fiesta') {
             if (ev.draw) {
               this.showBanner(t('fiesta.end.draw'));
@@ -16688,6 +16730,7 @@ export class Hud {
       this.isMobileLayout(),
       this.partyCollapsed,
       this.isMobileChatOpen(),
+      this.sim.activeDungeonDifficulty() ?? this.sim.dungeonDifficulty(),
     );
   }
 
@@ -16723,18 +16766,13 @@ export class Hud {
       this.wasLeaderOfParty = false;
       return;
     }
-    // Drive the mobile collapse chip from (in a party, on the touch HUD, the persisted
-    // collapse choice, whether mobile chat is open), every frame. Fully elided: a
-    // steady state (unchanged inputs) writes nothing. On desktop the chip is never
-    // built and the container carries no collapse class, so the desktop stack is
-    // unchanged. While mobile chat is open the party UI yields (chip + frames hide) so
-    // the chat overlay owns the top-left; the persisted choice is untouched, so closing
-    // chat restores it.
+    // Paint the shared selection on both layouts. A live instance takes precedence.
     this.partyFramesPainter.setCollapse(
       true,
       this.isMobileLayout(),
       this.partyCollapsed,
       this.isMobileChatOpen(),
+      this.sim.activeDungeonDifficulty() ?? this.sim.dungeonDifficulty(),
     );
     // The Loot Settings window (opened on demand from the right-click menu) is
     // repainted from authoritative state while open. The signature is low frequency
@@ -17436,6 +17474,28 @@ export class Hud {
   noteDevCommandsAdvertised(): void {
     this.devCommandsAdvertised = true;
   }
+  private adminSelfPreview?: ReturnType<typeof mountAdminSelfPanel>;
+
+  attachAdminSelfPanel(panel: AdminSelfPreview | AdminCharacterConnection): void {
+    this.mapMarkerInteraction.adminTeleport.connect('request' in panel ? panel : null);
+    this.adminSelfPreview = mountAdminSelfPanel(
+      panel,
+      $('#side-buttons-col-a'),
+      $('#ui'),
+      this.windowFocus('#admin-self-window'),
+      () => this.closeOtherWindows('#admin-self-window'),
+      {
+        location: () => {
+          const { x, y, z } = this.sim.player.pos;
+          return { zone: zoneDisplayName(zoneAt(x, z).id), x, y, z };
+        },
+        bags: () => ({ used: this.sim.inventory.length, capacity: this.sim.bagCapacity }),
+        openMap: () => this.toggleMap(),
+        openBags: () => this.toggleBags(),
+      },
+    );
+  }
+
   toggleDevCommandWindow(): boolean {
     return this.devCommandWindow.toggle();
   }

@@ -75,6 +75,7 @@ import {
   templeSprites,
 } from './drowned_temple_entrance_core';
 import { floorVfxRenderOrder } from './floor_vfx_layer';
+import { buildFantasyArenaDrownedTemple } from './fa_drowned_temple_entrance';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
 import { mistNoiseTexture } from './ignivar_mist_gate';
 import { registerSetPieceOccluders, type SetPieceOccluderHandle } from './set_piece_occluders';
@@ -86,7 +87,7 @@ const WORKS_URL = '/models/props/drowned_temple_entrance_works.glb';
 const GROWTH_URL = '/models/props/drowned_temple_entrance_growth.glb';
 const URLS = [MAIN_URL, WORKS_URL, GROWTH_URL] as const;
 const sources = new Map<string, THREE.Group>();
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   for (const url of URLS) {
     registerDeferredPreload(() =>
       loadGltf(url).then((gltf) => {
@@ -850,13 +851,19 @@ export function buildDrownedTempleEntrance(seed: number): DrownedTempleEntranceV
   const body = new THREE.Group();
   body.name = 'drownedTempleEntranceBody';
   body.position.set(door.x, base, door.z);
+  const release = import.meta.env.VITE_FA_BROWSER_RELEASE === '1';
+  const replacement = release ? buildFantasyArenaDrownedTemple(door, base, seed) : null;
   const mainSource = sources.get(MAIN_URL);
-  const main = mainSource ? seat(mainSource, true) : fallbackGate();
+  const main = replacement ? new THREE.Group() : mainSource ? seat(mainSource, true) : fallbackGate();
+  if (replacement) {
+    for (const unit of TEMPLE_GHOST_SETS) main.add(replacement.roots[unit]);
+    main.add(replacement.support);
+  }
   body.add(main);
-  const worksSource = sources.get(WORKS_URL);
+  const worksSource = release ? undefined : sources.get(WORKS_URL);
   const works = worksSource ? seat(worksSource, true) : null;
   if (works) body.add(works);
-  const growthSource = sources.get(GROWTH_URL);
+  const growthSource = release ? undefined : sources.get(GROWTH_URL);
   const growth = growthSource ? seat(growthSource, false) : null;
   if (growth) body.add(growth);
   // Camera occlusion: every collider row is an occluder, in four fading units
@@ -895,7 +902,10 @@ export function buildDrownedTempleEntrance(seed: number): DrownedTempleEntranceV
   const gateRoots = mainSource
     ? [...node(main, 'Entrance_Moongate'), ...node(growth, 'Growth_Gate')]
     : [main];
-  const roots: Record<TempleGhostSet, THREE.Object3D[]> = {
+  const roots: Record<TempleGhostSet, THREE.Object3D[]> = replacement ? {
+    gate: [replacement.roots.gate], east: [replacement.roots.east],
+    west: [replacement.roots.west], works: [replacement.roots.works],
+  } : {
     gate: gateRoots,
     east: [...node(main, 'Entrance_FlankEast'), ...node(growth, 'Growth_FlankEast')],
     west: [...node(main, 'Entrance_FlankWest'), ...node(growth, 'Growth_FlankWest')],

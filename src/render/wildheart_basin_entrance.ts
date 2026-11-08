@@ -37,6 +37,7 @@ import {
 import { terrainHeight, WATER_LEVEL } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
+import { buildFantasyArenaWildheart } from './fa_wildheart_entrance';
 import { currentDayNightPhase } from './day_night_clock';
 import { floorVfxRenderOrder } from './floor_vfx_layer';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
@@ -75,7 +76,7 @@ const COURT_URL = '/models/props/wildheart_basin_entrance_court.glb';
 const GROWTH_URL = '/models/props/wildheart_basin_entrance_growth.glb';
 const URLS = [MAIN_URL, COURT_URL, GROWTH_URL] as const;
 const sources = new Map<string, THREE.Group>();
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.VITE_FA_BROWSER_RELEASE !== '1') {
   for (const url of URLS) {
     registerDeferredPreload(() =>
       loadGltf(url).then((gltf) => {
@@ -778,13 +779,16 @@ export function buildWildheartBasinEntrance(seed: number): WildheartBasinEntranc
   const maw = new THREE.Group();
   maw.name = 'wildheartBasinEntranceBody';
   maw.position.set(door.x, base, door.z);
-  const main = sources.get(MAIN_URL);
-  const idol = main ? seat(main, true) : fallbackIdol();
+  const replacement = import.meta.env.VITE_FA_BROWSER_RELEASE === '1'
+    ? buildFantasyArenaWildheart(door, base, seed)
+    : null;
+  const main = replacement ? undefined : sources.get(MAIN_URL);
+  const idol = replacement?.idol ?? (main ? seat(main, true) : fallbackIdol());
   maw.add(idol);
-  const courtSource = sources.get(COURT_URL);
-  const court = courtSource ? seat(courtSource, true) : null;
+  const courtSource = replacement ? undefined : sources.get(COURT_URL);
+  const court = replacement?.court ?? (courtSource ? seat(courtSource, true) : null);
   if (court) maw.add(court);
-  const growthSource = sources.get(GROWTH_URL);
+  const growthSource = replacement ? undefined : sources.get(GROWTH_URL);
   const growth = growthSource ? seat(growthSource, false) : null;
   if (growth) maw.add(growth);
   // the throat's window leans with the idol, about the door

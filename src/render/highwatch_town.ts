@@ -6,6 +6,7 @@ import type * as THREE from 'three';
 import { HIGHWATCH_LAYOUT } from '../sim/highwatch_layout';
 import type { BuildingDef } from '../sim/types';
 import type { IWorld } from '../world_api';
+import { faGuildHallPreviewSource } from './fa_guild_hall_preview';
 import type { GfxSettings } from './gfx';
 import { buildHighwatchGuildSign } from './highwatch_guild_sign';
 import { createGuildTrophyRoom } from './highwatch_guild_trophies';
@@ -22,6 +23,7 @@ const HIGHWATCH_TOWN = createPlacedTownKit({
   buildings: HIGHWATCH_LAYOUT.buildings,
   promotedBy: 'highwatchTown',
   decorate: highwatchBuildingExtras,
+  sourceFileOverride: faGuildHallPreviewSource,
 });
 
 if (typeof window !== 'undefined') HIGHWATCH_TOWN.registerPreloads();

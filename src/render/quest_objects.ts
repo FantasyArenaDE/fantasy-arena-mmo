@@ -24,6 +24,7 @@ export {
   prewarmFarshoreSalvageObjects,
 } from './farshore_salvage_assets';
 
+import { faReleaseQuestTotemSource } from './characters/fa_release_quest_totem';
 import { buildForgeAnvilTarget, buildForgeWellTarget } from './forge_anvil_target';
 import { GFX, surfaceMat } from './gfx';
 import { markSharedGeometry, markSharedMaterial } from './shared_resource';
@@ -180,7 +181,7 @@ if (typeof window !== 'undefined') {
   const urls = [...new Set(Object.values(QUEST_OBJECT_URLS))];
   for (const url of urls) {
     registerDeferredPreload(() =>
-      loadGltf(url)
+      loadGltf(faReleaseQuestTotemSource(url, import.meta.env.VITE_FA_BROWSER_RELEASE === '1'))
         .then((g) => {
           gltfByUrl.set(url, g);
         })

@@ -18,6 +18,7 @@ import { terrainHeight } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerDeferredPreload } from './assets/preload';
 import { drakelandsKitBootThunk } from './drakelands_kit_lane_core';
+import { buildReleaseEmberProp } from './fa_release_ember_props';
 import { buildForgefatherFortress } from './forgefather_fortress';
 import { GFX } from './gfx';
 import { ignivarEnvPropsSettled } from './ignivar_env_props';
@@ -39,6 +40,10 @@ type EmberPropKey = keyof typeof EMBER_PROP_URLS;
 const EMBER_PROP_KEYS = Object.keys(EMBER_PROP_URLS) as EmberPropKey[];
 const propScenes: Partial<Record<EmberPropKey, THREE.Group>> = {};
 function loadEmberPropScene(key: EmberPropKey): Promise<void> {
+  if (import.meta.env.VITE_FA_BROWSER_RELEASE === '1') {
+    propScenes[key] = buildReleaseEmberProp(key);
+    return Promise.resolve();
+  }
   return loadGltf(EMBER_PROP_URLS[key]).then((gltf) => {
     propScenes[key] = gltf.scene;
   });

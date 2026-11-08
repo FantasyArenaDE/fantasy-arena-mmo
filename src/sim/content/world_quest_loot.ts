@@ -11,7 +11,7 @@
 // DATA, not logic: edit the lists, keep the invariants the test names.
 import type { PlayerClass } from '../types';
 
-export const WORLD_QUEST_CLASS_LOOT: Readonly<Record<PlayerClass, readonly string[]>> =
+const SHIPPED_WORLD_QUEST_CLASS_LOOT: Readonly<Record<Exclude<PlayerClass, 'dreamdancer'>, readonly string[]>> =
   Object.freeze({
     warrior: Object.freeze([
       'abyssal_loop',
@@ -340,3 +340,6 @@ export const WORLD_QUEST_CLASS_LOOT: Readonly<Record<PlayerClass, readonly strin
       'zense_meridian',
     ]),
   });
+
+export const WORLD_QUEST_CLASS_LOOT: Readonly<Record<PlayerClass, readonly string[]>> =
+  Object.freeze({ ...SHIPPED_WORLD_QUEST_CLASS_LOOT, dreamdancer: SHIPPED_WORLD_QUEST_CLASS_LOOT.mage });
