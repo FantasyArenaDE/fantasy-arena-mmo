@@ -18,8 +18,8 @@ const client = spawn(path.resolve(executable), [
 let browser;
 try {
   const endpoint = await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('Installed client did not start')), 45_000);
     let stderr = '';
+    const timer = setTimeout(() => reject(new Error(`Installed client did not start: ${stderr}`)), 45_000);
     client.stderr.on('data', chunk => {
       stderr = (stderr + chunk).slice(-4000);
       const url = stderr.match(/DevTools listening on (ws:\/\/127\.0\.0\.1:[\w:/-]+)/)?.[1];

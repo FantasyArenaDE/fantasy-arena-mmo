@@ -17,7 +17,8 @@ if ($package.name -cne 'fantasy-arena-mmo' -or $package.productName -cne 'Fantas
     throw 'Unexpected Windows package identity.'
 }
 foreach ($file in 'electron/main.cjs','electron/beta_update_policy.cjs','electron/vendor/electron_updater.cjs',
-                  'dist/index.html','dist/LICENSE','dist/CREDITS.md',"build/$IconFile",'host-diag/HostDiag.ps1') {
+                  'electron/patcher/window.cjs','electron/host_diag/dist/manifest.json','dist/index.html',
+                  'dist/LICENSE','dist/CREDITS.md',"build/$IconFile",'host-diag/HostDiag.ps1') {
     if (!(Test-Path -LiteralPath (Join-Path $app $file) -PathType Leaf)) {
         throw "Build input is missing $file"
     }

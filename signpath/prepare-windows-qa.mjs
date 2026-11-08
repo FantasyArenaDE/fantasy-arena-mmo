@@ -70,12 +70,15 @@ await rm(path.join(dist, '.vite/release-sources.json'), { force: true });
 
 await cp(path.join(root, 'electron'), path.join(application, 'electron'), {
   recursive: true,
-  filter: file => !/^(?:host_diag|patcher)$/.test(path.basename(file)),
+  filter: file => path.basename(file) !== 'host_diag',
 });
+const diag = 'electron/host_diag/dist';
+await mkdir(path.join(application, diag), { recursive: true });
+await cp(path.join(root, diag, 'manifest.json'), path.join(application, diag, 'manifest.json'));
 await mkdir(path.join(application, 'build'));
 await cp(path.join(dist, 'fantasy-arena/icon-512.png'), path.join(application, 'build/icon.png'));
 await mkdir(path.join(application, 'host-diag'));
-await cp(path.join(root, 'electron/host_diag/dist/HostDiag.ps1'), path.join(application, 'host-diag/HostDiag.ps1'));
+await cp(path.join(root, diag, 'HostDiag.ps1'), path.join(application, 'host-diag/HostDiag.ps1'));
 const metadata = await readJson(path.join(extracted, 'package.json'));
 assert.equal(metadata.name, 'fantasy-arena-mmo');
 assert.equal(metadata.version, (await readJson(path.join(root, 'signpath/renderer-input.json'))).version);
