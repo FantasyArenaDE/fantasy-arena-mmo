@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory)][string]$ApplicationDirectory,
     [Parameter(Mandatory)][string]$OutputDirectory,
     [string]$BuilderCli,
-    [string]$ElectronDist
+    [string]$ElectronDist,
+    [ValidateSet('icon.ico','icon.png')][string]$IconFile = 'icon.ico'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,7 +17,7 @@ if ($package.name -cne 'fantasy-arena-mmo' -or $package.productName -cne 'Fantas
     throw 'Unexpected Windows package identity.'
 }
 foreach ($file in 'electron/main.cjs','electron/beta_update_policy.cjs','electron/vendor/electron_updater.cjs',
-                  'dist/index.html','dist/LICENSE','dist/CREDITS.md','build/icon.ico','host-diag/HostDiag.ps1') {
+                  'dist/index.html','dist/LICENSE','dist/CREDITS.md',"build/$IconFile",'host-diag/HostDiag.ps1') {
     if (!(Test-Path -LiteralPath (Join-Path $app $file) -PathType Leaf)) {
         throw "Build input is missing $file"
     }
@@ -43,7 +44,7 @@ $config = [ordered]@{
         enableNodeCliInspectArguments=$false; grantFileProtocolExtraPrivileges=$false
         onlyLoadAppFromAsar=$true; enableEmbeddedAsarIntegrityValidation=$true
     }
-    win = @{ target=@(@{target='nsis';arch=@('x64')}); icon=(Join-Path $app 'build/icon.ico') }
+    win = @{ target=@(@{target='nsis';arch=@('x64')}); icon=(Join-Path $app "build/$IconFile") }
     nsis = @{ oneClick=$true; perMachine=$false }
 }
 if ($ElectronDist) { $config.electronDist = (Resolve-Path -LiteralPath $ElectronDist).Path }
